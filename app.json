@@ -1,0 +1,13 @@
+{
+  "name": "openownership-register",
+  "scripts": {
+  },
+  "env": {
+  },
+  "formation": {
+  },
+  "addons": [
+  ],
+  "buildpacks": [
+  ]
+}
