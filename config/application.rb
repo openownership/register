@@ -12,5 +12,10 @@ Bundler.require(*Rails.groups)
 
 module OpenOwnershipRegister
   class Application < Rails::Application
+    if ENV["BASIC_AUTH"].present?
+      config.middleware.insert_before(Rack::Sendfile, Rack::Auth::Basic) do |u, p|
+        [u, p] == ENV["BASIC_AUTH"].split(':')
+      end
+    end
   end
 end
