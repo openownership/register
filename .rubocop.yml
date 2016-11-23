@@ -4,3 +4,6 @@ inherit_from:
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
+  Exclude:
+    - bin/spring
+    - vendor/**/*
