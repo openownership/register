@@ -7,3 +7,6 @@ AllCops:
   Exclude:
     - bin/spring
     - vendor/**/*
+
+Lint/EndAlignment:
+  AlignWith: variable

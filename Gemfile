@@ -11,6 +11,8 @@ gem 'haml-rails'
 gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 
+gem 'rollbar'
+
 group :development, :test do
   gem 'byebug'
   gem 'rspec-rails'
