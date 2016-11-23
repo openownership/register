@@ -1,3 +1,6 @@
+inherit_from:
+  - .rubocop-disable-default-enabled.yml
+
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
