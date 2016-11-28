@@ -1,0 +1,13 @@
+inherit_from:
+  - .rubocop-disable-default-enabled.yml
+  - .rubocop-enable-default-disabled.yml
+
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  Exclude:
+    - bin/spring
+    - vendor/**/*
+
+Lint/EndAlignment:
+  AlignWith: variable
