@@ -19,6 +19,7 @@
   "formation": {
   },
   "addons": [
+    "mongolab:sandbox"
   ],
   "buildpacks": [
   ]
