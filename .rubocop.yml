@@ -11,3 +11,7 @@ AllCops:
 
 Lint/EndAlignment:
   AlignWith: variable
+
+Style/HashSyntax:
+  Exclude:
+    - lib/tasks/**/*.rake
