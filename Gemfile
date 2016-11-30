@@ -18,6 +18,7 @@ gem 'rollbar'
 group :development, :test do
   gem 'byebug'
   gem 'rspec-rails'
+  gem 'dotenv-rails'
   gem 'webmock'
 end
 

@@ -58,6 +58,10 @@ GEM
       safe_yaml (~> 1.0.0)
     debug_inspector (0.0.2)
     diff-lcs (1.2.5)
+    dotenv (2.1.1)
+    dotenv-rails (2.1.1)
+      dotenv (= 2.1.1)
+      railties (>= 4.0, < 5.1)
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.14)
@@ -227,6 +231,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   coffee-rails (~> 4.2)
+  dotenv-rails
   haml-rails
   haml_lint
   jquery-rails
