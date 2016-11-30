@@ -9,9 +9,6 @@
     "HEROKU_APP_NAME": {
       "required": true
     },
-    "HEROKU_PARENT_APP_NAME": {
-      "required": true
-    },
     "ROLLBAR_ACCESS_TOKEN": {
       "required": true
     }
