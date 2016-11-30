@@ -12,7 +12,7 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 
 gem 'mongoid'
-
+gem 'net-http-persistent'
 gem 'rollbar'
 
 group :development, :test do
