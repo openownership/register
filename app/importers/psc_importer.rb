@@ -7,7 +7,7 @@ class PscImporter
 
     @api_url = 'https://api.opencorporates.com/v0.4'
 
-    @http = Net::HTTP::Persistent.new(name: self.class.name)
+    @http = Net::HTTP::Persistent.new(self.class.name)
   end
 
   def parse(file)

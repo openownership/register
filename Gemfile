@@ -13,7 +13,7 @@ gem 'turbolinks', '~> 5'
 
 gem 'mongoid'
 gem 'elasticsearch-model'
-gem 'net-http-persistent'
+gem 'net-http-persistent', '~> 2.0'
 gem 'rollbar'
 
 group :development, :test do

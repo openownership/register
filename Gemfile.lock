@@ -53,7 +53,6 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.2)
-    connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     debug_inspector (0.0.2)
@@ -126,8 +125,7 @@ GEM
       mongo (~> 2.3)
     multi_json (1.12.1)
     multipart-post (2.0.0)
-    net-http-persistent (3.0.0)
-      connection_pool (~> 2.2)
+    net-http-persistent (2.9.4)
     nio4r (1.2.1)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
@@ -254,7 +252,7 @@ DEPENDENCIES
   jquery-rails
   listen (~> 3.0.5)
   mongoid
-  net-http-persistent
+  net-http-persistent (~> 2.0)
   puma (~> 3.0)
   rails (~> 5.0.0, >= 5.0.0.1)
   rollbar
