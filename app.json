@@ -9,6 +9,9 @@
     "HEROKU_APP_NAME": {
       "required": true
     },
+    "OPENCORPORATES_API_TOKEN": {
+      "required": true
+    },
     "ROLLBAR_ACCESS_TOKEN": {
       "required": true
     }
