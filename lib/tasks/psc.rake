@@ -8,5 +8,7 @@ namespace :psc do
 
       Entity.collection.insert_many(documents)
     end
+
+    Entity.import(force: true)
   end
 end
