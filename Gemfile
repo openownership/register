@@ -12,6 +12,7 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 
 gem 'mongoid'
+gem 'elasticsearch-model'
 gem 'net-http-persistent'
 gem 'rollbar'
 
