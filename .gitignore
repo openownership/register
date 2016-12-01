@@ -6,5 +6,6 @@
 !/tmp/.keep
 
 .byebug_history
+.env
 
 /spec/examples.txt
