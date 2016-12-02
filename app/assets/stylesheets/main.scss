@@ -13,4 +13,10 @@ $sans: 'Atlas Grotesk', 'Helvetica', sans-serif;
 
 body {
   font-family: $sans;
+  color: $darkBlue;
+}
+
+.site-header {
+  background-color: $darkBlue;
+  padding: 30px;
 }
