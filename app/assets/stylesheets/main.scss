@@ -1,22 +1,4 @@
-$darkBlue: #191D23;
-$electricBlue: #3C31D4;
-$greyBlue: #363F4D;
-$white: #FFFFFF;
-
-$headline: 'Publico Headline', 'Times New Roman', Times, Georgia, serif;
-$serif: 'Publico Text', 'Times New Roman', Times, Georgia, serif;
-$sans: 'Atlas Grotesk', 'Helvetica', sans-serif;
-
-@import
-  "fonts"
-;
-
 body {
   font-family: $sans;
   color: $darkBlue;
-}
-
-.site-header {
-  background-color: $darkBlue;
-  padding: 30px;
 }

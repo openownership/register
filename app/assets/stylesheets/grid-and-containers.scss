@@ -1,0 +1,12 @@
+$darkBlue: #191D23;
+
+.site-wrapper {
+  margin: 0 auto;
+  @media (min-width: 768px) {
+    padding: 0 80px;
+  }
+}
+
+.site-header {
+  background-color: $darkBlue;
+}

@@ -8,5 +8,7 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
     %header.site-header
-      = image_tag('OpenOwnership-Logo.svg')
-    = yield
+      .site-wrapper
+        = image_tag('OpenOwnership-Logo.svg')
+    .site-wrapper
+      = yield
