@@ -1,12 +1,19 @@
 {
   "name": "openownership-register",
   "scripts": {
+    "postdeploy": "rake psc:import[http://$BUCKETEER_BUCKET_NAME.s3.amazonaws.com/public/gb-persons-with-significant-control-snapshot-2016-07-19-sample-1k.txt]"
   },
   "env": {
     "BASIC_AUTH": {
       "required": true
     },
+    "BUCKETEER_BUCKET_NAME": {
+      "required": true
+    },
     "HEROKU_APP_NAME": {
+      "required": true
+    },
+    "OPENCORPORATES_API_TOKEN": {
       "required": true
     },
     "ROLLBAR_ACCESS_TOKEN": {
