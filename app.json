@@ -23,7 +23,8 @@
   "formation": {
   },
   "addons": [
-    "mongolab:sandbox"
+    "mongolab:sandbox",
+    "searchbox:starter"
   ],
   "buildpacks": [
   ]
