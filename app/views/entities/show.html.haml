@@ -1,1 +1,7 @@
 %h1.entity-name Name: #{@entity.name}
+
+- @source_relationships.each do |relationship|
+  %p #{@entity.name} controls #{link_to relationship.target.name, entity_path(relationship.target)}
+
+- @target_relationships.each do |relationship|
+  %p #{@entity.name} is controlled by #{link_to relationship.source.name, entity_path(relationship.source)}
