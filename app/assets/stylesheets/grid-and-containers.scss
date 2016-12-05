@@ -1,12 +1,18 @@
-.site-wrapper {
-  margin: 0 auto;
-  @media (min-width: 768px) {
-    padding: 0 80px;
-  }
-}
-
 .site-header {
   background-color: $darkBlue;
   padding: 30px 0;
   margin-bottom: 30px;
+}
+
+.content {
+  flex: 1;
+}
+
+.site-footer {
+  font-size: 14px;
+}
+
+.site-footer-container {
+  padding: 15px 0;
+  border-top: 1px solid lighten($darkBlue, 65%);
 }

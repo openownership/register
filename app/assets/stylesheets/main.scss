@@ -1,6 +1,13 @@
+html {
+  height: 100%;
+}
+
 body {
   font-family: $sans;
   color: $darkBlue;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .entity-name {
