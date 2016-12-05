@@ -12,7 +12,7 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 
 gem 'mongoid'
-gem 'kaminari'
+gem 'kaminari-mongoid'
 gem 'elasticsearch-model'
 gem 'net-http-persistent', '~> 2.0'
 gem 'rollbar'
