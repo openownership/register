@@ -108,6 +108,8 @@ GEM
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    kaminari-mongoid (0.1.2)
+      kaminari
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -253,7 +255,7 @@ DEPENDENCIES
   haml-rails
   haml_lint
   jquery-rails
-  kaminari
+  kaminari-mongoid
   listen (~> 3.0.5)
   mongoid
   net-http-persistent (~> 2.0)
