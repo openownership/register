@@ -7,4 +7,13 @@
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
-    = yield
+    %header.site-header
+      .container
+        = image_tag('OpenOwnership-Logo.svg')
+    .content
+      .container
+        = yield
+    %footer.site-footer
+      .container
+        .site-footer-container
+          %span © OpenOwnership
