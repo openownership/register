@@ -9,7 +9,8 @@
   %body
     %header.site-header
       .container
-        = image_tag('OpenOwnership-Logo.svg')
+        = link_to root_path do
+          = image_tag('OpenOwnership-Logo.svg')
     .content
       .container
         = yield
