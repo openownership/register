@@ -1,6 +1,7 @@
 $darkBlue: #191D23;
 $electricBlue: #3C31D4;
 $greyBlue: #363F4D;
+$lightGrey: #EBEEF2;
 $white: #FFFFFF;
 
 $headline: 'Publico Headline', 'Times New Roman', Times, Georgia, serif;
@@ -8,3 +9,16 @@ $serif: 'Publico Text', 'Times New Roman', Times, Georgia, serif;
 $sans: 'Atlas Grotesk', 'Helvetica', sans-serif;
 
 $on-mobile: 768px;
+
+
+/////////////////////////////////////
+//////// Bootstrap Overrides ////////
+/////////////////////////////////////
+
+
+$brand-primary: $electricBlue;
+$border-radius: 0.0625rem;
+$border-radius-lg: 0.125rem;
+$border-radius-sm: 0.0625rem;
+$input-padding-x-lg: 1rem;
+$input-line-height: 1.5;

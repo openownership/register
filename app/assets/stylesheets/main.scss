@@ -13,3 +13,71 @@ body {
 .entity-name {
   font-weight: bold;
 }
+
+.search-form {
+  position: relative;
+}
+
+.search-field {
+
+}
+
+.search-button {
+  position: absolute;
+  right: 15px;
+  top: 29%;
+  height: 24px;
+  width: 24px;
+  background: asset-url("ic_search_black_24px.svg") no-repeat;
+  background-color: transparent;
+  border: none;
+  text-indent: -9999px;
+  opacity: .35;
+  cursor: pointer;
+  transition: opacity .25s ease;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.search-results {
+  margin-bottom: -10px;
+  a {
+    display: block;
+    position: relative;
+    padding: 20px;
+    margin-bottom: 5px;
+    background-color: $white;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
+    border-radius: $border-radius;
+    transition: all .25s ease;
+    &:after {
+      content: '';
+      background: asset-url("ic_chevron_right_blue_24px.svg") bottom right no-repeat;
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      right: 12px;
+      opacity: 0;
+    }
+    &:hover {
+      text-decoration: none;
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, .2);
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.no-results {
+  padding: 20px;
+  background-color: $lightGrey;
+  margin-bottom: $spacer;
+  text-align: center;
+  p {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
