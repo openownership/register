@@ -62,7 +62,7 @@ body {
 }
 
 .search-results {
-  margin-bottom: -10px;
+  margin-bottom: 0px;
   a {
     display: block;
     position: relative;
@@ -87,6 +87,33 @@ body {
       &:after {
         opacity: 1;
       }
+    }
+  }
+}
+
+.pagination {
+  margin: 32px auto 4px auto;
+  text-align: center;
+  display: block;
+  .first, .prev, .page, .next, .last {
+    padding: 6px 1px 6px 4px;
+    margin: 0 3px;
+    text-align: center;
+    transition: opacity .25 ease;
+  }
+  .current {
+    border-bottom: 2px solid $darkBlue;
+    // font-weight: bold;
+  }
+  .first a, .last a {
+    opacity: .35;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  @include media-breakpoint-down(md) {
+    .first, .prev, .page, .next, .last {
+      line-height: 2.4;
     }
   }
 }
