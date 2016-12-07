@@ -1,7 +1,7 @@
 {
   "name": "openownership-register",
   "scripts": {
-    "postdeploy": "rake psc:import[http://$BUCKETEER_BUCKET_NAME.s3.amazonaws.com/public/gb-persons-with-significant-control-snapshot-2016-07-19-sample-1k.txt]"
+    "postdeploy": "rake postdeploy"
   },
   "env": {
     "BASIC_AUTH": {
