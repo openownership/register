@@ -1,4 +1,4 @@
-%h1.entity-name Name: #{@entity.name}
+%h1.entity-name= @entity.name
 
 - @source_relationships.each do |relationship|
   %p #{@entity.name} controls #{link_to relationship.target.name, entity_path(relationship.target)}
