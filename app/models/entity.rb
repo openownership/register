@@ -3,7 +3,8 @@ class Entity
   include Elasticsearch::Model
 
   field :name, type: String
-  field :company_number, type: String
+
+  embeds_many :identifiers
 
   index_name "#{Rails.application.class.parent_name.underscore}_#{Rails.env}"
 

@@ -37,7 +37,7 @@ class PscImporter
         entities << {
           _id: controlled_company_id,
           name: get_company_name(record.fetch(:company_number)),
-          company_number: record.fetch(:company_number)
+          identifiers: [identifier('gb', record.fetch(:company_number))]
         }
 
         entities << {
@@ -53,6 +53,15 @@ class PscImporter
   end
 
   private
+
+  def identifier(jurisdiction_code, company_number)
+    {
+      _id: {
+        jurisdiction_code: jurisdiction_code,
+        company_number: company_number
+      }
+    }
+  end
 
   def relationship(source_id, target_id)
     {
