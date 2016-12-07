@@ -1,7 +1,31 @@
-%h1.entity-name= @entity.name
+.row
+  .col-xl-10.offset-xl-1
+    %h1.entity-name= @entity.name
 
-- @source_relationships.each do |relationship|
-  %p #{@entity.name} controls #{link_to relationship.target.name, entity_path(relationship.target)}
-
-- @target_relationships.each do |relationship|
-  %p #{@entity.name} is controlled by #{link_to relationship.source.name, entity_path(relationship.source)}
+.row
+  .col-xl-10.offset-xl-1
+    .row
+      .col-lg-6
+        .frame
+          %h4.relationship-header
+            = @entity.name
+            = succeed ":" do
+              %strong is controlled by
+          - if @target_relationships.any?
+            %ul.list-unstyled.list-entities
+              - @target_relationships.each do |relationship|
+                %li= link_to relationship.source.name, entity_path(relationship.source)
+          - else
+            %p.empty-notice No information
+      .col-lg-6
+        .frame
+          %h4.relationship-header
+            = @entity.name
+            = succeed ":" do
+              %strong controls
+          - if @source_relationships.any?
+            %ul.list-unstyled.list-entities
+              - @source_relationships.each do |relationship|
+                %li= link_to relationship.target.name, entity_path(relationship.target)
+          - else
+            %p.empty-notice No information

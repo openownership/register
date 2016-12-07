@@ -31,10 +31,6 @@ body {
   }
 }
 
-.entity-name {
-  font-weight: bold;
-}
-
 .search-form {
   position: relative;
 }
@@ -89,6 +85,13 @@ body {
       }
     }
   }
+  li {
+    &:last-child {
+      a {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .pagination {
@@ -128,4 +131,35 @@ body {
       margin-bottom: 0;
     }
   }
+}
+
+
+/////////////////////////////////////////////
+////////////////// ENTITIES /////////////////
+/////////////////////////////////////////////
+
+
+.entity-name {
+  font-weight: bold;
+  letter-spacing: .035em;
+  margin-bottom: 24px;
+}
+
+.relationship-header {
+  font-weight: normal;
+  font-size: 14px;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  strong {
+    letter-spacing: 0;
+    text-transform: none;
+  }
+}
+
+.empty-notice {
+  text-align: center;
+  color: darken($lightGrey, 20%);
+  padding: 20px 0 19px;
+  margin-bottom:  0;
 }
