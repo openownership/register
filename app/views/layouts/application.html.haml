@@ -11,7 +11,8 @@
     %header.site-header
       .container
         = link_to root_path do
-          = image_tag('OpenOwnership-Logo.svg')
+          = image_tag('OpenOwnership-Logo.svg', class: 'logo')
+        %h2.brand-subhead.pull-right The Global Beneficial Ownership Register
     .content
       .container
         = yield

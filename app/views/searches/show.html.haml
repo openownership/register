@@ -1,18 +1,23 @@
-%h1 Search
+.row
+  .col-lg-8.offset-lg-2
+    .form-group
+      = form_tag search_path, method: 'get', class: 'search-form' do
+        = text_field_tag :q, params[:q], class: 'form-control form-control-lg search-field', placeholder: 'Search company or name'
 
-= form_tag search_path, method: 'get' do
-  = text_field_tag :q, params[:q]
+        = submit_tag 'Search', name: nil, class: 'search-button'
 
-  = submit_tag 'Search', name: nil
+.row
+  .col-lg-8.offset-lg-2
+    - unless params[:q].blank?
+      - if @results.total.zero?
+        .no-results
+          %p No results to show
+      - else
+        .frame
+          %p= page_entries_info @results, entry_name: 'result'
 
-- unless params[:q].blank?
-  - if @results.total.zero?
-    %p No results to show
-  - else
-    %p= page_entries_info @results, entry_name: 'result'
+          %ul.list-unstyled.search-results
+            - @results.each do |result|
+              %li= link_to result.name, entity_path(result.id)
 
-    %ul
-      - @results.each do |result|
-        %li= link_to result.name, entity_path(result.id)
-
-    %p= paginate @results
+          = paginate @results

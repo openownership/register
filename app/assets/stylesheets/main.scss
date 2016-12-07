@@ -10,6 +10,122 @@ body {
   flex-direction: column;
 }
 
+.logo {
+  width: 300px;
+  height: auto;
+}
+
+.brand-subhead {
+  font-family: $serif;
+  font-weight: normal;
+  font-size: 14px;
+  text-align: right;
+  color: lighten( $darkBlue, 50% );
+  margin-bottom: 0;
+  -webkit-font-smoothing: antialiased;
+  float: right;
+  @include media-breakpoint-down(md) {
+    float: none;
+    text-align: left;
+    margin-top: 20px;
+  }
+}
+
 .entity-name {
   font-weight: bold;
+}
+
+.search-form {
+  position: relative;
+}
+
+.search-field {
+
+}
+
+.search-button {
+  position: absolute;
+  right: 15px;
+  top: 29%;
+  height: 24px;
+  width: 24px;
+  background: asset-url("ic_search_black_24px.svg") no-repeat;
+  background-color: transparent;
+  border: none;
+  text-indent: -9999px;
+  opacity: .35;
+  cursor: pointer;
+  transition: opacity .25s ease;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.search-results {
+  margin-bottom: 0px;
+  a {
+    display: block;
+    position: relative;
+    padding: 20px;
+    margin-bottom: 5px;
+    background-color: $white;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
+    border-radius: $border-radius;
+    transition: all .25s ease;
+    &:after {
+      content: '';
+      background: asset-url("ic_chevron_right_blue_24px.svg") bottom right no-repeat;
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      right: 12px;
+      opacity: 0;
+    }
+    &:hover {
+      text-decoration: none;
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, .2);
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.pagination {
+  margin: 32px auto 4px auto;
+  text-align: center;
+  display: block;
+  .first, .prev, .page, .next, .last {
+    padding: 6px 1px 6px 4px;
+    margin: 0 3px;
+    text-align: center;
+    transition: opacity .25 ease;
+  }
+  .current {
+    border-bottom: 2px solid $darkBlue;
+    // font-weight: bold;
+  }
+  .first a, .last a {
+    opacity: .35;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  @include media-breakpoint-down(md) {
+    .first, .prev, .page, .next, .last {
+      line-height: 2.4;
+    }
+  }
+}
+
+.no-results {
+  padding: 20px;
+  background-color: $lightGrey;
+  margin-bottom: $spacer;
+  text-align: center;
+  p {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
