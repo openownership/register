@@ -20,4 +20,4 @@
             - @results.each do |result|
               %li= link_to result.name, entity_path(result.id)
 
-          %p= paginate @results
+          = paginate @results
