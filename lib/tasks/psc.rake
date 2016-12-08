@@ -4,10 +4,12 @@ namespace :psc do
     importer = PscImporter.new
 
     open(args.source) do |file|
-      documents = importer.parse(file)
-
-      Entity.collection.insert_many(documents)
+      importer.parse(file)
     end
+
+    Entity.collection.insert_many(importer.entities)
+
+    Relationship.collection.insert_many(importer.relationships)
 
     Entity.import(force: true)
   end

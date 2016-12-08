@@ -16,7 +16,7 @@
         .frame
           %p= page_entries_info @results, entry_name: 'result'
 
-          %ul.list-unstyled.search-results
+          %ul.list-unstyled.list-entities
             - @results.each do |result|
               %li= link_to result.name, entity_path(result.id)
 
