@@ -1,5 +1,6 @@
 require 'net/http/persistent'
 require 'json'
+require 'cgi'
 
 class PscImporter
   def initialize(api_token: ENV.fetch('OPENCORPORATES_API_TOKEN'))
@@ -36,13 +37,14 @@ class PscImporter
 
         entities << {
           _id: controlled_company_id,
-          name: get_company_name(record.fetch(:company_number)),
+          name: get_company('gb', record.fetch(:company_number)).fetch(:name),
           identifiers: [identifier('gb', record.fetch(:company_number))]
         }
 
         entities << {
           _id: controlling_entity_id,
-          name: data.fetch(:name)
+          name: data.fetch(:name),
+          identifiers: corporate_entity_identifiers(data)
         }
 
         relationships << relationship(controlling_entity_id, controlled_company_id)
@@ -53,6 +55,24 @@ class PscImporter
   end
 
   private
+
+  def corporate_entity_identifiers(data)
+    return unless data.fetch(:kind).start_with?('corporate-entity-person')
+
+    identification = data.fetch(:identification)
+
+    return if identification[:country_registered].nil?
+
+    jurisdiction_code = get_jurisdiction_code(identification[:country_registered])
+
+    return if jurisdiction_code.nil?
+
+    company = get_company(jurisdiction_code, identification.fetch(:registration_number))
+
+    return if company.nil?
+
+    [identifier(jurisdiction_code, company.fetch(:company_number))]
+  end
 
   def identifier(jurisdiction_code, company_number)
     {
@@ -71,8 +91,18 @@ class PscImporter
     }
   end
 
-  def get_company_name(company_number)
-    uri = URI("#{@api_url}/companies/gb/#{company_number}?sparse=true&api_token=#{@api_token}")
+  def get_jurisdiction_code(name)
+    uri = URI("#{@api_url}/jurisdictions/match?q=#{CGI.escape(name)}&api_token=#{@api_token}")
+
+    response = @http.request(uri)
+
+    object = JSON.parse(response.body, symbolize_names: true)
+
+    object.fetch(:results).fetch(:jurisdiction)[:code]
+  end
+
+  def get_company(jurisdiction_code, company_number)
+    uri = URI("#{@api_url}/companies/#{jurisdiction_code}/#{CGI.escape(company_number)}?sparse=true&api_token=#{@api_token}")
 
     response = @http.request(uri)
 
@@ -80,6 +110,6 @@ class PscImporter
 
     object = JSON.parse(response.body, symbolize_names: true)
 
-    object.fetch(:results).fetch(:company).fetch(:name)
+    object.fetch(:results).fetch(:company)
   end
 end
