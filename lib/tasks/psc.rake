@@ -7,10 +7,6 @@ namespace :psc do
       importer.parse(file)
     end
 
-    Entity.collection.insert_many(importer.entities)
-
-    Relationship.collection.insert_many(importer.relationships)
-
     Entity.import(force: true)
   end
 end

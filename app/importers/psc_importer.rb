@@ -5,14 +5,6 @@ class PscImporter
     @client = client
   end
 
-  def entities
-    @entities ||= []
-  end
-
-  def relationships
-    @relationships ||= []
-  end
-
   def parse(file)
     file.each_line do |line|
       record = JSON.parse(line, symbolize_names: true)
@@ -25,23 +17,13 @@ class PscImporter
       when 'persons-with-significant-control-statement'
         :ignore
       when /(individual|corporate-entity|legal-person)-person-with-significant-control/
-        controlled_company_id = BSON::ObjectId.new
+        company_number = record.fetch(:company_number)
 
-        controlling_entity_id = BSON::ObjectId.new
+        controlled_entity = controlled_entity!(company_number)
 
-        entities << {
-          _id: controlled_company_id,
-          name: @client.get_company('gb', record.fetch(:company_number)).fetch(:name),
-          identifiers: [identifier('gb', record.fetch(:company_number))]
-        }
+        controlling_entity = controlling_entity!(data)
 
-        entities << {
-          _id: controlling_entity_id,
-          name: data.fetch(:name),
-          identifiers: corporate_entity_identifiers(data)
-        }
-
-        relationships << relationship(controlling_entity_id, controlled_company_id)
+        Relationship.create!(source: controlling_entity, target: controlled_entity)
       else
         raise "unexpected kind: #{data.fetch(:kind)}"
       end
@@ -50,22 +32,36 @@ class PscImporter
 
   private
 
-  def corporate_entity_identifiers(data)
-    return unless data.fetch(:kind).start_with?('corporate-entity-person')
+  def controlled_entity!(company_number)
+    response = @client.get_company('gb', company_number)
 
-    identification = data.fetch(:identification)
+    corporate_entity!(response)
+  end
 
+  def controlling_entity!(data)
+    if data.fetch(:kind).start_with?('corporate-entity-person')
+      response = get_controlling_entity_company(data.fetch(:identification))
+
+      return corporate_entity!(response) unless response.nil?
+    end
+
+    Entity.create!(name: data.fetch(:name))
+  end
+
+  def get_controlling_entity_company(identification)
     return if identification[:country_registered].nil?
 
     jurisdiction_code = @client.get_jurisdiction_code(identification[:country_registered])
 
     return if jurisdiction_code.nil?
 
-    company = @client.get_company(jurisdiction_code, identification.fetch(:registration_number))
+    @client.get_company(jurisdiction_code, identification.fetch(:registration_number))
+  end
 
-    return if company.nil?
+  def corporate_entity!(response)
+    id = identifier(response.fetch(:jurisdiction_code), response.fetch(:company_number))
 
-    [identifier(jurisdiction_code, company.fetch(:company_number))]
+    Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: response.fetch(:name))
   end
 
   def identifier(jurisdiction_code, company_number)
@@ -74,14 +70,6 @@ class PscImporter
         jurisdiction_code: jurisdiction_code,
         company_number: company_number
       }
-    }
-  end
-
-  def relationship(source_id, target_id)
-    {
-      _id: BSON::ObjectId.new,
-      source_id: source_id,
-      target_id: target_id
     }
   end
 end
