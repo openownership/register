@@ -10,9 +10,27 @@
   %body
     %header.site-header
       .container
-        = link_to root_path do
-          = image_tag('OpenOwnership-Logo.svg', class: 'logo')
-        %h2.brand-subhead.pull-right The Global Beneficial Ownership Register
+        .row
+          .col-md-12
+            %nav.navbar.navbar-dark
+              %button.navbar-toggler.hidden-lg-up{ :type => "button", "data-toggle" => "collapse", "data-target" => "#navbarResponsive", "aria-controls" => "navbarResponsive", "aria-expanded" => "false", "aria-label" => "Toggle navigation" }
+              .collapse.navbar-toggleable-md#navbarResponsive
+                %ul.nav.navbar-nav
+                  %li.nav-item
+                    = link_to "Search", root_path, class: "nav-link"
+                  %span.float-md-right.follow-nav
+                    %li.nav-item.follow-label
+                      Follow the project on:
+                    %li.nav-item
+                      %a.nav-link{ href: "http://www.twitter.com/openownership" }
+                        %i.fa.fa-twitter
+                    %li.nav-item
+                      %a.nav-link{ href: "https://medium.com/beneficial-ownership" }
+                        %i.fa.fa-medium
+            .brand-header
+              = link_to root_path do
+                = image_tag('OpenOwnership-Logo.svg', class: 'logo')
+              %h2.brand-subhead.pull-right The Global Beneficial Ownership Register
     .content
       .container
         = yield

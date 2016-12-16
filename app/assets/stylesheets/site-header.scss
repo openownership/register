@@ -1,0 +1,65 @@
+.site-header {
+  background-color: $darkBlue;
+  margin-bottom: 30px;
+}
+
+.navbar {
+  border-bottom: 1px solid lighten( $darkBlue, 12% );
+  font-family: $sans;
+  padding-bottom: 0;
+  .navbar-nav {
+    .nav-item {
+      .nav-link {
+        font-size: 14px;
+        font-weight: bold;
+        padding: 14px 0;
+      }
+    }
+    .follow-nav {
+      .nav-item {
+        .nav-link {
+          color: $white;
+          font-size: 18px;
+          padding: 10px 0;
+        }
+      }
+      .nav-item + .nav-item {
+        @include media-breakpoint-up(md) {
+          margin-left: .75rem;
+        }
+        @include media-breakpoint-down(md) {
+          float: left;
+          margin-right: 1rem;
+        }
+      }
+    }
+    .follow-label {
+      padding: 14px 0;
+      font-family: $serif;
+      font-size: 14px;
+      font-style: italic;
+      color: lighten($darkBlue, 45%);
+    }
+    .nav-item + .nav-item {
+      @include media-breakpoint-up(md) {
+        margin-left: 1.5rem;
+      }
+    }
+    .nav-item.active {
+      color: $white;
+      @include media-breakpoint-up(md) {
+        border-bottom: 2px solid $electricBlue;
+      }
+    }
+  }
+}
+
+.navbar-dark .navbar-toggler {
+  border-color: transparent;
+  margin-left: -.75rem;
+  height: 3em;
+}
+
+.brand-header {
+  padding: 30px 0 34px;
+}

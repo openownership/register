@@ -24,3 +24,8 @@ $grid-gutter-width-base: 20px;
 $input-border-focus: $electricBlue;
 $input-padding-x-lg: 1rem;
 $input-line-height: 1.5;
+$navbar-padding-x: 0;
+$navbar-dark-color: lighten($darkBlue, 45%);
+$navbar-dark-hover-color: lighten($darkBlue, 70%);
+$navbar-dark-active-color: lighten($darkBlue, 70%);
+$navbar-dark-disabled-color: lighten($darkBlue, 20%);
