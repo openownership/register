@@ -16,6 +16,7 @@ gem 'mongoid'
 gem 'kaminari-mongoid'
 gem 'elasticsearch-model'
 gem 'net-http-persistent', '~> 2.0'
+gem 'parallel'
 gem 'rollbar'
 
 group :development, :test do

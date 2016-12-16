@@ -140,6 +140,7 @@ GEM
     nio4r (1.2.1)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
+    parallel (1.10.0)
     parser (2.3.2.0)
       ast (~> 2.2)
     powerpack (0.1.1)
@@ -267,6 +268,7 @@ DEPENDENCIES
   listen (~> 3.0.5)
   mongoid
   net-http-persistent (~> 2.0)
+  parallel
   puma (~> 3.0)
   rails (~> 5.0.0, >= 5.0.0.1)
   rollbar
