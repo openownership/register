@@ -9,7 +9,7 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
     %header.site-header
-      .container
+      .container-fluid
         .row
           .col-md-12
             %nav.navbar.navbar-dark
@@ -32,9 +32,9 @@
                 = image_tag('OpenOwnership-Logo.svg', class: 'logo')
               %h2.brand-subhead.pull-right The Global Beneficial Ownership Register
     .content
-      .container
+      .container-fluid
         = yield
     %footer.site-footer
-      .container
+      .container-fluid
         .site-footer-container
           %span © OpenOwnership
