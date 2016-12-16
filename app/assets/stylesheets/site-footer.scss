@@ -1,0 +1,68 @@
+.supporters-footer {
+  background-color: $white;
+  margin-top: 60px;
+  border-top: 1px solid lighten( $darkBlue, 75% );
+  a {
+    opacity: 1;
+    transition: opacity .25s ease;
+    &:hover {
+      opacity: .7;
+    }
+  }
+  h6 {
+    font-family: $serif;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: italic;
+    color: lighten( $darkBlue, 50% );
+    padding-top: 10px;
+  }
+  .container-fluid {
+    display: flex;
+    flex-direction: row;
+  }
+  .supporters {
+    @include media-breakpoint-down(md) {
+      flex: 1;
+    }
+  }
+  .supporters-logos {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    a {
+      display: block;
+      padding: 10px 30px 10px 0;
+      @include media-breakpoint-down(md) {
+        padding: 0 0 30px 0;
+      }
+    }
+    @include media-breakpoint-down(md) {
+      flex-wrap: wrap;
+      .one-logo {
+        margin: 0 20px;
+      }
+    }
+  }
+  .funders {
+    margin-left: 30px;
+    border-left: 1px solid lighten( $darkBlue, 75% );
+    padding: 0 0 0 40px;
+    @include media-breakpoint-down(md) {
+      flex: 1;
+      margin: 0 20px 0 40px;
+    }
+  }
+  .funders-logos {
+    padding: 5px 0 15px 0;
+  }
+}
+
+.site-footer {
+  border-top: 1px solid lighten( $darkBlue, 75% );
+  font-size: 14px;
+}
+
+.site-footer-container {
+  padding: 15px 0;
+}

@@ -34,6 +34,35 @@
     .content
       .container-fluid
         = yield
+
+    .supporters-footer
+      .container-fluid
+        .supporters
+          %h6
+            Brought to you by
+          .supporters-logos
+            %a{ href: "https://www.transparency.org" }
+              = image_tag('supporters/transparency-international-logo.png')
+            %a.one-logo{ href: "https://www.one.org/international/" }
+              = image_tag('supporters/one-logo.png')
+            %a{ href: "https://opencorporates.com" }
+              = image_tag('supporters/opencorporates-logo.png')
+            %a{ href: "http://www.open-contracting.org" }
+              = image_tag('supporters/ocp-logo.png')
+            %a{ href: "http://webfoundation.org" }
+              = image_tag('supporters/webfoundation-logo.png')
+            %a{ href: "https://www.globalwitness.org/en-gb/" }
+              = image_tag('supporters/global-witness-logo.png')
+            %a{ href: "http://bteam.org" }
+              = image_tag('supporters/the-b-team-logo.png')
+        .funders
+          %h6
+            Funded by
+          .funders-logos
+            %a{ href: "https://www.gov.uk/government/organisations/department-for-international-development" }
+              = image_tag('supporters/uk-aid-logo.png')
+
+
     %footer.site-footer
       .container-fluid
         .site-footer-container
