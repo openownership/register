@@ -11,27 +11,6 @@ body {
   flex-direction: column;
 }
 
-.logo {
-  width: 300px;
-  height: auto;
-}
-
-.brand-subhead {
-  font-family: $serif;
-  font-weight: normal;
-  font-size: 14px;
-  text-align: right;
-  color: lighten( $darkBlue, 50% );
-  margin-bottom: 0;
-  -webkit-font-smoothing: antialiased;
-  float: right;
-  @include media-breakpoint-down(md) {
-    float: none;
-    text-align: left;
-    margin-top: 20px;
-  }
-}
-
 .search-form {
   position: relative;
 }
