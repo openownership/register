@@ -1,19 +1,20 @@
 .row.entity-relationships
   .col-xl-6.offset-xl-3
     - if @target_relationships.any?
-      .controllers-list
+      .sources-list
         %ul.list-unstyled
           - @target_relationships.each do |relationship|
             %li= link_to relationship.source.name, entity_path(relationship.source)
-        %h4.control-header Controls
+        %h4.relationship-header Controls
     .current-entity
       %h1= @entity.name
     - if @source_relationships.any?
-      .controllees-list
-        - if @source_relationships.any? && @target_relationships.any?
-          %h4.control-header Which controls
-        - else
-          %h4.control-header Controls
+      .targets-list
+        %h4.relationship-header
+          - if @target_relationships.any?
+            Which controls
+          - else
+            Controls
         %ul.list-unstyled
           - @source_relationships.each do |relationship|
             %li= link_to relationship.target.name, entity_path(relationship.target)

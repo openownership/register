@@ -143,7 +143,7 @@ body {
   margin-bottom: 40px;
 }
 
-.controllers-list, .controllees-list {
+.sources-list, .targets-list {
   position: relative;
   border: 1px solid darken($lightGrey, 10%);
   ul {
@@ -167,7 +167,7 @@ body {
       }
     }
   }
-  .control-header {
+  .relationship-header {
     font-size: 0.75rem;
     font-weight: bold;
     letter-spacing: .1em;
@@ -180,13 +180,13 @@ body {
   }
 }
 
-.controllers-list {
+.sources-list {
   padding: 17px 40px 25px;
   border-bottom: none;
   li {
     padding-bottom: 18px;
   }
-  .control-header {
+  .relationship-header {
     position: absolute;
     bottom: -24px;
   }
@@ -196,10 +196,10 @@ body {
   }
 }
 
-.controllees-list {
+.targets-list {
   padding: 22px 40px 14px;
   margin-top: -1px;
-  .control-header {
+  .relationship-header {
     position: absolute;
     top: -16px;
   }
@@ -222,8 +222,4 @@ body {
     padding-left: 20px;
     padding-right: 20px;
   }
-}
-
-.entity-item {
-
 }
