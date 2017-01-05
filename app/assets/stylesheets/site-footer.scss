@@ -3,11 +3,23 @@
   margin-top: 60px;
   border-top: 1px solid lighten( $darkBlue, 75% );
   a {
-    opacity: 1;
+    opacity: .65;
     transition: opacity .25s ease;
     &:hover {
-      opacity: .7;
+      opacity: 1;
     }
+  }
+  .one-logo {
+    opacity: .5;
+  }
+  .b-team {
+    opacity: .55;
+  }
+  .ocp {
+    opacity: .75;
+  }
+  .webfoundation {
+    opacity: .6
   }
   h6 {
     font-family: $serif;
