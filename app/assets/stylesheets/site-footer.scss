@@ -44,7 +44,7 @@
     align-items: center;
     a {
       display: block;
-      padding: 10px 30px 10px 0;
+      padding: 14px 40px 10px 0;
       @include media-breakpoint-down(md) {
         padding: 0 0 30px 0;
       }
@@ -59,10 +59,11 @@
   .funders {
     margin-left: 30px;
     border-left: 1px solid lighten( $darkBlue, 75% );
-    padding: 0 0 0 40px;
+    padding: 0 0 0 60px;
     @include media-breakpoint-down(md) {
       flex: 1;
       margin: 0 20px 0 40px;
+      padding-left: 30px;
     }
   }
   .funders-logos {
