@@ -1,20 +1,30 @@
-.row.entity-relationships
-  .col-xl-6.offset-xl-3
-    - if @target_relationships.any?
-      .sources-list
-        %ul.list-unstyled
-          - @target_relationships.each do |relationship|
-            %li= link_to relationship.source.name, entity_path(relationship.source)
-        %h4.relationship-header Controls
-    .current-entity
-      %h1= @entity.name
-    - if @source_relationships.any?
-      .targets-list
-        %h4.relationship-header
-          - if @target_relationships.any?
-            Which controls
-          - else
-            Controls
-        %ul.list-unstyled
-          - @source_relationships.each do |relationship|
-            %li= link_to relationship.target.name, entity_path(relationship.target)
+.secondary-search
+  .container-fluid
+    .row
+      .col-lg-12
+        .form-group
+          = form_tag search_path, method: 'get', class: 'search-form' do
+            = text_field_tag :q, params[:q], class: 'form-control form-control-lg search-field', placeholder: 'New search'
+
+.content
+  .container-fluid
+    .row.entity-relationships
+      .col-xl-6.offset-xl-3
+        - if @target_relationships.any?
+          .sources-list
+            %ul.list-unstyled
+              - @target_relationships.each do |relationship|
+                %li= link_to relationship.source.name, entity_path(relationship.source)
+            %h4.relationship-header Controls
+        .current-entity
+          %h1= @entity.name
+        - if @source_relationships.any?
+          .targets-list
+            %h4.relationship-header
+              - if @target_relationships.any?
+                Which controls
+              - else
+                Controls
+            %ul.list-unstyled
+              - @source_relationships.each do |relationship|
+                %li= link_to relationship.target.name, entity_path(relationship.target)
