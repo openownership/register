@@ -21,7 +21,10 @@ img {
 }
 
 .search-field {
-
+  transition: all .25s ease;
+  &:focus {
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, .1);
+  }
 }
 
 .search-button {

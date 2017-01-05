@@ -5,6 +5,10 @@
 .container-fluid {
   padding-left: 70px;
   padding-right: 70px;
+  @include media-breakpoint-down(md) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 
 .frame {
