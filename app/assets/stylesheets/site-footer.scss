@@ -3,23 +3,11 @@
   margin-top: 60px;
   border-top: 1px solid lighten( $darkBlue, 75% );
   a {
-    opacity: .5;
+    opacity: .35;
     transition: opacity .25s ease;
     &:hover {
       opacity: 1;
     }
-  }
-  .one-logo {
-    opacity: .35;
-  }
-  .b-team {
-    opacity: .45;
-  }
-  .ocp {
-    opacity: .65;
-  }
-  .webfoundation {
-    opacity: .55
   }
   h6 {
     font-family: $serif;
@@ -34,6 +22,7 @@
     flex-direction: row;
   }
   .supporters {
+    // float: left;
     @include media-breakpoint-down(md) {
       flex: 1;
     }
@@ -41,10 +30,15 @@
   .supporters-logos {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    padding-bottom: 10px;
     a {
       display: block;
-      padding: 14px 40px 10px 0;
+      padding: 10px 50px 10px 0;
+      &:last-child {
+        padding-right: 20px;
+      }
       @include media-breakpoint-down(md) {
         padding: 0 0 30px 0;
       }
@@ -59,7 +53,7 @@
   .funders {
     margin-left: 30px;
     border-left: 1px solid lighten( $darkBlue, 75% );
-    padding: 0 0 0 60px;
+    padding: 0 0 10px 60px;
     @include media-breakpoint-down(md) {
       flex: 1;
       margin: 0 20px 0 40px;
@@ -67,7 +61,26 @@
     }
   }
   .funders-logos {
-    padding: 5px 0 15px 0;
+    padding: 10px 0 15px 0;
+    a {
+      img {
+        @include media-breakpoint-up(md) {
+          max-width: 58px;
+        }
+      }
+    }
+  }
+  .one-logo {
+    opacity: .25;
+  }
+  .b-team {
+    opacity: .30;
+  }
+  .ocp {
+    opacity: .45;
+  }
+  .webfoundation {
+    opacity: .40
   }
 }
 
