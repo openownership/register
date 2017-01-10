@@ -1,8 +1,8 @@
-.content
+.content.search-content
   .container-fluid
 
     .row
-      .col-lg-8.offset-lg-2
+      .col-lg-6.offset-lg-3
         .form-group
           = form_tag search_path, method: 'get', class: 'search-form' do
             = text_field_tag :q, params[:q], class: 'form-control form-control-lg search-field', placeholder: 'Search company or name', autofocus: true
@@ -10,7 +10,7 @@
             = submit_tag 'Search', name: nil, class: 'search-button'
 
     .row
-      .col-lg-8.offset-lg-2
+      .col-lg-6.offset-lg-3
         - unless params[:q].blank?
           - if @results.total.zero?
             .no-results

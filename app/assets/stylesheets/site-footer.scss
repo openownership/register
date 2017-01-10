@@ -1,9 +1,9 @@
 .supporters-footer {
-  background-color: $lightGrey;
-  margin-top: 60px;
+  background-color: $white;
+  // margin-top: 60px;
   border-top: 1px solid lighten( $darkBlue, 75% );
   a {
-    opacity: .35;
+    opacity: .25;
     transition: opacity .25s ease;
     &:hover {
       opacity: 1;
@@ -14,7 +14,7 @@
     font-size: 12px;
     font-weight: normal;
     font-style: italic;
-    color: lighten( $darkBlue, 50% );
+    color: #B8B8B8;
     padding-top: 10px;
   }
   .container-fluid {
@@ -71,16 +71,16 @@
     }
   }
   .one-logo {
-    opacity: .25;
+    opacity: .20;
   }
   .b-team {
-    opacity: .30;
+    opacity: .23;
   }
   .ocp {
-    opacity: .45;
+    opacity: .30;
   }
   .webfoundation {
-    opacity: .40
+    opacity: .28
   }
 }
 
