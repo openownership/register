@@ -28,6 +28,19 @@ class OpencorporatesClient
     parse(response).fetch(:company)
   end
 
+  def search_companies(jurisdiction_code, company_number)
+    params = {
+      q: company_number,
+      jurisdiction_code: jurisdiction_code,
+      fields: 'company_number',
+      order: 'score'
+    }
+
+    response = get('/v0.4/companies/search', params)
+
+    parse(response).fetch(:companies)
+  end
+
   private
 
   def parse(response)

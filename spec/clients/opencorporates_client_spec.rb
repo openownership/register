@@ -58,4 +58,41 @@ RSpec.describe OpencorporatesClient do
       expect { subject.get_company(@jurisdiction_code, @company_number) }.to raise_error(OpencorporatesClient::Error)
     end
   end
+
+  describe '#search_companies' do
+    before do
+      @jurisdiction_code = 'mm'
+
+      @company_number = '919 / 1996-1997'
+
+      @url = 'https://api.opencorporates.com/v0.4/companies/search'
+
+      query = {
+        q: @company_number,
+        jurisdiction_code: @jurisdiction_code,
+        fields: 'company_number',
+        order: 'score',
+        api_token: api_token
+      }
+
+      @stub = stub_request(:get, @url).with(query: query)
+    end
+
+    it 'returns an array of results for the given jurisdiction_code and query' do
+      @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"MYANMAR IMPERIAL JADE LIMITED"}}]}}))
+
+      results = subject.search_companies(@jurisdiction_code, @company_number)
+
+      expect(results).to be_an(Array)
+      expect(results.size).to eq(1)
+      expect(results.first).to be_a(Hash)
+      expect(results.first.fetch(:company).fetch(:name)).to eq('MYANMAR IMPERIAL JADE LIMITED')
+    end
+
+    it 'raises an exception for response errors' do
+      @stub.to_return(status: 500)
+
+      expect { subject.search_companies(@jurisdiction_code, @company_number) }.to raise_error(OpencorporatesClient::Error)
+    end
+  end
 end
