@@ -41,7 +41,7 @@ class PscImporter
 
       controlling_entity = controlling_entity!(data)
 
-      Relationship.create!(source: controlling_entity, target: controlled_entity)
+      Relationship.create!(source: controlling_entity, target: controlled_entity, interests: data[:natures_of_control])
     else
       raise "unexpected kind: #{data.fetch(:kind)}"
     end
