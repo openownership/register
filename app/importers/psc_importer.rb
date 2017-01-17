@@ -2,11 +2,15 @@ require 'json'
 require 'parallel'
 
 class PscImporter
-  def initialize(client: OpencorporatesClient.new)
-    @client = client
+  def initialize(opencorporates_client: OpencorporatesClient.new, entity_resolver: EntityResolver.new)
+    @opencorporates_client = opencorporates_client
+
+    @entity_resolver = entity_resolver
   end
 
-  def parse(file)
+  def parse(file, document_id:)
+    @document_id = document_id
+
     queue = SizedQueue.new(100)
 
     Thread.new do
@@ -25,66 +29,54 @@ class PscImporter
   private
 
   def process(line)
-    record = JSON.parse(line, symbolize_names: true)
+    record = JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
 
-    data = record.fetch(:data)
-
-    case data.fetch(:kind)
+    case record.data.kind
     when 'totals#persons-of-significant-control-snapshot'
       :ignore
     when 'persons-with-significant-control-statement'
       :ignore
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
-      company_number = record.fetch(:company_number)
+      child_entity = @entity_resolver.resolve!(jurisdiction_code: 'gb', identifier: record.company_number, name: nil)
 
-      controlled_entity = controlled_entity!(company_number)
+      parent_entity = parent_entity!(record.data)
 
-      controlling_entity = controlling_entity!(data)
-
-      Relationship.create!(source: controlling_entity, target: controlled_entity, interests: data[:natures_of_control])
+      Relationship.create!(source: parent_entity, target: child_entity, interests: record.data.natures_of_control)
     else
       raise "unexpected kind: #{data.fetch(:kind)}"
     end
   end
 
-  def controlled_entity!(company_number)
-    response = @client.get_company('gb', company_number)
+  def parent_entity!(data)
+    if data.kind.start_with?('corporate-entity-person')
+      country = data.identification.country_registered
 
-    corporate_entity!(response)
-  end
+      unless country.nil?
+        jurisdiction_code = @opencorporates_client.get_jurisdiction_code(country)
 
-  def controlling_entity!(data)
-    if data.fetch(:kind).start_with?('corporate-entity-person')
-      response = get_controlling_entity_company(data.fetch(:identification))
+        unless jurisdiction_code.nil?
+          identifier = data.identification.registration_number
 
-      return corporate_entity!(response) unless response.nil?
+          name = data.name
+
+          entity = @entity_resolver.resolve!(jurisdiction_code: jurisdiction_code, identifier: identifier, name: name)
+
+          return entity unless entity.nil?
+        end
+      end
     end
 
-    Entity.create!(name: data.fetch(:name))
+    find_or_create_entity_with_document_id!(data)
   end
 
-  def get_controlling_entity_company(identification)
-    return if identification[:country_registered].nil?
-
-    jurisdiction_code = @client.get_jurisdiction_code(identification[:country_registered])
-
-    return if jurisdiction_code.nil?
-
-    @client.get_company(jurisdiction_code, identification.fetch(:registration_number))
-  end
-
-  def corporate_entity!(response)
-    id = identifier(response.fetch(:jurisdiction_code), response.fetch(:company_number))
-
-    Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: response.fetch(:name))
-  end
-
-  def identifier(jurisdiction_code, company_number)
-    {
+  def find_or_create_entity_with_document_id!(data)
+    id = {
       _id: {
-        jurisdiction_code: jurisdiction_code,
-        company_number: company_number
+        document_id: @document_id,
+        link: data.links.self
       }
     }
+
+    Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: data.name)
   end
 end

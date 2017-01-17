@@ -6,7 +6,7 @@ namespace :psc do
     importer = PscImporter.new
 
     open(args.source) do |file|
-      importer.parse(file)
+      importer.parse(file, document_id: 'GB PSC Snapshot')
     end
   end
 end
