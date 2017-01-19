@@ -77,6 +77,11 @@ class PscImporter
       }
     }
 
-    Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: data.name)
+    begin
+      Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: data.name)
+    rescue Mongo::Error::OperationFailure => e
+      raise unless e.message =~ /\bE11000\b/
+      retry
+    end
   end
 end
