@@ -9,14 +9,45 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
     %header.site-header
-      .container
-        = link_to root_path do
-          = image_tag('OpenOwnership-Logo.svg', class: 'logo')
-        %h2.brand-subhead.pull-right The Global Beneficial Ownership Register
-    .content
-      .container
-        = yield
-    %footer.site-footer
-      .container
-        .site-footer-container
-          %span © OpenOwnership
+      .container-fluid
+        .row
+          .col-md-12
+            %nav.navbar.navbar-dark
+              %button.navbar-toggler.hidden-lg-up{ :type => "button", "data-toggle" => "collapse", "data-target" => "#navbarResponsive", "aria-controls" => "navbarResponsive", "aria-expanded" => "false", "aria-label" => "Toggle navigation" }
+              .collapse.navbar-toggleable-md#navbarResponsive
+                %ul.nav.navbar-nav
+                  %li.nav-item
+                    = link_to "Home", root_path, class: "nav-link"
+                  %span.float-md-right.follow-nav
+                    %li.nav-item.follow-label
+                      Follow the project on:
+                    %li.nav-item
+                      %a.nav-link{ href: "http://www.twitter.com/openownership" }
+                        %i.fa.fa-twitter
+                    %li.nav-item
+                      %a.nav-link{ href: "https://medium.com/beneficial-ownership" }
+                        %i.fa.fa-medium
+            .brand-header
+              = link_to root_path do
+                = image_tag('OpenOwnership-Logo.svg', class: 'logo')
+              %h2.brand-subhead.pull-right The Global Beneficial Ownership Register
+
+    = yield
+
+    .supporters-footer
+      .container-fluid
+        .supporters
+          .supporters-header
+            %h6
+              Brought to you by:
+          %a.transparency-logo{ href: "https://www.transparency.org" }
+          %a.one-logo{ href: "https://www.one.org/international/" }
+          %a.opencorporates-logo{ href: "https://opencorporates.com" }
+          %a.ocp{ href: "http://www.open-contracting.org" }
+          %a.webfoundation{ href: "http://webfoundation.org" }
+          %a.global-witness-logo{ href: "https://www.globalwitness.org/en-gb/" }
+          %a.b-team{ href: "http://bteam.org" }
+          .funders-header
+            %h6
+              Funded by:
+          %a.uk-aid-logo{ href: "https://www.gov.uk/government/organisations/department-for-international-development" }

@@ -84,6 +84,8 @@ GEM
     faraday (0.10.0)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.14)
+    font-awesome-sass (4.7.0)
+      sass (>= 3.2)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     haml (4.0.7)
@@ -261,6 +263,7 @@ DEPENDENCIES
   database_cleaner
   dotenv-rails
   elasticsearch-model
+  font-awesome-sass (~> 4.7.0)
   haml-rails
   haml_lint
   jquery-rails
