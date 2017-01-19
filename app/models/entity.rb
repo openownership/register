@@ -14,6 +14,24 @@ class Entity
     number_of_replicas: 0
   }
 
+  # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
+  # are found using their embeddeded identifiers instead of the _id field.
+  def upsert
+    selector = {
+      identifiers: identifiers.first.as_document
+    }
+
+    attributes = as_document.except('_id')
+
+    document = collection.find_one_and_update(selector, attributes, upsert: true, return_document: :after)
+
+    self.id = document.fetch('_id')
+  rescue Mongo::Error::OperationFailure => exception
+    raise unless exception.message.start_with?('E11000')
+
+    retry
+  end
+
   def as_indexed_json(_options = {})
     as_json(only: [:name])
   end
