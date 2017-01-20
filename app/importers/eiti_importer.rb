@@ -18,8 +18,6 @@ class EitiImporter
   column 'Reporting Date (Sample date)'
   column 'Start Date (if known)'
   column 'End Date (if known)'
-  column 'Included due to Accounting Consolidation'
-  column 'Basis for Consolidation'
   column 'Child company name', :child_name
   column 'Child Company register identifier', :child_identifier
   column 'Child company jurisdiction', :child_jurisdiction
