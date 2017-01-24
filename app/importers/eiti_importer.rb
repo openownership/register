@@ -15,6 +15,7 @@ class EitiImporter
     columns << Column.new(columns.size, heading, name)
   end
 
+  column 'ID', :id
   column 'Reporting Date (Sample date)'
   column 'Start Date (if known)'
   column 'End Date (if known)'
