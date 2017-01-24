@@ -22,6 +22,8 @@ class PscImporter
     end
 
     Parallel.each(queue, in_threads: 20) do |line|
+      Mongoid.default_client.reconnect
+
       process(line)
     end
   end
