@@ -31,6 +31,11 @@ class EntityResolver
       }
     }
 
-    Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: response.fetch(:name))
+    begin
+      Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: response.fetch(:name))
+    rescue Mongo::Error::OperationFailure => e
+      raise unless e.message =~ /\bE11000\b/
+      retry
+    end
   end
 end
