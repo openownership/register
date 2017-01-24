@@ -43,7 +43,7 @@ class PscImporter
 
       parent_entity = parent_entity!(record.data)
 
-      Relationship.create!(source: parent_entity, target: child_entity, interests: record.data.natures_of_control)
+      relationship!(child_entity, parent_entity, record.data)
     else
       raise "unexpected kind: #{data.fetch(:kind)}"
     end
@@ -68,22 +68,36 @@ class PscImporter
       end
     end
 
-    find_or_create_entity_with_document_id!(data)
+    entity_with_document_id!(data)
   end
 
-  def find_or_create_entity_with_document_id!(data)
-    id = {
+  def entity_with_document_id!(data)
+    attributes = {
+      identifiers: [
+        {
+          _id: {
+            document_id: @document_id,
+            link: data.links.self
+          }
+        }
+      ],
+      name: data.name
+    }
+
+    Entity.new(attributes).tap(&:upsert)
+  end
+
+  def relationship!(child_entity, parent_entity, data)
+    attributes = {
       _id: {
         document_id: @document_id,
         link: data.links.self
-      }
+      },
+      source: parent_entity,
+      target: child_entity,
+      interests: data.natures_of_control
     }
 
-    begin
-      Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: data.name)
-    rescue Mongo::Error::OperationFailure => e
-      raise unless e.message =~ /\bE11000\b/
-      retry
-    end
+    Relationship.new(attributes).upsert
   end
 end
