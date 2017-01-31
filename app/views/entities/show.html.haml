@@ -17,23 +17,48 @@
           = entity_country_flag(@entity)
           = entity_jurisdiction(@entity)
 
-    .row.entity-relationships
-      .col-xl-6.offset-xl-3
-        - if @target_relationships.any?
-          .sources-list
-            %ul.list-unstyled
-              - @target_relationships.each do |relationship|
-                %li= link_to relationship.source.name, entity_path(relationship.source)
-            %h4.relationship-header Controls
-        .current-entity
-          %h1= @entity.name
-        - if @source_relationships.any?
-          .targets-list
-            %h4.relationship-header
-              - if @target_relationships.any?
-                Which controls
+    .row
+      .col-lg-6
+        .ultimate-source-relationships
+          - if @ultimate_source_relationship_groupings.empty?
+            %h2
+              %span
+                = @entity.name
+              has no known ultimate source entities
+          - else
+            %h2
+              Entities which ultimately control
+              %span
+                = @entity.name
+            - @ultimate_source_relationship_groupings.each do |name, relationships|
+              - if relationships.size > 1
+                .grouping
+                  %a.grouping-header{ 'aria-controls' => name.parameterize, 'aria-expanded' => 'false', 'data-toggle' => 'collapse', 'href' => '#' + name.parameterize }
+                    = name
+                    %small.grouping-size.pull-right
+                      = relationships.size
+                      Instances
+                  .collapse{ id: name.parameterize }
+                    = render partial: 'ultimate_source_relationship', collection: relationships, as: :relationship
               - else
-                Controls
-            %ul.list-unstyled
-              - @source_relationships.each do |relationship|
-                %li= link_to relationship.target.name, entity_path(relationship.target)
+                = render partial: 'ultimate_source_relationship', locals: { relationship: relationships.first }
+
+      .col-lg-6
+        .source-relationships
+          - if @source_relationships.empty?
+            %h2
+              No known entities are controlled by
+              %span
+                = @entity.name
+          - else
+            %h2
+              Entities controlled by
+              %span
+                = @entity.name
+            - @source_relationships.sort_by { |relationship| relationship.target.name }.each do |relationship|
+              .item
+                = render partial: 'shared/entity_title', locals: { entity: relationship.target }
+                = link_to entity_relationship_path(relationship.target, @entity), class: 'relationship-link' do
+                  = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
+                  %span.details
+                    Details &rsaquo;

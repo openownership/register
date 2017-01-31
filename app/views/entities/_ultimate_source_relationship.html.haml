@@ -1,0 +1,19 @@
+.item
+  = render partial: 'shared/entity_title', locals: { entity: relationship.source }
+  = link_to entity_relationship_path(relationship.target, relationship.source), class: 'relationship-link' do
+    - if relationship.intermediate_entities.any?
+      %span.via
+        Controls via:
+        - relationship.intermediate_entities.each_with_index do |entity, index|
+          - unless index.zero?
+            &rarr;
+          = entity.name
+          = entity_country_flag(entity)
+        &rarr;
+        %span.target
+          = @entity.name
+        = entity_country_flag(@entity)
+    - else
+      = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
+    %span.details
+      Details &rsaquo;
