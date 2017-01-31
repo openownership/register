@@ -1,16 +1,36 @@
 require 'rails_helper'
 
 RSpec.describe Entity do
-  describe '#upsert' do
-    let(:identifier) do
-      {
-        _id: {
-          jurisdiction_code: 'gb',
-          company_number: '01234567'
-        }
+  let(:jurisdiction_code) { 'gb' }
+
+  let(:identifier) do
+    {
+      _id: {
+        'jurisdiction_code' => jurisdiction_code,
+        'company_number' => '01234567'
       }
+    }
+  end
+
+  describe '#jurisdiction_code' do
+    context 'when the entity has an identifer with a jurisdiction code' do
+      subject { Entity.new(identifiers: [Identifier.new(identifier)]) }
+
+      it 'returns the jurisdiction code' do
+        expect(subject.jurisdiction_code).to eq(jurisdiction_code)
+      end
     end
 
+    context 'when the entity does not have an identifer with a jurisdiction code' do
+      subject { Entity.new }
+
+      it 'returns nil' do
+        expect(subject.jurisdiction_code).to be_nil
+      end
+    end
+  end
+
+  describe '#upsert' do
     let(:name) { 'EXAMPLE LIMITED' }
 
     subject { Entity.new(identifiers: [Identifier.new(identifier)], name: name) }

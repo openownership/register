@@ -14,6 +14,10 @@ class Entity
     number_of_replicas: 0
   }
 
+  def jurisdiction_code
+    identifiers.map { |identifier| identifier._id['jurisdiction_code'] }.compact.first
+  end
+
   # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
   # are found using their embeddeded identifiers instead of the _id field.
   def upsert

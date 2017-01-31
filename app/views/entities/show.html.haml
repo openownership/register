@@ -8,6 +8,15 @@
 
 .content
   .container-fluid
+    .entity-header
+      .row
+        .col-lg-12
+          %h1.entity-name= @entity.name
+      .row
+        .col-lg-12
+          = entity_country_flag(@entity)
+          = entity_jurisdiction(@entity)
+
     .row.entity-relationships
       .col-xl-6.offset-xl-3
         - if @target_relationships.any?
