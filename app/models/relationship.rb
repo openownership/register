@@ -1,7 +1,7 @@
 class Relationship
   include Mongoid::Document
 
-  field :interests, type: Array
+  field :interests, type: Array, default: []
 
   belongs_to :source, class_name: 'Entity'
   belongs_to :target, class_name: 'Entity'

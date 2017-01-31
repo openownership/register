@@ -1,0 +1,10 @@
+- if relationship.interests.empty?
+  .relationship-interests
+    %ul.list-unstyled
+      %li
+        Unknown
+- else
+  .relationship-interests
+    %ul.list-unstyled
+      - relationship.interests.each do |interest|
+        %li= I18n.translate(interest, scope: :relationship_interests, default: interest)
