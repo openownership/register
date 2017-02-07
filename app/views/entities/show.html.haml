@@ -8,14 +8,15 @@
           %h1.entity-name= @entity.name
       .row
         .col-lg-12
-          = entity_country_flag(@entity)
-          = entity_jurisdiction(@entity)
+          .meta-jurisdiction
+            = entity_country_flag(@entity)
+            = entity_jurisdiction(@entity)
 
     .row
       .col-lg-6
         .ultimate-source-relationships
           - if @ultimate_source_relationship_groupings.empty?
-            %h2
+            %h2.empty-entities
               %span
                 = @entity.name
               has no known ultimate source entities
@@ -40,7 +41,7 @@
       .col-lg-6
         .source-relationships
           - if @source_relationships.empty?
-            %h2
+            %h2.empty-entities
               No known entities are controlled by
               %span
                 = @entity.name
