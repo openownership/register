@@ -317,6 +317,13 @@ img {
     margin-top: 10px;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
     border-radius: $border-radius;
+    .note {
+      margin-top: 12px;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-style: italic;
+      color: #A9A9A9;
+    }
   }
   .item {
     background-color: $white;

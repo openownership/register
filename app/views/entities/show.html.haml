@@ -34,6 +34,8 @@
                       = relationships.size
                       Instances
                   .collapse{ id: name.parameterize }
+                    .note
+                      These entities have been grouped together because similarities have been found. We have not determined whether or not these entities are the same.
                     = render partial: 'ultimate_source_relationship', collection: relationships, as: :relationship
               - else
                 = render partial: 'ultimate_source_relationship', locals: { relationship: relationships.first }
