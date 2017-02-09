@@ -72,11 +72,13 @@ img {
   a {
     display: block;
     position: relative;
-    padding: 20px;
+    padding: 20px 20px 18px;
     margin-bottom: 5px;
     background-color: $white;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
     border-radius: $border-radius;
+    color: $darkBlue;
+    font-size: 0.9375rem;
     transition: all .25s ease;
     &:after {
       content: '';
@@ -89,7 +91,7 @@ img {
     }
     &:hover {
       text-decoration: none;
-      box-shadow: 0px 1px 4px rgba(0, 0, 0, .2);
+      box-shadow: 0px 1px 6px rgba(0, 0, 0, .25);
       &:after {
         opacity: 1;
       }
@@ -101,6 +103,13 @@ img {
         margin-bottom: 0;
       }
     }
+  }
+  .flag {
+    height: 12px;
+    width: auto;
+    position: relative;
+    top: -2px;
+    margin-left: 2px;
   }
 }
 

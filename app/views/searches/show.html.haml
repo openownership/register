@@ -20,7 +20,10 @@
               %p= page_entries_info @results, entry_name: 'result'
 
               %ul.list-unstyled.list-entities
-                - @results.each do |result|
-                  %li= link_to result.name, entity_path(result.id)
+                - @records.each do |record|
+                  %li
+                    = link_to entity_path(record.id) do
+                      = record.name
+                      = entity_country_flag(record)
 
               = paginate @results
