@@ -6,6 +6,8 @@ namespace :psc do
     importer = PscImporter.new
 
     open(args.source) do |file|
+      file = Zlib::GzipReader.new(file) if File.extname(args.source) == ".gz"
+
       importer.parse(file, document_id: 'GB PSC Snapshot')
     end
   end
