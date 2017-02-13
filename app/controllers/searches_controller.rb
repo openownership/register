@@ -4,7 +4,10 @@ class SearchesController < ApplicationController
 
     query = {
       match: {
-        name: params[:q]
+        name: {
+          query: params[:q],
+          operator: 'AND'
+        }
       }
     }
 
