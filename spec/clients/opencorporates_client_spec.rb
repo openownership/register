@@ -22,10 +22,19 @@ RSpec.describe OpencorporatesClient do
       expect(subject.get_jurisdiction_code('West Yorkshire')).to be_nil
     end
 
-    it 'raises an exception for response errors' do
-      stub_request(:get, @url).with(query: "q=United+Kingdom&api_token=#{api_token}").to_return(status: 500)
+    context "when a response error occurs" do
+      before do
+        stub_request(:get, @url).with(query: "q=United+Kingdom&api_token=#{api_token}").to_return(status: 500)
+      end
 
-      expect { subject.get_jurisdiction_code('United Kingdom') }.to raise_error(OpencorporatesClient::Error)
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/500.*United Kingdom/)
+        subject.get_jurisdiction_code('United Kingdom')
+      end
+
+      it 'returns nil' do
+        expect(subject.get_jurisdiction_code('United Kingdom')).to be_nil
+      end
     end
   end
 
@@ -52,10 +61,19 @@ RSpec.describe OpencorporatesClient do
       expect(subject.get_company(@jurisdiction_code, @company_number)).to be_nil
     end
 
-    it 'raises an exception for other response errors' do
-      @stub.to_return(status: 500)
+    context "when a response error occurs" do
+      before do
+        @stub.to_return(status: 500)
+      end
 
-      expect { subject.get_company(@jurisdiction_code, @company_number) }.to raise_error(OpencorporatesClient::Error)
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/500.*#{@jurisdiction_code}.*#{@company_number}/)
+        subject.get_company(@jurisdiction_code, @company_number)
+      end
+
+      it 'returns nil' do
+        expect(subject.get_company(@jurisdiction_code, @company_number)).to be_nil
+      end
     end
   end
 
@@ -89,10 +107,19 @@ RSpec.describe OpencorporatesClient do
       expect(results.first.fetch(:company).fetch(:name)).to eq('MYANMAR IMPERIAL JADE LIMITED')
     end
 
-    it 'raises an exception for response errors' do
-      @stub.to_return(status: 500)
+    context "when a response error occurs" do
+      before do
+        @stub.to_return(status: 500)
+      end
 
-      expect { subject.search_companies(@jurisdiction_code, @company_number) }.to raise_error(OpencorporatesClient::Error)
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/500.*#{@company_number}.*#{@jurisdiction_code}/)
+        subject.search_companies(@jurisdiction_code, @company_number)
+      end
+
+      it 'returns empty array' do
+        expect(subject.search_companies(@jurisdiction_code, @company_number)).to eq([])
+      end
     end
   end
 end
