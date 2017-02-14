@@ -45,7 +45,7 @@ class PscImporter
 
       relationship!(child_entity, parent_entity, record.data)
     else
-      raise "unexpected kind: #{data.fetch(:kind)}"
+      raise "unexpected kind: #{record.data.kind}"
     end
   end
 
