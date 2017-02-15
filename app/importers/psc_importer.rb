@@ -13,6 +13,7 @@ class PscImporter
 
     queue = SizedQueue.new(100)
 
+    Thread.abort_on_exception = true
     Thread.new do
       file.each_line do |line|
         queue << line
