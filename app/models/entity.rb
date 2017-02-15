@@ -5,7 +5,7 @@ class Entity
   field :name, type: String
 
   embeds_many :identifiers
-  index({ "identifiers._id": 1 }, unique: true, sparse: true)
+  index({ identifiers: 1 }, unique: true, sparse: true)
 
   index_name "#{Rails.application.class.parent_name.underscore}_#{Rails.env}"
 
