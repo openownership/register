@@ -63,7 +63,7 @@ class EitiImporter
 
     parent_entity = parent_entity!(record)
 
-    Relationship.create!(source: parent_entity, target: child_entity, interests: Array(record.mechanism_of_control))
+    relationship!(child_entity, parent_entity, record)
   end
 
   def child_entity!(record)
@@ -75,7 +75,7 @@ class EitiImporter
 
     return entity unless entity.nil?
 
-    find_or_create_entity_with_document_id!(record.child_name)
+    entity_with_document_id!(record.child_name)
   end
 
   def parent_entity!(record)
@@ -91,20 +91,39 @@ class EitiImporter
       end
     end
 
-    find_or_create_entity_with_document_id!(record.parent_name)
+    entity_with_document_id!(record.parent_name)
   end
 
-  def find_or_create_entity_with_document_id!(name)
+  def entity_with_document_id!(name)
     name = name.strip
 
-    id = {
-      _id: {
-        document_id: @document_id,
-        name: name
-      }
+    attributes = {
+      identifiers: [
+        {
+          _id: {
+            document_id: @document_id,
+            name: name
+          }
+        }
+      ],
+      name: name
     }
 
-    Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: name)
+    Entity.new(attributes).tap(&:upsert)
+  end
+
+  def relationship!(child_entity, parent_entity, record)
+    attributes = {
+      _id: {
+        document_id: @document_id,
+        row_id: record.id
+      },
+      source: parent_entity,
+      target: child_entity,
+      interests: Array(record.mechanism_of_control)
+    }
+
+    Relationship.new(attributes).upsert
   end
 
   def read_headings(input)
