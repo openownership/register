@@ -14,5 +14,7 @@ class SearchesController < ApplicationController
     response = Entity.search(query: query).page(params[:page]).per(10)
 
     @results = response.results
+
+    @records = response.records.to_a
   end
 end

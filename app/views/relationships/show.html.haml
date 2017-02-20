@@ -1,0 +1,30 @@
+= render partial: 'shared/search_bar'
+
+.content
+  .container-fluid
+    .relationship-header
+      .row
+        .col-lg-12
+          %h1
+            = 'Relationship'.pluralize(@relationships.size)
+            between
+            %span.entity-name= @source_entity.name
+            and
+            %span.entity-name= @target_entity.name
+
+    - @relationships.each do |relationship|
+      .row
+        .col-lg-6.offset-lg-3
+          .relationship-details
+            - if relationship.intermediate_relationships.any?
+              - relationship.intermediate_relationships.each do |intermediate_relationship|
+                .item.relationship-source
+                  = render partial: 'shared/entity_title', locals: { entity: intermediate_relationship.source }
+                  = render partial: 'shared/relationship_interests', locals: { relationship: intermediate_relationship }
+            - else
+              .item.relationship-source
+                = render partial: 'shared/entity_title', locals: { entity: relationship.source }
+                = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
+
+            .item.relationship-target
+              = render partial: 'shared/entity_title', locals: { entity: @target_entity }

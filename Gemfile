@@ -19,6 +19,7 @@ gem 'elasticsearch-model'
 gem 'net-http-persistent', '~> 2.0'
 gem 'parallel'
 gem 'rollbar'
+gem 'countries'
 
 group :development, :test do
   gem 'byebug'
