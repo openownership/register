@@ -16,8 +16,14 @@
               %button.navbar-toggler.hidden-lg-up{ :type => "button", "data-toggle" => "collapse", "data-target" => "#navbarResponsive", "aria-controls" => "navbarResponsive", "aria-expanded" => "false", "aria-label" => "Toggle navigation" }
               .collapse.navbar-toggleable-md#navbarResponsive
                 %ul.nav.navbar-nav
-                  %li.nav-item
-                    = link_to "Home", root_path, class: "nav-link"
+                  %li.nav-item.active
+                    = link_to "Search the register", root_path, class: "nav-link"
+                  %li.nav-item.external
+                    %a.nav-link.external{ href: "http://openownership.org/about/", target: "_blank" }
+                      Learn more
+                  %li.nav-item.external
+                    %a.nav-link.external{ href: "http://openownership.org/get-involved/", target: "_blank" }
+                      Get involved
                   %span.float-md-right.follow-nav
                     %li.nav-item.follow-label
                       Follow the project on:
