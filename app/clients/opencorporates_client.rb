@@ -3,9 +3,6 @@ require 'cgi'
 require 'json'
 
 class OpencorporatesClient
-  class Error < StandardError
-  end
-
   def initialize(api_token: ENV.fetch('OPENCORPORATES_API_TOKEN'))
     @api_token = api_token
 
@@ -16,14 +13,14 @@ class OpencorporatesClient
 
   def get_jurisdiction_code(name)
     response = get('/v0.4/jurisdictions/match', q: name)
+    return unless response
 
     parse(response).fetch(:jurisdiction)[:code]
   end
 
   def get_company(jurisdiction_code, company_number)
     response = get("/v0.4/companies/#{jurisdiction_code}/#{company_number}", sparse: true)
-
-    return if response.is_a?(Net::HTTPNotFound)
+    return unless response
 
     parse(response).fetch(:company)
   end
@@ -37,6 +34,7 @@ class OpencorporatesClient
     }
 
     response = get('/v0.4/companies/search', params)
+    return [] unless response
 
     parse(response).fetch(:companies)
   end
@@ -44,10 +42,6 @@ class OpencorporatesClient
   private
 
   def parse(response)
-    unless response.is_a?(Net::HTTPSuccess)
-      raise Error, "unexpected #{response.code} response from api.opencorporates.com"
-    end
-
     object = JSON.parse(response.body, symbolize_names: true)
 
     object.fetch(:results)
@@ -60,7 +54,14 @@ class OpencorporatesClient
 
     uri.query = params.map { |k, v| "#{escape(k)}=#{escape(v)}" }.join('&')
 
-    @http.request(uri)
+    response = @http.request(uri)
+
+    if response.is_a?(Net::HTTPSuccess)
+      response
+    else
+      Rails.logger.info("Received #{response.code} from api.opencorporates.com when calling #{path} (#{params})")
+      nil
+    end
   end
 
   def escape(component)

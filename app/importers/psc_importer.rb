@@ -13,6 +13,7 @@ class PscImporter
 
     queue = SizedQueue.new(100)
 
+    Thread.abort_on_exception = true
     Thread.new do
       file.each_line do |line|
         queue << line
@@ -34,9 +35,10 @@ class PscImporter
     record = JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
 
     case record.data.kind
-    when 'totals#persons-of-significant-control-snapshot'
-      :ignore
-    when 'persons-with-significant-control-statement'
+    when 'totals#persons-of-significant-control-snapshot',
+         'persons-with-significant-control-statement',
+         'super-secure-person-with-significant-control',
+         'exemptions'
       :ignore
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
       child_entity = @entity_resolver.resolve!(jurisdiction_code: 'gb', identifier: record.company_number, name: nil)
@@ -45,7 +47,7 @@ class PscImporter
 
       relationship!(child_entity, parent_entity, record.data)
     else
-      raise "unexpected kind: #{data.fetch(:kind)}"
+      raise "unexpected kind: #{record.data.kind}"
     end
   end
 

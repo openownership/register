@@ -1,0 +1,1 @@
+{"company_number":"1234567","data":{"exemptions":{"psc_exempt_as_shares_admitted_on_market":{"exemption_type":"psc-exempt-as-shares-admitted-on-market","items":[{"exempt_from":"2016-10-29"}]}},"kind":"exemptions","links":{"self":"/company/1234567/exemptions"}}}
