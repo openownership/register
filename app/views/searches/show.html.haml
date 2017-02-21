@@ -3,26 +3,25 @@
 
     .row
       .col-lg-12
-        %h1 Check beneficial ownership for #{number_to_human(@company_count, precision: 2).downcase} companies
+        %h1= t(".headline", count: number_to_human(@company_count, precision: 2).downcase)
       .col-lg-6.offset-lg-3
         .form-group
           = form_tag search_path, method: 'get', class: 'search-form' do
-            = text_field_tag :q, params[:q], class: 'form-control form-control-lg search-field', placeholder: 'Search company or name of person', autofocus: true
+            = text_field_tag :q, params[:q], class: 'form-control form-control-lg search-field', placeholder: t(".placeholder"), autofocus: true
 
-            = submit_tag 'Search', name: nil, class: 'search-button'
+            = submit_tag t(".search"), name: nil, class: 'search-button'
 
     .row
       .col-lg-6.offset-lg-3
         - if params[:q].blank?
           .oo-intro
-            %p OpenOwnership is a new platform to collect and publish beneficial ownership to fight corruption, crime, and improve business integrity.
+            %p= t(".blurb")
             %p
-              %span
-                Coming soon:
-              Add ownership info on your company
+              %span= t(".coming_soon")
+              = t(".coming_soon_content")
         - elsif @results.total.zero?
           .no-results
-            %p No results to show
+            %p= t(".no_results")
         - else
           .frame
             %p= page_entries_info @results, entry_name: 'result'
@@ -35,4 +34,4 @@
             = paginate @results
 
 .footer-data-info
-  Free and open information on #{number_with_delimiter(@company_count)} companies, from UK PSC Register and EITI pilot data
+  = t(".footer", count: number_with_delimiter(@company_count))

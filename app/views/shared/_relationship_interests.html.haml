@@ -2,9 +2,9 @@
   .relationship-interests
     %ul.list-unstyled.unknown
       %li
-        Unknown
+        = t(".unknown")
 - else
   .relationship-interests
     %ul.list-unstyled
       - relationship.interests.each do |interest|
-        %li= I18n.translate(interest, scope: :relationship_interests, default: interest)
+        %li= t(interest, scope: :relationship_interests, default: interest)

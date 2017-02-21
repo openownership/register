@@ -25,7 +25,7 @@ module EntityHelper
     if entity.natural_person?
       parts << entity.country.try(:nationality)
       date_of_birth(entity).presence.try do |date_of_birth|
-        parts << "(Born #{date_of_birth})"
+        parts << t("helpers.entities.entity_attributes_snippet.date_of_birth", date_of_birth: date_of_birth)
       end
     else
       parts << entity_jurisdiction(entity, short: true)

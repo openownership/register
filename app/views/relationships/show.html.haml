@@ -6,11 +6,7 @@
       .row
         .col-lg-12
           %h1
-            = 'Relationship'.pluralize(@relationships.size)
-            between
-            %span.entity-name= @source_entity.name
-            and
-            %span.entity-name= @target_entity.name
+            = t(".title_html", source: render_haml("%span.entity-name= @source_entity.name"), target: render_haml("%span.entity-name= @target_entity.name"), count: @relationships.size)
 
     - @relationships.each do |relationship|
       .row
