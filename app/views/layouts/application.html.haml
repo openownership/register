@@ -34,9 +34,12 @@
                       %a.nav-link{ href: "https://medium.com/beneficial-ownership" }
                         %i.fa.fa-medium
             .brand-header
-              = link_to root_path do
-                = image_tag('OpenOwnership-Logo.svg', class: 'logo')
-              %h2.brand-subhead.pull-right The Global Beneficial Ownership Register
+              .row
+                .col-lg-6
+                  = link_to root_path do
+                    = image_tag('OpenOwnership-Logo-Beta.svg', class: 'logo')
+                .col-lg-6
+                  %h2.brand-subhead.pull-right The Global Beneficial Ownership Register
 
     = yield
 
