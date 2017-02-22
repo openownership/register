@@ -50,9 +50,37 @@
       }
     }
     .nav-item.active {
-      color: $white;
       @include media-breakpoint-up(md) {
         border-bottom: 2px solid $electricBlue;
+      }
+      a {
+        color: $white;
+      }
+    }
+    .nav-item.external + .nav-item.external {
+      @include media-breakpoint-up(md) {
+        margin-left: 1.2rem;
+      }
+    }
+    .nav-link.external {
+      &:after {
+        content: '';
+        display: inline-block;
+        width: 18px;
+        height: 13px;
+        margin-left: 6px;
+        background-image: asset-url("icon-external.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: left center;
+        position: relative;
+        top: 2px;
+        transition: background-position .25s ease;
+      }
+      &:hover {
+        &:after {
+          background-position: right center;
+        }
       }
     }
   }
