@@ -17,7 +17,13 @@ class EntityResolver
     else
       response = @reconciliation_client.reconcile(jurisdiction_code, name)
 
-      return entity!(response) unless response.nil?
+      return if response.nil?
+
+      resolve!(
+        jurisdiction_code: response.fetch(:jurisdiction_code),
+        identifier: response.fetch(:company_number),
+        name: response.fetch(:name)
+      )
     end
   end
 

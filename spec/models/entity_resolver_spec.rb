@@ -152,30 +152,11 @@ RSpec.describe EntityResolver do
           expect(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(response)
         end
 
-        it 'creates an entity with an identifier' do
+        it 'retries resolving with returned details' do
+          allow(subject).to receive(:resolve!).and_call_original
+          expect(subject).to receive(:resolve!).with(jurisdiction_code: @jurisdiction_code, identifier: @company_number, name: @company_name).and_return(nil)
+
           subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
-
-          expect(Entity.count).to eq(1)
-
-          entity = Entity.first
-
-          expect(entity.identifiers.first._id).to be_a(Hash)
-          expect(entity.identifiers.first._id.fetch('jurisdiction_code')).to eq(@jurisdiction_code)
-          expect(entity.identifiers.first._id.fetch('company_number')).to eq(@company_number)
-        end
-
-        it 'uses the name from the api response' do
-          subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
-
-          entity = Entity.first
-
-          expect(entity.name).to eq(@company_name)
-        end
-
-        it 'returns the entity' do
-          entity = subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
-
-          expect(entity).to eq(Entity.first)
         end
       end
 
