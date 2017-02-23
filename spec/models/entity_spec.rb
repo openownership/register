@@ -30,6 +30,26 @@ RSpec.describe Entity do
     end
   end
 
+  describe '#natural_person?' do
+    subject { Entity.new(type: type).natural_person? }
+
+    context "when entity type is Entity::Types::NATURAL_PERSON" do
+      let(:type) { Entity::Types::NATURAL_PERSON }
+
+      it "returns true" do
+        expect(subject).to be true
+      end
+    end
+
+    context "when entity type is not Entity::Types::NATURAL_PERSON" do
+      let(:type) { Entity::Types::LEGAL_ENTITY }
+
+      it "returns false" do
+        expect(subject).to be false
+      end
+    end
+  end
+
   describe '#upsert' do
     let(:name) { 'EXAMPLE LIMITED' }
 

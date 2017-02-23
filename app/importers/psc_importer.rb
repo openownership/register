@@ -74,6 +74,13 @@ class PscImporter
   end
 
   def entity_with_document_id!(data)
+    type = case data.kind
+    when "individual-person-with-significant-control"
+      Entity::Types::NATURAL_PERSON
+    else
+      Entity::Types::LEGAL_ENTITY
+    end
+
     attributes = {
       identifiers: [
         {
@@ -83,6 +90,7 @@ class PscImporter
           }
         }
       ],
+      type: type,
       name: data.name
     }
 

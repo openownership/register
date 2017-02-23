@@ -42,6 +42,14 @@ RSpec.describe EntityResolver do
           expect(entity.identifiers.first._id.fetch('company_number')).to eq(@company_number)
         end
 
+        it 'sets the type to Entity::Types::LEGAL_ENTITY' do
+          subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
+
+          entity = Entity.first
+
+          expect(entity.type).to eq(Entity::Types::LEGAL_ENTITY)
+        end
+
         it 'uses the name from the api response' do
           subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
 

@@ -39,6 +39,7 @@ class EntityResolver
           }
         }
       ],
+      type: Entity::Types::LEGAL_ENTITY,
       name: response.fetch(:name)
     }
 

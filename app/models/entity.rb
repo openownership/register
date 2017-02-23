@@ -2,6 +2,13 @@ class Entity
   include Mongoid::Document
   include Elasticsearch::Model
 
+  module Types
+    NATURAL_PERSON = "natural-person".freeze
+    LEGAL_ENTITY = "legal-entity".freeze
+  end
+
+  field :type, type: String
+
   field :name, type: String
 
   embeds_many :identifiers
@@ -16,6 +23,10 @@ class Entity
 
   def jurisdiction_code
     identifiers.map { |identifier| identifier._id['jurisdiction_code'] }.compact.first
+  end
+
+  def natural_person?
+    type == Types::NATURAL_PERSON
   end
 
   # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
