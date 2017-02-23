@@ -10,6 +10,19 @@ class Entity
   field :type, type: String
 
   field :name, type: String
+  field :address, type: String
+
+  field :nationality, type: String
+  field :country_of_residence, type: String
+  field :dob_year, type: Integer
+  field :dob_month, type: Integer
+  field :dob_day, type: Integer
+
+  field :jurisdiction_code, type: String
+  field :company_number, type: String
+  field :incorporation_date, type: Date
+  field :dissolution_date, type: Date
+  field :company_type, type: String
 
   embeds_many :identifiers
   index({ identifiers: 1 }, unique: true, sparse: true)
@@ -20,10 +33,6 @@ class Entity
     number_of_shards: 1,
     number_of_replicas: 0
   }
-
-  def jurisdiction_code
-    identifiers.map { |identifier| identifier._id['jurisdiction_code'] }.compact.first
-  end
 
   def natural_person?
     type == Types::NATURAL_PERSON

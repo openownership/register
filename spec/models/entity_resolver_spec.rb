@@ -24,7 +24,11 @@ RSpec.describe EntityResolver do
           response = {
             jurisdiction_code: @jurisdiction_code,
             company_number: @company_number,
-            name: @company_name
+            name: @company_name,
+            registered_address_in_full: "123 Main Street, Example Town, Exampleshire, EX4 2MP",
+            incorporation_date: "1980-02-27",
+            dissolution_date: "1980-02-27",
+            company_type: "Limited company"
           }
 
           expect(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(response)
@@ -50,12 +54,18 @@ RSpec.describe EntityResolver do
           expect(entity.type).to eq(Entity::Types::LEGAL_ENTITY)
         end
 
-        it 'uses the name from the api response' do
+        it 'uses the information from the api response' do
           subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
 
           entity = Entity.first
 
           expect(entity.name).to eq(@company_name)
+          expect(entity.address).to eq("123 Main Street, Example Town, Exampleshire, EX4 2MP")
+          expect(entity.jurisdiction_code).to eq(@jurisdiction_code)
+          expect(entity.company_number).to eq(@company_number)
+          expect(entity.incorporation_date).to eq(Date.new(1980, 2, 27))
+          expect(entity.dissolution_date).to eq(Date.new(1980, 2, 27))
+          expect(entity.company_type).to eq("Limited company")
         end
 
         it 'returns the entity' do
@@ -82,7 +92,11 @@ RSpec.describe EntityResolver do
               company: {
                 name: @company_name,
                 company_number: @company_number,
-                jurisdiction_code: @jurisdiction_code
+                jurisdiction_code: @jurisdiction_code,
+                registered_address_in_full: "123 Main Street, Example Town, Exampleshire, EX4 2MP",
+                incorporation_date: "1980-02-27",
+                dissolution_date: "1980-02-27",
+                company_type: "Limited company"
               }
             }
           ]
@@ -103,12 +117,18 @@ RSpec.describe EntityResolver do
           expect(entity.identifiers.first._id.fetch('company_number')).to eq(@company_number)
         end
 
-        it 'uses the name from the api response' do
+        it 'uses the information from the api response' do
           subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
 
           entity = Entity.first
 
           expect(entity.name).to eq(@company_name)
+          expect(entity.address).to eq("123 Main Street, Example Town, Exampleshire, EX4 2MP")
+          expect(entity.jurisdiction_code).to eq(@jurisdiction_code)
+          expect(entity.company_number).to eq(@company_number)
+          expect(entity.incorporation_date).to eq(Date.new(1980, 2, 27))
+          expect(entity.dissolution_date).to eq(Date.new(1980, 2, 27))
+          expect(entity.company_type).to eq("Limited company")
         end
 
         it 'returns the entity' do

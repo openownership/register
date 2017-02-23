@@ -40,7 +40,13 @@ class EntityResolver
         }
       ],
       type: Entity::Types::LEGAL_ENTITY,
-      name: response.fetch(:name)
+      name: response.fetch(:name),
+      address: response[:registered_address_in_full].presence.try(:gsub, "\n", ", "),
+      jurisdiction_code: response[:jurisdiction_code].presence,
+      company_number: response[:company_number].presence,
+      incorporation_date: response[:incorporation_date].presence,
+      dissolution_date: response[:dissolution_date].presence,
+      company_type: response[:company_type].presence
     }
 
     Entity.new(attributes).tap(&:upsert)

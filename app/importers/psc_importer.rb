@@ -91,7 +91,13 @@ class PscImporter
         }
       ],
       type: type,
-      name: data.name
+      name: data.name,
+      nationality: country_from_nationality(data.nationality).try(:alpha2),
+      address: data.address.presence && address_string(data.address),
+      country_of_residence: data.country_of_residence.presence,
+      dob_year: data.date_of_birth && data.date_of_birth.year,
+      dob_month: data.date_of_birth && data.date_of_birth.month,
+      dob_day: data.date_of_birth && data.date_of_birth.day
     }
 
     Entity.new(attributes).tap(&:upsert)
@@ -109,5 +115,17 @@ class PscImporter
     }
 
     Relationship.new(attributes).upsert
+  end
+
+  ADDRESS_KEYS = [:premises, :address_line_1, :address_line_2, :locality, :region, :postal_code].freeze
+
+  def address_string(address)
+    address.to_h.values_at(*ADDRESS_KEYS).map(&:presence).compact.join(', ')
+  end
+
+  def country_from_nationality(nationality)
+    countries = ISO3166::Country.find_all_countries_by_nationality(nationality)
+    return if countries.count > 1 # too ambiguous
+    countries[0]
   end
 end
