@@ -44,6 +44,7 @@ GEM
     ast (2.3.0)
     autoprefixer-rails (6.5.3)
       execjs
+    bcrypt (3.1.11)
     bootstrap (4.0.0.alpha5)
       autoprefixer-rails (>= 6.0.3)
       sass (>= 3.4.19)
@@ -67,6 +68,12 @@ GEM
       safe_yaml (~> 1.0.0)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    devise (4.2.0)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0, < 5.1)
+      responders
+      warden (~> 1.2.3)
     diff-lcs (1.2.5)
     dotenv (2.1.1)
     dotenv-rails (2.1.1)
@@ -152,6 +159,7 @@ GEM
     nio4r (1.2.1)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
+    orm_adapter (0.5.0)
     parallel (1.10.0)
     parser (2.3.2.0)
       ast (~> 2.2)
@@ -189,6 +197,8 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
+    responders (2.3.0)
+      railties (>= 4.2.0, < 5.1)
     rollbar (2.13.3)
       multi_json
     rspec-core (3.5.4)
@@ -253,6 +263,8 @@ GEM
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.1.1)
     unicode_utils (1.4.0)
+    warden (1.2.7)
+      rack (>= 1.0)
     web-console (3.4.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
@@ -275,6 +287,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   countries
   database_cleaner
+  devise
   dotenv-rails
   elasticsearch-model
   font-awesome-sass (~> 4.7.0)
@@ -305,4 +318,4 @@ RUBY VERSION
    ruby 2.3.2p217
 
 BUNDLED WITH
-   1.13.6
+   1.14.4
