@@ -64,6 +64,9 @@ img {
   background-color: $lightGrey;
   margin-bottom: 30px;
   border-top: 1px solid lighten( $darkBlue, 12% );
+  @include media-breakpoint-down(md) {
+    margin-bottom: 20px;
+  }
   .form-group {
     margin-bottom: 0;
   }
@@ -107,7 +110,7 @@ img {
   a {
     display: block;
     position: relative;
-    padding: 20px 20px 18px;
+    padding: 20px 20px 17px;
     margin-bottom: 5px;
     background-color: $white;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
@@ -117,10 +120,11 @@ img {
     transition: all .25s ease;
     &:after {
       content: '';
-      background: asset-url("ic_chevron_right_blue_24px.svg") bottom right no-repeat;
+      background: asset-url("ic_chevron_right_blue_24px.svg") right top no-repeat;
       width: 24px;
       height: 24px;
       position: absolute;
+      top: 18px;
       right: 12px;
       opacity: 0;
     }
@@ -214,12 +218,24 @@ img {
 
 .entity-header, .relationship-header {
   margin-bottom: 30px;
-  padding-bottom: 16px;
-  border-bottom: solid 1px #D8DEE4;
-
+  @include media-breakpoint-down(md) {
+    margin-bottom: 20px;
+  }
   h1 {
     font-size: 1.75rem;
     font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 14px;
+  }
+
+  h6 {
+    font-size: 0.6875rem;
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: #B3B3B3;
+    text-transform: uppercase;
+    letter-spacing: .035em;
+    margin-top: 20px;
   }
 
   .entity-name {
@@ -228,9 +244,18 @@ img {
     text-transform: uppercase;
     letter-spacing: .035em;
   }
-  .meta-jurisdiction {
-    font-size: 14px;
-    color: #666666;
+  .entity-name-wrap {
+    margin-bottom: 2px;
+    border-bottom: 1px solid #DFE4E9;
+  }
+  .meta {
+    border: 1px solid #DFE4E9;
+    padding: 18px 20px 16px 20px;
+    border-radius: 2px;
+    p {
+      font-size: 0.875rem;
+      margin-bottom: 0;
+    }
   }
   .flag {
     height: 12px;
@@ -245,13 +270,12 @@ img {
 .ultimate-source-relationships, .source-relationships, .relationship-details {
   .entity-title {
     padding-bottom: 7px;
-    border-bottom: solid 1px #EBEEF1;
     font-size: 0.9375rem;
     text-transform: uppercase;
     a {
       display: inline-block;
       width: 100%;
-      background: calc(100% + 4px) calc(50% - 3px) no-repeat;
+      background: calc(100% + 4px) calc(0% - 3px) no-repeat;
       text-transform: uppercase;
       letter-spacing: .035em;
       &:hover {
@@ -269,6 +293,10 @@ img {
   padding: 20px;
   margin-bottom: 30px;
   background-color: $lightGrey;
+  border-radius: 2px;
+  @include media-breakpoint-down(md) {
+    margin-bottom: 20px;
+  }
   h2 {
     font-size: 1.375rem;
     font-weight: normal;
@@ -308,7 +336,6 @@ img {
     .relationship-link {
       display: block;
       position: relative;
-      margin-top: 12px;
       padding: 7px 10px;
       font-size: 0.75rem;
       line-height: 1.75em;
@@ -434,5 +461,13 @@ img {
     vertical-align: middle;
     position: relative;
     top: -2px;
+  }
+}
+
+.entity-title {
+  small {
+    color: #929292;
+    letter-spacing: 0;
+    text-transform: none;
   }
 }
