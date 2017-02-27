@@ -36,4 +36,5 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'rubocop', require: false
   gem 'haml_lint', require: false
+  gem 'spring-commands-rspec'
 end
