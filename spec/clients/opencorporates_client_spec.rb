@@ -7,7 +7,7 @@ RSpec.describe OpencorporatesClient do
 
   describe '#get_jurisdiction_code' do
     before do
-      @url = 'https://api.opencorporates.com/v0.4/jurisdictions/match'
+      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/jurisdictions/match"
     end
 
     it 'returns the jurisdiction code matching the given text' do
@@ -44,7 +44,7 @@ RSpec.describe OpencorporatesClient do
 
       @company_number = '01234567'
 
-      @url = "https://api.opencorporates.com/v0.4/companies/#{@jurisdiction_code}/#{@company_number}"
+      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/#{@jurisdiction_code}/#{@company_number}"
 
       @stub = stub_request(:get, @url).with(query: "sparse=true&api_token=#{api_token}")
     end
@@ -83,7 +83,7 @@ RSpec.describe OpencorporatesClient do
 
       @company_number = '919 / 1996-1997'
 
-      @url = 'https://api.opencorporates.com/v0.4/companies/search'
+      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/search"
 
       query = {
         q: @company_number,
