@@ -4,7 +4,7 @@ en:
       controlled_entities_html: Entities controlled by %{entity}
       controlled_entities_none_html: No known entities are controlled by %{entity}
       controlling_entities_html: Entities which ultimately control %{entity}
-      controlling_entities_none_html: "%{entity} has no known ultimate source entities"
+      controlling_entities_none_html: "%{entity} has no known ultimate controlling entities"
       details: Details ›
       fields:
         nationality: Nationality
