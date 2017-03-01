@@ -17,7 +17,13 @@ class EntityResolver
     else
       response = @reconciliation_client.reconcile(jurisdiction_code, name)
 
-      return entity!(response) unless response.nil?
+      return if response.nil?
+
+      resolve!(
+        jurisdiction_code: response.fetch(:jurisdiction_code),
+        identifier: response.fetch(:company_number),
+        name: response.fetch(:name)
+      )
     end
   end
 
@@ -33,7 +39,14 @@ class EntityResolver
           }
         }
       ],
-      name: response.fetch(:name)
+      type: Entity::Types::LEGAL_ENTITY,
+      name: response.fetch(:name),
+      address: response[:registered_address_in_full].presence.try(:gsub, "\n", ", "),
+      jurisdiction_code: response[:jurisdiction_code].presence,
+      company_number: response[:company_number].presence,
+      incorporation_date: response[:incorporation_date].presence,
+      dissolution_date: response[:dissolution_date].presence,
+      company_type: response[:company_type].presence
     }
 
     Entity.new(attributes).tap(&:upsert)

@@ -5,12 +5,60 @@
     .entity-header
       .row
         .col-lg-12
-          %h1.entity-name= @entity.name
-      .row
-        .col-lg-12
-          .meta-jurisdiction
-            = entity_country_flag(@entity)
-            = entity_jurisdiction(@entity)
+          .meta.clearfix
+            .row
+              .col-lg-12
+                .entity-name-wrap
+                  %h1.entity-name= @entity.name
+            - if @entity.natural_person?
+              .row
+                - @entity.country.try(:nationality).try do |nationality|
+                  .col-lg-3
+                    %h6 Nationality
+                    %p
+                      = entity_country_flag(@entity)
+                      = nationality
+                - @entity.country_of_residence.try do |country_of_residence|
+                  .col-lg-3
+                    %h6 Country of residence
+                    %p= country_of_residence
+                - @entity.address.try do |address|
+                  .col-lg-3
+                    %h6 Address
+                    %p= address
+                - date_of_birth(@entity).presence.try do |date_of_birth|
+                  .col-lg-3
+                    %h6 Born
+                    %p= date_of_birth
+            - else
+              .row
+                - entity_jurisdiction(@entity).try do |entity_jurisdiction|
+                  .col-lg-6
+                    %h6 Jurisdiction
+                    %p
+                      = entity_country_flag(@entity)
+                      = entity_jurisdiction
+                - @entity.address.try do |address|
+                  .col-lg-6
+                    %h6 Address
+                    %p= address
+              .row
+                - @entity.company_number.try do |company_number|
+                  .col-lg-3
+                    %h6 Company number
+                    %p= company_number
+                - @entity.company_type.try do |company_type|
+                  .col-lg-3
+                    %h6 Type
+                    %p= company_type
+                - @entity.incorporation_date.try do |incorporation_date|
+                  .col-lg-3
+                    %h6 Incorporation date
+                    %p= incorporation_date
+                - @entity.dissolution_date.try do |dissolution_date|
+                  .col-lg-3
+                    %h6 Dissolution date
+                    %p= dissolution_date
 
     .row
       .col-lg-6

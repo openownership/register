@@ -2,7 +2,27 @@ class Entity
   include Mongoid::Document
   include Elasticsearch::Model
 
+  module Types
+    NATURAL_PERSON = "natural-person".freeze
+    LEGAL_ENTITY = "legal-entity".freeze
+  end
+
+  field :type, type: String
+
   field :name, type: String
+  field :address, type: String
+
+  field :nationality, type: String
+  field :country_of_residence, type: String
+  field :dob_year, type: Integer
+  field :dob_month, type: Integer
+  field :dob_day, type: Integer
+
+  field :jurisdiction_code, type: String
+  field :company_number, type: String
+  field :incorporation_date, type: Date
+  field :dissolution_date, type: Date
+  field :company_type, type: String
 
   embeds_many :identifiers
   index({ identifiers: 1 }, unique: true, sparse: true)
@@ -14,8 +34,27 @@ class Entity
     number_of_replicas: 0
   }
 
-  def jurisdiction_code
-    identifiers.map { |identifier| identifier._id['jurisdiction_code'] }.compact.first
+  def natural_person?
+    type == Types::NATURAL_PERSON
+  end
+
+  def country
+    if natural_person?
+      return unless nationality
+      ISO3166::Country[nationality]
+    else
+      return unless jurisdiction_code
+      code, = jurisdiction_code.split('_')
+      ISO3166::Country[code]
+    end
+  end
+
+  def country_subdivision
+    return if natural_person?
+    return unless country
+    _, code = jurisdiction_code.split('_')
+    return unless code
+    country.subdivisions[code.upcase]
   end
 
   # Similar to Mongoid::Persistable::Upsertable#upsert except that entities

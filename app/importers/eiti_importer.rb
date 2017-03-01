@@ -75,7 +75,7 @@ class EitiImporter
 
     return entity unless entity.nil?
 
-    entity_with_document_id!(record.child_name)
+    entity_with_document_id!(record.child_name, Entity::Types::LEGAL_ENTITY)
   end
 
   def parent_entity!(record)
@@ -91,10 +91,16 @@ class EitiImporter
       end
     end
 
-    entity_with_document_id!(record.parent_name)
+    type = if record.parent_type =~ /^Individual\b/i
+      Entity::Types::NATURAL_PERSON
+    else
+      Entity::Types::LEGAL_ENTITY
+    end
+
+    entity_with_document_id!(record.parent_name, type)
   end
 
-  def entity_with_document_id!(name)
+  def entity_with_document_id!(name, type)
     name = name.strip
 
     attributes = {
@@ -106,6 +112,7 @@ class EitiImporter
           }
         }
       ],
+      type: type,
       name: name
     }
 

@@ -1,4 +1,9 @@
 .entity-title
   = link_to entity_path(entity) do
-    = entity.name
     = entity_country_flag(entity)
+    = entity.name
+    %small
+      = entity_attributes_snippet(entity)
+      - entity.address.try do |address|
+        %br
+        = address

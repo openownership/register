@@ -12,6 +12,9 @@ AllCops:
 Lint/EndAlignment:
   AlignWith: variable
 
+Style/CaseIndentation:
+  IndentWhenRelativeTo: end
+
 Style/HashSyntax:
   Exclude:
     - lib/tasks/**/*.rake

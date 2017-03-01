@@ -30,9 +30,7 @@
             %ul.list-unstyled.list-entities
               - @records.each do |record|
                 %li
-                  = link_to entity_path(record.id) do
-                    = record.name
-                    = entity_country_flag(record)
+                  = render "shared/entity_title", entity: record
 
             = paginate @results
 
