@@ -12,4 +12,5 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.action_mailer.delivery_method = :test
   config.active_support.deprecation = :stderr
+  config.action_view.raise_on_missing_translations = true
 end

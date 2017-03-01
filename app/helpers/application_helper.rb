@@ -6,4 +6,8 @@ module ApplicationHelper
       Rails.application.assets_manifest.assets[path].present?
     end
   end
+
+  def render_haml(haml)
+    Haml::Engine.new(haml).render(self)
+  end
 end

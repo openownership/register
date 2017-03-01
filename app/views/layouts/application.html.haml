@@ -17,16 +17,16 @@
               .collapse.navbar-toggleable-md#navbarResponsive
                 %ul.nav.navbar-nav
                   %li.nav-item.active
-                    = link_to "Search the register", root_path, class: "nav-link"
+                    = link_to t(".nav.home"), root_path, class: "nav-link"
                   %li.nav-item.external
                     %a.nav-link.external{ href: "http://openownership.org/about/", target: "_blank" }
-                      Learn more
+                      = t(".nav.about")
                   %li.nav-item.external
                     %a.nav-link.external{ href: "http://openownership.org/get-involved/", target: "_blank" }
-                      Get involved
+                      = t(".nav.get_involved")
                   %span.float-md-right.follow-nav
                     %li.nav-item.follow-label
-                      Follow the project on:
+                      = t(".nav.follow")
                     %li.nav-item
                       %a.nav-link{ href: "http://www.twitter.com/openownership" }
                         %i.fa.fa-twitter
@@ -39,7 +39,7 @@
                   = link_to root_path do
                     = image_tag('OpenOwnership-Logo-Beta.svg', class: 'logo')
                 .col-lg-6
-                  %h2.brand-subhead.pull-right The Global Beneficial Ownership Register
+                  %h2.brand-subhead.pull-right= t(".subtitle")
 
     = yield
 
@@ -48,7 +48,7 @@
         .supporters
           .supporters-header
             %h6
-              Brought to you by:
+              = t(".footer.brought_by")
           %a.transparency-logo{ href: "https://www.transparency.org" }
           %a.one-logo{ href: "https://www.one.org/international/" }
           %a.opencorporates-logo{ href: "https://opencorporates.com" }
@@ -58,5 +58,5 @@
           %a.b-team{ href: "http://bteam.org" }
           .funders-header
             %h6
-              Funded by:
+              = t(".footer.funded_by")
           %a.uk-aid-logo{ href: "https://www.gov.uk/government/organisations/department-for-international-development" }

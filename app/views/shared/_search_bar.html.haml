@@ -4,4 +4,4 @@
       .col-lg-12
         .form-group
           = form_tag search_path, method: 'get', class: 'search-form' do
-            = text_field_tag :q, params[:q], class: 'form-control form-control-lg search-field', placeholder: 'New search'
+            = text_field_tag :q, params[:q], class: 'form-control form-control-lg search-field', placeholder: t(".new_search")
