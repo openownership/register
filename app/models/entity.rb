@@ -24,8 +24,12 @@ class Entity
   field :dissolution_date, type: Date
   field :company_type, type: String
 
+  scope :legal_entities, -> { where(type: Types::LEGAL_ENTITY) }
+
   embeds_many :identifiers
+
   index({ identifiers: 1 }, unique: true, sparse: true)
+  index(type: 1)
 
   index_name "#{Rails.application.class.parent_name.underscore}_#{Rails.env}"
 
