@@ -116,13 +116,13 @@ h6 {
   a {
     display: block;
     position: relative;
-    padding: 20px 20px 17px;
+    padding: 15px 15px 14px;
     margin-bottom: 5px;
     background-color: $white;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
     border-radius: $border-radius;
     color: $darkBlue;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     transition: all .25s ease;
     &:after {
       content: '';
@@ -140,6 +140,9 @@ h6 {
       &:after {
         opacity: 1;
       }
+    }
+    small {
+      font-size: 0.8125rem;
     }
   }
   li {
@@ -281,8 +284,9 @@ h6 {
 
 .ultimate-source-relationships, .source-relationships, .relationship-details {
   .entity-title {
-    padding-bottom: 7px;
-    font-size: 0.9375rem;
+    padding-bottom: 5px;
+    font-size: 1rem;
+    line-height: 1.4;
     text-transform: uppercase;
     a {
       display: inline-block;
@@ -360,13 +364,13 @@ h6 {
     margin-bottom: 20px;
   }
   h2 {
-    font-size: 1.375rem;
+    font-size: 1.5rem;
     font-weight: normal;
     line-height: 1.3;
     margin-bottom: 18px;
     span {
       display: block;
-      font-size: .75rem;
+      font-size: .8125rem;
       letter-spacing: .035em;
       margin-top: 6px;
     }
@@ -381,7 +385,7 @@ h6 {
     color: inherit;
   }
   .item, .grouping {
-    padding: 17px 20px 12px 20px;
+    padding: 15px;
     margin-top: 10px;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
     border-radius: $border-radius;
@@ -399,7 +403,7 @@ h6 {
       display: block;
       position: relative;
       padding: 7px 10px;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       line-height: 1.75em;
       background-color: #F4F6F8;
       color: #666666;
@@ -466,7 +470,7 @@ h6 {
     }
   }
   .grouping-size {
-    font-size: .75rem;
+    font-size: 0.8125rem;
     color: #999999;
     margin-right: 20px;
     line-height: 1.75em;
@@ -502,7 +506,7 @@ h6 {
         left: -13px;
       }
       li {
-        font-size: .75rem;
+        font-size: .8125rem;
         font-weight: normal;
         color: #666666;
       }
