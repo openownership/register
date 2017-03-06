@@ -5,6 +5,7 @@ en:
       controlled_entities_none_html: No known entities are controlled by %{entity}
       controlling_entities_html: Entities which ultimately control %{entity}
       controlling_entities_none_html: "%{entity} has no known ultimate controlling entities"
+      data_from_opencorporates_html: "Data from %{opencorporates}"
       details: Details ›
       fields:
         nationality: Nationality

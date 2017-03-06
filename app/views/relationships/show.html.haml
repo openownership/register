@@ -1,13 +1,15 @@
 = render partial: 'shared/search_bar'
 
-.content
+.entity-header
   .container-fluid
-    .relationship-header
-      .row
-        .col-lg-12
+    .row
+      .col-lg-12
+        .entity-name-wrap
           %h1
             = t(".title_html", source: render_haml("%span.entity-name= @source_entity.name"), target: render_haml("%span.entity-name= @target_entity.name"), count: @relationships.size)
 
+.content
+  .container-fluid
     - @relationships.each do |relationship|
       .row
         .col-lg-6.offset-lg-3
