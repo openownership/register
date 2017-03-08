@@ -73,23 +73,29 @@
                   %span.details
                     = t(".details")
 
+      - content_for(:meta) do
+        - if @entity.natural_person?
+          - @entity.address.try do |address|
+            %h6= t(".fields.address")
+            %p= address
+        - else
+          - @entity.address.try do |address|
+            %h6= t(".fields.address")
+            %p= address
+          - @entity.incorporation_date.try do |incorporation_date|
+            %h6= t(".fields.incorporation_date")
+            %p= incorporation_date
+          - @entity.dissolution_date.try do |dissolution_date|
+            %h6= t(".fields.dissolution_date")
+            %p= dissolution_date
+
       .col-lg-4
         .frame-light.meta
           .frame-wrap
-            - if @entity.natural_person?
-              - @entity.address.try do |address|
-                %h6= t(".fields.address")
-                %p= address
+            - if content_for?(:meta)
+              = yield :meta
             - else
-              - @entity.address.try do |address|
-                %h6= t(".fields.address")
-                %p= address
-              - @entity.incorporation_date.try do |incorporation_date|
-                %h6= t(".fields.incorporation_date")
-                %p= incorporation_date
-              - @entity.dissolution_date.try do |dissolution_date|
-                %h6= t(".fields.dissolution_date")
-                %p= dissolution_date
+              %p= t(".no_further_information_known")
         - if @opencorporates_company_hash
           .frame-light.meta
             .frame-wrap

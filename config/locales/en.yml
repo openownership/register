@@ -6,6 +6,7 @@ en:
       controlling_entities_html: Entities which ultimately control %{entity}
       controlling_entities_none_html: "%{entity} has no known ultimate controlling entities"
       data_from_opencorporates_html: "Data from %{opencorporates}"
+      no_further_information_known: No further information known about this entity
       more_on: "More on %{name}"
       details: Details ›
       fields:
