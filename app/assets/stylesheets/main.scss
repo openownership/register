@@ -27,6 +27,29 @@ h6 {
   margin-top: 20px;
 }
 
+.external {
+  &:after {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 13px;
+    margin-left: 6px;
+    background-image: asset-url("icon-external.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left center;
+    position: relative;
+    top: 2px;
+    transition: background-position .25s ease;
+  }
+  &:hover {
+    &:after {
+      background-position: right center;
+    }
+  }
+}
+
+
 .search-content {
   background-color: $lightGrey;
   padding: 30px 0 90px 0;
@@ -315,6 +338,10 @@ h6 {
   p {
     margin-bottom: 0;
   }
+  a {
+    color: $darkBlue;
+    text-decoration: underline;
+  }
   ul {
     padding: 0;
     margin-bottom: 0;
@@ -324,34 +351,50 @@ h6 {
     color: #AEAEAE;
     font-style: italic;
   }
+  .external {
+    text-decoration: none;
+    &:after {
+      margin-left: 2px;
+      background-image: asset-url("icon-external-lightgrey.svg");
+    }
+  }
+  .oo-link {
+    display: block;
+    width: 100%;
+    border-top: 1px solid lighten($darkBlue, 76%);
+    padding: 18px 20px 20px;
+    color: #AEAEAE;
+    text-decoration: none;
+    background-image: asset-url("icon-external-lightgrey.svg");
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    transition: background .25s ease;
+    span {
+      display: inline-block;
+      width: 110px;
+      height: 16px;
+      position: relative;
+      top: 4px;
+      background-image: asset-url("supporters/opencorporates-logo.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      text-indent: -9999px;
+    }
+    &:hover {
+      background-position: right 12px center;
+      background-color: lighten($darkBlue, 86.5%);
+      color: #B3B3B3;
+      text-decoration: none;
+    }
+  }
 }
 
-.oo-link {
-  display: block;
-  width: 100%;
-  border-top: 1px solid lighten($darkBlue, 76%);
-  padding: 18px 20px 20px;
-  color: #AEAEAE;
-  background-image: asset-url("icon-external-lightgrey.svg");
-  background-repeat: no-repeat;
-  background-position: right 20px center;
-  transition: background .25s ease;
-  span {
-    display: inline-block;
-    width: 110px;
-    height: 16px;
-    position: relative;
-    top: 4px;
-    background-image: asset-url("supporters/opencorporates-logo.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-    text-indent: -9999px;
-  }
-  &:hover {
-    background-position: right 12px center;
-    background-color: lighten($darkBlue, 86.5%);
-    color: #B3B3B3;
-    text-decoration: none;
+.entity-search-links {
+  p {
+    margin-top: 3px;
+    &:first-of-type {
+      margin-top: 5px;
+    }
   }
 }
 
@@ -535,5 +578,11 @@ h6 {
     color: #AEAEAE;
     letter-spacing: 0;
     text-transform: none;
+  }
+}
+
+.nav-item.external + .nav-item.external {
+  @include media-breakpoint-up(md) {
+    margin-left: 1.2rem;
   }
 }

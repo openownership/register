@@ -112,3 +112,9 @@
                         %span.meta-secondary= attributes
             %a.oo-link{ href: @opencorporates_company_hash[:opencorporates_url], target: '_blank' }
               = t(".data_from_opencorporates_html", opencorporates: render_haml("%span OpenCorporates"))
+        .frame-light.meta.entity-search-links
+          .frame-wrap
+            %h6= t(".more_on", name: @entity.name)
+            %p= link_to 'Google', google_search_uri(q: @entity.name), class: 'external', target: '_blank'
+            - if @entity.natural_person?
+              %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank'
