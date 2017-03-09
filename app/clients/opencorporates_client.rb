@@ -5,6 +5,8 @@ require 'json'
 class OpencorporatesClient
   API_VERSION = 'v0.4.6'.freeze
 
+  attr_reader :http
+
   def initialize(api_token: ENV.fetch('OPENCORPORATES_API_TOKEN'))
     @api_token = api_token
 
@@ -20,8 +22,11 @@ class OpencorporatesClient
     parse(response).fetch(:jurisdiction)[:code]
   end
 
-  def get_company(jurisdiction_code, company_number)
-    response = get("/#{API_VERSION}/companies/#{jurisdiction_code}/#{company_number}", sparse: true)
+  def get_company(jurisdiction_code, company_number, sparse: true)
+    params = {}
+    params[:sparse] = true if sparse
+
+    response = get("/#{API_VERSION}/companies/#{jurisdiction_code}/#{company_number}", params)
     return unless response
 
     parse(response).fetch(:company)

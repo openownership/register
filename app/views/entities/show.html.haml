@@ -60,6 +60,29 @@
                     %h6= t(".fields.dissolution_date")
                     %p= dissolution_date
 
+              - if @opencorporates_company_hash
+                .row
+                  - @opencorporates_company_hash[:current_status].try do |current_status|
+                    .col-lg-3
+                      %h6= t(".fields.current_status")
+                      %p= current_status
+                  - previous_names(@opencorporates_company_hash).presence.try do |previous_names|
+                    .col-lg-3
+                      %h6= t(".fields.previous_names")
+                      %p= previous_names
+                  - industry_codes(@opencorporates_company_hash).presence.try do |industry_codes|
+                    .col-lg-3
+                      %h6= t(".fields.industry_codes")
+                      %p= industry_codes
+                  - officers(@opencorporates_company_hash).presence.try do |officers|
+                    .col-lg-3
+                      %h6= t(".fields.officers")
+                      %ul
+                        - officers.each do |officer_hash|
+                          %li
+                            = officer_hash[:name]
+                            - officer_attributes_snippet(officer_hash).presence.try do |attributes|
+                              %span.meta-secondary= attributes
     .row
       .col-lg-6
         .ultimate-source-relationships
