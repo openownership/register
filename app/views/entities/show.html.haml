@@ -95,7 +95,7 @@
             - if content_for?(:meta)
               = yield :meta
             - else
-              %p= t(".no_further_information_known")
+              %p.unknown= t(".no_further_information_known")
 
         - unless @entity.natural_person?
           - if @opencorporates_company_hash
@@ -123,7 +123,7 @@
           - else
             .frame-light.meta
               .frame-wrap
-                %p= t(".no_data_from_opencorporates")
+                %p.unknown= t(".no_data_from_opencorporates")
 
         .frame-light.meta.entity-search-links
           .frame-wrap

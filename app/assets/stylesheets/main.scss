@@ -33,13 +33,13 @@ h6 {
     display: inline-block;
     width: 18px;
     height: 13px;
-    margin-left: 6px;
     background-image: asset-url("icon-external.svg");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: left center;
     position: relative;
     top: 2px;
+    right: -4px;
     transition: background-position .25s ease;
   }
   &:hover {
@@ -223,6 +223,10 @@ h6 {
   }
 }
 
+.unknown {
+  font-style: italic;
+}
+
 
 /////////////////////////////////////////////
 ////////////////// ENTITIES /////////////////
@@ -323,9 +327,6 @@ h6 {
       }
     }
   }
-  .unknown {
-    font-style: italic;
-  }
 }
 
 .meta {
@@ -383,9 +384,11 @@ h6 {
     &:hover {
       background-position: right 12px center;
       background-color: lighten($darkBlue, 86.5%);
-      color: #B3B3B3;
       text-decoration: none;
     }
+  }
+  .unknown {
+    color: #999999;
   }
 }
 
