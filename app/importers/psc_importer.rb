@@ -60,7 +60,8 @@ class PscImporter
   end
 
   def parent_entity!(data)
-    if data.kind.start_with?('corporate-entity-person')
+    case data.kind
+    when 'corporate-entity-person-with-significant-control'
       country = data.identification.country_registered
 
       unless country.nil?
@@ -76,13 +77,23 @@ class PscImporter
           return entity unless entity.nil?
         end
       end
-    end
 
-    entity_with_document_id!(data)
+      entity_with_document_id!(data, name: data.name)
+    when 'individual-person-with-significant-control'
+      entity_with_document_id!(
+        data,
+        name: data.name_elements.presence && name_string(data.name_elements) || data.name,
+        nationality: country_from_nationality(data.nationality).try(:alpha2),
+        country_of_residence: data.country_of_residence.presence,
+        dob: entity_dob(data.date_of_birth)
+      )
+    when 'legal-person-person-with-significant-control'
+      entity_with_document_id!(data, name: data.name)
+    end
   end
 
-  def entity_with_document_id!(data)
-    attributes = {
+  def entity_with_document_id!(data, attrs = {})
+    attributes = attrs.merge(
       identifiers: [
         {
           _id: {
@@ -92,12 +103,8 @@ class PscImporter
         }
       ],
       type: entity_type(data),
-      name: data.name_elements.presence && name_string(data.name_elements) || data.name,
-      nationality: country_from_nationality(data.nationality).try(:alpha2),
-      address: data.address.presence && address_string(data.address),
-      country_of_residence: data.country_of_residence.presence,
-      dob: entity_dob(data.date_of_birth)
-    }
+      address: data.address.presence && address_string(data.address)
+    )
 
     Entity.new(attributes).tap(&:upsert)
   end
