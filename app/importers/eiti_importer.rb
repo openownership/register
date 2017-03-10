@@ -69,7 +69,11 @@ class EitiImporter
 
     jurisdiction_code = jurisdiction && @opencorporates_client.get_jurisdiction_code(jurisdiction) || source_jurisdiction_code
 
-    entity = @entity_resolver.resolve!(jurisdiction_code: jurisdiction_code, identifier: record.child_identifier, name: record.child_name)
+    entity = @entity_resolver.resolve!(
+      jurisdiction_code: jurisdiction_code,
+      identifier: record.child_identifier,
+      name: record.child_name
+    )
 
     return entity unless entity.nil?
 
@@ -83,7 +87,11 @@ class EitiImporter
       jurisdiction_code = @opencorporates_client.get_jurisdiction_code(record.parent_jurisdiction)
 
       if jurisdiction_code
-        entity = @entity_resolver.resolve!(jurisdiction_code: jurisdiction_code, identifier: record.parent_identifier, name: record.parent_name)
+        entity = @entity_resolver.resolve!(
+          jurisdiction_code: jurisdiction_code,
+          identifier: record.parent_identifier,
+          name: record.parent_name
+        )
 
         return entity unless entity.nil?
       end

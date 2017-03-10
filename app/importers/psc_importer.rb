@@ -45,7 +45,11 @@ class PscImporter
          'exemptions'
       :ignore
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
-      child_entity = @entity_resolver.resolve!(jurisdiction_code: 'gb', identifier: record.company_number, name: nil)
+      child_entity = @entity_resolver.resolve!(
+        jurisdiction_code: 'gb',
+        identifier: record.company_number,
+        name: nil
+      )
 
       parent_entity = parent_entity!(record.data)
 
@@ -67,7 +71,11 @@ class PscImporter
 
           name = data.name
 
-          entity = @entity_resolver.resolve!(jurisdiction_code: jurisdiction_code, identifier: identifier, name: name)
+          entity = @entity_resolver.resolve!(
+            jurisdiction_code: jurisdiction_code,
+            identifier: identifier,
+            name: name
+          )
 
           return entity unless entity.nil?
         end
