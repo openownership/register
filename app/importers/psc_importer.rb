@@ -67,14 +67,10 @@ class PscImporter
         jurisdiction_code = @opencorporates_client.get_jurisdiction_code(country)
 
         unless jurisdiction_code.nil?
-          identifier = data.identification.registration_number
-
-          name = data.name
-
           entity = @entity_resolver.resolve!(
             jurisdiction_code: jurisdiction_code,
-            identifier: identifier,
-            name: name
+            identifier: data.identification.registration_number,
+            name: data.name
           )
 
           return entity unless entity.nil?
