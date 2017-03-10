@@ -78,7 +78,7 @@ class PscImporter
         end
       end
 
-      entity_with_document_id!(data, name: data.name)
+      entity_with_document_id!(data, name: data.name, jurisdiction_code: jurisdiction_code)
     when 'individual-person-with-significant-control'
       entity_with_document_id!(
         data,

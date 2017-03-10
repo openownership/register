@@ -77,7 +77,11 @@ class EitiImporter
 
     return entity unless entity.nil?
 
-    entity_with_document_id!(record.child_name, Entity::Types::LEGAL_ENTITY)
+    entity_with_document_id!(
+      record.child_name,
+      Entity::Types::LEGAL_ENTITY,
+      jurisdiction_code: jurisdiction_code
+    )
   end
 
   def parent_entity!(record)
@@ -97,13 +101,17 @@ class EitiImporter
       end
     end
 
-    entity_with_document_id!(record.parent_name, type)
+    entity_with_document_id!(
+      record.parent_name,
+      type,
+      jurisdiction_code: jurisdiction_code
+    )
   end
 
-  def entity_with_document_id!(name, type)
+  def entity_with_document_id!(name, type, attrs = {})
     name = name.strip
 
-    attributes = {
+    attributes = attrs.merge(
       identifiers: [
         {
           _id: {
@@ -114,7 +122,7 @@ class EitiImporter
       ],
       type: type,
       name: name
-    }
+    )
 
     Entity.new(attributes).tap(&:upsert)
   end
