@@ -74,13 +74,6 @@ class PscImporter
   end
 
   def entity_with_document_id!(data)
-    type = case data.kind
-    when "individual-person-with-significant-control"
-      Entity::Types::NATURAL_PERSON
-    else
-      Entity::Types::LEGAL_ENTITY
-    end
-
     attributes = {
       identifiers: [
         {
@@ -90,7 +83,7 @@ class PscImporter
           }
         }
       ],
-      type: type,
+      type: entity_type(data),
       name: data.name_elements.presence && name_string(data.name_elements) || data.name,
       nationality: country_from_nationality(data.nationality).try(:alpha2),
       address: data.address.presence && address_string(data.address),
@@ -133,5 +126,11 @@ class PscImporter
     countries = ISO3166::Country.find_all_countries_by_nationality(nationality)
     return if countries.count > 1 # too ambiguous
     countries[0]
+  end
+
+  def entity_type(data)
+    return Entity::Types::NATURAL_PERSON if data.kind == 'individual-person-with-significant-control'
+
+    Entity::Types::LEGAL_ENTITY
   end
 end
