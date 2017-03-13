@@ -20,6 +20,7 @@ gem 'net-http-persistent', '~> 2.0'
 gem 'parallel'
 gem 'rollbar'
 gem 'countries'
+gem 'iso8601'
 
 group :development, :test do
   gem 'byebug'
