@@ -2,6 +2,7 @@ class Relationship
   include Mongoid::Document
 
   field :interests, type: Array, default: []
+  field :sample_date, type: String
 
   belongs_to :source, class_name: 'Entity'
   belongs_to :target, class_name: 'Entity'
@@ -12,4 +13,9 @@ class Relationship
 
   index source_id: 1
   index target_id: 1
+
+  def sample_date
+    return nil unless self[:sample_date]
+    ISO8601::Date.new(self[:sample_date])
+  end
 end
