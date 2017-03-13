@@ -79,22 +79,16 @@ class EitiImporter
   end
 
   def parent_entity!(record)
-    unless record.parent_type =~ /^Individual\b/i
-      if record.parent_jurisdiction
-        jurisdiction_code = @opencorporates_client.get_jurisdiction_code(record.parent_jurisdiction)
+    type = entity_type(record)
 
-        if jurisdiction_code
-          entity = @entity_resolver.resolve!(jurisdiction_code: jurisdiction_code, identifier: record.parent_identifier, name: record.parent_name)
+    if type == Entity::Types::LEGAL_ENTITY && record.parent_jurisdiction
+      jurisdiction_code = @opencorporates_client.get_jurisdiction_code(record.parent_jurisdiction)
 
-          return entity unless entity.nil?
-        end
+      if jurisdiction_code
+        entity = @entity_resolver.resolve!(jurisdiction_code: jurisdiction_code, identifier: record.parent_identifier, name: record.parent_name)
+
+        return entity unless entity.nil?
       end
-    end
-
-    type = if record.parent_type =~ /^Individual\b/i
-      Entity::Types::NATURAL_PERSON
-    else
-      Entity::Types::LEGAL_ENTITY
     end
 
     entity_with_document_id!(record.parent_name, type)
@@ -155,5 +149,11 @@ class EitiImporter
     end
 
     OpenStruct.new(hash)
+  end
+
+  def entity_type(record)
+    return Entity::Types::NATURAL_PERSON if record.parent_type =~ /^Individual\b/i
+
+    Entity::Types::LEGAL_ENTITY
   end
 end
