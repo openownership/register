@@ -2,15 +2,15 @@ require 'json'
 require 'parallel'
 
 class PscImporter
+  attr_accessor :source_url, :source_name, :document_id, :retrieved_at
+
   def initialize(opencorporates_client: OpencorporatesClient.new, entity_resolver: EntityResolver.new)
     @opencorporates_client = opencorporates_client
 
     @entity_resolver = entity_resolver
   end
 
-  def parse(file, document_id:)
-    @document_id = document_id
-
+  def parse(file)
     queue = SizedQueue.new(100)
 
     Thread.abort_on_exception = true
@@ -78,7 +78,7 @@ class PscImporter
       identifiers: [
         {
           _id: {
-            document_id: @document_id,
+            document_id: document_id,
             link: data.links.self
           }
         }
@@ -99,12 +99,19 @@ class PscImporter
   def relationship!(child_entity, parent_entity, data)
     attributes = {
       _id: {
-        document_id: @document_id,
+        document_id: document_id,
         link: data.links.self
       },
       source: parent_entity,
       target: child_entity,
-      interests: data.natures_of_control
+      interests: data.natures_of_control,
+      sample_date: data.notified_on.presence,
+      provenance: {
+        source_url: source_url,
+        source_name: source_name,
+        retrieved_at: retrieved_at,
+        imported_at: Time.now.utc
+      }
     }
 
     Relationship.new(attributes).upsert
