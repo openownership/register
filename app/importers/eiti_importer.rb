@@ -16,7 +16,7 @@ class EitiImporter
   end
 
   column 'ID', :id
-  column 'Reporting Date (Sample date)'
+  column 'Reporting Date (Sample date)', :reporting_date
   column 'Start Date (if known)'
   column 'End Date (if known)'
   column 'Child company name', :child_name
@@ -31,8 +31,10 @@ class EitiImporter
   column 'Ownership share (percentage)'
   column 'Voting percentage'
   column 'Type of Share'
-  column 'Source URL'
+  column 'Source URL', :source_url
   column 'Confidence in this source (HIGH, MEDIUM, LOW)'
+
+  attr_accessor :source_name, :source_jurisdiction_code, :document_id, :retrieved_at
 
   def initialize(opencorporates_client: OpencorporatesClient.new, entity_resolver: EntityResolver.new)
     @opencorporates_client = opencorporates_client
@@ -40,11 +42,7 @@ class EitiImporter
     @entity_resolver = entity_resolver
   end
 
-  def parse(file, jurisdiction_code:, document_id:)
-    @jurisdiction_code = jurisdiction_code
-
-    @document_id = document_id
-
+  def parse(file)
     lines = file.readlines
 
     read_headings(lines.shift)
@@ -69,7 +67,7 @@ class EitiImporter
   def child_entity!(record)
     jurisdiction = record.child_jurisdiction
 
-    jurisdiction_code = jurisdiction && @opencorporates_client.get_jurisdiction_code(jurisdiction) || @jurisdiction_code
+    jurisdiction_code = jurisdiction && @opencorporates_client.get_jurisdiction_code(jurisdiction) || source_jurisdiction_code
 
     entity = @entity_resolver.resolve!(jurisdiction_code: jurisdiction_code, identifier: record.child_identifier, name: record.child_name)
 
@@ -101,7 +99,7 @@ class EitiImporter
       identifiers: [
         {
           _id: {
-            document_id: @document_id,
+            document_id: document_id,
             name: name
           }
         }
@@ -116,12 +114,19 @@ class EitiImporter
   def relationship!(child_entity, parent_entity, record)
     attributes = {
       _id: {
-        document_id: @document_id,
+        document_id: document_id,
         row_id: record.id
       },
       source: parent_entity,
       target: child_entity,
-      interests: Array(record.mechanism_of_control)
+      interests: Array(record.mechanism_of_control),
+      sample_date: record.reporting_date.presence,
+      provenance: {
+        source_url: record.source_url,
+        source_name: source_name,
+        retrieved_at: retrieved_at,
+        imported_at: Time.now.utc
+      }
     }
 
     Relationship.new(attributes).upsert
