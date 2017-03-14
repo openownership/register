@@ -5,5 +5,21 @@ class EntitiesController < ApplicationController
     @source_relationships = Relationship.where(source: @entity).entries
 
     @ultimate_source_relationship_groupings = RelationshipGraph.new(@entity).ultimate_source_relationships.group_by { |r| r.source.name }.sort
+
+    @opencorporates_company_hash = get_opencorporates_company_hash(@entity)
+  end
+
+  private
+
+  def get_opencorporates_company_hash(entity)
+    return unless entity.jurisdiction_code? && entity.company_number?
+
+    client = OpencorporatesClient.new
+    client.http.read_timeout = 1.0
+    client.get_company(entity.jurisdiction_code, entity.company_number, sparse: false)
+  rescue Net::HTTP::Persistent::Error => exception
+    Rails.logger.warn(exception.message)
+
+    nil
   end
 end

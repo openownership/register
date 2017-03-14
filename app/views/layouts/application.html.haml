@@ -18,10 +18,10 @@
                 %ul.nav.navbar-nav
                   %li.nav-item.active
                     = link_to t(".nav.home"), root_path, class: "nav-link"
-                  %li.nav-item.external
+                  %li.nav-item
                     %a.nav-link.external{ href: "http://openownership.org/about/", target: "_blank" }
                       = t(".nav.about")
-                  %li.nav-item.external
+                  %li.nav-item
                     %a.nav-link.external{ href: "http://openownership.org/get-involved/", target: "_blank" }
                       = t(".nav.get_involved")
                   %span.float-md-right.follow-nav
@@ -47,7 +47,7 @@
       .container-fluid
         .supporters
           .supporters-header
-            %h6
+            %h5
               = t(".footer.brought_by")
           %a.transparency-logo{ href: "https://www.transparency.org" }
           %a.one-logo{ href: "https://www.one.org/international/" }
@@ -57,6 +57,6 @@
           %a.global-witness-logo{ href: "https://www.globalwitness.org/en-gb/" }
           %a.b-team{ href: "http://bteam.org" }
           .funders-header
-            %h6
+            %h5
               = t(".footer.funded_by")
           %a.uk-aid-logo{ href: "https://www.gov.uk/government/organisations/department-for-international-development" }

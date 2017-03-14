@@ -24,14 +24,15 @@
             %p= t(".no_results")
         - else
           .frame
-            %p= page_entries_info @results, entry_name: 'result'
+            .frame-wrap
+              %p= page_entries_info @results, entry_name: 'result'
 
-            %ul.list-unstyled.list-entities
-              - @records.each do |record|
-                %li
-                  = render "shared/entity_title", entity: record
+              %ul.list-unstyled.list-entities
+                - @records.each do |record|
+                  %li
+                    = render "shared/entity_title", entity: record
 
-            = paginate @results
+              = paginate @results
 
 .footer-data-info
   = t(".footer", count: number_with_delimiter(@company_count))

@@ -3,6 +3,10 @@ require 'cgi'
 require 'json'
 
 class OpencorporatesClient
+  API_VERSION = 'v0.4.6'.freeze
+
+  attr_reader :http
+
   def initialize(api_token: ENV.fetch('OPENCORPORATES_API_TOKEN'))
     @api_token = api_token
 
@@ -12,14 +16,17 @@ class OpencorporatesClient
   end
 
   def get_jurisdiction_code(name)
-    response = get('/v0.4/jurisdictions/match', q: name)
+    response = get("/#{API_VERSION}/jurisdictions/match", q: name)
     return unless response
 
     parse(response).fetch(:jurisdiction)[:code]
   end
 
-  def get_company(jurisdiction_code, company_number)
-    response = get("/v0.4/companies/#{jurisdiction_code}/#{company_number}", sparse: true)
+  def get_company(jurisdiction_code, company_number, sparse: true)
+    params = {}
+    params[:sparse] = true if sparse
+
+    response = get("/#{API_VERSION}/companies/#{jurisdiction_code}/#{company_number}", params)
     return unless response
 
     parse(response).fetch(:company)
@@ -33,7 +40,7 @@ class OpencorporatesClient
       order: 'score'
     }
 
-    response = get('/v0.4/companies/search', params)
+    response = get("/#{API_VERSION}/companies/search", params)
     return [] unless response
 
     parse(response).fetch(:companies)

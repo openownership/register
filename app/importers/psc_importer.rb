@@ -91,7 +91,7 @@ class PscImporter
         }
       ],
       type: type,
-      name: data.name,
+      name: data.name_elements.presence && name_string(data.name_elements) || data.name,
       nationality: country_from_nationality(data.nationality).try(:alpha2),
       address: data.address.presence && address_string(data.address),
       country_of_residence: data.country_of_residence.presence,
@@ -121,6 +121,12 @@ class PscImporter
 
   def address_string(address)
     address.to_h.values_at(*ADDRESS_KEYS).map(&:presence).compact.join(', ')
+  end
+
+  NAME_KEYS = [:forename, :middle_name, :surname].freeze
+
+  def name_string(name_elements)
+    name_elements.to_h.values_at(*NAME_KEYS).map(&:presence).compact.join(' ')
   end
 
   def country_from_nationality(nationality)

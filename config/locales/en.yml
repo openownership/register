@@ -5,6 +5,10 @@ en:
       controlled_entities_none_html: No known entities are controlled by %{entity}
       controlling_entities_html: Entities which ultimately control %{entity}
       controlling_entities_none_html: "%{entity} has no known ultimate controlling entities"
+      data_from_opencorporates_html: "Data from %{opencorporates}"
+      no_further_information_known: No further information known about this entity
+      no_data_from_opencorporates: OpenCorporates data not available
+      more_on: "More on %{name}"
       details: Details ›
       fields:
         nationality: Nationality
@@ -17,6 +21,10 @@ en:
         company_type: Type
         incorporation_date: Incorporation date
         dissolution_date: Dissolution date
+        current_status: Current status
+        previous_names: Previous names
+        industry_codes: Industry codes
+        officers: Officers
       instances:
         one: 1 Instance
         other: "%{count} Instances"

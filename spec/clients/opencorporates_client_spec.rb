@@ -7,7 +7,7 @@ RSpec.describe OpencorporatesClient do
 
   describe '#get_jurisdiction_code' do
     before do
-      @url = 'https://api.opencorporates.com/v0.4/jurisdictions/match'
+      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/jurisdictions/match"
     end
 
     it 'returns the jurisdiction code matching the given text' do
@@ -44,26 +44,38 @@ RSpec.describe OpencorporatesClient do
 
       @company_number = '01234567'
 
-      @url = "https://api.opencorporates.com/v0.4/companies/#{@jurisdiction_code}/#{@company_number}"
+      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/#{@jurisdiction_code}/#{@company_number}"
 
-      @stub = stub_request(:get, @url).with(query: "sparse=true&api_token=#{api_token}")
+      @query = "sparse=true&api_token=#{api_token}"
+
+      @body = %({"results":{"company":{"name":"EXAMPLE LIMITED"}}})
     end
 
     it 'returns company data for the given jurisdiction_code and company_number' do
-      @stub.to_return(body: %({"results":{"company":{"name":"EXAMPLE LIMITED"}}}))
+      stub_request(:get, @url).with(query: @query).to_return(body: @body)
 
       expect(subject.get_company(@jurisdiction_code, @company_number)).to eq(name: 'EXAMPLE LIMITED')
     end
 
     it 'returns nil if the company cannot be found' do
-      @stub.to_return(status: 404)
+      stub_request(:get, @url).with(query: @query).to_return(status: 404)
 
       expect(subject.get_company(@jurisdiction_code, @company_number)).to be_nil
     end
 
+    context 'when called with sparse: false' do
+      before do
+        stub_request(:get, @url).with(query: "api_token=#{api_token}").to_return(body: @body)
+      end
+
+      it 'calls the endpoint without the sparse parameter' do
+        subject.get_company(@jurisdiction_code, @company_number, sparse: false)
+      end
+    end
+
     context "when a response error occurs" do
       before do
-        @stub.to_return(status: 500)
+        stub_request(:get, @url).with(query: @query).to_return(status: 500)
       end
 
       it 'logs response errors' do
@@ -83,7 +95,7 @@ RSpec.describe OpencorporatesClient do
 
       @company_number = '919 / 1996-1997'
 
-      @url = 'https://api.opencorporates.com/v0.4/companies/search'
+      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/search"
 
       query = {
         q: @company_number,
