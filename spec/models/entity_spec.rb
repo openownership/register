@@ -250,6 +250,29 @@ RSpec.describe Entity do
         expect { subject.upsert }.not_to change { Entity.count }
       end
 
+      context "when the new document has multiple identifiers" do
+        let(:other_identifier) { { 'a' => 'b' } }
+        before do
+          subject.identifiers << other_identifier
+        end
+
+        it "matches existing document with any of them" do
+          @entity.set(identifiers: [identifier])
+          subject.upsert
+          expect(@entity.reload.identifiers).to match_array([
+            identifier,
+            other_identifier,
+          ])
+
+          @entity.set(identifiers: [other_identifier])
+          subject.upsert
+          expect(@entity.reload.identifiers).to match_array([
+            identifier,
+            other_identifier,
+          ])
+        end
+      end
+
       context "when the existing document also has other identifiers" do
         let(:other_identifier) { { 'a' => 'b' } }
         before do

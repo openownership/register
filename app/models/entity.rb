@@ -47,8 +47,7 @@ class Entity
   # are found using their embeddeded identifiers instead of the _id field.
   def upsert
     selector = {
-      # Can't do `{ identifiers: identifiers.first }` due to https://jira.mongodb.org/browse/SERVER-3946
-      identifiers: { :$elemMatch => { :$eq => identifiers.first } },
+      identifiers: { :$in => identifiers },
     }
 
     attributes = as_document.except('_id', 'identifiers')
