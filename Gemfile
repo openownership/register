@@ -29,6 +29,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'dotenv-rails'
   gem 'database_cleaner'
+  gem 'factory_girl_rails'
   gem 'webmock'
   gem 'launchy'
 end
