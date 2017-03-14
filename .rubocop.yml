@@ -19,6 +19,9 @@ Style/HashSyntax:
   Exclude:
     - lib/tasks/**/*.rake
 
+Style/IndentArray:
+  EnforcedStyle: consistent
+
 Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 

@@ -47,19 +47,28 @@ class Entity
   # are found using their embeddeded identifiers instead of the _id field.
   def upsert
     selector = {
-      identifiers: identifiers.first,
+      # Can't do `{ identifiers: identifiers.first }` due to https://jira.mongodb.org/browse/SERVER-3946
+      identifiers: { :$elemMatch => { :$eq => identifiers.first } },
     }
 
-    attributes = as_document.except('_id')
+    attributes = as_document.except('_id', 'identifiers')
 
     document = collection.find_one_and_update(
       selector,
-      attributes,
+      {
+        :$addToSet => {
+          identifiers: {
+            :$each => identifiers,
+          },
+        },
+        :$set => attributes,
+      },
       upsert: true,
       return_document: :after,
     )
 
     self.id = document.fetch('_id')
+    self.identifiers = document.fetch('identifiers')
   rescue Mongo::Error::OperationFailure => exception
     raise unless exception.message.start_with?('E11000')
 
