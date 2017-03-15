@@ -9,6 +9,7 @@ gem 'coffee-rails', '~> 4.2'
 gem 'haml-rails'
 gem 'bootstrap', '~> 4.0.0.alpha5'
 gem 'font-awesome-sass', '~> 4.7.0'
+gem 'tether-rails'
 
 gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
