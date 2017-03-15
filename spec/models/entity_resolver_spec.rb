@@ -31,7 +31,7 @@ RSpec.describe EntityResolver do
             company_type: "Limited company",
           }
 
-          expect(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(response)
+          allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(response)
         end
 
         it 'creates an entity with an identifier' do
@@ -102,8 +102,8 @@ RSpec.describe EntityResolver do
             },
           ]
 
-          expect(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
-          expect(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return(response)
+          allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
+          allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return(response)
         end
 
         it 'creates an entity with an identifier' do
@@ -148,8 +148,8 @@ RSpec.describe EntityResolver do
 
           @name = 'PC Myanmar (Hong Kong) Limited'
 
-          expect(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
-          expect(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return([])
+          allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
+          allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return([])
         end
 
         it 'returns nil' do
@@ -179,7 +179,7 @@ RSpec.describe EntityResolver do
             name: @company_name,
           }
 
-          expect(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(response)
+          allow(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(response)
         end
 
         it 'retries resolving with returned details' do
@@ -198,7 +198,7 @@ RSpec.describe EntityResolver do
 
           @name = 'PT Adaro Indonesia'
 
-          expect(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(nil)
+          allow(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(nil)
         end
 
         it 'returns nil' do
