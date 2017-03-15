@@ -37,26 +37,27 @@
   .container-fluid
     .row
       .col-lg-8
-        .ultimate-source-relationships
-          - if @ultimate_source_relationship_groupings.empty?
-            %h2.empty-entities
-              = t(".controlling_entities_none_html", entity: render_haml("%span.entity-name= @entity.name"))
-          - else
-            %h2
-              = t(".controlling_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
-            - @ultimate_source_relationship_groupings.each do |name, relationships|
-              - if relationships.size > 1
-                .grouping
-                  %a.grouping-header{ 'aria-controls' => name.parameterize, 'aria-expanded' => 'false', 'data-toggle' => 'collapse', 'href' => '#' + name.parameterize }
-                    = name
-                    %small.grouping-size.pull-right
-                      = t(".instances", count: relationships.size)
-                  .collapse{ id: name.parameterize }
-                    .note
-                      = t(".note")
-                    = render partial: 'ultimate_source_relationship', collection: relationships, as: :relationship
-              - else
-                = render partial: 'ultimate_source_relationship', locals: { relationship: relationships.first }
+        - unless @entity.natural_person?
+          .ultimate-source-relationships
+            - if @ultimate_source_relationship_groupings.empty?
+              %h2.empty-entities
+                = t(".controlling_entities_none_html", entity: render_haml("%span.entity-name= @entity.name"))
+            - else
+              %h2
+                = t(".controlling_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
+              - @ultimate_source_relationship_groupings.each do |name, relationships|
+                - if relationships.size > 1
+                  .grouping
+                    %a.grouping-header{ 'aria-controls' => name.parameterize, 'aria-expanded' => 'false', 'data-toggle' => 'collapse', 'href' => '#' + name.parameterize }
+                      = name
+                      %small.grouping-size.pull-right
+                        = t(".instances", count: relationships.size)
+                    .collapse{ id: name.parameterize }
+                      .note
+                        = t(".note")
+                      = render partial: 'ultimate_source_relationship', collection: relationships, as: :relationship
+                - else
+                  = render partial: 'ultimate_source_relationship', locals: { relationship: relationships.first }
 
         .source-relationships
           - if @source_relationships.empty?
