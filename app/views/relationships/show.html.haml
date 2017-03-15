@@ -12,7 +12,7 @@
   .container-fluid
     - @relationships.each do |relationship|
       .row
-        .col-lg-6.offset-lg-3
+        .col-lg-8
           .relationship-details
             - if relationship.intermediate_relationships.any?
               - relationship.intermediate_relationships.each do |intermediate_relationship|
@@ -26,3 +26,13 @@
 
             .item.relationship-target
               = render partial: 'shared/entity_title', locals: { entity: @target_entity }
+        .col-lg-4
+          .frame-light.meta.provenance
+            .frame-wrap
+              %h6= t(".provenance")
+              - if relationship.intermediate_relationships.any?
+                %ol
+                  = render partial: 'provenance', collection: relationship.intermediate_relationships, as: :relationship
+              - else
+                %ul
+                  = render partial: 'provenance', locals: { relationship: relationship }
