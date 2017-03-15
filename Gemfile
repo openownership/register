@@ -12,7 +12,6 @@ gem 'font-awesome-sass', '~> 4.7.0'
 gem 'tether-rails'
 
 gem 'jquery-rails'
-gem 'turbolinks', '~> 5'
 
 gem 'mongoid'
 gem 'kaminari-mongoid'
