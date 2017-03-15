@@ -39,11 +39,12 @@ class PscImporter
     return if record.data.ceased_on.present?
 
     case record.data.kind
-    when 'totals#persons-of-significant-control-snapshot',
-         'persons-with-significant-control-statement',
-         'super-secure-person-with-significant-control',
-         'exemptions'
+    when 'totals#persons-of-significant-control-snapshot'
       :ignore
+    when 'persons-with-significant-control-statement', 'super-secure-person-with-significant-control', 'exemptions'
+      child_entity = @entity_resolver.resolve!(jurisdiction_code: 'gb', company_number: record.company_number, name: nil)
+
+      statement!(child_entity, record.data)
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
       child_entity = child_entity!(record.company_number)
 
@@ -139,6 +140,41 @@ class PscImporter
     }
 
     Relationship.new(attributes).upsert
+  end
+
+  def statement!(entity, data)
+    attributes = {
+      _id: {
+        document_id: document_id,
+        link: data.links.self,
+      },
+      entity: entity,
+    }
+
+    attributes.merge!(statement_attributes(data))
+
+    Statement.new(attributes).upsert
+  end
+
+  def statement_attributes(data)
+    case data.kind
+    when 'persons-with-significant-control-statement'
+      {
+        type: data.statement,
+        date: Date.parse(data.notified_on),
+      }
+    when 'super-secure-person-with-significant-control'
+      {
+        type: data.kind,
+      }
+    when 'exemptions'
+      exemption = data.exemptions.to_h.values.first
+
+      {
+        type: exemption.exemption_type,
+        date: Date.parse(exemption.items.map(&:exempt_from).sort.last),
+      }
+    end
   end
 
   ADDRESS_KEYS = [:premises, :address_line_1, :address_line_2, :locality, :region, :postal_code].freeze
