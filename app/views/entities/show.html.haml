@@ -96,7 +96,7 @@
             - if content_for?(:meta)
               = yield :meta
             - else
-              %p.unknown= t(".no_further_information_known")
+              %p.unknown= t(".no_further_information_known", type: t("entity_types.#{@entity.type}", default: t("entity_types.default")))
 
         - unless @entity.natural_person?
           - if @opencorporates_company_hash

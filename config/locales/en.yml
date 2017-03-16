@@ -1,12 +1,12 @@
 en:
   entities:
     show:
-      controlled_entities_html: Entities controlled by %{entity}
-      controlled_entities_none_html: No known entities are controlled by %{entity}
-      controlling_entities_html: Entities which ultimately control %{entity}
-      controlling_entities_none_html: "%{entity} has no known ultimate controlling entities"
+      controlled_entities_html: Companies controlled by %{entity}
+      controlled_entities_none_html: No known companies are controlled by %{entity}
+      controlling_entities_html: Persons who ultimately control %{entity}
+      controlling_entities_none_html: "%{entity} has no known ultimate controlling persons"
       data_from_opencorporates_html: "Data from %{opencorporates}"
-      no_further_information_known: No further information known about this entity
+      no_further_information_known: No further information known about this %{type}
       no_data_from_opencorporates: OpenCorporates data not available
       more_on: "More on %{name}"
       details: Details ›
@@ -28,7 +28,7 @@ en:
       instances:
         one: 1 Instance
         other: "%{count} Instances"
-      note: These entities have been grouped together because similarities have been found. We have not determined whether or not these entities are the same.
+      note: These persons have been grouped together because similarities have been found. We have not determined whether or not these persons are the same.
     ultimate_source_relationship:
       controls_via: "Controls via:"
       details: Details ›
@@ -79,6 +79,11 @@ en:
       unknown: Unknown
     search_bar:
       new_search: New search
+
+  entity_types:
+    default: entity
+    legal-entity: company
+    natural-person: person
 
   relationship_interests:
     ownership-of-shares-25-to-50-percent: "Ownership of shares – More than 25% but not more than 50%"
