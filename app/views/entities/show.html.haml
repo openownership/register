@@ -62,7 +62,7 @@
         .source-relationships
           - if @source_relationships.empty?
             %h2.empty-entities
-              = t(".controlled_entities_none_html", entity: render_haml("%span.entity-name= @entity.name"))
+              = t(".controlled_entities_none.#{@entity.type}_html", entity: render_haml("%span.entity-name= @entity.name"))
           - else
             %h2
               = t(".controlled_entities_html", entity: render_haml("%span.entity-name= @entity.name"))

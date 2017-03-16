@@ -2,9 +2,11 @@ en:
   entities:
     show:
       controlled_entities_html: Companies controlled by %{entity}
-      controlled_entities_none_html: No known companies are controlled by %{entity}
-      controlling_entities_html: Persons who ultimately control %{entity}
-      controlling_entities_none_html: "%{entity} has no known ultimate controlling persons"
+      controlled_entities_none:
+        legal-entity_html: No companies are known to be controlled by %{entity}
+        natural-person_html: No companies are known to be beneficially owned by %{entity}
+      controlling_entities_html: Beneficial owners of %{entity}
+      controlling_entities_none_html: "%{entity} has no known beneficial owners"
       data_from_opencorporates_html: "Data from %{opencorporates}"
       no_further_information_known: No further information known about this %{type}
       no_data_from_opencorporates: OpenCorporates data not available
@@ -30,7 +32,7 @@ en:
         other: "%{count} Instances"
       note: These persons have been grouped together because similarities have been found. We have not determined whether or not these persons are the same.
     ultimate_source_relationship:
-      controls_via: "Controls via:"
+      controls_via: "Owned via:"
       details: Details ›
   helpers:
     entities:
@@ -68,7 +70,7 @@ en:
     show:
       blurb: OpenOwnership is a new platform to collect and publish beneficial ownership to fight corruption, crime, and improve business integrity.
       coming_soon: "Coming soon:"
-      coming_soon_content: Add ownership info on your company
+      coming_soon_content: Add beneficial ownership info on your company
       footer: Free and open information on %{count} companies, from UK PSC Register and EITI pilot data
       headline: Check beneficial ownership for %{count} companies
       placeholder: Search company or name of person
