@@ -5,7 +5,7 @@
         = t(".unknown")
     - else
       - relationship.interests.each do |interest|
-        %li= t(interest, scope: :relationship_interests, default: interest)
+        %li= t(interest, scope: :relationship_interests, default: t(".unknown"))
     - if relationship[:reference_number]
       %sup.reference
         %a{ href: "#cite-#{relationship[:reference_number]}" }

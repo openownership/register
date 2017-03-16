@@ -79,7 +79,7 @@ en:
       search: Search
   shared:
     relationship_interests:
-      unknown: Unknown
+      unknown: Undefined interest
     search_bar:
       new_search: Search company or name of person
 
@@ -110,9 +110,6 @@ en:
     right-to-appoint-and-remove-directors: "Right to appoint and remove directors"
     right-to-appoint-and-remove-directors-as-trust: "Right to appoint and remove directors as a trustee of a trust"
     right-to-appoint-and-remove-directors-as-firm: "Right to appoint and remove directors as a member of a firm"
-    significant-influence-or-control: "Has significant influence or control"
-    significant-influence-or-control-as-trust: "Has significant influence or control as a trustee of a trust"
-    significant-influence-or-control-as-firm: "Has significant influence or control as a member of a firm"
     right-to-share-surplus-assets-25-to-50-percent-limited-liability-partnership: "Right to surplus assets - More than 25% but not more than 50%"
     right-to-share-surplus-assets-50-to-75-percent-limited-liability-partnership: "Right to surplus assets - More than 50% but less than 75%"
     right-to-share-surplus-assets-75-to-100-percent-limited-liability-partnership: "Right to surplus assets - 75% or more"
@@ -134,6 +131,3 @@ en:
     right-to-appoint-and-remove-members-limited-liability-partnership: "Right to appoint and remove members"
     right-to-appoint-and-remove-members-as-trust-limited-liability-partnership: "Right to appoint and remove members as a trustee of a trust"
     right-to-appoint-and-remove-members-as-firm-limited-liability-partnership: "Right to appoint and remove members as a member of a firm"
-    significant-influence-or-control-limited-liability-partnership: "Has significant influence or control"
-    significant-influence-or-control-as-trust-limited-liability-partnership: "Has significant influence or control as a trustee of a trust"
-    significant-influence-or-control-as-firm-limited-liability-partnership: "Has significant influence or control as a member of a firm"
