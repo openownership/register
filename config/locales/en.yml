@@ -62,10 +62,11 @@ en:
         label: "Uploaded:"
         description: The date this information was last uploaded to the database
     show:
+      beneficial_ownership_chain:
+        one: Beneficial ownership chain
+        other: Beneficial ownership chains
       provenance: Provenance
-      title_html:
-        one: Relationship between %{source} and %{target}
-        other: Relationships between %{source} and %{target}
+      title_html: "%{source} to %{target}"
   searches:
     show:
       blurb: OpenOwnership is a new platform to collect and publish beneficial ownership to fight corruption, crime, and improve business integrity.
