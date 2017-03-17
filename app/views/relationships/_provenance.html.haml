@@ -17,4 +17,4 @@
         %a.tooltip-helper{ "data-toggle" => "tooltip", "data-placement" => "right", title: t(".imported_at.description") }= t(".imported_at.label")
         = relationship.provenance.imported_at.to_date
     - else
-      %p.unknown Not yet uploaded
+      %p.unknown= t(".unknown")

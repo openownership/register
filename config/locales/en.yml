@@ -49,6 +49,7 @@ en:
       subtitle: The Global Beneficial Ownership Register
   relationships:
     provenance:
+      unknown: Not yet uploaded
       sample_date:
         label: "As of:"
         description: The date this information was known to be true
