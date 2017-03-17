@@ -1,0 +1,81 @@
+@font-face {
+  font-family: 'Atlas Grotesk';
+  src: url('AtlasGrotesk-Regular.eot'); /* IE9 Compat Modes */
+  src: url('AtlasGrotesk-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('AtlasGrotesk-Regular.woff') format('woff'), /* Pretty Modern Browsers */
+       url('AtlasGrotesk-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  background-color: #333C47;
+  color: #FFFFFF;
+  font-family: 'Atlas Grotesk';
+  line-height: 1.3;
+}
+
+@media (min-width: 800px) {
+  body {
+    margin-top: 40px;
+  }
+}
+
+div.dialog {
+  background-color: #21272E;
+  padding: 40px;
+  margin: 0 auto;
+  max-width: 560px;
+  border-radius: 3px;
+}
+
+@media (max-width: 800px) {
+  div.dialog {
+    padding: 20px;
+  }
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 32px;
+  max-width: 440px;
+  margin-top: 64px;
+  margin-bottom: 18px;
+  line-height: 1.3;
+}
+
+.secondary-text {
+  color: #A2ADBF;
+  font-size: 18px;
+  max-width: 440px;
+}
+
+footer {
+  margin-top: 78px;
+}
+
+.btn {
+  display: inline-block;
+  background-color: #5147D9;
+  color: #FFFFFF;
+  padding: 12px 16px;
+  font-size: 18px;
+  text-decoration: none;
+  border-radius: 1px;
+  transition: all .25s ease;
+}
+
+.btn:hover {
+  background-color: #4B42C4;
+  box-shadow: 0px 2px 6px rgba(0,0,0,.5);
+}
