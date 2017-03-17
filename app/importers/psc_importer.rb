@@ -2,15 +2,15 @@ require 'json'
 require 'parallel'
 
 class PscImporter
+  attr_accessor :source_url, :source_name, :document_id, :retrieved_at
+
   def initialize(opencorporates_client: OpencorporatesClient.new, entity_resolver: EntityResolver.new)
     @opencorporates_client = opencorporates_client
 
     @entity_resolver = entity_resolver
   end
 
-  def parse(file, document_id:)
-    @document_id = document_id
-
+  def parse(file)
     queue = SizedQueue.new(100)
 
     Thread.abort_on_exception = true
@@ -74,23 +74,16 @@ class PscImporter
   end
 
   def entity_with_document_id!(data)
-    type = case data.kind
-    when "individual-person-with-significant-control"
-      Entity::Types::NATURAL_PERSON
-    else
-      Entity::Types::LEGAL_ENTITY
-    end
-
     attributes = {
       identifiers: [
         {
           _id: {
-            document_id: @document_id,
+            document_id: document_id,
             link: data.links.self
           }
         }
       ],
-      type: type,
+      type: entity_type(data),
       name: data.name_elements.presence && name_string(data.name_elements) || data.name,
       nationality: country_from_nationality(data.nationality).try(:alpha2),
       address: data.address.presence && address_string(data.address),
@@ -106,12 +99,19 @@ class PscImporter
   def relationship!(child_entity, parent_entity, data)
     attributes = {
       _id: {
-        document_id: @document_id,
+        document_id: document_id,
         link: data.links.self
       },
       source: parent_entity,
       target: child_entity,
-      interests: data.natures_of_control
+      interests: data.natures_of_control,
+      sample_date: data.notified_on.presence,
+      provenance: {
+        source_url: source_url,
+        source_name: source_name,
+        retrieved_at: retrieved_at,
+        imported_at: Time.now.utc
+      }
     }
 
     Relationship.new(attributes).upsert
@@ -133,5 +133,11 @@ class PscImporter
     countries = ISO3166::Country.find_all_countries_by_nationality(nationality)
     return if countries.count > 1 # too ambiguous
     countries[0]
+  end
+
+  def entity_type(data)
+    return Entity::Types::NATURAL_PERSON if data.kind == 'individual-person-with-significant-control'
+
+    Entity::Types::LEGAL_ENTITY
   end
 end

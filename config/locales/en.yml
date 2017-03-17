@@ -48,7 +48,18 @@ en:
         home: Search the register
       subtitle: The Global Beneficial Ownership Register
   relationships:
+    provenance:
+      sample_date:
+        label: "As of:"
+        description: The date this information was known to be true
+      retrieved_at:
+        label: "Retrieved:"
+        description: The date this information was last accessed from the source
+      imported_at:
+        label: "Uploaded:"
+        description: The date this information was last uploaded to the database
     show:
+      provenance: Provenance
       title_html:
         one: Relationship between %{source} and %{target}
         other: Relationships between %{source} and %{target}

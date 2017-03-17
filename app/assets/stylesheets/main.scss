@@ -319,6 +319,7 @@ h6 {
       display: inline-block;
       width: 100%;
       background: calc(100% + 4px) calc(0% - 3px) no-repeat;
+      font-size: 1rem;
       text-transform: uppercase;
       letter-spacing: .035em;
       &:hover {
@@ -397,6 +398,66 @@ h6 {
     margin-top: 3px;
     &:first-of-type {
       margin-top: 5px;
+    }
+  }
+}
+
+a.tooltip-helper {
+  padding-bottom: 1px;
+  border-bottom: 1px dotted $darkBlue;
+  text-decoration: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.tooltip {
+  .tooltip-arrow {
+    background-color: $darkBlue;
+  }
+  .tooltip-inner {
+    font-size: 0.8125rem;
+    text-align: left;
+    background-color: $darkBlue;
+  }
+}
+
+.provenance {
+  li {
+    margin-top: 12px;
+    border-radius: 2px;
+  }
+  .meta-secondary {
+    font-size: 0.6875rem;
+    font-style: normal;
+    margin-top: 2px;
+    color: #666666;
+    .tooltip-helper {
+      border-color: #666666;
+    }
+  }
+  ol {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    .provenance-item {
+      display: flex;
+      margin-top: 12px;
+      &:target {
+        background-color: #EFF1F4;
+      }
+    }
+    .provenance-num {
+      padding-top: 7px;
+      text-decoration: none;
+      color: #AEAEAE;
+      &:hover {
+        color: $electricBlue;
+      }
+    }
+    li {
+      padding: 7px 8px 8px;
+      margin-top: 0;
+      flex: 1;
     }
   }
 }
@@ -534,27 +595,48 @@ h6 {
   padding: 20px;
   margin-bottom: 60px;
   background-color: $lightGrey;
+  .entity-title {
+    a {
+      padding: 15px 15px 14px;
+      background: #FFFFFF calc(100% - 10px) calc(0% + 12px) no-repeat;
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
+    }
+  }
   .item {
     a {
       text-decoration: none;
       color: inherit;
     }
     .relationship-interests {
-      margin: 8px 0 12px 14px;
+      margin: 0 0 0 14px;
       font-size: 0.9375rem;
       font-weight: bold;
-      border-left: 1px solid #E7E7F5;
+      margin-left: 30px;
+      border-left: 1px solid #DBDDDF;
       ul {
+        position: relative;
         margin-bottom: 0;
-        padding: 28px 0 30px 36px;
+        padding: 28px 20px 30px 44px;
         background: asset-url("circle-arrow-down.svg") left center no-repeat;
         position: relative;
-        left: -13px;
+        left: -16px;
       }
       li {
         font-size: .8125rem;
         font-weight: normal;
         color: #666666;
+      }
+      .reference {
+        position: absolute;
+        top: 38px;
+        right: 12px;
+        color: #AEAEAE;
+        font-weight: normal;
+        a {
+          &:hover {
+            color: $electricBlue;
+          }
+        }
       }
     }
   }
@@ -581,6 +663,7 @@ h6 {
     color: #AEAEAE;
     letter-spacing: 0;
     text-transform: none;
+    font-size: 0.8125rem;
   }
 }
 

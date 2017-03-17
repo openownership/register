@@ -5,6 +5,10 @@
         = t(".unknown")
 - else
   .relationship-interests
-    %ul.list-unstyled
+    %ul.list-unstyled{ id: ("cite-back-#{relationship[:reference_number]}" if relationship[:reference_number]) }
       - relationship.interests.each do |interest|
         %li= t(interest, scope: :relationship_interests, default: interest)
+      - if relationship[:reference_number]
+        %sup.reference
+          %a{ href: "#cite-#{relationship[:reference_number]}" }
+            [#{relationship[:reference_number]}]
