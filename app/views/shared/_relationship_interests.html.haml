@@ -1,14 +1,12 @@
-- if relationship.interests.empty?
-  .relationship-interests
-    %ul.list-unstyled
-      %li
-        .unknown= t(".unknown")
-- else
-  .relationship-interests
-    %ul.list-unstyled{ id: ("cite-back-#{relationship[:reference_number]}" if relationship[:reference_number]) }
+.relationship-interests
+  %ul.list-unstyled{ id: ("cite-back-#{relationship[:reference_number]}" if relationship[:reference_number]) }
+    - if relationship.interests.empty?
+      %li.unknown
+        = t(".unknown")
+    - else
       - relationship.interests.each do |interest|
         %li= t(interest, scope: :relationship_interests, default: interest)
-      - if relationship[:reference_number]
-        %sup.reference
-          %a{ href: "#cite-#{relationship[:reference_number]}" }
-            [#{relationship[:reference_number]}]
+    - if relationship[:reference_number]
+      %sup.reference
+        %a{ href: "#cite-#{relationship[:reference_number]}" }
+          [#{relationship[:reference_number]}]
