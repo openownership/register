@@ -1,6 +1,14 @@
 class User
   include Mongoid::Document
 
+  field :name, type: String
+  field :company_name, type: String
+  field :position, type: String
+
+  validates :name, presence: true
+  validates :company_name, presence: true
+  validates :position, presence: true
+
   devise :database_authenticatable, :registerable,
          :confirmable, :recoverable, :trackable, :validatable
 
