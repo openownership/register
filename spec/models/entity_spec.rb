@@ -87,6 +87,26 @@ RSpec.describe Entity do
     end
   end
 
+  describe '#legal_entity?' do
+    subject { Entity.new(type: type).legal_entity? }
+
+    context "when entity type is Entity::Types::LEGAL_ENTITY" do
+      let(:type) { Entity::Types::LEGAL_ENTITY }
+
+      it "returns true" do
+        expect(subject).to be true
+      end
+    end
+
+    context "when entity type is not Entity::Types::LEGAL_ENTITY" do
+      let(:type) { Entity::Types::NATURAL_PERSON }
+
+      it "returns false" do
+        expect(subject).to be false
+      end
+    end
+  end
+
   describe '#country' do
     let(:entity) { Entity.new }
     subject { entity.country }

@@ -1,15 +1,31 @@
 .item
-  = render partial: 'shared/entity_title', locals: { entity: relationship.source }
+  - if relationship.source.legal_entity?
+    - if relationship.source.statements.any?(&:states_no_psc?)
+      No beneficial owners via
+    - else
+      Unknown beneficial owners via
+    = relationship.source.name
+    because:
+    - if relationship.source.statements.any?
+      - relationship.source.statements.each do |statement|
+        = t(statement.type, scope: :statement_descriptions, date: statement.date)
+    - else
+      No information about this company's beneficial ownership
+  - else
+    = render partial: 'shared/entity_title', locals: { entity: relationship.source }
+
   = link_to entity_relationship_path(relationship.target, relationship.source), class: 'relationship-link' do
     - if relationship.intermediate_entities.any?
       %span.via
         = t(".controls_via")
-        - relationship.intermediate_entities.each_with_index do |entity, index|
-          - unless index.zero?
-            &rarr;
+        - if relationship.source.legal_entity?
+          = relationship.source.name
+          = entity_country_flag(relationship.source)
+          &rarr;
+        - relationship.intermediate_entities.each do |entity|
           = entity.name
           = country_flag(entity.country)
-        &rarr;
+          &rarr;
         %span.target
           = @entity.name
         = country_flag(@entity.country)

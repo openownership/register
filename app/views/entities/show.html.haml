@@ -49,7 +49,12 @@
           .ultimate-source-relationships
             - if @ultimate_source_relationship_groupings.empty?
               %h2.empty-entities
-                = t(".controlling_entities_none.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities_none.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
+                - if @entity.statements.any?(&:states_no_psc?)
+                  = t(".controlling_entities_none.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities_none.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
+                - else
+                  = t(".controlling_entities_unknown.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities_unknown.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
+              - @entity.statements.each do |statement|
+                %p= t(statement.type, scope: :statement_descriptions, date: statement.date)
             - else
               %h2
                 = t(".controlling_entities.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
