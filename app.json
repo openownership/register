@@ -10,7 +10,13 @@
     "BUCKETEER_BUCKET_NAME": {
       "required": true
     },
+    "ERROR_PAGE_URL": {
+      "required": true
+    },
     "HEROKU_APP_NAME": {
+      "required": true
+    },
+    "MAINTENANCE_PAGE_URL": {
       "required": true
     },
     "OPENCORPORATES_API_TOKEN": {
