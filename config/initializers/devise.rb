@@ -1,5 +1,11 @@
 Devise.setup do |config|
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  config.mailer_sender = if ENV.key?('HEROKU_APP_NAME')
+    format '"OpenOwnership Register (%{app_name})" <account+%{app_name}@openownership.org>', app_name: ENV['HEROKU_APP_NAME']
+  else
+    '"OpenOwnership Register" <account@openownership.org>'
+  end
+
+  config.parent_mailer = 'ApplicationMailer'
   require 'devise/orm/mongoid'
 
   config.case_insensitive_keys = [:email]

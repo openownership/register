@@ -2,7 +2,7 @@ class User
   include Mongoid::Document
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
   field :email,              type: String, default: ""
   field :encrypted_password, type: String, default: ""
@@ -17,4 +17,9 @@ class User
   field :last_sign_in_at,    type: Time
   field :current_sign_in_ip, type: String
   field :last_sign_in_ip,    type: String
+
+  field :confirmation_token,   type: String
+  field :confirmed_at,         type: Time
+  field :confirmation_sent_at, type: Time
+  field :unconfirmed_email,    type: String
 end
