@@ -198,4 +198,64 @@ RSpec.describe OpencorporatesClient do
       end
     end
   end
+
+  describe '#search_companies_by_name' do
+    before do
+      url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/search"
+
+      query = {
+        q: 'Example Ltd',
+        fields: 'company_name',
+        order: 'score',
+        api_token: api_token
+      }
+
+      @stub = stub_request(:get, url).with(query: query)
+    end
+
+    subject { client.search_companies_by_name('Example Ltd') }
+
+    context "when given name and query returns results" do
+      before do
+        @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LTD"}}]}}))
+      end
+
+      it 'returns an array of results' do
+        expect(subject).to be_an(Array)
+        expect(subject.size).to eq(1)
+        expect(subject.first).to be_a(Hash)
+        expect(subject.first.fetch(:company).fetch(:name)).to eq('EXAMPLE LTD')
+      end
+    end
+
+    context "when a response error occurs" do
+      before do
+        @stub.to_return(status: 500)
+      end
+
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/500.*Example Ltd/)
+        subject
+      end
+
+      it 'returns empty array' do
+        expect(subject).to eq([])
+      end
+    end
+
+    context "when a response exception is raised" do
+      before do
+        @stub.to_raise(Net::HTTP::Persistent::Error)
+      end
+
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*Example Ltd/)
+        subject
+      end
+
+      it 'returns empty array' do
+        expect(subject).to eq([])
+      end
+    end
+  end
 end

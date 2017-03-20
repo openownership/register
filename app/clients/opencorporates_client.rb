@@ -46,6 +46,19 @@ class OpencorporatesClient
     parse(response).fetch(:companies)
   end
 
+  def search_companies_by_name(name)
+    params = {
+      q: name,
+      fields: 'company_name',
+      order: 'score'
+    }
+
+    response = get("/#{API_VERSION}/companies/search", params)
+    return [] unless response
+
+    parse(response).fetch(:companies)
+  end
+
   private
 
   def parse(response)
