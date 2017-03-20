@@ -1,0 +1,5 @@
+en:
+  glossary:
+    imported_at: The date this information was last uploaded to the database
+    retrieved_at: The date this information was last accessed from the source
+    sample_date: The date this information was known to be true

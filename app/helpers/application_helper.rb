@@ -11,6 +11,17 @@ module ApplicationHelper
     Haml::Engine.new(haml).render(self)
   end
 
+  def glossary_tooltip(label, glossary_key, position)
+    content_tag(
+      :span,
+      label,
+      "data-toggle" => "tooltip",
+      "data-placement" => position,
+      title: t("glossary.#{glossary_key}"),
+      class: "tooltip-helper"
+    )
+  end
+
   def google_search_uri(params)
     uri = URI('https://www.google.com/search')
     uri.query = params.to_query

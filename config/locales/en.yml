@@ -52,15 +52,9 @@ en:
   relationships:
     provenance:
       unknown: Not yet uploaded
-      sample_date:
-        label: "As of:"
-        description: The date this information was known to be true
-      retrieved_at:
-        label: "Retrieved:"
-        description: The date this information was last accessed from the source
-      imported_at:
-        label: "Uploaded:"
-        description: The date this information was last uploaded to the database
+      sample_date: "As of:"
+      retrieved_at: "Retrieved:"
+      imported_at: "Uploaded:"
     show:
       beneficial_ownership_chain:
         one: Beneficial ownership chain
