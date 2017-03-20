@@ -30,6 +30,7 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'database_cleaner'
   gem 'webmock'
+  gem 'launchy'
 end
 
 group :development do

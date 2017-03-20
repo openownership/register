@@ -141,6 +141,8 @@ GEM
       activesupport (>= 3.0.0)
     kaminari-mongoid (0.1.2)
       kaminari
+    launchy (2.4.3)
+      addressable (~> 2.3)
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -314,6 +316,7 @@ DEPENDENCIES
   iso8601
   jquery-rails
   kaminari-mongoid
+  launchy
   listen (~> 3.0.5)
   mongoid
   net-http-persistent (~> 2.0)
