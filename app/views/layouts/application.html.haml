@@ -41,6 +41,11 @@
                 .col-lg-6
                   %h2.brand-subhead.pull-right= t(".subtitle")
 
+    - if notice.present?
+      %p.notice= notice
+    - if alert.present?
+      %p.alert= alert
+
     = yield
 
     .supporters-footer
