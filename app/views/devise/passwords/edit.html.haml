@@ -10,10 +10,6 @@
         (#{@minimum_password_length} characters minimum)
       %br/
     = f.password_field :password, autofocus: true, autocomplete: "off"
-  .field
-    = f.label :password_confirmation, "Confirm new password"
-    %br/
-    = f.password_field :password_confirmation, autocomplete: "off"
   .actions
     = f.submit "Change my password"
 = render "devise/shared/links"
