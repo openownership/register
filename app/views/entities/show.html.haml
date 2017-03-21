@@ -41,10 +41,10 @@
           .ultimate-source-relationships
             - if @ultimate_source_relationship_groupings.empty?
               %h2.empty-entities
-                = t(".controlling_entities_none_html", entity: render_haml("%span.entity-name= @entity.name"))
+                = t(".controlling_entities_none.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities_none.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
             - else
               %h2
-                = t(".controlling_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
+                = t(".controlling_entities.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
               - @ultimate_source_relationship_groupings.each do |name, relationships|
                 - if relationships.size > 1
                   .grouping

@@ -5,8 +5,12 @@ en:
       controlled_entities_none:
         legal-entity_html: No companies are known to be controlled by %{entity}
         natural-person_html: No companies are known to be beneficially owned by %{entity}
-      controlling_entities_html: Beneficial owners of %{entity}
-      controlling_entities_none_html: "%{entity} has no known beneficial owners"
+      controlling_entities:
+        text_html: "%{beneficial_owners} of %{entity}"
+        beneficial_owners: Beneficial owners
+      controlling_entities_none:
+        text_html: "%{entity} has no known %{beneficial_owners}"
+        beneficial_owners: beneficial owners
       data_from_opencorporates_html: "Data from %{opencorporates}"
       no_further_information_known: No further information known about this %{type}
       no_data_from_opencorporates: OpenCorporates data not available
