@@ -40,10 +40,10 @@
         .ultimate-source-relationships
           - if @ultimate_source_relationship_groupings.empty?
             %h2.empty-entities
-              = t(".controlling_entities_none_html", entity: render_haml("%span= @entity.name"))
+              = t(".controlling_entities_none_html", entity: render_haml("%span.entity-name= @entity.name"))
           - else
             %h2
-              = t(".controlling_entities_html", entity: render_haml("%span= @entity.name"))
+              = t(".controlling_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
             - @ultimate_source_relationship_groupings.each do |name, relationships|
               - if relationships.size > 1
                 .grouping
@@ -61,10 +61,10 @@
         .source-relationships
           - if @source_relationships.empty?
             %h2.empty-entities
-              = t(".controlled_entities_none_html", entity: render_haml("%span= @entity.name"))
+              = t(".controlled_entities_none_html", entity: render_haml("%span.entity-name= @entity.name"))
           - else
             %h2
-              = t(".controlled_entities_html", entity: render_haml("%span= @entity.name"))
+              = t(".controlled_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
             - @source_relationships.sort_by { |relationship| relationship.target.name }.each do |relationship|
               .item
                 = render partial: 'shared/entity_title', locals: { entity: relationship.target }
