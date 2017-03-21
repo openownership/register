@@ -1,15 +1,15 @@
-%h2 Change your password
+%h2= t(".header")
 = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
   = devise_error_messages!
   = f.hidden_field :reset_password_token
   .field
-    = f.label :password, "New password"
+    = f.label :password, t(".new_password")
     %br/
     - if @minimum_password_length
       %em
-        (#{@minimum_password_length} characters minimum)
+        = t(".minimum_password_length", length: @minimum_password_length)
       %br/
     = f.password_field :password, autofocus: true, autocomplete: "off"
   .actions
-    = f.submit "Change my password"
+    = f.submit t(".submit")
 = render "devise/shared/links"

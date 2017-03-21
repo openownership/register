@@ -1,4 +1,4 @@
-%h2 Log in
+%h2= t(".header")
 = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
   .field
     = f.label :email
@@ -9,5 +9,5 @@
     %br/
     = f.password_field :password, autocomplete: "off"
   .actions
-    = f.submit "Log in"
+    = f.submit t(".submit")
 = render "devise/shared/links"
