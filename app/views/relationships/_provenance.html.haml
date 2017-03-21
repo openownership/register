@@ -8,13 +8,13 @@
         = relationship.provenance.source_name
       - partial_date_format(relationship.sample_date).try do |sample_date|
         %p
-          %a.tooltip-helper{ "data-toggle" => "tooltip", "data-placement" => "right", title: t(".sample_date.description") }= t(".sample_date.label")
+          %span.tooltip-helper{ "data-toggle" => "tooltip", "data-placement" => "right", title: t(".sample_date.description") }= t(".sample_date.label")
           = sample_date
       %p.meta-secondary
-        %a.tooltip-helper{ "data-toggle" => "tooltip", "data-placement" => "right", title: t(".retrieved_at.description") }= t(".retrieved_at.label")
+        %span.tooltip-helper{ "data-toggle" => "tooltip", "data-placement" => "right", title: t(".retrieved_at.description") }= t(".retrieved_at.label")
         = relationship.provenance.retrieved_at.to_date
       %p.meta-secondary
-        %a.tooltip-helper{ "data-toggle" => "tooltip", "data-placement" => "right", title: t(".imported_at.description") }= t(".imported_at.label")
+        %span.tooltip-helper{ "data-toggle" => "tooltip", "data-placement" => "right", title: t(".imported_at.description") }= t(".imported_at.label")
         = relationship.provenance.imported_at.to_date
     - else
       %p.unknown= t(".unknown")
