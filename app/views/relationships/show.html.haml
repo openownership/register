@@ -6,7 +6,9 @@
       .col-lg-12
         .entity-name-wrap
           %h1
-            = t(".title_html", source: render_haml("%span.entity-name= @source_entity.name"), target: render_haml("%span.entity-name= @target_entity.name"), count: @relationships.size)
+            = succeed(":") do
+              = glossary_tooltip(t(".beneficial_ownership_chain", count: @relationships.size), :beneficial_ownership_chain, :top)
+            = t(".title_html", source: render_haml("%span.entity-name= @source_entity.name"), target: render_haml("%span.entity-name= @target_entity.name"))
 
 .content
   .container-fluid

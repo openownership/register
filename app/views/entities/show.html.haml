@@ -37,34 +37,35 @@
   .container-fluid
     .row
       .col-lg-8
-        .ultimate-source-relationships
-          - if @ultimate_source_relationship_groupings.empty?
-            %h2.empty-entities
-              = t(".controlling_entities_none_html", entity: render_haml("%span= @entity.name"))
-          - else
-            %h2
-              = t(".controlling_entities_html", entity: render_haml("%span= @entity.name"))
-            - @ultimate_source_relationship_groupings.each do |name, relationships|
-              - if relationships.size > 1
-                .grouping
-                  %a.grouping-header{ 'aria-controls' => name.parameterize, 'aria-expanded' => 'false', 'data-toggle' => 'collapse', 'href' => '#' + name.parameterize }
-                    = name
-                    %small.grouping-size.pull-right
-                      = t(".instances", count: relationships.size)
-                  .collapse{ id: name.parameterize }
-                    .note
-                      = t(".note")
-                    = render partial: 'ultimate_source_relationship', collection: relationships, as: :relationship
-              - else
-                = render partial: 'ultimate_source_relationship', locals: { relationship: relationships.first }
+        - unless @entity.natural_person?
+          .ultimate-source-relationships
+            - if @ultimate_source_relationship_groupings.empty?
+              %h2.empty-entities
+                = t(".controlling_entities_none.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities_none.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
+            - else
+              %h2
+                = t(".controlling_entities.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
+              - @ultimate_source_relationship_groupings.each do |name, relationships|
+                - if relationships.size > 1
+                  .grouping
+                    %a.grouping-header{ 'aria-controls' => name.parameterize, 'aria-expanded' => 'false', 'data-toggle' => 'collapse', 'href' => '#' + name.parameterize }
+                      = name
+                      %small.grouping-size.pull-right
+                        = t(".instances", count: relationships.size)
+                    .collapse{ id: name.parameterize }
+                      .note
+                        = t(".note")
+                      = render partial: 'ultimate_source_relationship', collection: relationships, as: :relationship
+                - else
+                  = render partial: 'ultimate_source_relationship', locals: { relationship: relationships.first }
 
         .source-relationships
           - if @source_relationships.empty?
             %h2.empty-entities
-              = t(".controlled_entities_none_html", entity: render_haml("%span= @entity.name"))
+              = t(".controlled_entities_none.#{@entity.type}_html", entity: render_haml("%span.entity-name= @entity.name"))
           - else
             %h2
-              = t(".controlled_entities_html", entity: render_haml("%span= @entity.name"))
+              = t(".controlled_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
             - @source_relationships.sort_by { |relationship| relationship.target.name }.each do |relationship|
               .item
                 = render partial: 'shared/entity_title', locals: { entity: relationship.target }
@@ -95,7 +96,7 @@
             - if content_for?(:meta)
               = yield :meta
             - else
-              %p.unknown= t(".no_further_information_known")
+              %p.unknown= t(".no_further_information_known", type: t("entity_types.#{@entity.type}", default: t("entity_types.default")))
 
         - unless @entity.natural_person?
           - if @opencorporates_company_hash

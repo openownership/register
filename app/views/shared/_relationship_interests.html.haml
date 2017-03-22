@@ -2,10 +2,10 @@
   %ul.list-unstyled{ id: ("cite-back-#{relationship[:reference_number]}" if relationship[:reference_number]) }
     - if relationship.interests.empty?
       %li.unknown
-        = t(".unknown")
+        = glossary_tooltip(t(".unknown"), :undefined_interest, :right)
     - else
       - relationship.interests.each do |interest|
-        %li= t(interest, scope: :relationship_interests, default: interest)
+        %li= t(interest, scope: :relationship_interests, default: glossary_tooltip(t(".unknown"), :undefined_interest, :right))
     - if relationship[:reference_number]
       %sup.reference
         %a{ href: "#cite-#{relationship[:reference_number]}" }

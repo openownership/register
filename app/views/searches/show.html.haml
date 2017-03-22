@@ -3,7 +3,8 @@
 
     .row
       .col-lg-12
-        %h1= t(".headline", count: number_to_human(@company_count, precision: 2).downcase)
+        %h1= t(".headline")
+        %p.company-count= t(".company_count", count: number_to_human(@company_count, precision: 2).downcase)
       .col-lg-6.offset-lg-3
         .form-group
           = form_tag search_path, method: 'get', class: 'search-form' do
