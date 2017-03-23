@@ -1,3 +1,6 @@
+machine:
+  environment:
+    HOST: localhost
 test:
   post:
     - bundle exec rubocop

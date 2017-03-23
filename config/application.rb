@@ -17,5 +17,24 @@ module OpenOwnershipRegister
         [u, p] == ENV["BASIC_AUTH"].split(':')
       end
     end
+
+    config.action_mailer.delivery_method :smtp
+    config.action_mailer.smtp_settings = {
+      port: ENV['SMTP_PORT'],
+      address: ENV['SMTP_ADDRESS'],
+      user_name: ENV['SMTP_TOKEN'],
+      password: ENV['SMTP_TOKEN'],
+      authentication: :plain
+    }
+
+    host_uri = if ENV.key?('HEROKU_APP_NAME')
+      URI("https://#{ENV['HEROKU_APP_NAME']}.herokuapp.com")
+    else
+      URI(ENV.fetch('HOST'))
+    end
+
+    config.action_mailer.default_url_options = { host: host_uri.hostname }
+    config.action_mailer.default_url_options[:port] = host_uri.port if host_uri.port != host_uri.default_port
+    config.action_mailer.asset_host = host_uri.to_s
   end
 end

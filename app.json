@@ -24,6 +24,15 @@
     },
     "ROLLBAR_ACCESS_TOKEN": {
       "required": true
+    },
+    "SMTP_ADDRESS": {
+      "required": true
+    },
+    "SMTP_PORT": {
+      "required": true
+    },
+    "SMTP_TOKEN": {
+      "required": true
     }
   },
   "formation": {
