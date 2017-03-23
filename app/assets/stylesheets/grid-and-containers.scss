@@ -28,4 +28,9 @@
 
 .frame-wrap {
   padding: 22px 20px 20px;
+  p {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }

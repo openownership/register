@@ -1,0 +1,33 @@
+.content.form-content
+  .container-fluid
+    .row
+      .col-lg-6.offset-lg-3
+        .frame-light
+          .frame-wrap
+            %header
+              %h1= t(".header")
+
+            = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+              = devise_error_messages!
+              .form-group
+                = f.label :name
+                = f.text_field :name, autofocus: true, class: 'form-control form-control-lg'
+              .form-group
+                = f.label :company_name
+                = f.text_field :company_name, class: 'form-control form-control-lg'
+              .form-group
+                = f.label :position
+                = f.text_field :position, class: 'form-control form-control-lg'
+              .form-group
+                = f.label :email
+                %em= t(".email_help")
+                = f.email_field :email, class: 'form-control form-control-lg'
+              .form-group
+                = f.label :password
+                - if @minimum_password_length
+                  %em
+                    = t(".minimum_password_length", length: @minimum_password_length)
+                = f.password_field :password, autocomplete: 'off', class: 'form-control form-control-lg'
+              .actions
+                = f.submit t(".submit"), class: 'btn btn-primary btn-lg btn-block'
+            = render "devise/shared/links"

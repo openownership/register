@@ -1,0 +1,17 @@
+.content.form-content
+  .container-fluid
+    .row
+      .col-lg-6.offset-lg-3
+        .frame-light
+          .frame-wrap
+            %header
+              %h1= t(".header")
+
+            = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
+              = devise_error_messages!
+              .form-group
+                = f.label :email
+                = f.email_field :email, autofocus: true, class: 'form-control form-control-lg'
+              .actions
+                = f.submit t(".submit"), class: 'btn btn-primary btn-lg btn-block'
+            = render "devise/shared/links"

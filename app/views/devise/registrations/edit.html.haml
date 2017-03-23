@@ -1,0 +1,31 @@
+.content.form-content
+  .container-fluid
+    .row
+      .col-lg-6.offset-lg-3
+        .frame-light
+          .frame-wrap
+            %header
+              %h1
+                = t(".header", resource: resource_name.to_s.humanize)
+
+            = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+              = devise_error_messages!
+              .form-group
+                = f.label :email
+                = f.email_field :email, autofocus: true, class: 'form-control form-control-lg'
+              - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+                %div
+                  = t(".pending_reconfirmation", email: resource.unconfirmed_email)
+              .form-group
+                = f.label :password
+                %i= t(".new_password.leave_blank")
+                = f.password_field :password, autocomplete: "off", class: 'form-control form-control-lg'
+                - if @minimum_password_length
+                  %em
+                    = t(".new_password.minimum_length", length: @minimum_password_length)
+              .form-group
+                = f.label :current_password
+                %i= t(".current_password_help")
+                = f.password_field :current_password, autocomplete: "off", class: 'form-control form-control-lg'
+              .actions
+                = f.submit t(".submit"), class: 'btn btn-primary btn-lg btn-block'

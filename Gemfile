@@ -21,6 +21,8 @@ gem 'parallel'
 gem 'rollbar'
 gem 'countries'
 gem 'iso8601'
+gem 'devise'
+gem 'roadie-rails'
 
 group :development, :test do
   gem 'byebug'
