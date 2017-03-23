@@ -47,6 +47,7 @@ en:
         pending_reconfirmation: "Currently waiting confirmation for: %{email}"
         submit: Update
       new:
+        email_help: (Please use your company email address)
         header: Sign up
         minimum_password_length: (%{length} characters minimum)
         submit: Sign up
