@@ -8,7 +8,7 @@
     = stylesheet_link_tag 'application', media: 'all'
     = javascript_include_tag 'application'
   %body
-    %header.site-header.site-header-small
+    %header.site-header{ class: ("site-header-small" unless current_page?(root_path)) }
       .container-fluid
         .row
           .col-md-12
