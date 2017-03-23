@@ -4,6 +4,8 @@ $greyBlue: #363F4D;
 $lightGrey: #EBEEF2;
 $white: #FFFFFF;
 
+$red: red;
+
 $headline: 'Publico Headline', 'Times New Roman', Times, Georgia, serif;
 $serif: 'Publico Text', 'Times New Roman', Times, Georgia, serif;
 $sans: 'Atlas Grotesk', 'Helvetica', sans-serif;
@@ -16,11 +18,13 @@ $on-mobile: 768px;
 /////////////////////////////////////
 
 
+$alert-border-width: 0;
 $brand-primary: $electricBlue;
 $border-radius: 0.0625rem;
 $border-radius-lg: 0.125rem;
 $border-radius-sm: 0.0625rem;
 $grid-gutter-width-base: 20px;
+$input-border-color: #D3D7DF;
 $input-border-focus: #CCCCCC;
 $input-padding-x-lg: 1rem;
 $input-line-height: 1.5;
@@ -29,3 +33,7 @@ $navbar-dark-color: #7E94B4;
 $navbar-dark-hover-color: lighten($darkBlue, 70%);
 $navbar-dark-active-color: lighten($darkBlue, 70%);
 $navbar-dark-disabled-color: lighten($darkBlue, 20%);
+$state-danger-bg: rgba(254, 229, 230, .9);
+$state-danger-text: $red;
+$state-info-bg: rgba(224, 222, 247, .9);
+$state-info-text: $electricBlue;
