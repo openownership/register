@@ -11,11 +11,11 @@ module EntityHelper
   end
 
   def entity_country_flag(entity)
-    return unless (country = entity.country)
+    return unknown_country_flag unless (country = entity.country)
 
     basename = "#{country.alpha2.upcase}.svg"
 
-    return unless asset_present?(basename)
+    return unknown_country_flag unless asset_present?(basename)
 
     image_tag(basename, size: '32x16', alt: country.name, class: 'flag')
   end
@@ -40,5 +40,11 @@ module EntityHelper
     parts << Date::MONTHNAMES[entity.dob_month] if entity.dob_month? && (entity.dob_day? || entity.dob_year?)
     parts << entity.dob_year
     parts.compact.join(" ")
+  end
+
+  private
+
+  def unknown_country_flag
+    image_tag("flag-unknown.svg", size: '32x16', alt: "unknown", class: 'flag')
   end
 end
