@@ -8,15 +8,16 @@
     = stylesheet_link_tag 'application', media: 'all'
     = javascript_include_tag 'application'
   %body
-    %header.site-header
+    %header.site-header{ class: ("site-header-small" unless current_page?(root_path)) }
       .container-fluid
         .row
           .col-md-12
             %nav.navbar.navbar-dark
               %button.navbar-toggler.hidden-lg-up{ :type => "button", "data-toggle" => "collapse", "data-target" => "#navbarResponsive", "aria-controls" => "navbarResponsive", "aria-expanded" => "false", "aria-label" => "Toggle navigation" }
+                %span Menu
               .collapse.navbar-toggleable-md#navbarResponsive
                 %ul.nav.navbar-nav
-                  %li.nav-item.active
+                  %li.nav-item{ class: ("active" if current_page?(root_path)) }
                     = link_to t(".nav.home"), root_path, class: "nav-link"
                   %li.nav-item
                     %a.nav-link.external{ href: "http://openownership.org/about/", target: "_blank" }
@@ -45,12 +46,9 @@
                       %a.nav-link{ href: "https://medium.com/beneficial-ownership" }
                         %i.fa.fa-medium
             .brand-header
-              .row
-                .col-lg-6
-                  = link_to root_path do
-                    = image_tag('OpenOwnership-Logo-Beta.svg', class: 'logo')
-                .col-lg-6
-                  %h2.brand-subhead.pull-right= t(".subtitle")
+              = link_to root_path do
+                = image_tag('OpenOwnership-Logo-Beta.svg', class: 'logo')
+            = render partial: 'shared/search_bar'
 
     .container-fluid
       - if notice.present?
