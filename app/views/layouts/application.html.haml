@@ -17,7 +17,7 @@
                 %span Menu
               .collapse.navbar-toggleable-md#navbarResponsive
                 %ul.nav.navbar-nav
-                  %li.nav-item
+                  %li.nav-item{ class: ("active" if current_page?(root_path)) }
                     = link_to t(".nav.home"), root_path, class: "nav-link"
                   %li.nav-item
                     %a.nav-link.external{ href: "http://openownership.org/about/", target: "_blank" }
