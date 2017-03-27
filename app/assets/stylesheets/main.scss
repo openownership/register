@@ -37,6 +37,19 @@ h6 {
   margin-top: 20px;
 }
 
+.flag-wrap {
+  display: inline-block;
+  width: 26px;
+}
+
+.flag {
+  height: 13px;
+  width: auto;
+  vertical-align: middle;
+  position: relative;
+  top: -2px;
+}
+
 .external {
   &:after {
     content: '';
@@ -167,13 +180,6 @@ h6 {
         margin-bottom: 0;
       }
     }
-  }
-  .flag {
-    height: 12px;
-    width: auto;
-    position: relative;
-    top: -2px;
-    margin-left: 2px;
   }
 }
 
@@ -356,14 +362,6 @@ h6 {
     @include media-breakpoint-down(md) {
       border-top: 1px solid lighten($darkBlue, 76%);
     }
-  }
-  .flag {
-    height: 12px;
-    width: auto;
-    position: relative;
-    top: -2px;
-    margin-right: 2px;
-    margin-left: 1px;
   }
   .col-lg-8.header-sep {
     @include media-breakpoint-up(lg) {
@@ -619,17 +617,12 @@ span.tooltip-helper {
       }
     }
   }
-  .flag {
-    height: 11px;
-    width: auto;
-    vertical-align: middle;
-    position: relative;
-    top: -2px;
-  }
   .via {
     .flag {
-      height: 9px;
-      top: -1px;
+      height: 8px;
+      position: relative;
+      top: -2px;
+      margin-left: 2px;
     }
   }
 }
@@ -719,13 +712,6 @@ span.tooltip-helper {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
-  }
-  .flag {
-    height: 14px;
-    width: auto;
-    vertical-align: middle;
-    position: relative;
-    top: -2px;
   }
 }
 
