@@ -133,25 +133,20 @@ RSpec.describe EntityHelper do
   end
 
   describe '#date_of_birth' do
+    let(:entity) { Entity.new(dob: dob) }
+
     subject { helper.date_of_birth(entity) }
 
     {
-      [1980, nil, nil] => "1980",
-      [nil,  2,   nil] => "",
-      [nil,  nil, 27] => "",
-      [1980, 2,   nil] => "February 1980",
-      [1980, nil, 27] => "1980",
-      [nil,  2,   27] => "February",
-      [1980, 2,   27] => "February 1980"
-    }.each do |(year, month, day), expected|
-      context "when entity data of birth data is #{[year, month, day]}" do
-        before do
-          entity.dob_year = year
-          entity.dob_month = month
-          entity.dob_day = day
-        end
+      nil => nil,
+      ISO8601::Date.new('1980') => '1980',
+      ISO8601::Date.new('1980-02') => 'February 1980',
+      ISO8601::Date.new('1980-02-27') => 'February 1980'
+    }.each do |date, expected|
+      context "when entity dob is #{date ? date.mongoize : date.inspect}" do
+        let(:dob) { date }
 
-        it "returns #{expected}" do
+        it "returns #{expected.inspect}" do
           expect(subject).to eq(expected)
         end
       end
