@@ -36,7 +36,7 @@ en:
         other: "%{count} Matches"
       note: These persons have been grouped together because our system found similarities in their identifying information. This does not constitute a factual determination that these people are one and the same.
     ultimate_source_relationship:
-      controls_via: "Owned via"
+      controls_via: Owned via
       details: Details ›
   helpers:
     entities:
