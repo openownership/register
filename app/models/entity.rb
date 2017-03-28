@@ -59,6 +59,10 @@ class Entity
     country.subdivisions[code.upcase]
   end
 
+  def country_code
+    country.try(:alpha2)
+  end
+
   # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
   # are found using their embeddeded identifiers instead of the _id field.
   def upsert
