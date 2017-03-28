@@ -1,6 +1,7 @@
 .entity-title
   = link_to entity_path(entity) do
-    = entity_country_flag(entity)
+    %span.flag-wrap
+      = entity_country_flag(entity)
     = entity.name
     %small
       = entity_attributes_snippet(entity)

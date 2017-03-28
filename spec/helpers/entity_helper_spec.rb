@@ -19,8 +19,10 @@ RSpec.describe EntityHelper do
     context 'when the entity does not have a country' do
       before { allow(entity).to receive(:country).and_return(nil) }
 
-      it 'returns nil' do
-        expect(subject).to be_nil
+      it 'returns the unknown flag image' do
+        expect(subject).to match(/^<img /)
+        expect(subject).to match(%r{src="/assets/flag-unknown-.+\.svg"})
+        expect(subject).to match(/alt="unknown"/)
       end
     end
   end
