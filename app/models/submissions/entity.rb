@@ -40,6 +40,10 @@ module Submissions
       relationships_as_target.where(:id.nin => ids)
     end
 
+    def attributes_for_submission
+      attributes.with_indifferent_access.slice(*ATTRIBUTES_FOR_SUBMISSION)
+    end
+
     private
 
     def incorporation_date_is_in_past
