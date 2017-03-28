@@ -51,6 +51,75 @@ h6 {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, .15);
 }
 
+.type-icon {
+  position: absolute;
+  top: -2px;
+  right: 0;
+  width: 20px;
+  height: 24px;
+  padding: 6px 0 6px 6px;
+  background-color: transparent;
+  border-radius: 1px;
+  transition: all .25s ease;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 7px;
+    right: 5px;
+    display: block;
+    width: 7px;
+    height: 10px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    border-radius: 1px;
+    font-size: 0.8125rem;
+    z-index: 9;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  &.person {
+    &:after {
+      background-image: asset-url("chevron-right-green.svg");
+    }
+  }
+  &.company {
+    &:after {
+      background-image: asset-url("chevron-right.svg");
+    }
+  }
+  img {
+    height: 12px;
+    width: auto;
+    vertical-align: top;
+    position: relative;
+    z-index: 10;
+  }
+}
+
+a {
+  &:hover {
+    .type-icon {
+      width: 38px;
+      &.person {
+        background-color: lighten( $green, 52% );
+      }
+      &.company {
+        background-color: lighten( $electricBlue, 46% );
+      }
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.list-entities, .relationship-details {
+  .type-icon {
+    top: 13px;
+    right: 15px;
+  }
+}
+
 .external {
   &:after {
     content: '';
@@ -146,7 +215,7 @@ h6 {
   a {
     display: block;
     position: relative;
-    padding: 15px 15px 14px;
+    padding: 15px 60px 14px 15px;
     margin-bottom: 5px;
     background-color: $white;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
@@ -154,22 +223,10 @@ h6 {
     color: $darkBlue;
     font-size: 1rem;
     transition: all .25s ease;
-    &:after {
-      content: '';
-      background: asset-url("ic_chevron_right_blue_24px.svg") right top no-repeat;
-      width: 24px;
-      height: 24px;
-      position: absolute;
-      top: 18px;
-      right: 12px;
-      opacity: 0;
-    }
     &:hover {
       text-decoration: none;
       box-shadow: 0px 1px 6px rgba(0, 0, 0, .25);
-      &:after {
-        opacity: 1;
-      }
+      color: $electricBlue;
     }
     small {
       font-size: 0.8125rem;
@@ -355,6 +412,35 @@ h6 {
       padding: 30px 0;
     }
   }
+  .jurisdiction {
+    float: left;
+    margin: 3px 10px 0 0;
+  }
+  .type-icon {
+    position: static;
+    width: auto;
+    height: auto;
+    float: left;
+    padding: 2px 5px 2px 6px;
+    margin: 2px 10px 0 0;
+    font-size: 0.8125rem;
+    &.person {
+      background-color: lighten( $green, 52% );
+      color: $green;
+    }
+    &.company {
+      background-color: lighten( $electricBlue, 46% );
+      color: $electricBlue;
+    }
+    img {
+      position: relative;
+      top: 3px;
+      margin-right: 1px;
+    }
+    @include media-breakpoint-down(md) {
+      margin-top: 8px;
+    }
+  }
   .entity-header-meta {
     padding: 20px 0;
     @include media-breakpoint-up(lg) {
@@ -387,14 +473,14 @@ h6 {
     text-transform: uppercase;
     a {
       display: inline-block;
+      position: relative;
       width: 100%;
-      background: calc(100% + 4px) calc(0% - 3px) no-repeat;
+      padding-right: 45px;
       font-size: 1rem;
       text-transform: uppercase;
       letter-spacing: .035em;
       &:hover {
         color: $electricBlue;
-        background-image: asset-url("ic_chevron_right_blue_24px.svg");
       }
     }
   }
