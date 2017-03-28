@@ -10,16 +10,6 @@ module EntityHelper
     end
   end
 
-  def entity_country_flag(entity)
-    return unknown_country_flag unless (country = entity.country)
-
-    basename = "#{country.alpha2.upcase}.svg"
-
-    return unknown_country_flag unless asset_present?(basename)
-
-    image_tag(basename, size: '32x16', alt: country.name, class: 'flag')
-  end
-
   def entity_attributes_snippet(entity)
     parts = []
     if entity.natural_person?
@@ -40,11 +30,5 @@ module EntityHelper
     parts << Date::MONTHNAMES[entity.dob.month] if entity.dob.atoms.size > 1
     parts << entity.dob.year
     parts.join(" ")
-  end
-
-  private
-
-  def unknown_country_flag
-    image_tag("flag-unknown.svg", size: '32x16', alt: "unknown", class: 'flag')
   end
 end

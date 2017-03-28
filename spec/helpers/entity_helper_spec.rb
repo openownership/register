@@ -3,30 +3,6 @@ require 'rails_helper'
 RSpec.describe EntityHelper do
   let(:entity) { Entity.new }
 
-  describe '#entity_country_flag' do
-    subject { helper.entity_country_flag(entity) }
-
-    context 'when the entity has a country' do
-      before { allow(entity).to receive(:country).and_return(ISO3166::Country[:GB]) }
-
-      it 'returns the corresponding country flag image' do
-        expect(subject).to match(/^<img /)
-        expect(subject).to match(%r{src="/assets/GB-.+\.svg"})
-        expect(subject).to match(/alt="United Kingdom/)
-      end
-    end
-
-    context 'when the entity does not have a country' do
-      before { allow(entity).to receive(:country).and_return(nil) }
-
-      it 'returns the unknown flag image' do
-        expect(subject).to match(/^<img /)
-        expect(subject).to match(%r{src="/assets/flag-unknown-.+\.svg"})
-        expect(subject).to match(/alt="unknown"/)
-      end
-    end
-  end
-
   describe '#entity_jurisdiction' do
     subject { helper.entity_jurisdiction(entity, short: short) }
     let(:short) { false }

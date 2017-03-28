@@ -9,7 +9,7 @@
               - if @entity.natural_person?
                 - @entity.country.try(:nationality).try do |nationality|
                   .jurisdiction
-                    = entity_country_flag(@entity)
+                    = country_flag(@entity.country)
                     = nationality
                   .type-icon.person
                     = image_tag "icon-person.svg"
@@ -17,7 +17,7 @@
               - else
                 - entity_jurisdiction(@entity).try do |entity_jurisdiction|
                   .jurisdiction
-                    = entity_country_flag(@entity)
+                    = country_flag(@entity.country)
                     = entity_jurisdiction
                   .type-icon.company
                     = image_tag "icon-company.svg"
