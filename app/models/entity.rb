@@ -36,6 +36,12 @@ class Entity
     number_of_replicas: 0
   }
 
+  mapping do
+    indexes :name
+    indexes :type, index: :not_analyzed
+    indexes :country_code, index: :not_analyzed
+  end
+
   def natural_person?
     type == Types::NATURAL_PERSON
   end
@@ -82,6 +88,6 @@ class Entity
   end
 
   def as_indexed_json(_options = {})
-    as_json(only: [:name])
+    as_json(only: [:name, :type], methods: :country_code)
   end
 end
