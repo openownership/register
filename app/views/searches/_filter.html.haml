@@ -1,0 +1,17 @@
+- if search_params[key]
+  = t('.filtered_by', key: key)
+  %ul
+    %li
+      - helper.call(search_params[key]).each do |element|
+        = element
+      = @response.results.total
+      = link_to t('.remove_filter'), search_path(search_params.without(key))
+- else
+  = t('.filter_by', key: key)
+  %ul
+    - @response.response[:aggregations][key][:buckets].each do |bucket|
+      %li
+        = link_to search_path(search_params.merge(key => bucket[:key])) do
+          - helper.call(bucket[:key]).each do |element|
+            = element
+          = bucket[:doc_count]

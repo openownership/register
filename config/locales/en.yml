@@ -77,6 +77,10 @@ en:
       placeholder: Search company or name of person
       no_results: No results to show
       search: Search
+    filter:
+      filter_by: "Filter by %{key}"
+      filtered_by: "Filtered by %{key}"
+      remove_filter: Remove filter
   shared:
     relationship_interests:
       unknown: Undefined interest

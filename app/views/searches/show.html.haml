@@ -35,5 +35,9 @@
 
               = paginate @response.results
 
+      - unless params[:q].blank? || @response.results.empty?
+        = render partial: 'filter', locals: { key: 'type', helper: method(:search_filter_type) }
+        = render partial: 'filter', locals: { key: 'country', helper: method(:search_filter_country) }
+
 .footer-data-info
   = t(".footer", count: number_with_delimiter(@company_count))
