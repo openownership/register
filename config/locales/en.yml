@@ -35,6 +35,7 @@ en:
         one: 1 Match
         other: "%{count} Matches"
       note: These persons have been grouped together because our system found similarities in their identifying information. This does not constitute a factual determination that these people are one and the same.
+      view_as_tree: View as tree
     ultimate_source_relationship:
       controls_via: Owned via
       details: Details ›
@@ -57,6 +58,7 @@ en:
         destroy_user_session: Sign out
         new_user_registration: Sign up
         edit_user_registration: My account
+        submissions: Submit your data
       subtitle: The Global Beneficial Ownership Register
   pages:
     feedback:
@@ -101,6 +103,10 @@ en:
 
   unknown_persons_entity:
     name: unknown persons
+
+  tree:
+    help: Click and drag anywhere to change the view
+    zoom: Zoom in or out
 
   relationship_interests:
     ownership-of-shares-25-to-50-percent: "Ownership of shares – More than 25% but not more than 50%"

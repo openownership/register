@@ -1,0 +1,16 @@
+@mixin prefix($property, $values...) {
+  -webkit-#{$property}: #{$values};
+  -moz-#{$property}: #{$values};
+  -ms-#{$property}: #{$values};
+  -o-#{$property}: #{$values};
+  #{$property}: #{$values};
+}
+
+@mixin reset-button {
+  @include prefix(appearance, none);
+
+  border: none;
+  padding: 0;
+  text-align: inherit;
+  background: none;
+}

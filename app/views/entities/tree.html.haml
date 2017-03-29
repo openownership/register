@@ -1,0 +1,17 @@
+.tree-wrapper
+  .tree-window{ "data-tree": @entity.id }
+    .tree-canvas
+      .tree-group
+        = render 'tree_node', node: @node
+
+  .tree-controls
+    %span.fa.fa-search-minus
+    %input.tree-zoom{ type: "range", data: { toggle: 'tooltip', title: t('tree.zoom'), placement: 'bottom' } }
+    %span.fa.fa-search-plus
+
+  .tree-help
+    .fa.fa-info-circle
+    %small= t('tree.help')
+
+:javascript
+  var GROUPED_NODES_TOOLTIP_TITLE = "#{j t("entities.show.note")}";

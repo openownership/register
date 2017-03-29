@@ -111,4 +111,8 @@ class Entity
   def as_indexed_json(_options = {})
     as_json(only: [:name, :type], methods: :country_code)
   end
+
+  def relationships_as_target_excluding(ids)
+    relationships_as_target.where(:id.nin => ids)
+  end
 end

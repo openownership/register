@@ -1,0 +1,187 @@
+$tree-spacing: 20px;
+$tree-background: #f4f6f8;
+
+.tree-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 720px;
+  overflow: hidden;
+}
+
+.tree-window {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: $tree-background;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.tree-canvas {
+  position: absolute;
+  left: calc(50% - 5000px);
+  bottom: 50%;
+  width: 10000px;
+  opacity: 0;
+  text-align: center;
+  font-size: 0;
+}
+
+.tree-link {
+  display: inline-block;
+  position: relative;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-top: 2px solid $electricBlue;
+  }
+
+  &:first-child:after {
+    left: 50%;
+  }
+
+  &:last-child:after {
+    right: 50%;
+  }
+}
+
+.tree-node {
+  position: relative;
+  margin: $tree-spacing ($tree-spacing / 2);
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: - $tree-spacing;
+    bottom: - $tree-spacing;
+    left: calc(50% - 1px);
+    z-index: -1;
+    border-left: 2px solid $electricBlue;
+  }
+
+  &--leaf:after {
+    top: 50%;
+  }
+
+  &--root:after {
+    bottom: 50%;
+  }
+}
+
+.tree-node__content {
+  position: relative;
+  z-index: 1;
+  background: $tree-background;
+
+  &__top {
+    display: inline-block;
+    position: relative;
+  }
+}
+
+.tree-node__entity {
+  display: inline-block;
+  position: relative;
+  padding: 0.5em 0.75em;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: normal;
+  background: white;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
+  transition: opacity 0.1s linear;
+
+  a {
+    color: $darkBlue;
+  }
+
+  a:hover {
+    text-decoration: none;
+    color: $electricBlue;
+  }
+
+  .flag {
+    display: block;
+    float: left;
+    margin: 0.25em 0.5em 0.25em 0;
+    height: 1em;
+    width: auto;
+  }
+
+  .tree-entity__type-icon {
+    display: block;
+    float: right;
+    margin: 0.25em 0 0.25em 1em;
+    height: 1em;
+    width: auto;
+  }
+
+  small {
+    display: none;
+  }
+
+  .tree-node--root & {
+    font-size: 16px;
+  }
+
+  .flag-wrap {
+    display: inline;
+  }
+
+  .flag {
+    top: 0;
+  }
+}
+
+.tree-node--leaf:before {
+  top: 50%;
+}
+
+.tree-node--root:before {
+  bottom: 50%;
+}
+
+.tree-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 14px;
+  color: $greyBlue;
+  user-select: none;
+
+  .fa-search-minus {
+    position: relative;
+    top: -2px;
+    margin-right: 0.5em;
+    cursor: pointer;
+  }
+
+  .fa-search-plus {
+    position: relative;
+    top: -2px;
+    margin-left: 0.5em;
+    cursor: pointer;
+  }
+}
+
+.tree-help {
+  display: block;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  border: 1px solid #dfe4e9;
+  padding: 0.25em 0.5em;
+  background: $white;
+  font-size: 14px;
+}
