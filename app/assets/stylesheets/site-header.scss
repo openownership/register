@@ -12,9 +12,6 @@
   .navbar-nav {
     .nav-item {
       border-bottom: 2px solid transparent;
-      @include media-breakpoint-up(md) {
-        padding-top: 8px;
-      }
       .nav-link {
         font-size: 14px;
         font-weight: bold;
@@ -51,8 +48,8 @@
       font-size: 14px;
       font-style: italic;
       color: lighten($darkBlue, 45%);
-      @include media-breakpoint-up(md) {
-        padding: 22px 0 14px;
+      @include media-breakpoint-down(md) {
+        padding-bottom: 0;
       }
     }
     .nav-item + .nav-item {

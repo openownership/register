@@ -4,16 +4,24 @@
       .col-lg-12
         .row
           .col-lg-8.header-sep
-            .entity-name-wrap
+            .entity-name-wrap.clearfix
               %h1.entity-name= @entity.name
               - if @entity.natural_person?
                 - @entity.country.try(:nationality).try do |nationality|
-                  = entity_country_flag(@entity)
-                  = nationality
+                  .jurisdiction
+                    = entity_country_flag(@entity)
+                    = nationality
+                  .type-icon.person
+                    = image_tag "icon-person.svg"
+                    Person
               - else
                 - entity_jurisdiction(@entity).try do |entity_jurisdiction|
-                  = entity_country_flag(@entity)
-                  = entity_jurisdiction
+                  .jurisdiction
+                    = entity_country_flag(@entity)
+                    = entity_jurisdiction
+                  .type-icon.company
+                    = image_tag "icon-company.svg"
+                    Company
           .col-lg-4.header-sep
             .entity-header-meta.meta
               - if @entity.natural_person?

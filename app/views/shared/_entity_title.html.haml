@@ -3,6 +3,12 @@
     %span.flag-wrap
       = entity_country_flag(entity)
     = entity.name
+    - if entity.natural_person?
+      .type-icon.person
+        = image_tag "icon-person.svg"
+    - else
+      .type-icon.company
+        = image_tag "icon-company.svg"
     %small
       = entity_attributes_snippet(entity)
       - entity.address.try do |address|
