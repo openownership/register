@@ -4,6 +4,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'spec_helper'
 require 'rspec/rails'
 require 'support/factory_girl'
+require 'support/devise'
 
 Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
 
