@@ -5,11 +5,10 @@ RSpec.describe RelationshipGraph do
     @entities ||= []
   end
 
-  def entity!(jurisdiction_code, company_number, name)
+  def entity!(identifier, name)
     id = {
       _id: {
-        jurisdiction_code: jurisdiction_code,
-        company_number: company_number
+        identifier: identifier
       }
     }
 
@@ -28,13 +27,13 @@ RSpec.describe RelationshipGraph do
 
   describe '#ultimate_source_relationships' do
     it 'returns an array of ultimate source relationships for the entity' do
-      entity!('gb', '07711111', 'FLAGSTAFF 1 LIMITED')
-      entity!('gb', '03487308', 'TRILLIUM HOLDINGS LIMITED')
-      entity!('gb', '06761256', 'LONDON WALL OUTSOURCING LIMITED')
-      entity!('gb', '08788866', 'LONDON WALL OUTSOURCING FREEHOLDS LIMITED')
-      entity!('gb', '09335291', 'TELEREAL (LONDON WALL) LIMITED')
-      entity!('gb', '08787339', 'LONDON WALL OUTSOURCING INVESTMENTS LIMITED')
-      entity!('bm', '2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
+      entity!('07711111', 'FLAGSTAFF 1 LIMITED')
+      entity!('03487308', 'TRILLIUM HOLDINGS LIMITED')
+      entity!('06761256', 'LONDON WALL OUTSOURCING LIMITED')
+      entity!('08788866', 'LONDON WALL OUTSOURCING FREEHOLDS LIMITED')
+      entity!('09335291', 'TELEREAL (LONDON WALL) LIMITED')
+      entity!('08787339', 'LONDON WALL OUTSOURCING INVESTMENTS LIMITED')
+      entity!('2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
 
       relationships!
 
@@ -50,8 +49,8 @@ RSpec.describe RelationshipGraph do
 
     context 'when the entity has a direct relationship to an entity with no direct target relationships' do
       it 'returns an array containing the relationship to the source entity' do
-        entity!('gb', '07711112', 'FLAGSTAFF 3 LIMITED')
-        entity!('bm', '2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
+        entity!('07711112', 'FLAGSTAFF 3 LIMITED')
+        entity!('2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
 
         relationships!
 
@@ -67,7 +66,7 @@ RSpec.describe RelationshipGraph do
 
     context 'when the entity has no direct target relationships' do
       it 'returns no relationships' do
-        entity!('bm', '2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
+        entity!('2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
 
         relationships = RelationshipGraph.new(entities.first).ultimate_source_relationships
 
@@ -77,10 +76,10 @@ RSpec.describe RelationshipGraph do
 
     context 'when there are multiple relationships leading to the same ultimate source entity' do
       it 'returns all the relationships' do
-        entity_a = entity!('gb', '0000000A', 'A')
-        entity_b = entity!('gb', '0000000B', 'B')
-        entity_c = entity!('gb', '0000000C', 'C')
-        entity_d = entity!('gb', '0000000D', 'D')
+        entity_a = entity!('0000000A', 'A')
+        entity_b = entity!('0000000B', 'B')
+        entity_c = entity!('0000000C', 'C')
+        entity_d = entity!('0000000D', 'D')
 
         Relationship.create!(target: entity_b, source: entity_a)
         Relationship.create!(target: entity_c, source: entity_a)
@@ -99,11 +98,11 @@ RSpec.describe RelationshipGraph do
 
     context 'when there is a circular loop within the relationship chain' do
       it 'returns the relationship to the ultimate source entity' do
-        entity!('gb', '04581669', 'LUMINUS DEVELOPMENTS LIMITED')
-        entity!('gb', '06438705', 'LUMINUS FINANCE LIMITED')
-        entity!('gb', '04782653', 'LUMINUS GROUP LIMITED')
-        entity!('gb', '03736718', 'LUMINUS HOMES LIMITED')
-        entity!('gb', '04782653', 'LUMINUS GROUP LIMITED')
+        entity!('04581669', 'LUMINUS DEVELOPMENTS LIMITED')
+        entity!('06438705', 'LUMINUS FINANCE LIMITED')
+        entity!('04782653', 'LUMINUS GROUP LIMITED')
+        entity!('03736718', 'LUMINUS HOMES LIMITED')
+        entity!('04782653', 'LUMINUS GROUP LIMITED')
 
         relationships!
 
@@ -122,10 +121,10 @@ RSpec.describe RelationshipGraph do
 
     context 'when there is a circular loop at the top of the relationship chain' do
       it 'returns no relationships' do
-        entity!('gb', '0000000A', 'A')
-        entity!('gb', '0000000B', 'B')
-        entity!('gb', '0000000C', 'C')
-        entity!('gb', '0000000B', 'B')
+        entity!('0000000A', 'A')
+        entity!('0000000B', 'B')
+        entity!('0000000C', 'C')
+        entity!('0000000B', 'B')
 
         relationships!
 
@@ -139,8 +138,8 @@ RSpec.describe RelationshipGraph do
   describe '#relationships_to' do
     context 'when there is a direct relationship between the subject entity and the given entity' do
       it 'returns an array containing the direct relationship' do
-        entity!('gb', '07711112', 'FLAGSTAFF 3 LIMITED')
-        entity!('bm', '2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
+        entity!('07711112', 'FLAGSTAFF 3 LIMITED')
+        entity!('2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
 
         relationships!
 
@@ -154,9 +153,9 @@ RSpec.describe RelationshipGraph do
 
       context 'when the given entity is not an ultimate source entity' do
         it 'returns an array containing the direct relationship' do
-          entity!('gb', '0000000A', 'A')
-          entity = entity!('gb', '0000000B', 'B')
-          entity!('gb', '0000000C', 'C')
+          entity!('0000000A', 'A')
+          entity = entity!('0000000B', 'B')
+          entity!('0000000C', 'C')
 
           relationships!
 
@@ -172,13 +171,13 @@ RSpec.describe RelationshipGraph do
 
     context 'when there is an indirect relationship between the subject entity and the given entity' do
       it 'returns an array containing the indirect relationship' do
-        entity!('gb', '07711111', 'FLAGSTAFF 1 LIMITED')
-        entity!('gb', '03487308', 'TRILLIUM HOLDINGS LIMITED')
-        entity!('gb', '06761256', 'LONDON WALL OUTSOURCING LIMITED')
-        entity!('gb', '08788866', 'LONDON WALL OUTSOURCING FREEHOLDS LIMITED')
-        entity!('gb', '09335291', 'TELEREAL (LONDON WALL) LIMITED')
-        entity!('gb', '08787339', 'LONDON WALL OUTSOURCING INVESTMENTS LIMITED')
-        entity!('bm', '2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
+        entity!('07711111', 'FLAGSTAFF 1 LIMITED')
+        entity!('03487308', 'TRILLIUM HOLDINGS LIMITED')
+        entity!('06761256', 'LONDON WALL OUTSOURCING LIMITED')
+        entity!('08788866', 'LONDON WALL OUTSOURCING FREEHOLDS LIMITED')
+        entity!('09335291', 'TELEREAL (LONDON WALL) LIMITED')
+        entity!('08787339', 'LONDON WALL OUTSOURCING INVESTMENTS LIMITED')
+        entity!('2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
 
         relationships!
 
@@ -198,10 +197,10 @@ RSpec.describe RelationshipGraph do
 
     context 'when there are multiple relationships between the subject entity and the given entity' do
       it 'returns an array containing all the relationships' do
-        entity_a = entity!('gb', '0000000A', 'A')
-        entity_b = entity!('gb', '0000000B', 'B')
-        entity_c = entity!('gb', '0000000C', 'C')
-        entity_d = entity!('gb', '0000000D', 'D')
+        entity_a = entity!('0000000A', 'A')
+        entity_b = entity!('0000000B', 'B')
+        entity_c = entity!('0000000C', 'C')
+        entity_d = entity!('0000000D', 'D')
 
         Relationship.create!(target: entity_b, source: entity_a)
         Relationship.create!(target: entity_c, source: entity_a)
@@ -221,11 +220,11 @@ RSpec.describe RelationshipGraph do
 
     context 'when there is a circular loop between the subject entity and the given entity' do
       it 'returns an array containing all the relationships' do
-        entity!('gb', '04581669', 'LUMINUS DEVELOPMENTS LIMITED')
-        entity!('gb', '06438705', 'LUMINUS FINANCE LIMITED')
-        entity!('gb', '04782653', 'LUMINUS GROUP LIMITED')
-        entity!('gb', '03736718', 'LUMINUS HOMES LIMITED')
-        entity!('gb', '04782653', 'LUMINUS GROUP LIMITED')
+        entity!('04581669', 'LUMINUS DEVELOPMENTS LIMITED')
+        entity!('06438705', 'LUMINUS FINANCE LIMITED')
+        entity!('04782653', 'LUMINUS GROUP LIMITED')
+        entity!('03736718', 'LUMINUS HOMES LIMITED')
+        entity!('04782653', 'LUMINUS GROUP LIMITED')
 
         relationships!
 
@@ -244,8 +243,8 @@ RSpec.describe RelationshipGraph do
 
     context 'when there are no relationships between the entity and the given source entity' do
       it 'returns an empty array' do
-        entity!('gb', '07711112', 'FLAGSTAFF 3 LIMITED')
-        entity!('bm', '2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
+        entity!('07711112', 'FLAGSTAFF 3 LIMITED')
+        entity!('2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
 
         relationships = RelationshipGraph.new(entities.first).relationships_to(entities.last)
 
