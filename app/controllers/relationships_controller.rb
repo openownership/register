@@ -11,8 +11,8 @@ class RelationshipsController < ApplicationController
     reference_number = 0
 
     @relationships.each do |relationship|
-      relationship.intermediate_relationships.each do |intermediate_relationship|
-        intermediate_relationship[:reference_number] = (reference_number += 1)
+      relationship.sourced_relationships.each do |sourced_relationship|
+        sourced_relationship[:reference_number] = (reference_number += 1)
       end
     end
   end

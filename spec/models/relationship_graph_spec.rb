@@ -41,27 +41,10 @@ RSpec.describe RelationshipGraph do
 
       expect(relationships).to be_an(Array)
       expect(relationships.size).to eq(1)
-      expect(relationships.first).to be_a(Relationship)
+      expect(relationships.first).to be_a(InferredRelationship)
       expect(relationships.first.source).to eq(entities.last)
       expect(relationships.first.target).to eq(entities.first)
       expect(relationships.first.intermediate_entities.size).to eq(5)
-    end
-
-    context 'when the entity has a direct relationship to an entity with no direct target relationships' do
-      it 'returns an array containing the relationship to the source entity' do
-        entity!('07711112', 'FLAGSTAFF 3 LIMITED')
-        entity!('2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
-
-        relationships!
-
-        relationships = RelationshipGraph.new(entities.first).ultimate_source_relationships
-
-        relationship = Relationship.find_by(target: entities.first, source: entities.last)
-
-        expect(relationships).to be_an(Array)
-        expect(relationships.size).to eq(1)
-        expect(relationships.first).to eq(relationship)
-      end
     end
 
     context 'when the entity has no direct target relationships' do
@@ -190,7 +173,7 @@ RSpec.describe RelationshipGraph do
           expect(relationships.size).to eq(1)
           expect(relationships.first.source).to eq(entity)
           expect(relationships.first.target).to eq(entities.first)
-          expect(relationships.first.intermediate_relationships.size).to eq(index)
+          expect(relationships.first.sourced_relationships.size).to eq(index)
         end
       end
     end

@@ -16,15 +16,10 @@
       .row
         .col-lg-8
           .relationship-details
-            - if relationship.intermediate_relationships.any?
-              - relationship.intermediate_relationships.each do |intermediate_relationship|
-                .item.relationship-source
-                  = render partial: 'shared/entity_title', locals: { entity: intermediate_relationship.source }
-                  = render partial: 'shared/relationship_interests', locals: { relationship: intermediate_relationship }
-            - else
+            - relationship.sourced_relationships.each do |sourced_relationship|
               .item.relationship-source
-                = render partial: 'shared/entity_title', locals: { entity: relationship.source }
-                = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
+                = render partial: 'shared/entity_title', locals: { entity: sourced_relationship.source }
+                = render partial: 'shared/relationship_interests', locals: { relationship: sourced_relationship }
 
             .item.relationship-target
               = render partial: 'shared/entity_title', locals: { entity: @target_entity }
@@ -32,9 +27,5 @@
           .frame-light.meta.provenance
             .frame-wrap
               %h6= t(".provenance")
-              - if relationship.intermediate_relationships.any?
-                %ol
-                  = render partial: 'provenance', collection: relationship.intermediate_relationships, as: :relationship
-              - else
-                %ul
-                  = render partial: 'provenance', locals: { relationship: relationship }
+              %ol
+                = render partial: 'provenance', collection: relationship.sourced_relationships, as: :relationship

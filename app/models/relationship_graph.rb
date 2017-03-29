@@ -30,16 +30,21 @@ class RelationshipGraph
 
     if block.call(entity, immediate_relationships) && !entities.empty?
       if relationships.size == 1
-        state << relationships.first
+        state << InferredRelationship.new(
+          source: entity,
+          target: @entity,
+          interests: relationships.first.interests,
+          sourced_relationships: relationships
+        )
       else
         attributes = {
           source: entity,
           target: @entity,
           intermediate_entities: entities[0..-2],
-          intermediate_relationships: relationships
+          sourced_relationships: relationships
         }
 
-        state << Relationship.new(attributes)
+        state << InferredRelationship.new(attributes)
       end
     end
 
