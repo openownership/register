@@ -12,12 +12,16 @@ module ApplicationHelper
   end
 
   def glossary_tooltip(label, glossary_key, position)
+    tooltip(label, t("glossary.#{glossary_key}"), position)
+  end
+
+  def tooltip(label, title, position)
     content_tag(
       :span,
       label,
       "data-toggle" => "tooltip",
       "data-placement" => position,
-      title: t("glossary.#{glossary_key}"),
+      title: title,
       class: "tooltip-helper"
     )
   end

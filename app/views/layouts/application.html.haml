@@ -28,6 +28,9 @@
                 %ul.nav.navbar-nav
                   %li.nav-item{ class: ("active" if current_page?(root_path)) }
                     = link_to t(".nav.home"), root_path, class: "nav-link"
+                  - if user_signed_in?
+                    %li.nav-item{ class: ("active" if submissions_section?) }
+                      = link_to t(".nav.submissions"), submissions_path, class: "nav-link"
                   %li.nav-item
                     %a.nav-link.external{ href: "http://openownership.org/about/", target: "_blank" }
                       = t(".nav.about")

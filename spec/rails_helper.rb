@@ -5,6 +5,7 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'support/factory_girl'
 require 'support/devise'
+require 'support/submission_helpers'
 
 Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
 

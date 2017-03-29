@@ -28,4 +28,6 @@ class User
   field :confirmed_at,         type: Time
   field :confirmation_sent_at, type: Time
   field :unconfirmed_email,    type: String
+
+  has_many :submissions, class_name: 'Submissions::Submission'
 end
