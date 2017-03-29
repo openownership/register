@@ -5,14 +5,14 @@ RSpec.describe RelationshipGraph do
     @entities ||= []
   end
 
-  def entity!(identifier, name)
+  def entity!(identifier, name, type = Entity::Types::LEGAL_ENTITY)
     id = {
       _id: {
         identifier: identifier
       }
     }
 
-    entity = Entity.where(identifiers: id).first_or_create!(identifiers: [id], name: name)
+    entity = Entity.where(identifiers: id).first_or_create!(identifiers: [id], type: type, name: name)
 
     entities << entity
 
@@ -33,7 +33,7 @@ RSpec.describe RelationshipGraph do
       entity!('08788866', 'LONDON WALL OUTSOURCING FREEHOLDS LIMITED')
       entity!('09335291', 'TELEREAL (LONDON WALL) LIMITED')
       entity!('08787339', 'LONDON WALL OUTSOURCING INVESTMENTS LIMITED')
-      entity!('2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
+      entity!('person1', 'A Person', Entity::Types::NATURAL_PERSON)
 
       relationships!
 
@@ -48,7 +48,7 @@ RSpec.describe RelationshipGraph do
 
     context 'when the entity has no direct target relationships' do
       it 'returns no relationships' do
-        entity!('2106', 'BANK OF N.T. BUTTERFIELD & SON LIMITED (THE)')
+        entity!('person1', 'A Person', Entity::Types::NATURAL_PERSON)
 
         relationships = RelationshipGraph.new(entities.first).ultimate_source_relationships
 
@@ -58,7 +58,7 @@ RSpec.describe RelationshipGraph do
 
     context 'when there are multiple relationships leading to the same ultimate source entity' do
       it 'returns all the relationships' do
-        entity_a = entity!('0000000A', 'A')
+        entity_a = entity!('person1', 'A Person', Entity::Types::NATURAL_PERSON)
         entity_b = entity!('0000000B', 'B')
         entity_c = entity!('0000000C', 'C')
         entity_d = entity!('0000000D', 'D')
@@ -88,7 +88,7 @@ RSpec.describe RelationshipGraph do
 
         relationships!
 
-        entity = Entity.create!(name: 'Huntingdonshire District Council')
+        entity = Entity.create!(name: 'A Person', type: Entity::Types::NATURAL_PERSON)
 
         Relationship.create!(target: entities[-2], source: entity)
 
