@@ -32,6 +32,8 @@ class SkImporter
   end
 
   def process(record)
+    return unless slovakian_address?(record.PartneriVerejnehoSektora.first.Adresa)
+
     child_entity = child_entity!(record)
 
     record.KonecniUzivateliaVyhod.each do |item|
@@ -112,6 +114,10 @@ class SkImporter
     }
 
     Relationship.new(attributes).upsert
+  end
+
+  def slovakian_address?(address)
+    address.Psc.present? && address.Psc.strip =~ /^\d{3} ?\d{2}$/
   end
 
   def address_string(address)
