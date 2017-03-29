@@ -36,6 +36,8 @@ class PscImporter
   def process(line)
     record = JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
 
+    return if record.data.ceased_on.present?
+
     case record.data.kind
     when 'totals#persons-of-significant-control-snapshot',
          'persons-with-significant-control-statement',
