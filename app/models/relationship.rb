@@ -4,8 +4,8 @@ class Relationship
   field :interests, type: Array, default: []
   field :sample_date, type: String
 
-  belongs_to :source, class_name: 'Entity'
-  belongs_to :target, class_name: 'Entity'
+  belongs_to :source, class_name: 'Entity', inverse_of: :relationships_as_source
+  belongs_to :target, class_name: 'Entity', inverse_of: :relationships_as_target
 
   embeds_one :provenance
 

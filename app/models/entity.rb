@@ -26,6 +26,9 @@ class Entity
 
   embeds_many :identifiers
 
+  has_many :relationships_as_source, class_name: "Relationship", inverse_of: :source
+  has_many :relationships_as_target, class_name: "Relationship", inverse_of: :target
+
   index({ identifiers: 1 }, unique: true, sparse: true)
   index(type: 1)
 

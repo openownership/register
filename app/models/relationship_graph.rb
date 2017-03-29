@@ -26,7 +26,7 @@ class RelationshipGraph
   end
 
   def select_relationships_recursive(entity, state, entities, relationships, block)
-    immediate_relationships = Relationship.all(target: entity).to_a
+    immediate_relationships = entity.relationships_as_target
 
     if block.call(entity, immediate_relationships) && !entities.empty?
       if relationships.size == 1
