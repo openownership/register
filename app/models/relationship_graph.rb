@@ -40,7 +40,6 @@ class RelationshipGraph
         attributes = {
           source: entity,
           target: @entity,
-          intermediate_entities: entities[0..-2],
           sourced_relationships: relationships
         }
 

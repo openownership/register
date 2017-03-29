@@ -44,7 +44,6 @@ RSpec.describe RelationshipGraph do
       expect(relationships.first).to be_a(InferredRelationship)
       expect(relationships.first.source).to eq(entities.last)
       expect(relationships.first.target).to eq(entities.first)
-      expect(relationships.first.intermediate_entities.size).to eq(5)
     end
 
     context 'when the entity has no direct target relationships' do
@@ -98,7 +97,6 @@ RSpec.describe RelationshipGraph do
         expect(relationships.size).to eq(1)
         expect(relationships.first.source).to eq(entity)
         expect(relationships.first.target).to eq(entities.first)
-        expect(relationships.first.intermediate_entities.size).to eq(3)
       end
     end
 
@@ -217,10 +215,8 @@ RSpec.describe RelationshipGraph do
         expect(relationships.size).to eq(2)
         expect(relationships[0].source).to eq(entities.last)
         expect(relationships[0].target).to eq(entities.first)
-        expect(relationships[0].intermediate_entities.size).to eq(1)
         expect(relationships[1].source).to eq(entities.last)
         expect(relationships[1].target).to eq(entities.first)
-        expect(relationships[1].intermediate_entities.size).to eq(3)
       end
     end
 
