@@ -13,10 +13,6 @@ class SearchesController < ApplicationController
       }
     }
 
-    response = Entity.search(query: query).page(params[:page]).per(10)
-
-    @results = response.results
-
-    @records = response.records.to_a
+    @response = Entity.search(query: query).page(params[:page]).per(10)
   end
 end
