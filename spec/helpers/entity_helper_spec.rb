@@ -3,6 +3,20 @@ require 'rails_helper'
 RSpec.describe EntityHelper do
   let(:entity) { Entity.new }
 
+  describe '#entity_link' do
+    subject do
+      helper.entity_link(entity) do
+        "label"
+      end
+    end
+
+    before { allow(entity).to receive(:persisted?).and_return(true) }
+
+    it 'returns a link to entity' do
+      expect(subject).to eq(content_tag(:a, "label", href: entity_path(entity)))
+    end
+  end
+
   describe '#entity_jurisdiction' do
     subject { helper.entity_jurisdiction(entity, short: short) }
     let(:short) { false }

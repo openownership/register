@@ -1,5 +1,5 @@
 .entity-title
-  = link_to entity_path(entity) do
+  = entity_link(entity) do
     %span.flag-wrap
       = country_flag(entity.country)
     = entity.name

@@ -1,4 +1,8 @@
 module EntityHelper
+  def entity_link(entity, &block)
+    link_to(entity_path(entity), &block)
+  end
+
   def entity_jurisdiction(entity, short: false)
     return unless (country = entity.country)
 
