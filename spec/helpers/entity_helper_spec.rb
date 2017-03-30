@@ -141,8 +141,8 @@ RSpec.describe EntityHelper do
       [nil,  nil, 27] => "",
       [1980, 2,   nil] => "February 1980",
       [1980, nil, 27] => "1980",
-      [nil,  2,   27] => "27 February",
-      [1980, 2,   27] => "27 February 1980"
+      [nil,  2,   27] => "February",
+      [1980, 2,   27] => "February 1980"
     }.each do |(year, month, day), expected|
       context "when entity data of birth data is #{[year, month, day]}" do
         before do
