@@ -7,6 +7,8 @@ class Entity
     LEGAL_ENTITY = "legal-entity".freeze
   end
 
+  UNKNOWN_ID_MODIFIER = "-unknown".freeze
+
   field :type, type: String
 
   field :name, type: String
@@ -27,7 +29,7 @@ class Entity
   embeds_many :identifiers
 
   has_many :relationships_as_source, class_name: "Relationship", inverse_of: :source
-  has_many :relationships_as_target, class_name: "Relationship", inverse_of: :target
+  has_many :_relationships_as_target, class_name: "Relationship", inverse_of: :target
 
   index({ identifiers: 1 }, unique: true, sparse: true)
   index(type: 1)
@@ -43,6 +45,22 @@ class Entity
     indexes :name
     indexes :type, index: :not_analyzed
     indexes :country_code, index: :not_analyzed
+  end
+
+  def self.find_or_unknown(id)
+    if id.include?(UNKNOWN_ID_MODIFIER)
+      UnknownPersonsEntity.new(id: id)
+    else
+      find(id)
+    end
+  end
+
+  def relationships_as_target
+    if type == Types::NATURAL_PERSON
+      []
+    else
+      _relationships_as_target.entries.presence || [Relationship.new(source: UnknownPersonsEntity.new(id: "#{id}-unknown"), target: self)]
+    end
   end
 
   def natural_person?

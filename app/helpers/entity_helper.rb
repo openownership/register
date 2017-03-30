@@ -1,6 +1,10 @@
 module EntityHelper
   def entity_link(entity, &block)
-    link_to(entity_path(entity), &block)
+    if entity.is_a?(UnknownPersonsEntity)
+      capture(&block)
+    else
+      link_to(entity_path(entity), &block)
+    end
   end
 
   def entity_jurisdiction(entity, short: false)

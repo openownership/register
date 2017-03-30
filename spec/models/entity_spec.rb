@@ -1,6 +1,70 @@
 require 'rails_helper'
 
 RSpec.describe Entity do
+  describe '.find_or_unknown' do
+    subject { Entity.find_or_unknown(id) }
+
+    context "when id is id of a normal entity" do
+      let(:id) { "1234" }
+
+      it "finds the entity" do
+        expect(Entity).to receive(:find).with(id).and_return(:entity)
+        expect(subject).to eq(:entity)
+      end
+    end
+
+    context "when id is id of an unknown persons entity" do
+      let(:id) { "1234#{Entity::UNKNOWN_ID_MODIFIER}" }
+
+      it "returns an unknown persons entity" do
+        expect(subject).to be_a(UnknownPersonsEntity)
+      end
+
+      it "returns entity with same id" do
+        expect(subject.id).to eq(id)
+      end
+    end
+  end
+
+  describe '#relationships_as_target' do
+    let(:entity) { Entity.new }
+    subject { entity.relationships_as_target }
+
+    context "when entity is a Entity::Types::NATURAL_PERSON" do
+      before { entity.type = Entity::Types::NATURAL_PERSON }
+
+      it "returns empty array" do
+        expect(subject).to eq([])
+      end
+    end
+
+    context "when entity is not a Entity::Types::NATURAL_PERSON" do
+      before { entity.type = nil }
+
+      context "when entity is target of some persisted relationships" do
+        before do
+          allow(entity).to receive(:_relationships_as_target).and_return([:relationship])
+        end
+
+        it "returns those relationships" do
+          expect(subject).to eq([:relationship])
+        end
+      end
+
+      context "when entity is target of no persisted relationships" do
+        before do
+          allow(entity).to receive(:_relationships_as_target).and_return([])
+        end
+
+        it "returns an array containing a relationship to an unknown persons entity" do
+          expect(subject.count).to eq(1)
+          expect(subject[0].source).to eq(UnknownPersonsEntity.new(id: "#{entity.id}#{Entity::UNKNOWN_ID_MODIFIER}"))
+          expect(subject[0].target).to eq(entity)
+        end
+      end
+    end
+  end
+
   describe '#natural_person?' do
     subject { Entity.new(type: type).natural_person? }
 

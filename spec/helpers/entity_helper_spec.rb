@@ -10,10 +10,20 @@ RSpec.describe EntityHelper do
       end
     end
 
-    before { allow(entity).to receive(:persisted?).and_return(true) }
+    context "when entity is a normal entity" do
+      before { allow(entity).to receive(:persisted?).and_return(true) }
 
-    it 'returns a link to entity' do
-      expect(subject).to eq(content_tag(:a, "label", href: entity_path(entity)))
+      it 'returns a link to entity' do
+        expect(subject).to eq(content_tag(:a, "label", href: entity_path(entity)))
+      end
+    end
+
+    context "when entity is a unknown persons entity" do
+      let(:entity) { UnknownPersonsEntity.new }
+
+      it 'returns just the label' do
+        expect(subject).to eq("label")
+      end
     end
   end
 

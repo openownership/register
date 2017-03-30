@@ -99,6 +99,9 @@ en:
     legal-entity: company
     natural-person: person
 
+  unknown_persons_entity:
+    name: unknown persons
+
   relationship_interests:
     ownership-of-shares-25-to-50-percent: "Ownership of shares – More than 25% but not more than 50%"
     ownership-of-shares-50-to-75-percent: "Ownership of shares – More than 50% but less than 75%"
