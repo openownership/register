@@ -6,6 +6,7 @@ RSpec.feature 'review submission' do
   let!(:submission) { create(:submitted_submission) }
 
   before do
+    page.driver.header('Authorization', admin_basic_auth)
     stub_elasticsearch
     stub_opencorporates_client_get_company
     stub_opencorporates_client_search_companies

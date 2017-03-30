@@ -1,4 +1,8 @@
 module AdminHelpers
+  def admin_basic_auth
+    ActionController::HttpAuthentication::Basic.encode_credentials(*ENV.fetch('ADMIN_BASIC_AUTH').split(':'))
+  end
+
   def stub_elasticsearch
     stub_request(:any, /#{ENV['SEARCHBOX_SSL_URL']}.*/)
   end

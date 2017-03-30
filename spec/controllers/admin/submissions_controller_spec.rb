@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Admin::SubmissionsController do
+  include AdminHelpers
+
+  before do
+    request.env['HTTP_AUTHORIZATION'] = admin_basic_auth
+  end
+
   let!(:submission) { create(:submitted_submission) }
 
   describe 'GET #index' do
