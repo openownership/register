@@ -5,6 +5,8 @@ module Submissions
     scope :started, -> { where(:entities_count.gt => 0) }
     scope :draft, -> { started.where(submitted_at: nil) }
     scope :submitted, -> { started.where(:submitted_at.ne => nil) }
+    scope :reviewable, -> { submitted.where(approved_at: nil) }
+    scope :approved, -> { where(:approved_at.ne => nil) }
 
     belongs_to :user
 
@@ -12,6 +14,7 @@ module Submissions
     has_many :relationships, class_name: 'Submissions::Relationship'
 
     field :submitted_at, type: Time
+    field :approved_at, type: Time
 
     def entity
       entities.legal_entities.first
@@ -27,6 +30,14 @@ module Submissions
 
     def started?
       entity.present?
+    end
+
+    def approved?
+      approved_at.present?
+    end
+
+    def reviewable?
+      submitted? && !approved?
     end
   end
 end

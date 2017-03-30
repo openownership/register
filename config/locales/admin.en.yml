@@ -1,0 +1,18 @@
+en:
+  admin:
+    submissions:
+      index:
+        awaiting_approval: Submissions awaiting approval
+        approved_submissions: Approved submissions
+        draft_submissions: Draft submissions
+        none: None
+      show:
+        heading: "%{name} submitted control information for"
+        submitted_at: "Submitted at %{date}"
+        approved_at: "Approved at %{date}"
+        back: Back to all submissions
+        grouped: These persons (indicated by a colored border) have been grouped together because they the same
+        approve: Approve
+        confirm: Are you sure?
+      approve:
+        success: "You have approved submission for %{entity}"

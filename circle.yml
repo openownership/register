@@ -1,6 +1,7 @@
 machine:
   environment:
     HOST: localhost
+    SEARCHBOX_SSL_URL: "http://localhost:9200"
 test:
   post:
     - bundle exec rubocop

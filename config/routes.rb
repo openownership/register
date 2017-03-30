@@ -28,5 +28,12 @@ Rails.application.routes.draw do
     end
     resources :relationships, only: [:edit, :update], controller: 'submissions/relationships'
   end
+  namespace :admin do
+    resources :submissions, only: [:index, :show] do
+      member do
+        post :approve
+      end
+    end
+  end
   root "searches#show"
 end
