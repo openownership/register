@@ -25,6 +25,8 @@
                   %li.nav-item
                     %a.nav-link.external{ href: "http://openownership.org/get-involved/", target: "_blank" }
                       = t(".nav.get_involved")
+                  %li.nav-item{ class: ("active" if current_page?(feedback_path)) }
+                    = link_to t(".nav.feedback"), feedback_path, class: "nav-link"
                   .float-md-right.sign-up-nav
                     - if user_signed_in?
                       %li.nav-item

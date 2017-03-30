@@ -5,4 +5,5 @@ Rails.application.routes.draw do
     resources :relationships, only: :show, path: ''
   end
   resource :search, only: :show
+  get 'feedback' => 'pages#feedback'
 end
