@@ -92,9 +92,7 @@ class PscImporter
       nationality: country_from_nationality(data.nationality).try(:alpha2),
       address: data.address.presence && address_string(data.address),
       country_of_residence: data.country_of_residence.presence,
-      dob_year: data.date_of_birth && data.date_of_birth.year,
-      dob_month: data.date_of_birth && data.date_of_birth.month,
-      dob_day: data.date_of_birth && data.date_of_birth.day
+      dob: entity_dob(data.date_of_birth)
     }
 
     Entity.new(attributes).tap(&:upsert)
@@ -143,5 +141,13 @@ class PscImporter
     return Entity::Types::NATURAL_PERSON if data.kind == 'individual-person-with-significant-control'
 
     Entity::Types::LEGAL_ENTITY
+  end
+
+  def entity_dob(elements)
+    return unless elements
+    parts = [elements.year]
+    parts << format('%02d', elements.month) if elements.month
+    parts << format('%02d', elements.day) if elements.month && elements.day
+    ISO8601::Date.new(parts.join('-'))
   end
 end

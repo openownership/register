@@ -35,11 +35,11 @@ module EntityHelper
   end
 
   def date_of_birth(entity)
+    return unless entity.dob
     parts = []
-    parts << entity.dob_day if entity.dob_month?
-    parts << Date::MONTHNAMES[entity.dob_month] if entity.dob_month? && (entity.dob_day? || entity.dob_year?)
-    parts << entity.dob_year
-    parts.compact.join(" ")
+    parts << Date::MONTHNAMES[entity.dob.month] if entity.dob.atoms.size > 1
+    parts << entity.dob.year
+    parts.join(" ")
   end
 
   private

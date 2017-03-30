@@ -14,9 +14,7 @@ class Entity
 
   field :nationality, type: String
   field :country_of_residence, type: String
-  field :dob_year, type: Integer
-  field :dob_month, type: Integer
-  field :dob_day, type: Integer
+  field :dob, type: ISO8601::Date
 
   field :jurisdiction_code, type: String
   field :company_number, type: String
