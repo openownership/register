@@ -3,6 +3,32 @@ require 'rails_helper'
 RSpec.describe EntityHelper do
   let(:entity) { Entity.new }
 
+  describe '#entity_name_or_tooltip' do
+    subject { helper.entity_name_or_tooltip(entity, :top) }
+
+    context "when entity is a normal entity" do
+      before { entity.name = "name" }
+
+      it 'returns the entity name' do
+        expect(subject).to eq("name")
+      end
+    end
+
+    context "when entity is a unknown persons entity" do
+      let(:entity) { UnknownPersonsEntity.new }
+
+      it "returns a tooltip" do
+        expect(helper).to receive(:glossary_tooltip).with(
+          content_tag(:span, "unknown persons", class: "unknown"),
+          :unknown_persons,
+          anything
+        ).and_return(:tooltip)
+
+        expect(subject).to eq(:tooltip)
+      end
+    end
+  end
+
   describe '#entity_link' do
     subject do
       helper.entity_link(entity) do
