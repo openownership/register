@@ -5,7 +5,7 @@
         = glossary_tooltip(t(".unknown"), :undefined_interest, :right)
     - else
       - relationship.interests.each do |interest|
-        %li= t(interest, scope: :relationship_interests, default: glossary_tooltip(t(".unknown"), :undefined_interest, :right))
+        %li= format_interest(interest, glossary_tooltip(t(".unknown"), :undefined_interest, :right))
     - if relationship[:reference_number]
       %sup.reference
         %a{ href: "#cite-#{relationship[:reference_number]}" }
