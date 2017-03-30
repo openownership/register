@@ -6,7 +6,7 @@ module SearchHelper
       'icon-company.svg'
     end
 
-    icon = content_tag(:span, image_tag(icon_filename))
+    icon = content_tag(:span, image_tag(icon_filename), class: 'filter-type-icon')
 
     [t(value, scope: :entity_types).capitalize, icon]
   end
