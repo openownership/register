@@ -1,0 +1,51 @@
+.page-content {
+  padding: 30px 0;
+}
+
+.page-header {
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  margin-bottom: 30px;
+}
+
+.legal-list {
+  counter-reset: section;
+
+  > li {
+    counter-increment: section;
+    margin-bottom: 30px;
+  }
+
+  ol {
+    counter-reset: item;
+    list-style: none;
+  }
+
+  ol > li {
+    counter-increment: item;
+    margin-top: 15px;
+  }
+
+  ol > li:before {
+    display: inline-block;
+    content: counter(section) "." counter(item) ".";
+    margin-left: -40px;
+    width: 40px;
+  }
+
+  h2 {
+    margin-bottom: 15px;
+    margin-left: -30px;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  h3 {
+    margin-left: -30px;
+    text-decoration: underline;
+    font-size: 1em;
+    font-weight: bold;
+  }
+}

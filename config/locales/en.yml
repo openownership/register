@@ -63,6 +63,8 @@ en:
   pages:
     feedback:
       title: Feedback
+    terms_and_conditions:
+      title: Terms & Conditions
   relationships:
     provenance:
       unknown: Not yet uploaded
