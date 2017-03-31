@@ -1,3 +1,5 @@
+- content_for(:title, %("#{params[:q]}")) if params[:q].present?
+
 .content.search-content
   .container-fluid
 

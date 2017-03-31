@@ -58,6 +58,9 @@ en:
         new_user_registration: Sign up
         edit_user_registration: My account
       subtitle: The Global Beneficial Ownership Register
+  pages:
+    feedback:
+      title: Feedback
   relationships:
     provenance:
       unknown: Not yet uploaded

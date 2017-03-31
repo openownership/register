@@ -5,6 +5,7 @@ en:
     confirmations:
       confirmed: "Your email address has been successfully confirmed."
       new:
+        title: Resend confirmation instructions
         header: Resend confirmation instructions
         submit: Resend confirmation instructions
       send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
@@ -25,11 +26,13 @@ en:
         subject: "Password Changed"
     passwords:
       edit:
+        title: Change your password
         header: Change your password
         minimum_password_length: (%{length} characters minimum)
         new_password: New password
         submit: Change my password
       new:
+        title: Forgot your password?
         header: Forgot your password?
         submit: Send me reset password instructions
       no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
@@ -39,6 +42,7 @@ en:
       updated_not_active: "Your password has been changed successfully."
     registrations:
       edit:
+        title: My account
         current_password_help: (we need your current password to confirm your changes)
         header: My account
         new_password:
@@ -47,6 +51,7 @@ en:
         pending_reconfirmation: "Currently waiting confirmation for: %{email}"
         submit: Update
       new:
+        title: Sign up
         email_help: (Please use your company email address)
         header: Sign up
         minimum_password_length: (%{length} characters minimum)
@@ -58,6 +63,7 @@ en:
       updated: "Your account has been updated successfully."
     sessions:
       new:
+        title: Sign in
         header: Sign in
         submit: Sign in
       signed_in: "Signed in successfully."
