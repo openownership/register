@@ -48,6 +48,10 @@ en:
       footer:
         brought_by: "Brought to you by:"
         funded_by: "Funded by:"
+        privacy: Privacy
+        terms_and_conditions: Terms & Conditions
+        faq: FAQ
+        glossary: Glossary
       nav:
         about: Learn more
         follow: "Follow the project on:"

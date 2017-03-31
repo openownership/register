@@ -73,20 +73,27 @@
 
       = yield
 
-    .supporters-footer
-      .container-fluid
-        .supporters
-          .supporters-header
-            %h5
-              = t(".footer.brought_by")
-          %a.transparency-logo{ href: "https://www.transparency.org" }
-          %a.one-logo{ href: "https://www.one.org/international/" }
-          %a.opencorporates-logo{ href: "https://opencorporates.com" }
-          %a.ocp{ href: "http://www.open-contracting.org" }
-          %a.webfoundation{ href: "http://webfoundation.org" }
-          %a.global-witness-logo{ href: "https://www.globalwitness.org/en-gb/" }
-          %a.b-team{ href: "http://bteam.org" }
-          .funders-header
-            %h5
-              = t(".footer.funded_by")
-          %a.uk-aid-logo{ href: "https://www.gov.uk/government/organisations/department-for-international-development" }
+    %footer.site-footer
+      .links-footer
+        .container-fluid
+          = link_to t('.footer.privacy'), privacy_path
+          = link_to t('.footer.terms_and_conditions'), terms_and_conditions_path
+          = link_to t('.footer.faq'), faq_path
+          = link_to t('.footer.glossary'), glossary_path
+      .supporters-footer
+        .container-fluid
+          .supporters
+            .supporters-header
+              %h5
+                = t(".footer.brought_by")
+            %a.transparency-logo{ href: "https://www.transparency.org" }
+            %a.one-logo{ href: "https://www.one.org/international/" }
+            %a.opencorporates-logo{ href: "https://opencorporates.com" }
+            %a.ocp{ href: "http://www.open-contracting.org" }
+            %a.webfoundation{ href: "http://webfoundation.org" }
+            %a.global-witness-logo{ href: "https://www.globalwitness.org/en-gb/" }
+            %a.b-team{ href: "http://bteam.org" }
+            .funders-header
+              %h5
+                = t(".footer.funded_by")
+            %a.uk-aid-logo{ href: "https://www.gov.uk/government/organisations/department-for-international-development" }
