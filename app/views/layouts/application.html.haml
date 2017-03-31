@@ -3,7 +3,10 @@
   %head
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }/
     %meta{ content: "width=device-width, initial-scale=1", name: "viewport" }/
-    %title OpenOwnershipRegister
+    %title
+      OpenOwnership Register
+      - yield(:title).presence.try do |title|
+        | #{title}
     = csrf_meta_tags
     = stylesheet_link_tag 'application', media: 'all'
     = javascript_include_tag 'application'
@@ -36,14 +39,14 @@
                   .float-md-right.sign-up-nav
                     - if user_signed_in?
                       %li.nav-item
-                        = link_to 'My account', edit_user_registration_path, class: "nav-link"
+                        = link_to t(".nav.edit_user_registration"), edit_user_registration_path, class: "nav-link"
                       %li.nav-item
-                        = link_to 'Sign out', destroy_user_session_path, method: :delete, class: "nav-link"
+                        = link_to t(".nav.destroy_user_session"), destroy_user_session_path, method: :delete, class: "nav-link"
                     - else
                       %li.nav-item
-                        = link_to 'Sign in', new_user_session_path, class: "nav-link"
+                        = link_to t(".nav.new_user_session"), new_user_session_path, class: "nav-link"
                       %li.nav-item
-                        = link_to 'Sign up', new_user_registration_path, class: "nav-link"
+                        = link_to t(".nav.new_user_registration"), new_user_registration_path, class: "nav-link"
                   %span.float-md-right.follow-nav
                     %li.nav-item.follow-label
                       = t(".nav.follow")
