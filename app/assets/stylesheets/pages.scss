@@ -49,3 +49,16 @@
     font-weight: bold;
   }
 }
+
+.page-text {
+  h2 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    line-height: 1.25;
+  }
+
+  .table {
+    background: $white;
+  }
+}

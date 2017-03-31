@@ -65,6 +65,8 @@ en:
       title: Feedback
     terms_and_conditions:
       title: Terms & Conditions
+    privacy:
+      title: Privacy
   relationships:
     provenance:
       unknown: Not yet uploaded
