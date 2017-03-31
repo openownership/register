@@ -67,6 +67,8 @@ en:
       title: Terms & Conditions
     privacy:
       title: Privacy
+    faq:
+      title: FAQ
   relationships:
     provenance:
       unknown: Not yet uploaded

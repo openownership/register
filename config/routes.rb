@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'feedback' => 'pages#feedback'
   get 'terms-and-conditions' => 'pages#terms_and_conditions'
   get 'privacy' => 'pages#privacy'
+  get 'faq' => 'pages#faq'
   resources :submissions, only: [:index, :create, :show, :edit], controller: 'submissions/submissions' do
     member do
       post :submit
