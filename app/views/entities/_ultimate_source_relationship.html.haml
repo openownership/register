@@ -8,11 +8,11 @@
           - unless index.zero?
             &rarr;
           = entity.name
-          = entity_country_flag(entity)
+          = country_flag(entity.country)
         &rarr;
         %span.target
           = @entity.name
-        = entity_country_flag(@entity)
+        = country_flag(@entity.country)
     - else
       = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
     %span.details

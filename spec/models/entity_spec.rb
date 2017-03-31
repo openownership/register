@@ -131,6 +131,28 @@ RSpec.describe Entity do
     end
   end
 
+  describe '#country_code' do
+    let(:entity) { Entity.new }
+
+    subject { entity.country_code }
+
+    context 'when the entity has a country' do
+      before do
+        allow(entity).to receive(:country).and_return(ISO3166::Country[:GB])
+      end
+
+      it 'returns the alpha2 code of the country' do
+        expect(subject).to eq('GB')
+      end
+    end
+
+    context 'when the entity does not have a country' do
+      it 'returns nil' do
+        expect(subject).to be_nil
+      end
+    end
+  end
+
   describe '#upsert' do
     let(:jurisdiction_code) { 'gb' }
 

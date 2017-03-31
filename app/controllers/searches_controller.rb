@@ -4,19 +4,14 @@ class SearchesController < ApplicationController
 
     return if params[:q].blank?
 
-    query = {
-      match: {
-        name: {
-          query: params[:q],
-          operator: 'AND'
-        }
-      }
-    }
-
-    response = Entity.search(query: query).page(params[:page]).per(10)
-
-    @results = response.results
-
-    @records = response.records.to_a
+    @response = Entity.search(query: Search.query(search_params), aggs: Search.aggregations).page(params[:page]).per(10)
   end
+
+  protected
+
+  def search_params
+    params.permit(:q, :type, :country)
+  end
+
+  helper_method :search_params
 end

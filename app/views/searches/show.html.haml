@@ -13,27 +13,34 @@
             = submit_tag t(".search"), name: nil, class: 'search-button'
 
     .row
-      .col-lg-6.offset-lg-3
-        - if params[:q].blank?
+      - if params[:q].blank?
+        .col-lg-6.offset-lg-3
           .oo-intro
             %p= t(".blurb")
             %p
               %span= t(".coming_soon")
               = t(".coming_soon_content")
-        - elsif @results.total.zero?
+      - elsif @response.results.total.zero?
+        .col-lg-6.offset-lg-3
           .no-results
             %p= t(".no_results")
-        - else
+      - else
+        .col-lg-7.offset-lg-1
           .frame
             .frame-wrap
-              %p= page_entries_info @results, entry_name: 'result'
+              %p= page_entries_info @response.results, entry_name: 'result'
 
               %ul.list-unstyled.list-entities
-                - @records.each do |record|
+                - @response.records.to_a.each do |record|
                   %li
                     = render "shared/entity_title", entity: record
 
-              = paginate @results
+              = paginate @response.results
+
+      .col-lg-3
+        - unless params[:q].blank? || @response.results.empty?
+          = render partial: 'filter', locals: { key: 'type', helper: method(:search_filter_type) }
+          = render partial: 'filter', locals: { key: 'country', helper: method(:search_filter_country) }
 
 .footer-data-info
   = t(".footer", count: number_with_delimiter(@company_count))

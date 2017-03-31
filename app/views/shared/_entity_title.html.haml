@@ -1,7 +1,7 @@
 .entity-title
   = link_to entity_path(entity) do
     %span.flag-wrap
-      = entity_country_flag(entity)
+      = country_flag(entity.country)
     = entity.name
     - if entity.natural_person?
       .type-icon.person
