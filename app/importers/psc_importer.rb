@@ -45,7 +45,11 @@ class PscImporter
          'exemptions'
       :ignore
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
-      child_entity = @entity_resolver.resolve!(jurisdiction_code: 'gb', identifier: record.company_number, name: nil)
+      child_entity = @entity_resolver.resolve!(
+        jurisdiction_code: 'gb',
+        identifier: record.company_number,
+        name: nil
+      )
 
       parent_entity = parent_entity!(record.data)
 
@@ -56,29 +60,40 @@ class PscImporter
   end
 
   def parent_entity!(data)
-    if data.kind.start_with?('corporate-entity-person')
+    case data.kind
+    when 'corporate-entity-person-with-significant-control'
       country = data.identification.country_registered
 
       unless country.nil?
         jurisdiction_code = @opencorporates_client.get_jurisdiction_code(country)
 
         unless jurisdiction_code.nil?
-          identifier = data.identification.registration_number
-
-          name = data.name
-
-          entity = @entity_resolver.resolve!(jurisdiction_code: jurisdiction_code, identifier: identifier, name: name)
+          entity = @entity_resolver.resolve!(
+            jurisdiction_code: jurisdiction_code,
+            identifier: data.identification.registration_number,
+            name: data.name
+          )
 
           return entity unless entity.nil?
         end
       end
-    end
 
-    entity_with_document_id!(data)
+      entity_with_document_id!(data, name: data.name, jurisdiction_code: jurisdiction_code)
+    when 'individual-person-with-significant-control'
+      entity_with_document_id!(
+        data,
+        name: data.name_elements.presence && name_string(data.name_elements) || data.name,
+        nationality: country_from_nationality(data.nationality).try(:alpha2),
+        country_of_residence: data.country_of_residence.presence,
+        dob: entity_dob(data.date_of_birth)
+      )
+    when 'legal-person-person-with-significant-control'
+      entity_with_document_id!(data, name: data.name)
+    end
   end
 
-  def entity_with_document_id!(data)
-    attributes = {
+  def entity_with_document_id!(data, attrs = {})
+    attributes = attrs.merge(
       identifiers: [
         {
           _id: {
@@ -88,12 +103,8 @@ class PscImporter
         }
       ],
       type: entity_type(data),
-      name: data.name_elements.presence && name_string(data.name_elements) || data.name,
-      nationality: country_from_nationality(data.nationality).try(:alpha2),
-      address: data.address.presence && address_string(data.address),
-      country_of_residence: data.country_of_residence.presence,
-      dob: entity_dob(data.date_of_birth)
-    }
+      address: data.address.presence && address_string(data.address)
+    )
 
     Entity.new(attributes).tap(&:upsert)
   end
