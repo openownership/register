@@ -62,7 +62,7 @@
             .brand-header
               = link_to root_path do
                 = image_tag('OpenOwnership-Logo-Beta.svg', class: 'logo')
-            = render partial: 'shared/search_bar'
+            = render partial: 'shared/search_bar' unless submissions_section?
 
     .content-wrapper
       .container-fluid
