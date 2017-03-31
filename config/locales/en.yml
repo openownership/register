@@ -69,6 +69,8 @@ en:
       title: Privacy
     faq:
       title: FAQ
+    glossary:
+      title: Glossary
   relationships:
     provenance:
       unknown: Not yet uploaded
