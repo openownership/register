@@ -40,7 +40,7 @@ en:
     registrations:
       edit:
         current_password_help: (we need your current password to confirm your changes)
-        header: Edit %{resource}
+        header: My account
         new_password:
           leave_blank: (leave blank if you don't want to change it)
           minimum_length: "%{length} characters minimum"
@@ -59,13 +59,13 @@ en:
     sessions:
       new:
         header: Sign in
-        submit: Log in
+        submit: Sign in
       signed_in: "Signed in successfully."
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
     shared:
       links:
-        new_session: Log in
+        new_session: Sign in
         new_registration: Sign up
         new_password: Forgot your password?
         new_confirmation: Didn't receive confirmation instructions?
