@@ -1,9 +1,9 @@
 module SearchHelper
   def search_filter_type(value)
     icon_filename = if value == Entity::Types::NATURAL_PERSON
-      'icon-person.svg'
+      'icon-natural-person.svg'
     else
-      'icon-company.svg'
+      'icon-legal-entity.svg'
     end
 
     icon = content_tag(:span, image_tag(icon_filename), class: 'filter-type-icon')

@@ -6,7 +6,7 @@
     .row
       .col-lg-12
         %h1= t(".headline")
-        %p.company-count= t(".company_count", count: number_to_human(@company_count, precision: 2).downcase)
+        %p.legal-entity-count= t(".legal-entity_count", count: number_to_human(@legal_entity_count, precision: 2).downcase)
       .col-lg-6.offset-lg-3
         .form-group
           = form_tag search_path, method: 'get', class: 'search-form' do
@@ -45,4 +45,4 @@
           = render partial: 'filter', locals: { key: 'country', helper: method(:search_filter_country) }
 
 .footer-data-info
-  = t(".footer", count: number_with_delimiter(@company_count))
+  = t(".footer", count: number_with_delimiter(@legal_entity_count))

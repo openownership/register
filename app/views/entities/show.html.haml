@@ -13,16 +13,16 @@
                   .jurisdiction
                     = country_flag(@entity.country)
                     = nationality
-                  .type-icon.person
-                    = image_tag "icon-person.svg"
+                  .type-icon.natural-person
+                    = image_tag "icon-natural-person.svg"
                     = t("entity_types.natural-person").capitalize
               - else
                 - entity_jurisdiction(@entity).try do |entity_jurisdiction|
                   .jurisdiction
                     = country_flag(@entity.country)
                     = entity_jurisdiction
-                  .type-icon.company
-                    = image_tag "icon-company.svg"
+                  .type-icon.legal-entity
+                    = image_tag "icon-legal-entity.svg"
                     = t("entity_types.legal-entity").capitalize
           .col-lg-4.header-sep
             .entity-header-meta.meta
