@@ -96,7 +96,7 @@ en:
 
   entity_types:
     default: entity
-    legal-entity: company
+    legal-entity: legal entity
     natural-person: person
 
   unknown_persons_entity:
