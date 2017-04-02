@@ -47,6 +47,21 @@ RSpec.describe OpencorporatesClient do
         expect(subject).to be_nil
       end
     end
+
+    context "when a response exception is raised" do
+      before do
+        @stub.to_raise(Net::HTTP::Persistent::Error)
+      end
+
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*United Kingdom/)
+        subject
+      end
+
+      it 'returns nil' do
+        expect(subject).to be_nil
+      end
+    end
   end
 
   describe '#get_company' do
@@ -106,6 +121,21 @@ RSpec.describe OpencorporatesClient do
         expect(subject).to be_nil
       end
     end
+
+    context "when a response exception is raised" do
+      before do
+        @stub.to_raise(Net::HTTP::Persistent::Error)
+      end
+
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*gb.*01234567/)
+        subject
+      end
+
+      it 'returns nil' do
+        expect(subject).to be_nil
+      end
+    end
   end
 
   describe '#search_companies' do
@@ -145,6 +175,21 @@ RSpec.describe OpencorporatesClient do
 
       it 'logs response errors' do
         expect(Rails.logger).to receive(:info).with(/500.*01234567.*gb/)
+        subject
+      end
+
+      it 'returns empty array' do
+        expect(subject).to eq([])
+      end
+    end
+
+    context "when a response exception is raised" do
+      before do
+        @stub.to_raise(Net::HTTP::Persistent::Error)
+      end
+
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*01234567.*gb/)
         subject
       end
 

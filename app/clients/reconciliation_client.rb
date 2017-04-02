@@ -28,6 +28,9 @@ class ReconciliationClient
       jurisdiction_code: jurisdiction_code,
       company_number: company_number
     }
+  rescue Net::HTTP::Persistent::Error => e
+    Rails.logger.info("Received #{e.inspect} when reconciling \"#{search_query}\" (#{jurisdiction_code})")
+    nil
   end
 
   private
