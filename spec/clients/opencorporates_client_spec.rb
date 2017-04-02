@@ -95,7 +95,7 @@ RSpec.describe OpencorporatesClient do
 
       @company_number = '01234567'
 
-      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/search"
+      url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/search"
 
       query = {
         q: @company_number,
@@ -105,7 +105,7 @@ RSpec.describe OpencorporatesClient do
         api_token: api_token
       }
 
-      @stub = stub_request(:get, @url).with(query: query)
+      @stub = stub_request(:get, url).with(query: query)
     end
 
     it 'returns an array of results for the given jurisdiction_code and query' do
