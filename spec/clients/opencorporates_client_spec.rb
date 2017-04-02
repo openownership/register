@@ -17,9 +17,9 @@ RSpec.describe OpencorporatesClient do
     end
 
     it 'returns nil if the jurisdiction is not matched' do
-      stub_request(:get, @url).with(query: "q=West+Yorkshire&api_token=#{api_token}").to_return(body: %({"results":{"jurisdiction":{}}}))
+      stub_request(:get, @url).with(query: "q=United+Kingdom&api_token=#{api_token}").to_return(body: %({"results":{"jurisdiction":{}}}))
 
-      expect(subject.get_jurisdiction_code('West Yorkshire')).to be_nil
+      expect(subject.get_jurisdiction_code('United Kingdom')).to be_nil
     end
 
     context "when a response error occurs" do
@@ -91,9 +91,9 @@ RSpec.describe OpencorporatesClient do
 
   describe '#search_companies' do
     before do
-      @jurisdiction_code = 'mm'
+      @jurisdiction_code = 'gb'
 
-      @company_number = '919 / 1996-1997'
+      @company_number = '01234567'
 
       @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/search"
 
@@ -109,14 +109,14 @@ RSpec.describe OpencorporatesClient do
     end
 
     it 'returns an array of results for the given jurisdiction_code and query' do
-      @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"MYANMAR IMPERIAL JADE LIMITED"}}]}}))
+      @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LIMITED"}}]}}))
 
       results = subject.search_companies(@jurisdiction_code, @company_number)
 
       expect(results).to be_an(Array)
       expect(results.size).to eq(1)
       expect(results.first).to be_a(Hash)
-      expect(results.first.fetch(:company).fetch(:name)).to eq('MYANMAR IMPERIAL JADE LIMITED')
+      expect(results.first.fetch(:company).fetch(:name)).to eq('EXAMPLE LIMITED')
     end
 
     context "when a response error occurs" do
