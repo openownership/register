@@ -83,10 +83,20 @@ module Submissions
     end
 
     def find_companies_from_opencorporates
-      @companies_from_opencorporates = OpencorporatesClient
-        .new
+      @companies_from_opencorporates = opencorporates_client
         .search_companies_by_name(params[:q])
         .map(&method(:legal_entity_from))
+
+      return unless @companies_from_opencorporates.nil?
+
+      @companies_from_opencorporates = []
+      flash.now[:alert] = I18n.t('submissions.entities.search.timeout')
+    end
+
+    def opencorporates_client
+      OpencorporatesClient.new.tap do |client|
+        client.http.read_timeout = 10.0
+      end
     end
 
     def find_companies_from_submission

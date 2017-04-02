@@ -102,6 +102,7 @@ en:
         companies_from_opencorporates: Companies from OpenCorporates
         choose_from_submission: Choose from your submission
         search_tooltip: Search for a company
+        timeout: Searching too too long. Please try again.
     relationships:
       errors:
         blank_interests: Must select at least one interest

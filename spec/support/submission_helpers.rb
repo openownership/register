@@ -2,6 +2,7 @@ module SubmissionHelpers
   def stub_opencorporates_api_for_search
     instance = instance_double("OpencorporatesClient")
     allow(OpencorporatesClient).to receive(:new).and_return(instance)
+    allow(instance).to receive(:http).and_return(double.as_null_object)
     allow(instance).to receive(:search_companies_by_name).and_return(
       [
         {
