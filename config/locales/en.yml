@@ -79,7 +79,7 @@ en:
       coming_soon: "Coming soon:"
       coming_soon_content: Add beneficial ownership info on your company
       company_count: Currently showing %{count} companies
-      footer: Free and open information on %{count} companies, from UK PSC Register and EITI pilot data
+      footer: Free and open information on %{count} companies, from UK PSC Register, Slovakia Public Sector Partners Register and EITI pilot data
       headline: Who controls, influences, or benefits from a company?
       placeholder: Search company or name of person
       no_results: No results to show
