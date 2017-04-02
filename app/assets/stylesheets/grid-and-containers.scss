@@ -1,6 +1,9 @@
-.content {
-  flex: 1;
+.content-wrapper {
+  flex: 1 0 auto;
   background-color: #F4F6F8;
+}
+
+.content {
   padding: 20px 0 0;
 }
 

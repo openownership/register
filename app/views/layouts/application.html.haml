@@ -61,13 +61,14 @@
                 = image_tag('OpenOwnership-Logo-Beta.svg', class: 'logo')
             = render partial: 'shared/search_bar'
 
-    .container-fluid
-      - if notice.present?
-        %p.alert.alert-info= notice
-      - if alert.present?
-        %p.alert.alert-danger= alert
+    .content-wrapper
+      .container-fluid
+        - if notice.present?
+          %p.alert.alert-info= notice
+        - if alert.present?
+          %p.alert.alert-danger= alert
 
-    = yield
+      = yield
 
     .supporters-footer
       .container-fluid
