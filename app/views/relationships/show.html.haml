@@ -26,6 +26,6 @@
         .col-lg-4
           .frame-light.meta.provenance
             .frame-wrap
-              %h6= t(".provenance")
+              %h6= glossary_tooltip(t(".provenance"), :provenance, :right)
               %ol
                 = render partial: 'provenance', collection: relationship.sourced_relationships, as: :relationship

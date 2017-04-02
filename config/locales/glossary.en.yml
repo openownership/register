@@ -9,3 +9,4 @@ en:
     unknown_persons: There is no data available on who owns this company
     legal-entity: A company, government, or other legal construct
     interest: The means through which control is exercised or benefit is gained.
+    provenance: The source of the data and any relevant timestamps
