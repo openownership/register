@@ -13,16 +13,24 @@ RSpec.describe OpencorporatesClient do
 
     subject { client.get_jurisdiction_code('United Kingdom') }
 
-    it 'returns the jurisdiction code matching the given text' do
-      @stub.to_return(body: %({"results":{"jurisdiction":{"code":"gb"}}}))
+    context "when jurisdiction is matched" do
+      before do
+        @stub.to_return(body: %({"results":{"jurisdiction":{"code":"gb"}}}))
+      end
 
-      expect(subject).to eq('gb')
+      it 'returns the jurisdiction code matching the given text' do
+        expect(subject).to eq('gb')
+      end
     end
 
-    it 'returns nil if the jurisdiction is not matched' do
-      @stub.to_return(body: %({"results":{"jurisdiction":{}}}))
+    context "when jurisdiction is not matched" do
+      before do
+        @stub.to_return(body: %({"results":{"jurisdiction":{}}}))
+      end
 
-      expect(subject).to be_nil
+      it 'returns nil' do
+        expect(subject).to be_nil
+      end
     end
 
     context "when a response error occurs" do
@@ -52,16 +60,24 @@ RSpec.describe OpencorporatesClient do
 
     subject { client.get_company('gb', '01234567') }
 
-    it 'returns company data for the given jurisdiction_code and company_number' do
-      @stub.to_return(body: @body)
+    context "when the company with given jurisdiction_code and company_number is found" do
+      before do
+        @stub.to_return(body: @body)
+      end
 
-      expect(subject).to eq(name: 'EXAMPLE LIMITED')
+      it 'returns company data' do
+        expect(subject).to eq(name: 'EXAMPLE LIMITED')
+      end
     end
 
-    it 'returns nil if the company cannot be found' do
-      @stub.to_return(status: 404)
+    context "when the company cannot be found" do
+      before do
+        @stub.to_return(status: 404)
+      end
 
-      expect(subject).to be_nil
+      it 'returns nil' do
+        expect(subject).to be_nil
+      end
     end
 
     context 'when called with sparse: false' do
@@ -109,13 +125,17 @@ RSpec.describe OpencorporatesClient do
 
     subject { client.search_companies('gb', '01234567') }
 
-    it 'returns an array of results for the given jurisdiction_code and query' do
-      @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LIMITED"}}]}}))
+    context "when given jurisdiction_code and query returns results" do
+      before do
+        @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LIMITED"}}]}}))
+      end
 
-      expect(subject).to be_an(Array)
-      expect(subject.size).to eq(1)
-      expect(subject.first).to be_a(Hash)
-      expect(subject.first.fetch(:company).fetch(:name)).to eq('EXAMPLE LIMITED')
+      it 'returns them' do
+        expect(subject).to be_an(Array)
+        expect(subject.size).to eq(1)
+        expect(subject.first).to be_a(Hash)
+        expect(subject.first.fetch(:company).fetch(:name)).to eq('EXAMPLE LIMITED')
+      end
     end
 
     context "when a response error occurs" do
