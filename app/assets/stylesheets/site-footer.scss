@@ -8,6 +8,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
     @include media-breakpoint-down(md) {
       flex-wrap: wrap;
       justify-content: flex-start;
@@ -80,6 +81,8 @@
     }
   }
   a {
+    display: inline-block;
+    vertical-align: middle;
     flex-basis: auto;
     background-repeat: no-repeat;
     background-size: contain;
@@ -109,6 +112,8 @@
     }
   }
   .supporters-header {
+    display: inline-block;
+    vertical-align: middle;
     @include media-breakpoint-down(md) {
       width: 100%;
     }
@@ -117,6 +122,8 @@
     }
   }
   .funders-header {
+    display: inline-block;
+    vertical-align: middle;
     @include media-breakpoint-down(md) {
       width: 100%;
     }
