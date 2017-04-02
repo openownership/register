@@ -23,7 +23,7 @@
                     = entity_jurisdiction
                   .type-icon.legal-entity
                     = image_tag "icon-legal-entity.svg"
-                    = t("entity_types.legal-entity").capitalize
+                    = glossary_tooltip(t("entity_types.legal-entity").capitalize, :"legal-entity", :right)
           .col-lg-4.header-sep
             .entity-header-meta.meta
               - if @entity.natural_person?
