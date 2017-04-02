@@ -15,7 +15,7 @@
                     = nationality
                   .type-icon.person
                     = image_tag "icon-person.svg"
-                    Person
+                    = t("entity_types.natural-person").capitalize
               - else
                 - entity_jurisdiction(@entity).try do |entity_jurisdiction|
                   .jurisdiction
@@ -23,7 +23,7 @@
                     = entity_jurisdiction
                   .type-icon.company
                     = image_tag "icon-company.svg"
-                    Company
+                    = t("entity_types.legal-entity").capitalize
           .col-lg-4.header-sep
             .entity-header-meta.meta
               - if @entity.natural_person?
