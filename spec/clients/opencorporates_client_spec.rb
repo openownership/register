@@ -41,29 +41,23 @@ RSpec.describe OpencorporatesClient do
 
   describe '#get_company' do
     before do
-      @jurisdiction_code = 'gb'
-
-      @company_number = '01234567'
-
-      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/#{@jurisdiction_code}/#{@company_number}"
-
-      @query = "sparse=true&api_token=#{api_token}"
+      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/gb/01234567"
 
       @body = %({"results":{"company":{"name":"EXAMPLE LIMITED"}}})
 
-      @stub = stub_request(:get, @url).with(query: @query)
+      @stub = stub_request(:get, @url).with(query: "sparse=true&api_token=#{api_token}")
     end
 
     it 'returns company data for the given jurisdiction_code and company_number' do
       @stub.to_return(body: @body)
 
-      expect(subject.get_company(@jurisdiction_code, @company_number)).to eq(name: 'EXAMPLE LIMITED')
+      expect(subject.get_company('gb', '01234567')).to eq(name: 'EXAMPLE LIMITED')
     end
 
     it 'returns nil if the company cannot be found' do
       @stub.to_return(status: 404)
 
-      expect(subject.get_company(@jurisdiction_code, @company_number)).to be_nil
+      expect(subject.get_company('gb', '01234567')).to be_nil
     end
 
     context 'when called with sparse: false' do
@@ -72,7 +66,7 @@ RSpec.describe OpencorporatesClient do
       end
 
       it 'calls the endpoint without the sparse parameter' do
-        subject.get_company(@jurisdiction_code, @company_number, sparse: false)
+        subject.get_company('gb', '01234567', sparse: false)
       end
     end
 
@@ -82,27 +76,23 @@ RSpec.describe OpencorporatesClient do
       end
 
       it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/500.*#{@jurisdiction_code}.*#{@company_number}/)
-        subject.get_company(@jurisdiction_code, @company_number)
+        expect(Rails.logger).to receive(:info).with(/500.*gb.*01234567/)
+        subject.get_company('gb', '01234567')
       end
 
       it 'returns nil' do
-        expect(subject.get_company(@jurisdiction_code, @company_number)).to be_nil
+        expect(subject.get_company('gb', '01234567')).to be_nil
       end
     end
   end
 
   describe '#search_companies' do
     before do
-      @jurisdiction_code = 'gb'
-
-      @company_number = '01234567'
-
       url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/search"
 
       query = {
-        q: @company_number,
-        jurisdiction_code: @jurisdiction_code,
+        q: '01234567',
+        jurisdiction_code: 'gb',
         fields: 'company_number',
         order: 'score',
         api_token: api_token
@@ -114,7 +104,7 @@ RSpec.describe OpencorporatesClient do
     it 'returns an array of results for the given jurisdiction_code and query' do
       @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LIMITED"}}]}}))
 
-      results = subject.search_companies(@jurisdiction_code, @company_number)
+      results = subject.search_companies('gb', '01234567')
 
       expect(results).to be_an(Array)
       expect(results.size).to eq(1)
@@ -128,12 +118,12 @@ RSpec.describe OpencorporatesClient do
       end
 
       it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/500.*#{@company_number}.*#{@jurisdiction_code}/)
-        subject.search_companies(@jurisdiction_code, @company_number)
+        expect(Rails.logger).to receive(:info).with(/500.*01234567.*gb/)
+        subject.search_companies('gb', '01234567')
       end
 
       it 'returns empty array' do
-        expect(subject.search_companies(@jurisdiction_code, @company_number)).to eq([])
+        expect(subject.search_companies('gb', '01234567')).to eq([])
       end
     end
   end
