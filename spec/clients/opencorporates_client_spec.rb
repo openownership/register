@@ -7,24 +7,25 @@ RSpec.describe OpencorporatesClient do
 
   describe '#get_jurisdiction_code' do
     before do
-      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/jurisdictions/match"
+      url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/jurisdictions/match"
+      @stub = stub_request(:get, url).with(query: "q=United+Kingdom&api_token=#{api_token}")
     end
 
     it 'returns the jurisdiction code matching the given text' do
-      stub_request(:get, @url).with(query: "q=United+Kingdom&api_token=#{api_token}").to_return(body: %({"results":{"jurisdiction":{"code":"gb"}}}))
+      @stub.to_return(body: %({"results":{"jurisdiction":{"code":"gb"}}}))
 
       expect(subject.get_jurisdiction_code('United Kingdom')).to eq('gb')
     end
 
     it 'returns nil if the jurisdiction is not matched' do
-      stub_request(:get, @url).with(query: "q=United+Kingdom&api_token=#{api_token}").to_return(body: %({"results":{"jurisdiction":{}}}))
+      @stub.to_return(body: %({"results":{"jurisdiction":{}}}))
 
       expect(subject.get_jurisdiction_code('United Kingdom')).to be_nil
     end
 
     context "when a response error occurs" do
       before do
-        stub_request(:get, @url).with(query: "q=United+Kingdom&api_token=#{api_token}").to_return(status: 500)
+        @stub.to_return(status: 500)
       end
 
       it 'logs response errors' do
@@ -49,16 +50,18 @@ RSpec.describe OpencorporatesClient do
       @query = "sparse=true&api_token=#{api_token}"
 
       @body = %({"results":{"company":{"name":"EXAMPLE LIMITED"}}})
+
+      @stub = stub_request(:get, @url).with(query: @query)
     end
 
     it 'returns company data for the given jurisdiction_code and company_number' do
-      stub_request(:get, @url).with(query: @query).to_return(body: @body)
+      @stub.to_return(body: @body)
 
       expect(subject.get_company(@jurisdiction_code, @company_number)).to eq(name: 'EXAMPLE LIMITED')
     end
 
     it 'returns nil if the company cannot be found' do
-      stub_request(:get, @url).with(query: @query).to_return(status: 404)
+      @stub.to_return(status: 404)
 
       expect(subject.get_company(@jurisdiction_code, @company_number)).to be_nil
     end
@@ -75,7 +78,7 @@ RSpec.describe OpencorporatesClient do
 
     context "when a response error occurs" do
       before do
-        stub_request(:get, @url).with(query: @query).to_return(status: 500)
+        @stub.to_return(status: 500)
       end
 
       it 'logs response errors' do
