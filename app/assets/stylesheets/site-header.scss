@@ -77,7 +77,9 @@
 .navbar-toggler {
   text-indent: 30px;
   margin-left: -15px;
+  overflow: visible;
   span {
+    position: relative;
     font-size: 0.875rem;
     color: #7E94B4;
   }
