@@ -12,6 +12,10 @@ module CountryHelper
   private
 
   def unknown_country_flag
-    image_tag("flag-unknown.svg", size: '32x16', alt: "unknown", class: 'flag')
+    glossary_tooltip(
+      image_tag("flag-unknown.svg", size: '32x16', alt: "unknown", class: 'flag'),
+      :unknown_jurisdiction,
+      :top
+    )
   end
 end
