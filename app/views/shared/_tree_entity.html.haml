@@ -1,0 +1,6 @@
+%span= country_flag(entity.country)
+%span= entity.name
+- if entity.natural_person?
+  = image_tag "icon-natural-person.svg", class: 'tree-entity__type-icon'
+- else
+  = image_tag "icon-legal-entity.svg", class: 'tree-entity__type-icon'

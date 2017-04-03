@@ -95,7 +95,7 @@ h6 {
   }
 }
 
-a {
+a, button {
   &:hover {
     .type-icon {
       width: 38px;
@@ -258,6 +258,10 @@ a {
   span {
     font-weight: bold;
     color: $electricBlue;
+  }
+
+  .btn {
+    white-space: normal;
   }
 }
 
@@ -681,6 +685,7 @@ span.tooltip-helper {
 }
 
 .ultimate-source-relationships, .source-relationships {
+  position: relative;
   padding: 20px;
   margin-bottom: 20px;
   background-color: $lightGrey;
@@ -774,9 +779,32 @@ span.tooltip-helper {
       margin-left: 2px;
     }
   }
+
+  .view-as-tree {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    background: $greyBlue;
+    border-color: $greyBlue;
+
+    &:hover {
+      background: $darkBlue;
+      border-color: $darkBlue;
+    }
+
+    i {
+      transform: rotate(180deg);
+    }
+  }
 }
 
 .ultimate-source-relationships {
+  h2 {
+    @include media-breakpoint-up(lg) {
+      padding-right: 130px;
+    }
+  }
   .grouping {
     background-color: #F4F6F8;
   }

@@ -1,0 +1,22 @@
+.tree-wrapper
+  .tree-window{ 'data-tree': @submission.entity.id }
+    .tree-canvas.tree-canvas--edit-submission
+      .tree-group
+        = render 'tree_node', node: @node
+
+  .tree-instructions
+    .submission-instructions
+      = render 'submissions/submissions/instructions_header'
+      = render 'submissions/submissions/instructions_steps'
+
+  .tree-controls
+    %span.fa.fa-search-minus
+    %input.tree-zoom{ type: "range", data: { toggle: 'tooltip', title: t('tree.zoom'), placement: 'bottom' } }
+    %span.fa.fa-search-plus
+
+  .tree-help
+    .fa.fa-info-circle
+    %small= t('tree.help')
+
+:javascript
+  var GROUPED_NODES_TOOLTIP_TITLE = '#{t('.grouped')}';

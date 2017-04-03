@@ -9,6 +9,11 @@ class EntitiesController < ApplicationController
     @opencorporates_company_hash = get_opencorporates_company_hash(@entity)
   end
 
+  def tree
+    @entity = Entity.find(params[:id])
+    @node = TreeNode.new(@entity)
+  end
+
   private
 
   def get_opencorporates_company_hash(entity)

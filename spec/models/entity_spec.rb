@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Entity do
+  it_behaves_like "acts as entity"
+
   describe '.find_or_unknown' do
     subject { Entity.find_or_unknown(id) }
 

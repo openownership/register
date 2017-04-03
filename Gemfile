@@ -29,7 +29,9 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'dotenv-rails'
   gem 'database_cleaner'
+  gem 'factory_girl_rails'
   gem 'webmock'
+  gem 'launchy'
 end
 
 group :development do
@@ -40,4 +42,9 @@ group :development do
   gem 'rubocop', require: false
   gem 'haml_lint', require: false
   gem 'spring-commands-rspec'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'rails-controller-testing'
 end
