@@ -110,8 +110,8 @@ en:
         choose_interests: Choose the nature of the interest for this relationship
         interests_hint: Interests are the means through which control is exercised or benefit is gained, e.g. shareholding or voting rights.
       interests:
-        ownership_of_shares_percentage: 'Ownership of shares (%{value}%)'
-        voting_rights_percentage: 'Voting rights (%{value}%)'
+        ownership_of_shares_percentage: 'Ownership of shares - %{value}%'
+        voting_rights_percentage: 'Ownership of voting rights - %{value}%'
         right_to_appoint_and_remove_directors: Right to appoint and remove directors
         other_significant_influence_or_control: 'Other (%{value})'
       form:

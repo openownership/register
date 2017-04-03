@@ -13,10 +13,10 @@ RSpec.describe Submissions::Relationship do
       it "formats the interests" do
         expect(subject.interests).to eq(
           [
-            "Ownership of shares (20.0%)",
-            "Voting rights (5.0%)",
-            "Right to appoint and remove directors",
-            "Other (test)"
+            I18n.t('submissions.relationships.interests.ownership_of_shares_percentage', value: 20.0),
+            I18n.t('submissions.relationships.interests.voting_rights_percentage', value: 5.0),
+            I18n.t('submissions.relationships.interests.right_to_appoint_and_remove_directors'),
+            I18n.t('submissions.relationships.interests.other_significant_influence_or_control', value: 'test')
           ]
         )
       end
