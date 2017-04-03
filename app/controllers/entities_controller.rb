@@ -17,9 +17,5 @@ class EntitiesController < ApplicationController
     client = OpencorporatesClient.new
     client.http.read_timeout = 1.0
     client.get_company(entity.jurisdiction_code, entity.company_number, sparse: false)
-  rescue Net::HTTP::Persistent::Error => exception
-    Rails.logger.warn(exception.message)
-
-    nil
   end
 end
