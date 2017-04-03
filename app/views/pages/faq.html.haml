@@ -1,0 +1,55 @@
+- content_for(:title, t(".title"))
+
+.content.page-content
+  .container-fluid
+
+    .row
+      .col-lg-8
+        .page-header
+          %h1 FAQ
+
+        .page-text
+          %h2 What is OpenOwnership?
+          %p OpenOwnership’s central goal is to build an open global beneficial ownership register, which will serve as an authoritative source of data about who owns companies, for the benefit of all. This data will be global and linked across jurisdictions, industries, and linkable to other datasets too. The public beta of the OpenOwnership Register will launch on April 3, 2017 -- the anniversary of the Panama Papers leak.
+          %p Alongside the register, OpenOwnership is developing a universal and open data standard for beneficial ownership, providing a solid conceptual and practical foundation for collecting and publishing beneficial ownership data. <a href="https://beneficial-ownership-data-standard.readthedocs.io/en/master/">An initial version of the data standard is available here.</a>
+
+          %h2 What’s a public beta?
+          %p Our platform is a work in progress. The Phase 1 of our project (concluding in April 2017) is focusing on the creation of a beta platform with enough functionality to be useful and to get constructive feedback from a wide variety of stakeholders. In other words, while you’re browsing the Register, #{link_to 'let us know if you spot something that can be improved', feedback_path}!
+
+          %h2 Who’s behind it?
+          %p OpenOwnership is driven by a steering group composed of leading transparency NGOs, including Global Witness, Open Contracting Partnership, Web Foundation, Transparency International, and the B Team, as well as OpenCorporates, the largest open database of companies in the world. The UK’s Department for International Development is supporting the project in Phase 1. Zosia Sztykowski coordinates the work of the steering group and manages the project.
+
+          %h2 Where does the data on the beta version of the Register come from?
+          %p The data comes from two regulatory sources: the UK’s Persons of Significant Control (PSC) Register, and Slovakia’s Register of Public Sector Partners. We have also transcribed beneficial ownership data from the initial Extractive Industries Transparency Initiative beneficial ownership reports of 23 countries.
+          %p We’re also very excited that several companies have submitted their own beneficial ownership to the platform, helping test and provide feedback in the process.
+
+          %h2 Why is there data missing?
+          %p Overall, we have data available from 25 jurisdictions and a wide variety of industries, with a special focus on extractives. However, any gaps that are in the original datasets are also represented on our Register. Some UK companies couldn’t or didn’t identify beneficial owners, or their specific means of control, and there were many well-recognized challenges to collecting high-quality beneficial ownership data in some EITI jurisdictions. It is also worth noting that publicly-listed UK companies were excluded from the PSC Register. We think sometimes these gaps are informative in themselves, though, so we make sure you know when you’re looking at one.
+
+          %h2 Can I download the data?
+          %p Yes, you definitely will be able to download the data. We’re working on adding this functionality now.
+
+          %h2 How often is the data updated?
+          %p How often the data is updated depends on the source and therefore can vary from daily to every few months. You can see when a particular datum was last updated in the provenance for that information.
+
+          %h2 How do I add my company’s ownership information?
+          %p #{link_to 'Click here', submissions_path} and follow the process as directed. Any issues? #{mail_to 'info@openownership.org', 'Email us'}.
+
+          %h2 I found an error. How do I report it?
+          %p= link_to 'Fill in the form on this page!', feedback_path
+
+          %h2 How is using the OpenOwnership Register different than searching the UK’s Persons of Significant Control Register?
+          %p There are a few differences: first, on the OpenOwnership Register, you’ll be able to search for the names of people -- a function not yet available on the PSC Register. Additionally, the form for submitting data to the OpenOwnership Register solves a few problems (for instance, requiring a beneficial owner’s year of birth to be in the past and allowing a specific percentage for share ownership) that were identified as challenges in the first round of data submitted to the PSC Register. Of course, this is not limited to jurisdictions where it is required to file this information with a central register, and anyone may submit to OpenOwnership. Finally, we include data from other sources. Each record will make it clear where the data came from.
+          %p We’re working with a limited amount of data for this early version of the Register. But the more beneficial ownership data is made available to the public, the more we’ll be able to use the Register to spot cross-jurisdictional connections between people and companies.
+
+          %h2 What will OpenOwnership change?
+          %p OpenOwnership makes useful data available to people who need it, helping governments and civil society hold corrupt individuals accountable and creating a better environment for ethical business.
+          %p In transparent jurisdictions, the availability of the data will act as a deterrent to unethical behavior (it’s no coincidence that the 21 anonymous UK companies involved in the <a href="https://www.theguardian.com/world/2017/mar/20/british-banks-handled-vast-sums-of-laundered-russian-money">Global Laundromat scheme</a> dissolved just months before the UK’s beneficial ownership register came online).
+          %p And the more we shine the light on jurisdictions that remain opaque, rather than accepting opacity as business as usual, the more we make it expensive and difficult for corrupt individuals to hide. That’s why it’s not just important where we do have data, but also where we don’t.
+          %p Finally, by providing the option for companies to submit their beneficial ownership voluntarily, OpenOwnership allows corporates to demonstrate a commitment to transparency and play a role in indicating to national governments the business imperative to action on this important issue.
+
+          %h2 What’s next for OpenOwnership?
+          %p We will develop the beta platform into a transformative world-class tool and integrate it into the wider world. The OpenOwnership Register can serve as a technical solution for countries implementing national registers, and we hope to partner with at least two governments interested in using our technology to underpin their central registers. We also intend to test on-the-ground implementation of the beneficial ownership data standard, for those who may prefer to use their own technology but want their data to be linkable with other beneficial ownership datasets.
+          %p The Register is not just a solution for those implementing central national registers. We are looking for partners in government procurement to integrate our system with theirs, as well as corporate partners to integrate our platform with their due diligence systems.
+          %p We will continue to engage the private sector in driving a norms change around corporate transparency, such that organisations that keep their ownership secret are subjected to high levels of scrutiny. We’ll also aim to provide data that is highly useful to stakeholders in the public sector, civil society, and private sector.
+          %p We also intend to test integration of the register with two national registers, including in at least one developing country, as well as with one national procurement system and two due diligence systems in the private sector. This will be supported by engagement with end users of the data and the provision of a help desk for technical assistance.

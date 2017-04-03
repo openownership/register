@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   end
   resource :search, only: :show
   get 'feedback' => 'pages#feedback'
+  get 'terms-and-conditions' => 'pages#terms_and_conditions'
+  get 'privacy' => 'pages#privacy'
+  get 'faq' => 'pages#faq'
+  get 'glossary' => 'pages#glossary'
   resources :submissions, only: [:index, :create, :show, :edit], controller: 'submissions/submissions' do
     member do
       post :submit
