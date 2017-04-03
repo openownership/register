@@ -2,7 +2,7 @@ class RelationshipsController < ApplicationController
   def show
     @target_entity = Entity.find(params[:entity_id])
 
-    @source_entity = Entity.find(params[:id])
+    @source_entity = Entity.find_or_unknown(params[:id])
 
     @relationships = RelationshipGraph.new(@target_entity).relationships_to(@source_entity)
 
@@ -11,8 +11,8 @@ class RelationshipsController < ApplicationController
     reference_number = 0
 
     @relationships.each do |relationship|
-      relationship.intermediate_relationships.each do |intermediate_relationship|
-        intermediate_relationship[:reference_number] = (reference_number += 1)
+      relationship.sourced_relationships.each do |sourced_relationship|
+        sourced_relationship[:reference_number] = (reference_number += 1)
       end
     end
   end

@@ -1,16 +1,17 @@
 .entity-title
-  = link_to entity_path(entity) do
-    %span.flag-wrap
-      = country_flag(entity.country)
-    = entity.name
-    - if entity.natural_person?
-      .type-icon.person
-        = image_tag "icon-person.svg"
-    - else
-      .type-icon.company
-        = image_tag "icon-company.svg"
-    %small
-      = entity_attributes_snippet(entity)
-      - entity.address.try do |address|
-        %br
-        = address
+  .entity-link
+    = entity_link(entity) do
+      %span.flag-wrap
+        = country_flag(entity.country)
+      = entity_name_or_tooltip(entity, :right)
+      - if entity.natural_person?
+        .type-icon.person
+          = image_tag "icon-person.svg"
+      - else
+        .type-icon.company
+          = image_tag "icon-company.svg"
+      %small
+        = entity_attributes_snippet(entity)
+        - entity.address.try do |address|
+          %br
+          = address

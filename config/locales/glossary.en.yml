@@ -6,3 +6,4 @@ en:
     retrieved_at: The date this information was last accessed from the source
     sample_date: The date this information was known to be true
     undefined_interest: The person or company controls or benefits from the entity through undefined means
+    unknown_persons: There is no data available on who owns this company

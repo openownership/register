@@ -543,6 +543,9 @@ a {
         color: $electricBlue;
       }
     }
+    .entity-link {
+      position: relative;
+    }
   }
 }
 
@@ -807,10 +810,13 @@ span.tooltip-helper {
   margin-bottom: 60px;
   background-color: $lightGrey;
   .entity-title {
-    a {
+    .entity-link {
       padding: 15px 15px 14px;
       background: #FFFFFF calc(100% - 10px) calc(0% + 12px) no-repeat;
       box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
+    }
+    a {
+      position: static;
     }
   }
   .item {

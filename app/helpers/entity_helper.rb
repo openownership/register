@@ -1,4 +1,20 @@
 module EntityHelper
+  def entity_name_or_tooltip(entity, position)
+    if entity.is_a?(UnknownPersonsEntity)
+      glossary_tooltip(content_tag(:span, "unknown persons", class: "unknown"), :unknown_persons, position)
+    else
+      entity.name
+    end
+  end
+
+  def entity_link(entity, &block)
+    if entity.is_a?(UnknownPersonsEntity)
+      capture(&block)
+    else
+      link_to(entity_path(entity), &block)
+    end
+  end
+
   def entity_jurisdiction(entity, short: false)
     return unless (country = entity.country)
 
