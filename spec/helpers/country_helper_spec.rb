@@ -15,8 +15,9 @@ RSpec.describe CountryHelper do
     context 'when the country is nil' do
       let(:country) { nil }
 
-      it 'returns the unknown flag image' do
-        expect(subject).to match(/^<img /)
+      it 'returns a glossary tooltip with unknown flag image' do
+        expect(helper).to receive(:glossary_tooltip).and_call_original
+        expect(subject).to match(/<img /)
         expect(subject).to match(%r{src="/assets/flag-unknown-.+\.svg"})
         expect(subject).to match(/alt="unknown"/)
       end
