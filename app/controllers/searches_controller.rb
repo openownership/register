@@ -1,6 +1,6 @@
 class SearchesController < ApplicationController
   def show
-    @company_count = Entity.legal_entities.count
+    @legal_entity_count = Entity.legal_entities.count
 
     return if params[:q].blank?
 

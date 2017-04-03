@@ -77,12 +77,12 @@ h6 {
     opacity: 0;
     transition: opacity .25s ease;
   }
-  &.person {
+  &.natural-person {
     &:after {
       background-image: asset-url("chevron-right-green.svg");
     }
   }
-  &.company {
+  &.legal-entity {
     &:after {
       background-image: asset-url("chevron-right.svg");
     }
@@ -100,10 +100,10 @@ a {
   &:hover {
     .type-icon {
       width: 38px;
-      &.person {
+      &.natural-person {
         background-color: lighten( $green, 52% );
       }
-      &.company {
+      &.legal-entity {
         background-color: lighten( $electricBlue, 46% );
       }
       &:after {
@@ -161,7 +161,7 @@ a {
       font-size: 1.5rem;
     }
   }
-  .company-count {
+  .legal-entity-count {
     text-align: center;
     font-size: 1.5rem;
   }
@@ -484,11 +484,11 @@ a {
     padding: 2px 5px 2px 6px;
     margin: 2px 10px 0 0;
     font-size: 0.8125rem;
-    &.person {
+    &.natural-person {
       background-color: lighten( $green, 52% );
       color: $green;
     }
-    &.company {
+    &.legal-entity {
       background-color: lighten( $electricBlue, 46% );
       color: $electricBlue;
     }

@@ -7,3 +7,4 @@ en:
     sample_date: The date this information was known to be true
     undefined_interest: The person or company controls or benefits from the entity through undefined means
     unknown_persons: There is no data available on who owns this company
+    legal-entity: A company, government, or other legal construct

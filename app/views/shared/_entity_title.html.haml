@@ -5,11 +5,11 @@
         = country_flag(entity.country)
       = entity_name_or_tooltip(entity, :right)
       - if entity.natural_person?
-        .type-icon.person
-          = image_tag "icon-person.svg"
+        .type-icon.natural-person
+          = image_tag "icon-natural-person.svg"
       - else
-        .type-icon.company
-          = image_tag "icon-company.svg"
+        .type-icon.legal-entity
+          = image_tag "icon-legal-entity.svg"
       %small
         = entity_attributes_snippet(entity)
         - entity.address.try do |address|
