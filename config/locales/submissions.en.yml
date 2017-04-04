@@ -60,6 +60,7 @@ en:
     entities:
       errors:
         must_be_in_past: must be in past
+        must_be_present_and_valid_date_format: must be present and formatted YYYY-MM-DD
       choose:
         choose_html: "Choose a person or company that controls %{company}"
         add_natural_person: Add a natural person

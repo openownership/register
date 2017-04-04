@@ -30,7 +30,7 @@ module Submissions
     validates :incorporation_date, presence: true, if: ->(record) { record.user_created? && record.legal_entity? }
     validate :incorporation_date_is_in_past, if: ->(record) { record.user_created? && record.legal_entity? }
     validates :company_number, presence: true, if: :legal_entity?
-    validates :dob, presence: true, if: :natural_person?
+    validates :dob, presence: { message: I18n.t('submissions.entities.errors.must_be_present_and_valid_date_format') }, if: :natural_person?
     validate :dob_is_in_past, if: :natural_person?
     validates :country_of_residence, presence: true, if: :natural_person?
     validates :nationality, presence: true, if: :natural_person?
