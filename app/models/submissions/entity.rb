@@ -51,7 +51,7 @@ module Submissions
     end
 
     def dob_is_in_past
-      errors.add(:dob, I18n.t('submissions.entities.errors.must_be_in_past')) if dob.try(:future?)
+      errors.add(:dob, I18n.t('submissions.entities.errors.must_be_in_past')) if dob.try(:to_date).try(:future?)
     end
   end
 end
