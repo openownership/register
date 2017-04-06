@@ -34,6 +34,7 @@ Rails.application.routes.draw do
         post :approve
       end
     end
+    root to: redirect('admin/submissions')
   end
   root "searches#show"
 end
