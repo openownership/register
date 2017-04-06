@@ -13,7 +13,7 @@ FactoryGirl.define do
       after(:create) do |submission|
         target = create(:submission_legal_entity, submission: submission)
         source = create(:submission_natural_person, submission: submission)
-        create(:submission_relationship, submission: submission, source: source, target: target)
+        create(:submission_relationship, :interests, submission: submission, source: source, target: target)
       end
     end
 
