@@ -3,14 +3,14 @@ require "rails_helper"
 RSpec.describe Submissions::SubmissionsController do
   include Devise::Test::ControllerHelpers
 
-  let(:submission) { FactoryGirl.create(:submission) }
+  let(:submission) { create(:submission) }
 
   before do
     sign_in submission.user
   end
 
   describe "GET #index" do
-    let!(:entity) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
+    let!(:entity) { create(:submission_legal_entity, submission: submission) }
 
     subject do
       get :index
@@ -82,7 +82,7 @@ RSpec.describe Submissions::SubmissionsController do
   end
 
   describe "POST #submit" do
-    let!(:entity) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
+    let!(:entity) { create(:submission_legal_entity, submission: submission) }
 
     subject do
       post :submit, params: { id: submission.id }
