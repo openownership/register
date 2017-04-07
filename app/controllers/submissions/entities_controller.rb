@@ -30,7 +30,11 @@ module Submissions
     end
 
     def create
-      @entity = @submission.entities.new(entity_params)
+      @entity = @submission.entities.new
+
+      validate_dob
+
+      @entity.assign_attributes(entity_params)
 
       if @entity.save
         split_relationships if params[:source_ids].present? && params[:target_id].present?
@@ -47,6 +51,8 @@ module Submissions
 
     def update
       @entity = @submission.entities.find(params[:id])
+
+      validate_dob
 
       if @entity.update_attributes(entity_params)
         redirect_to edit_submission_path(@submission)
@@ -73,6 +79,13 @@ module Submissions
     end
 
     private
+
+    def validate_dob
+      date = ISO8601::Date.new(entity_params[:dob])
+      entity_params[:dob] = nil if date.atoms.length < 3
+    rescue ISO8601::Errors::UnknownPattern
+      entity_params[:dob] = nil
+    end
 
     def find_target
       @target = @submission.entities.find(params[:target_id])
@@ -154,7 +167,7 @@ module Submissions
     end
 
     def entity_params
-      params.require(:entity).permit(
+      @entity_params ||= params.require(:entity).permit(
         *Submissions::Entity::ATTRIBUTES_FOR_SUBMISSION,
         :user_created
       )

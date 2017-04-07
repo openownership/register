@@ -190,6 +190,18 @@ RSpec.describe Submissions::EntitiesController do
         expect(relationship.class.count).to be(2)
       end
     end
+
+    context "dob is invalid" do
+      before do
+        params[:entity][:type] = Submissions::Entity::Types::NATURAL_PERSON
+        params[:entity][:dob] = '2000/02'
+      end
+
+      it "validates the date" do
+        subject
+        expect(assigns(:entity).errors).to include(:dob)
+      end
+    end
   end
 
   describe "GET #edit" do
