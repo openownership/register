@@ -61,10 +61,8 @@ class SkImporter
     attributes = {
       identifiers: [
         {
-          _id: {
-            'document_id' => document_id,
-            'company_number' => item.Ico,
-          },
+          'document_id' => document_id,
+          'company_number' => item.Ico,
         },
       ],
       type: Entity::Types::LEGAL_ENTITY,
@@ -80,10 +78,8 @@ class SkImporter
     attributes = {
       identifiers: [
         {
-          _id: {
-            'document_id' => document_id,
-            'beneficial_owner_id' => item.Id,
-          },
+          'document_id' => document_id,
+          'beneficial_owner_id' => item.Id,
         },
       ],
       type: Entity::Types::NATURAL_PERSON,

@@ -224,16 +224,14 @@ RSpec.describe Entity do
 
     let(:identifier) do
       {
-        _id: {
-          'jurisdiction_code' => jurisdiction_code,
-          'company_number' => '01234567',
-        },
+        'jurisdiction_code' => jurisdiction_code,
+        'company_number' => '01234567',
       }
     end
 
     let(:name) { 'EXAMPLE LIMITED' }
 
-    subject { Entity.new(identifiers: [Identifier.new(identifier)], name: name) }
+    subject { Entity.new(identifiers: [identifier], name: name) }
 
     context 'when a document with the same identifier exists in the database' do
       before do

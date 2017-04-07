@@ -6,7 +6,7 @@ class Entity
 
   scope :legal_entities, -> { where(type: Types::LEGAL_ENTITY) }
 
-  embeds_many :identifiers
+  field :identifiers, type: Array, default: []
 
   has_many :relationships_as_source, class_name: "Relationship", inverse_of: :source
   has_many :_relationships_as_target, class_name: "Relationship", inverse_of: :target
@@ -47,7 +47,7 @@ class Entity
   # are found using their embeddeded identifiers instead of the _id field.
   def upsert
     selector = {
-      identifiers: identifiers.first.as_document,
+      identifiers: identifiers.first,
     }
 
     attributes = as_document.except('_id')

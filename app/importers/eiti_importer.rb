@@ -114,10 +114,8 @@ class EitiImporter
     attributes = attrs.merge(
       identifiers: [
         {
-          _id: {
-            'document_id' => document_id,
-            'name' => name,
-          },
+          'document_id' => document_id,
+          'name' => name,
         },
       ],
       type: type,

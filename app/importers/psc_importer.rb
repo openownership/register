@@ -96,10 +96,8 @@ class PscImporter
     attributes = attrs.merge(
       identifiers: [
         {
-          _id: {
-            'document_id' => document_id,
-            'link' => data.links.self,
-          },
+          'document_id' => document_id,
+          'link' => data.links.self,
         },
       ],
       type: entity_type(data),

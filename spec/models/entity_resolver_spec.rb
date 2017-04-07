@@ -41,7 +41,7 @@ RSpec.describe EntityResolver do
 
           entity = Entity.first
 
-          expect(entity.identifiers.first._id).to eq(
+          expect(entity.identifiers.first).to eq(
             'jurisdiction_code' => @jurisdiction_code,
             'company_number' => @company_number,
           )
@@ -113,7 +113,7 @@ RSpec.describe EntityResolver do
 
           entity = Entity.first
 
-          expect(entity.identifiers.first._id).to eq(
+          expect(entity.identifiers.first).to eq(
             'jurisdiction_code' => @jurisdiction_code,
             'company_number' => @company_number,
           )

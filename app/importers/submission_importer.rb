@@ -28,10 +28,8 @@ class SubmissionImporter
     Entity.new(
       submission_entity.attributes_for_submission.merge(
         identifiers: [{
-          _id: {
-            'submission_id' => @submission.id,
-            'entity_id' => submission_entity.id,
-          },
+          'submission_id' => @submission.id,
+          'entity_id' => submission_entity.id,
         }],
       ),
     ).tap(&:upsert)
