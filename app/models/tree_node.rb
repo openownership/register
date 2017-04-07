@@ -18,7 +18,7 @@ class TreeNode
     return [] if entity.nil?
 
     entity.relationships_as_target_excluding(seen_ids).map do |relationship|
-      TreeNode.new(relationship.source, relationship, seen_ids.push(relationship.id))
+      TreeNode.new(relationship.source, relationship, seen_ids += [relationship.id])
     end
   end
 end
