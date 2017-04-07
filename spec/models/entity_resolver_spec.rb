@@ -41,9 +41,10 @@ RSpec.describe EntityResolver do
 
           entity = Entity.first
 
-          expect(entity.identifiers.first._id).to be_a(Hash)
-          expect(entity.identifiers.first._id.fetch('jurisdiction_code')).to eq(@jurisdiction_code)
-          expect(entity.identifiers.first._id.fetch('company_number')).to eq(@company_number)
+          expect(entity.identifiers.first._id).to eq(
+            'jurisdiction_code' => @jurisdiction_code,
+            'company_number' => @company_number,
+          )
         end
 
         it 'sets the type to Entity::Types::LEGAL_ENTITY' do
@@ -112,9 +113,10 @@ RSpec.describe EntityResolver do
 
           entity = Entity.first
 
-          expect(entity.identifiers.first._id).to be_a(Hash)
-          expect(entity.identifiers.first._id.fetch('jurisdiction_code')).to eq(@jurisdiction_code)
-          expect(entity.identifiers.first._id.fetch('company_number')).to eq(@company_number)
+          expect(entity.identifiers.first._id).to eq(
+            'jurisdiction_code' => @jurisdiction_code,
+            'company_number' => @company_number,
+          )
         end
 
         it 'uses the information from the api response' do
