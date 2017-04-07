@@ -7,7 +7,12 @@ class SubmissionMailer < ApplicationMailer
 
   def submission_approved(submission)
     @submission = submission
-    @entity = Entity.find_by(identifiers: { _id: @submission.entity.id })
+    @entity = Entity.find_by(
+      identifiers: {
+        'submission_id' => @submission.id,
+        'entity_id' => @submission.entity.id,
+      },
+    )
     mail(to: @submission.user.email, subject: I18n.t('submission_mailer.submission_approved.subject'))
   end
 end
