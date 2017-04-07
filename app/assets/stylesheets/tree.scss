@@ -2,6 +2,7 @@ $tree-spacing: 20px;
 $tree-background: #f4f6f8;
 
 .tree-wrapper {
+  flex: 1 0 auto;
   position: relative;
   width: 100%;
   height: 100%;

@@ -6,14 +6,17 @@ module RelationshipsHelper
     /^Other \(.+\)$/
   ].freeze
 
-  def format_interest(interest, default = '')
-    return interest if interest_from_submission?(interest)
-    I18n.t(interest, scope: :relationship_interests, default: default)
+  def known_interests_for(relationship)
+    relationship.interests.select(&method(:known_interest?))
+  end
+
+  def unknown_interests_for(relationship)
+    relationship.interests.reject(&method(:known_interest?))
   end
 
   private
 
-  def interest_from_submission?(interest)
-    SUBMISSION_INTEREST_MATCHERS.any? { |r| r =~ interest }
+  def known_interest?(interest)
+    I18n.exists?("relationship_interests.#{interest}") || SUBMISSION_INTEREST_MATCHERS.any? { |r| r =~ interest }
   end
 end

@@ -8,4 +8,5 @@ Rollbar.configure do |config|
       ENV.fetch('ROLLBAR_ENV')
     end
   end
+  config.exception_level_filters.merge!('ActionController::UnknownFormat' => 'warning')
 end
