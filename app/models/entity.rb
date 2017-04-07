@@ -52,7 +52,12 @@ class Entity
 
     attributes = as_document.except('_id')
 
-    document = collection.find_one_and_update(selector, attributes, upsert: true, return_document: :after)
+    document = collection.find_one_and_update(
+      selector,
+      attributes,
+      upsert: true,
+      return_document: :after,
+    )
 
     self.id = document.fetch('_id')
   rescue Mongo::Error::OperationFailure => exception
