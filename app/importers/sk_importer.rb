@@ -62,8 +62,8 @@ class SkImporter
       identifiers: [
         {
           _id: {
-            document_id: document_id,
-            company_number: item.Ico,
+            'document_id' => document_id,
+            'company_number' => item.Ico,
           },
         },
       ],
@@ -81,8 +81,8 @@ class SkImporter
       identifiers: [
         {
           _id: {
-            document_id: document_id,
-            beneficial_owner_id: item.Id,
+            'document_id' => document_id,
+            'beneficial_owner_id' => item.Id,
           },
         },
       ],
@@ -99,8 +99,8 @@ class SkImporter
   def relationship!(child_entity, parent_entity, item)
     attributes = {
       _id: {
-        document_id: document_id,
-        beneficial_owner_id: item.Id,
+        'document_id' => document_id,
+        'beneficial_owner_id' => item.Id,
       },
       source: parent_entity,
       target: child_entity,

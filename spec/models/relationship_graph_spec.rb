@@ -8,7 +8,7 @@ RSpec.describe RelationshipGraph do
   def entity!(identifier, name, type = Entity::Types::LEGAL_ENTITY)
     id = {
       _id: {
-        identifier: identifier,
+        'identifier' => identifier,
       },
     }
 

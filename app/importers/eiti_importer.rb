@@ -115,8 +115,8 @@ class EitiImporter
       identifiers: [
         {
           _id: {
-            document_id: document_id,
-            name: name,
+            'document_id' => document_id,
+            'name' => name,
           },
         },
       ],
@@ -130,8 +130,8 @@ class EitiImporter
   def relationship!(child_entity, parent_entity, record)
     attributes = {
       _id: {
-        document_id: document_id,
-        row_id: record.id,
+        'document_id' => document_id,
+        'row_id' => record.id,
       },
       source: parent_entity,
       target: child_entity,
