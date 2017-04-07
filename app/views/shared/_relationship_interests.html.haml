@@ -5,7 +5,7 @@
         = glossary_tooltip(t(".unknown"), :undefined_interest, :right)
     - else
       - known_interests_for(relationship).each do |interest|
-        %li= I18n.t(interest, scope: :relationship_interests)
+        %li= t(interest, scope: :relationship_interests, default: interest)
       - if unknown_interests_for(relationship).any?
         %li.unknown
           = glossary_tooltip(t(".unknown"), :undefined_interest, :right)
