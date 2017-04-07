@@ -129,6 +129,12 @@ en:
     help: Click and drag anywhere to change the view
     zoom: Zoom in or out
 
+  submission_mailer:
+    submission_approved:
+      subject: Your submission was approved
+      approval: Thank you for submitting your information to the OpenOwnership Register. We're pleased to notify you that your submission has been approved and is now available on the Register.
+      view: View your data here
+
   relationship_interests:
     ownership-of-shares-25-to-50-percent: "Ownership of shares – More than 25% but not more than 50%"
     ownership-of-shares-50-to-75-percent: "Ownership of shares – More than 50% but less than 75%"

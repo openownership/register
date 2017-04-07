@@ -16,7 +16,9 @@ module Admin
       submission = Submissions::Submission.find(params[:id])
 
       submission.update_attribute(:approved_at, Time.now.utc)
+
       SubmissionImporter.new(submission).import
+      SubmissionMailer.submission_approved(submission).deliver_now
 
       redirect_to admin_submissions_path, notice: I18n.t('admin.submissions.approve.success', entity: submission.entity.name)
     end

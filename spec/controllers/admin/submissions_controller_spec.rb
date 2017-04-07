@@ -35,10 +35,12 @@ RSpec.describe Admin::SubmissionsController do
   end
 
   describe 'POST #approve' do
-    let(:importer) { instance_double('SubmissionImporter', import: nil) }
+    let(:importer) { instance_double('SubmissionImporter').as_null_object }
+    let(:delivery) { instance_double('ActionMailer::MessageDelivery').as_null_object }
 
     before do
       allow(SubmissionImporter).to receive(:new).and_return(importer)
+      allow(SubmissionMailer).to receive(:submission_approved).and_return(delivery)
 
       post :approve, params: { id: submission.id }
     end
@@ -49,6 +51,10 @@ RSpec.describe Admin::SubmissionsController do
 
     it 'imports the submission' do
       expect(importer).to have_received(:import)
+    end
+
+    it 'notifies to the user' do
+      expect(delivery).to have_received(:deliver_now)
     end
 
     it 'redirects' do

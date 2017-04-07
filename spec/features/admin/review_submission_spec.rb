@@ -17,6 +17,7 @@ RSpec.feature 'review submission' do
     click_on submission.entity.name
     click_on approve_button
     expect(page).to have_text(success_notice)
+    expect(last_delivered_email.subject).to eq(submission_approved_subject)
   end
 
   def approve_button
@@ -25,5 +26,13 @@ RSpec.feature 'review submission' do
 
   def success_notice
     I18n.t('admin.submissions.approve.success', entity: submission.entity.name)
+  end
+
+  def last_delivered_email
+    ActionMailer::Base.deliveries.last
+  end
+
+  def submission_approved_subject
+    I18n.t('submission_mailer.submission_approved.subject')
   end
 end
