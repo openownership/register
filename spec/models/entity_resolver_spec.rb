@@ -80,70 +80,74 @@ RSpec.describe EntityResolver do
         end
       end
 
-      context 'when the company is found with the opencorporates search api' do
+      context 'when the company is not found with the opencorporates api' do
         before do
-          @company_number = '00902239'
+          allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
+        end
 
-          @company_name = 'BG INTERNATIONAL LIMITED'
+        context 'when the company is found with the opencorporates search api' do
+          before do
+            @company_number = '00902239'
 
-          response = [
-            {
-              company: {
-                name: @company_name,
-                company_number: @company_number,
-                jurisdiction_code: @jurisdiction_code,
-                registered_address_in_full: "123 Main Street, Example Town, Exampleshire, EX4 2MP",
-                incorporation_date: "1980-02-27",
-                dissolution_date: "1980-02-27",
-                company_type: "Limited company",
+            @company_name = 'BG INTERNATIONAL LIMITED'
+
+            response = [
+              {
+                company: {
+                  name: @company_name,
+                  company_number: @company_number,
+                  jurisdiction_code: @jurisdiction_code,
+                  registered_address_in_full: "123 Main Street, Example Town, Exampleshire, EX4 2MP",
+                  incorporation_date: "1980-02-27",
+                  dissolution_date: "1980-02-27",
+                  company_type: "Limited company",
+                },
               },
-            },
-          ]
+            ]
 
-          allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
-          allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return(response)
+            allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return(response)
+          end
+
+          it 'creates an entity with an identifier' do
+            subject
+
+            expect(Entity.count).to eq(1)
+
+            entity = Entity.first
+
+            expect(entity.identifiers.first).to eq(
+              'jurisdiction_code' => @jurisdiction_code,
+              'company_number' => @company_number,
+            )
+          end
+
+          it 'uses the information from the api response' do
+            subject
+
+            entity = Entity.first
+
+            expect(entity.name).to eq(@company_name)
+            expect(entity.address).to eq("123 Main Street, Example Town, Exampleshire, EX4 2MP")
+            expect(entity.jurisdiction_code).to eq(@jurisdiction_code)
+            expect(entity.company_number).to eq(@company_number)
+            expect(entity.incorporation_date).to eq(Date.new(1980, 2, 27))
+            expect(entity.dissolution_date).to eq(Date.new(1980, 2, 27))
+            expect(entity.company_type).to eq("Limited company")
+          end
+
+          it 'returns the entity' do
+            expect(subject).to eq(Entity.first)
+          end
         end
 
-        it 'creates an entity with an identifier' do
-          subject
+        context 'when the company is not found with the opencorporates search api' do
+          before do
+            allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return([])
+          end
 
-          expect(Entity.count).to eq(1)
-
-          entity = Entity.first
-
-          expect(entity.identifiers.first).to eq(
-            'jurisdiction_code' => @jurisdiction_code,
-            'company_number' => @company_number,
-          )
-        end
-
-        it 'uses the information from the api response' do
-          subject
-
-          entity = Entity.first
-
-          expect(entity.name).to eq(@company_name)
-          expect(entity.address).to eq("123 Main Street, Example Town, Exampleshire, EX4 2MP")
-          expect(entity.jurisdiction_code).to eq(@jurisdiction_code)
-          expect(entity.company_number).to eq(@company_number)
-          expect(entity.incorporation_date).to eq(Date.new(1980, 2, 27))
-          expect(entity.dissolution_date).to eq(Date.new(1980, 2, 27))
-          expect(entity.company_type).to eq("Limited company")
-        end
-
-        it 'returns the entity' do
-          expect(subject).to eq(Entity.first)
-        end
-      end
-
-      context 'when the company is not found' do
-        before do
-          allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
-          allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return([])
-        end
-
-        it 'returns nil' do
-          expect(subject).to be_nil
+          it 'returns nil' do
+            expect(subject).to be_nil
+          end
         end
       end
     end
