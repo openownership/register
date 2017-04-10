@@ -78,15 +78,15 @@ RSpec.describe EntityResolver do
 
       context 'when the company is found with the opencorporates search api' do
         before do
-          @jurisdiction_code = 'mm'
+          @jurisdiction_code = 'gb'
 
-          @company_number = '203-2000-2001'
+          @company_number = '00902239'
 
-          @company_name = 'JADE MOUNTAIN COMPANY LIMITED'
+          @company_name = 'BG INTERNATIONAL LIMITED'
 
-          @identifier = '203 / 2000-2001'
+          @identifier = '902239'
 
-          @name = 'Jade Mountain Gems'
+          @name = 'BG International Limited'
 
           response = [
             {
@@ -142,11 +142,11 @@ RSpec.describe EntityResolver do
 
       context 'when the company is not found' do
         before do
-          @jurisdiction_code = 'mm'
+          @jurisdiction_code = 'gb'
 
-          @identifier = '251/97'
+          @identifier = '902239'
 
-          @name = 'PC Myanmar (Hong Kong) Limited'
+          @name = 'BG International Limited'
 
           allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
           allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return([])
@@ -163,15 +163,15 @@ RSpec.describe EntityResolver do
     context 'when the company does not have an identifier' do
       context 'when the company is found with the reconciliation api' do
         before do
-          @jurisdiction_code = 'ca'
+          @jurisdiction_code = 'gb'
 
-          @company_number = '2821281'
+          @company_number = '902239'
 
-          @company_name = 'GOLDEN STAR RESOURCES LTD.'
+          @company_name = 'BG INTERNATIONAL LIMITED'
 
           @identifier = nil
 
-          @name = 'Golden Star Resources Ltd'
+          @name = 'BG International Limited'
 
           response = {
             jurisdiction_code: @jurisdiction_code,
@@ -192,11 +192,11 @@ RSpec.describe EntityResolver do
 
       context 'when the company is not found' do
         before do
-          @jurisdiction_code = 'id'
+          @jurisdiction_code = 'gb'
 
           @identifier = nil
 
-          @name = 'PT Adaro Indonesia'
+          @name = 'BG International Limited'
 
           allow(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(nil)
         end
