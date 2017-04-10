@@ -8,13 +8,13 @@ RSpec.describe EntityResolver do
   let(:entity_resolver) { EntityResolver.new(opencorporates_client: opencorporates_client, reconciliation_client: reconciliation_client) }
 
   subject do
-    entity_resolver.resolve!(jurisdiction_code: 'gb', identifier: @identifier, name: @name)
+    entity_resolver.resolve!(jurisdiction_code: 'gb', company_number: @company_number, name: @name)
   end
 
   describe '#resolve!' do
-    context 'when the company has an identifier' do
+    context 'when the company has a company_number' do
       before do
-        @identifier = '902239'
+        @company_number = '902239'
       end
 
       context 'when the company is found with the opencorporates api' do
@@ -29,7 +29,7 @@ RSpec.describe EntityResolver do
             company_type: "Limited company",
           }
 
-          allow(opencorporates_client).to receive(:get_company).with('gb', @identifier).and_return(response)
+          allow(opencorporates_client).to receive(:get_company).with('gb', @company_number).and_return(response)
         end
 
         it 'creates an entity with an identifier' do
@@ -74,7 +74,7 @@ RSpec.describe EntityResolver do
 
       context 'when the company is not found with the opencorporates api' do
         before do
-          allow(opencorporates_client).to receive(:get_company).with('gb', @identifier).and_return(nil)
+          allow(opencorporates_client).to receive(:get_company).with('gb', @company_number).and_return(nil)
         end
 
         context 'when the company is found with the opencorporates search api' do
@@ -93,7 +93,7 @@ RSpec.describe EntityResolver do
               },
             ]
 
-            allow(opencorporates_client).to receive(:search_companies).with('gb', @identifier).and_return(response)
+            allow(opencorporates_client).to receive(:search_companies).with('gb', @company_number).and_return(response)
           end
 
           it 'creates an entity with an identifier' do
@@ -130,7 +130,7 @@ RSpec.describe EntityResolver do
 
         context 'when the company is not found with the opencorporates search api' do
           before do
-            allow(opencorporates_client).to receive(:search_companies).with('gb', @identifier).and_return([])
+            allow(opencorporates_client).to receive(:search_companies).with('gb', @company_number).and_return([])
           end
 
           it 'returns nil' do
@@ -140,9 +140,9 @@ RSpec.describe EntityResolver do
       end
     end
 
-    context 'when the company does not have an identifier but does have a name' do
+    context 'when the company does not have a company_number but does have a name' do
       before do
-        @identifier = nil
+        @company_number = nil
         @name = 'BG International Limited'
       end
 
@@ -159,7 +159,7 @@ RSpec.describe EntityResolver do
 
         it 'retries resolving with returned details' do
           allow(entity_resolver).to receive(:resolve!).and_call_original
-          expect(entity_resolver).to receive(:resolve!).with(jurisdiction_code: 'gb', identifier: '00902239', name: 'BG INTERNATIONAL LIMITED').and_return(nil)
+          expect(entity_resolver).to receive(:resolve!).with(jurisdiction_code: 'gb', company_number: '00902239', name: 'BG INTERNATIONAL LIMITED').and_return(nil)
 
           subject
         end

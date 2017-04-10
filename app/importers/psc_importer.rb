@@ -47,7 +47,7 @@ class PscImporter
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
       child_entity = @entity_resolver.resolve!(
         jurisdiction_code: 'gb',
-        identifier: record.company_number,
+        company_number: record.company_number,
         name: nil,
       )
 
@@ -70,7 +70,7 @@ class PscImporter
         unless jurisdiction_code.nil?
           entity = @entity_resolver.resolve!(
             jurisdiction_code: jurisdiction_code,
-            identifier: data.identification.registration_number,
+            company_number: data.identification.registration_number,
             name: data.name,
           )
 

@@ -71,7 +71,7 @@ class EitiImporter
 
     entity = @entity_resolver.resolve!(
       jurisdiction_code: jurisdiction_code,
-      identifier: record.child_identifier,
+      company_number: record.child_identifier,
       name: record.child_name,
     )
 
@@ -93,7 +93,7 @@ class EitiImporter
       if jurisdiction_code
         entity = @entity_resolver.resolve!(
           jurisdiction_code: jurisdiction_code,
-          identifier: record.parent_identifier,
+          company_number: record.parent_identifier,
           name: record.parent_name,
         )
 
