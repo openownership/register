@@ -12,18 +12,20 @@ RSpec.describe EntityResolver do
   end
 
   describe '#resolve!' do
+    before do
+      @jurisdiction_code = 'gb'
+    end
+
     context 'when the company has an identifier' do
+      before do
+        @identifier = '902239'
+      end
+
       context 'when the company is found with the opencorporates api' do
         before do
-          @jurisdiction_code = 'gb'
-
           @company_number = '00902239'
 
           @company_name = 'BG INTERNATIONAL LIMITED'
-
-          @identifier = '902239'
-
-          @name = 'BG International Limited'
 
           response = {
             jurisdiction_code: @jurisdiction_code,
@@ -80,15 +82,9 @@ RSpec.describe EntityResolver do
 
       context 'when the company is found with the opencorporates search api' do
         before do
-          @jurisdiction_code = 'gb'
-
           @company_number = '00902239'
 
           @company_name = 'BG INTERNATIONAL LIMITED'
-
-          @identifier = '902239'
-
-          @name = 'BG International Limited'
 
           response = [
             {
@@ -142,12 +138,6 @@ RSpec.describe EntityResolver do
 
       context 'when the company is not found' do
         before do
-          @jurisdiction_code = 'gb'
-
-          @identifier = '902239'
-
-          @name = 'BG International Limited'
-
           allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
           allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return([])
         end
@@ -158,18 +148,17 @@ RSpec.describe EntityResolver do
       end
     end
 
-    context 'when the company does not have an identifier' do
+    context 'when the company does not have an identifier but does have a name' do
+      before do
+        @identifier = nil
+        @name = 'BG International Limited'
+      end
+
       context 'when the company is found with the reconciliation api' do
         before do
-          @jurisdiction_code = 'gb'
-
           @company_number = '902239'
 
           @company_name = 'BG INTERNATIONAL LIMITED'
-
-          @identifier = nil
-
-          @name = 'BG International Limited'
 
           response = {
             jurisdiction_code: @jurisdiction_code,
@@ -190,12 +179,6 @@ RSpec.describe EntityResolver do
 
       context 'when the company is not found' do
         before do
-          @jurisdiction_code = 'gb'
-
-          @identifier = nil
-
-          @name = 'BG International Limited'
-
           allow(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(nil)
         end
 
