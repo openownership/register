@@ -8,14 +8,10 @@ RSpec.describe EntityResolver do
   let(:entity_resolver) { EntityResolver.new(opencorporates_client: opencorporates_client, reconciliation_client: reconciliation_client) }
 
   subject do
-    entity_resolver.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
+    entity_resolver.resolve!(jurisdiction_code: 'gb', identifier: @identifier, name: @name)
   end
 
   describe '#resolve!' do
-    before do
-      @jurisdiction_code = 'gb'
-    end
-
     context 'when the company has an identifier' do
       before do
         @identifier = '902239'
@@ -23,21 +19,17 @@ RSpec.describe EntityResolver do
 
       context 'when the company is found with the opencorporates api' do
         before do
-          @company_number = '00902239'
-
-          @company_name = 'BG INTERNATIONAL LIMITED'
-
           response = {
-            jurisdiction_code: @jurisdiction_code,
-            company_number: @company_number,
-            name: @company_name,
+            jurisdiction_code: 'gb',
+            company_number: '00902239',
+            name: 'BG INTERNATIONAL LIMITED',
             registered_address_in_full: "123 Main Street, Example Town, Exampleshire, EX4 2MP",
             incorporation_date: "1980-02-27",
             dissolution_date: "1980-02-27",
             company_type: "Limited company",
           }
 
-          allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(response)
+          allow(opencorporates_client).to receive(:get_company).with('gb', @identifier).and_return(response)
         end
 
         it 'creates an entity with an identifier' do
@@ -48,8 +40,8 @@ RSpec.describe EntityResolver do
           entity = Entity.first
 
           expect(entity.identifiers.first).to eq(
-            'jurisdiction_code' => @jurisdiction_code,
-            'company_number' => @company_number,
+            'jurisdiction_code' => 'gb',
+            'company_number' => '00902239',
           )
         end
 
@@ -66,10 +58,10 @@ RSpec.describe EntityResolver do
 
           entity = Entity.first
 
-          expect(entity.name).to eq(@company_name)
+          expect(entity.name).to eq('BG INTERNATIONAL LIMITED')
           expect(entity.address).to eq("123 Main Street, Example Town, Exampleshire, EX4 2MP")
-          expect(entity.jurisdiction_code).to eq(@jurisdiction_code)
-          expect(entity.company_number).to eq(@company_number)
+          expect(entity.jurisdiction_code).to eq('gb')
+          expect(entity.company_number).to eq('00902239')
           expect(entity.incorporation_date).to eq(Date.new(1980, 2, 27))
           expect(entity.dissolution_date).to eq(Date.new(1980, 2, 27))
           expect(entity.company_type).to eq("Limited company")
@@ -82,21 +74,17 @@ RSpec.describe EntityResolver do
 
       context 'when the company is not found with the opencorporates api' do
         before do
-          allow(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
+          allow(opencorporates_client).to receive(:get_company).with('gb', @identifier).and_return(nil)
         end
 
         context 'when the company is found with the opencorporates search api' do
           before do
-            @company_number = '00902239'
-
-            @company_name = 'BG INTERNATIONAL LIMITED'
-
             response = [
               {
                 company: {
-                  name: @company_name,
-                  company_number: @company_number,
-                  jurisdiction_code: @jurisdiction_code,
+                  name: 'BG INTERNATIONAL LIMITED',
+                  company_number: '00902239',
+                  jurisdiction_code: 'gb',
                   registered_address_in_full: "123 Main Street, Example Town, Exampleshire, EX4 2MP",
                   incorporation_date: "1980-02-27",
                   dissolution_date: "1980-02-27",
@@ -105,7 +93,7 @@ RSpec.describe EntityResolver do
               },
             ]
 
-            allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return(response)
+            allow(opencorporates_client).to receive(:search_companies).with('gb', @identifier).and_return(response)
           end
 
           it 'creates an entity with an identifier' do
@@ -116,8 +104,8 @@ RSpec.describe EntityResolver do
             entity = Entity.first
 
             expect(entity.identifiers.first).to eq(
-              'jurisdiction_code' => @jurisdiction_code,
-              'company_number' => @company_number,
+              'jurisdiction_code' => 'gb',
+              'company_number' => '00902239',
             )
           end
 
@@ -126,10 +114,10 @@ RSpec.describe EntityResolver do
 
             entity = Entity.first
 
-            expect(entity.name).to eq(@company_name)
+            expect(entity.name).to eq('BG INTERNATIONAL LIMITED')
             expect(entity.address).to eq("123 Main Street, Example Town, Exampleshire, EX4 2MP")
-            expect(entity.jurisdiction_code).to eq(@jurisdiction_code)
-            expect(entity.company_number).to eq(@company_number)
+            expect(entity.jurisdiction_code).to eq('gb')
+            expect(entity.company_number).to eq('00902239')
             expect(entity.incorporation_date).to eq(Date.new(1980, 2, 27))
             expect(entity.dissolution_date).to eq(Date.new(1980, 2, 27))
             expect(entity.company_type).to eq("Limited company")
@@ -142,7 +130,7 @@ RSpec.describe EntityResolver do
 
         context 'when the company is not found with the opencorporates search api' do
           before do
-            allow(opencorporates_client).to receive(:search_companies).with(@jurisdiction_code, @identifier).and_return([])
+            allow(opencorporates_client).to receive(:search_companies).with('gb', @identifier).and_return([])
           end
 
           it 'returns nil' do
@@ -160,22 +148,18 @@ RSpec.describe EntityResolver do
 
       context 'when the company is found with the reconciliation api' do
         before do
-          @company_number = '902239'
-
-          @company_name = 'BG INTERNATIONAL LIMITED'
-
           response = {
-            jurisdiction_code: @jurisdiction_code,
-            company_number: @company_number,
-            name: @company_name,
+            jurisdiction_code: 'gb',
+            company_number: '00902239',
+            name: 'BG INTERNATIONAL LIMITED',
           }
 
-          allow(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(response)
+          allow(reconciliation_client).to receive(:reconcile).with('gb', @name).and_return(response)
         end
 
         it 'retries resolving with returned details' do
           allow(entity_resolver).to receive(:resolve!).and_call_original
-          expect(entity_resolver).to receive(:resolve!).with(jurisdiction_code: @jurisdiction_code, identifier: @company_number, name: @company_name).and_return(nil)
+          expect(entity_resolver).to receive(:resolve!).with(jurisdiction_code: 'gb', identifier: '00902239', name: 'BG INTERNATIONAL LIMITED').and_return(nil)
 
           subject
         end
@@ -183,7 +167,7 @@ RSpec.describe EntityResolver do
 
       context 'when the company is not found' do
         before do
-          allow(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(nil)
+          allow(reconciliation_client).to receive(:reconcile).with('gb', @name).and_return(nil)
         end
 
         it 'returns nil' do
