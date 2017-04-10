@@ -5,7 +5,11 @@ RSpec.describe EntityResolver do
 
   let(:reconciliation_client) { instance_double('ReconciliationClient') }
 
-  subject { EntityResolver.new(opencorporates_client: opencorporates_client, reconciliation_client: reconciliation_client) }
+  let(:entity_resolver) { EntityResolver.new(opencorporates_client: opencorporates_client, reconciliation_client: reconciliation_client) }
+
+  subject do
+    entity_resolver.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
+  end
 
   describe '#resolve!' do
     context 'when the company has an identifier' do
@@ -35,7 +39,7 @@ RSpec.describe EntityResolver do
         end
 
         it 'creates an entity with an identifier' do
-          subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
+          subject
 
           expect(Entity.count).to eq(1)
 
@@ -48,7 +52,7 @@ RSpec.describe EntityResolver do
         end
 
         it 'sets the type to Entity::Types::LEGAL_ENTITY' do
-          subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
+          subject
 
           entity = Entity.first
 
@@ -56,7 +60,7 @@ RSpec.describe EntityResolver do
         end
 
         it 'uses the information from the api response' do
-          subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
+          subject
 
           entity = Entity.first
 
@@ -70,9 +74,7 @@ RSpec.describe EntityResolver do
         end
 
         it 'returns the entity' do
-          entity = subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
-
-          expect(entity).to eq(Entity.first)
+          expect(subject).to eq(Entity.first)
         end
       end
 
@@ -107,7 +109,7 @@ RSpec.describe EntityResolver do
         end
 
         it 'creates an entity with an identifier' do
-          subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
+          subject
 
           expect(Entity.count).to eq(1)
 
@@ -120,7 +122,7 @@ RSpec.describe EntityResolver do
         end
 
         it 'uses the information from the api response' do
-          subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
+          subject
 
           entity = Entity.first
 
@@ -134,9 +136,7 @@ RSpec.describe EntityResolver do
         end
 
         it 'returns the entity' do
-          entity = subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
-
-          expect(entity).to eq(Entity.first)
+          expect(subject).to eq(Entity.first)
         end
       end
 
@@ -153,9 +153,7 @@ RSpec.describe EntityResolver do
         end
 
         it 'returns nil' do
-          entity = subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
-
-          expect(entity).to be_nil
+          expect(subject).to be_nil
         end
       end
     end
@@ -183,10 +181,10 @@ RSpec.describe EntityResolver do
         end
 
         it 'retries resolving with returned details' do
-          allow(subject).to receive(:resolve!).and_call_original
-          expect(subject).to receive(:resolve!).with(jurisdiction_code: @jurisdiction_code, identifier: @company_number, name: @company_name).and_return(nil)
+          allow(entity_resolver).to receive(:resolve!).and_call_original
+          expect(entity_resolver).to receive(:resolve!).with(jurisdiction_code: @jurisdiction_code, identifier: @company_number, name: @company_name).and_return(nil)
 
-          subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
+          subject
         end
       end
 
@@ -202,9 +200,7 @@ RSpec.describe EntityResolver do
         end
 
         it 'returns nil' do
-          entity = subject.resolve!(jurisdiction_code: @jurisdiction_code, identifier: @identifier, name: @name)
-
-          expect(entity).to be_nil
+          expect(subject).to be_nil
         end
       end
     end
