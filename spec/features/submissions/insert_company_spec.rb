@@ -16,7 +16,7 @@ RSpec.feature 'insert company' do
         :submission_relationship,
         submission: submission,
         source: create(:submission_natural_person, submission: submission),
-        target: create(:submission_legal_entity, submission: submission)
+        target: create(:submission_legal_entity, submission: submission),
       )
     end
 
@@ -38,14 +38,14 @@ RSpec.feature 'insert company' do
         :submission_relationship,
         submission: submission,
         source: create(:submission_natural_person, submission: submission),
-        target: root
+        target: root,
       )
 
       create(
         :submission_relationship,
         submission: submission,
         source: create(:submission_natural_person, submission: submission),
-        target: root
+        target: root,
       )
     end
 

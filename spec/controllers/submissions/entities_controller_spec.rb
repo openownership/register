@@ -79,7 +79,7 @@ RSpec.describe Submissions::EntitiesController do
     let(:params) do
       {
         submission_id: submission.id,
-        id: entity.id
+        id: entity.id,
       }
     end
 
@@ -140,7 +140,7 @@ RSpec.describe Submissions::EntitiesController do
     let(:params) do
       {
         submission_id: submission.id,
-        entity: { name: 'Example Entity' }
+        entity: { name: 'Example Entity' },
       }
     end
 
@@ -209,7 +209,7 @@ RSpec.describe Submissions::EntitiesController do
     let(:params) do
       {
         submission_id: submission.id,
-        id: entity.id
+        id: entity.id,
       }
     end
 
@@ -234,7 +234,7 @@ RSpec.describe Submissions::EntitiesController do
       {
         submission_id: submission.id,
         id: entity.id,
-        entity: { name: 'Updated Entity Name' }
+        entity: { name: 'Updated Entity Name' },
       }
     end
 
@@ -264,7 +264,7 @@ RSpec.describe Submissions::EntitiesController do
       {
         submission_id: submission.id,
         id: source.id,
-        relationship_id: relationship_b.id
+        relationship_id: relationship_b.id,
       }
     end
 

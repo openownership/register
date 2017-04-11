@@ -18,7 +18,7 @@ class Entity
 
   settings index: {
     number_of_shards: 1,
-    number_of_replicas: 0
+    number_of_replicas: 0,
   }
 
   mapping do
@@ -47,7 +47,7 @@ class Entity
   # are found using their embeddeded identifiers instead of the _id field.
   def upsert
     selector = {
-      identifiers: identifiers.first.as_document
+      identifiers: identifiers.first.as_document,
     }
 
     attributes = as_document.except('_id')

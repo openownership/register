@@ -9,7 +9,7 @@ RSpec.feature 'edit entity' do
       :submission_relationship,
       submission: submission,
       target: create(:submission_legal_entity, submission: submission),
-      source: entity
+      source: entity,
     )
   end
 

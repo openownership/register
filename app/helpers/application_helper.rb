@@ -22,7 +22,7 @@ module ApplicationHelper
       "data-toggle" => "tooltip",
       "data-placement" => position,
       title: title,
-      class: "tooltip-helper"
+      class: "tooltip-helper",
     )
   end
 
@@ -41,7 +41,7 @@ module ApplicationHelper
   PARTIAL_DATE_FORMATS = {
     1 => '%04d',
     2 => '%04d-%02d',
-    3 => '%04d-%02d-%02d'
+    3 => '%04d-%02d-%02d',
   }.freeze
 
   def partial_date_format(iso8601_date)

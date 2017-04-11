@@ -2,7 +2,7 @@ module Submissions
   module EntitiesHelper
     COUNTRIES_TO_SUBDIVIDE = [
       ISO3166::Country.new('US'),
-      ISO3166::Country.new('CA')
+      ISO3166::Country.new('CA'),
     ].freeze
 
     def countries_for_select
@@ -17,12 +17,12 @@ module Submissions
       if entity.persisted?
         {
           url: submission_entity_path(entity.submission, entity),
-          method: :put
+          method: :put,
         }
       else
         {
           url: submission_entities_path(entity.submission),
-          method: :post
+          method: :post,
         }
       end
     end

@@ -15,7 +15,7 @@ module CountryHelper
     glossary_tooltip(
       image_tag("flag-unknown.svg", size: '32x16', alt: "unknown", class: 'flag'),
       :unknown_jurisdiction,
-      :top
+      :top,
     )
   end
 end

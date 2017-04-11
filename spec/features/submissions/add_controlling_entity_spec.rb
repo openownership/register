@@ -32,7 +32,7 @@ RSpec.feature 'add controlling entity' do
         :submission_relationship,
         submission: submission,
         target: create(:submission_legal_entity, submission: submission),
-        source: create(:submission_legal_entity, submission: submission)
+        source: create(:submission_legal_entity, submission: submission),
       )
     end
 

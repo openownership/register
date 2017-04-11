@@ -24,7 +24,7 @@ module OpenOwnershipRegister
       address: ENV['SMTP_ADDRESS'],
       user_name: ENV['SMTP_TOKEN'],
       password: ENV['SMTP_TOKEN'],
-      authentication: :plain
+      authentication: :plain,
     }
 
     host_uri = if ENV.key?('HEROKU_APP_NAME')

@@ -37,7 +37,7 @@ class OpencorporatesClient
       q: company_number,
       jurisdiction_code: jurisdiction_code,
       fields: 'company_number',
-      order: 'score'
+      order: 'score',
     }
 
     response = get("/#{API_VERSION}/companies/search", params)
@@ -50,7 +50,7 @@ class OpencorporatesClient
     params = {
       q: name,
       fields: 'company_name',
-      order: 'score'
+      order: 'score',
     }
 
     response = get("/#{API_VERSION}/companies/search", params)

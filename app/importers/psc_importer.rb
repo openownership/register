@@ -48,7 +48,7 @@ class PscImporter
       child_entity = @entity_resolver.resolve!(
         jurisdiction_code: 'gb',
         identifier: record.company_number,
-        name: nil
+        name: nil,
       )
 
       parent_entity = parent_entity!(record.data)
@@ -71,7 +71,7 @@ class PscImporter
           entity = @entity_resolver.resolve!(
             jurisdiction_code: jurisdiction_code,
             identifier: data.identification.registration_number,
-            name: data.name
+            name: data.name,
           )
 
           return entity unless entity.nil?
@@ -85,7 +85,7 @@ class PscImporter
         name: data.name_elements.presence && name_string(data.name_elements) || data.name,
         nationality: country_from_nationality(data.nationality).try(:alpha2),
         country_of_residence: data.country_of_residence.presence,
-        dob: entity_dob(data.date_of_birth)
+        dob: entity_dob(data.date_of_birth),
       )
     when 'legal-person-person-with-significant-control'
       entity_with_document_id!(data, name: data.name)
@@ -98,12 +98,12 @@ class PscImporter
         {
           _id: {
             document_id: document_id,
-            link: data.links.self
-          }
-        }
+            link: data.links.self,
+          },
+        },
       ],
       type: entity_type(data),
-      address: data.address.presence && address_string(data.address)
+      address: data.address.presence && address_string(data.address),
     )
 
     Entity.new(attributes).tap(&:upsert)
@@ -113,7 +113,7 @@ class PscImporter
     attributes = {
       _id: {
         document_id: document_id,
-        link: data.links.self
+        link: data.links.self,
       },
       source: parent_entity,
       target: child_entity,
@@ -123,8 +123,8 @@ class PscImporter
         source_url: source_url,
         source_name: source_name,
         retrieved_at: retrieved_at,
-        imported_at: Time.now.utc
-      }
+        imported_at: Time.now.utc,
+      },
     }
 
     Relationship.new(attributes).upsert

@@ -13,7 +13,7 @@ module Submissions
       :company_number,
       :incorporation_date,
       :dissolution_date,
-      :company_type
+      :company_type,
     ].freeze
 
     scope :legal_entities, -> { where(type: Types::LEGAL_ENTITY) }

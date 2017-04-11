@@ -10,7 +10,7 @@ RSpec.feature 'edit interests' do
       submission: submission,
       target: create(:submission_legal_entity, submission: submission),
       source: create(:submission_natural_person, submission: submission),
-      ownership_of_shares_percentage: 20.0
+      ownership_of_shares_percentage: 20.0,
     )
   end
 

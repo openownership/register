@@ -72,7 +72,7 @@ class EitiImporter
     entity = @entity_resolver.resolve!(
       jurisdiction_code: jurisdiction_code,
       identifier: record.child_identifier,
-      name: record.child_name
+      name: record.child_name,
     )
 
     return entity unless entity.nil?
@@ -80,7 +80,7 @@ class EitiImporter
     entity_with_document_id!(
       record.child_name,
       Entity::Types::LEGAL_ENTITY,
-      jurisdiction_code: jurisdiction_code
+      jurisdiction_code: jurisdiction_code,
     )
   end
 
@@ -94,7 +94,7 @@ class EitiImporter
         entity = @entity_resolver.resolve!(
           jurisdiction_code: jurisdiction_code,
           identifier: record.parent_identifier,
-          name: record.parent_name
+          name: record.parent_name,
         )
 
         return entity unless entity.nil?
@@ -104,7 +104,7 @@ class EitiImporter
     entity_with_document_id!(
       record.parent_name,
       type,
-      jurisdiction_code: jurisdiction_code
+      jurisdiction_code: jurisdiction_code,
     )
   end
 
@@ -116,12 +116,12 @@ class EitiImporter
         {
           _id: {
             document_id: document_id,
-            name: name
-          }
-        }
+            name: name,
+          },
+        },
       ],
       type: type,
-      name: name
+      name: name,
     )
 
     Entity.new(attributes).tap(&:upsert)
@@ -131,7 +131,7 @@ class EitiImporter
     attributes = {
       _id: {
         document_id: document_id,
-        row_id: record.id
+        row_id: record.id,
       },
       source: parent_entity,
       target: child_entity,
@@ -141,8 +141,8 @@ class EitiImporter
         source_url: record.source_url,
         source_name: source_name,
         retrieved_at: retrieved_at,
-        imported_at: Time.now.utc
-      }
+        imported_at: Time.now.utc,
+      },
     }
 
     Relationship.new(attributes).upsert

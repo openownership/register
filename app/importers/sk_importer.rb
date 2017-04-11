@@ -63,14 +63,14 @@ class SkImporter
         {
           _id: {
             document_id: document_id,
-            company_number: item.Ico
-          }
-        }
+            company_number: item.Ico,
+          },
+        },
       ],
       type: Entity::Types::LEGAL_ENTITY,
       name: item.ObchodneMeno.strip,
       jurisdiction_code: 'sk',
-      address: address_string(item.Adresa)
+      address: address_string(item.Adresa),
     }
 
     Entity.new(attributes).tap(&:upsert)
@@ -82,15 +82,15 @@ class SkImporter
         {
           _id: {
             document_id: document_id,
-            beneficial_owner_id: item.Id
-          }
-        }
+            beneficial_owner_id: item.Id,
+          },
+        },
       ],
       type: Entity::Types::NATURAL_PERSON,
       name: name_string(item),
       nationality: country_from_nationality(item).try(:alpha2),
       address: item.Adresa.presence && address_string(item.Adresa),
-      dob: entity_dob(item.DatumNarodenia)
+      dob: entity_dob(item.DatumNarodenia),
     }
 
     Entity.new(attributes).tap(&:upsert)
@@ -100,7 +100,7 @@ class SkImporter
     attributes = {
       _id: {
         document_id: document_id,
-        beneficial_owner_id: item.Id
+        beneficial_owner_id: item.Id,
       },
       source: parent_entity,
       target: child_entity,
@@ -109,8 +109,8 @@ class SkImporter
         source_url: source_url,
         source_name: source_name,
         retrieved_at: retrieved_at,
-        imported_at: Time.now.utc
-      }
+        imported_at: Time.now.utc,
+      },
     }
 
     Relationship.new(attributes).upsert
