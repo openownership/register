@@ -105,6 +105,17 @@ en:
       unknown: Undefined interest
     search_bar:
       new_search: Search company or name of person
+    referral_message:
+      about:
+        text_html: "%{whocontrolsit} was a proof-of-concept beneficial ownership register, created in just a few days by the team behind %{opencorporates}. It has now been superseded by the %{openownership_register}, a major civil-society-led project to create a global beneficial ownership register for the public good, in part building of the work on %{whocontrolsit}."
+        whocontrolsit: WhoControlsIt
+        opencorporates: OpenCorporates
+        openownership_register: OpenOwnership Register
+      see_the_code:
+        text_html: "%{see_here} for the the original code for %{whocontrolsit}"
+        see_here: See here
+        whocontrolsit: WhoControlsIt
+      continue: Continue
 
   entity_types:
     default: entity

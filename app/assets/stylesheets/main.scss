@@ -913,3 +913,11 @@ span.tooltip-helper {
 .feedback-iframe {
   min-height: 500px;
 }
+
+.modal-dialog {
+  margin: 30px;
+
+  @include media-breakpoint-up(md) {
+    margin: 100px auto;
+  }
+}
