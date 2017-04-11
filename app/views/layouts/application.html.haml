@@ -65,12 +65,7 @@
             = render partial: 'shared/search_bar' unless submissions_section?
 
     .content-wrapper
-      .container-fluid
-        - if notice.present?
-          %p.alert.alert-info= notice
-        - if alert.present?
-          %p.alert.alert-danger= alert
-
+      = render 'shared/messages'
       = yield
 
     %footer.site-footer
