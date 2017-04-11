@@ -8,7 +8,7 @@ RSpec.describe EntityResolver do
   subject { EntityResolver.new(opencorporates_client: opencorporates_client, reconciliation_client: reconciliation_client) }
 
   describe '#resolve!' do
-    context 'when the child company has an identifier' do
+    context 'when the company has an identifier' do
       context 'when the company is found with the opencorporates api' do
         before do
           @jurisdiction_code = 'gb'
@@ -160,7 +160,7 @@ RSpec.describe EntityResolver do
       end
     end
 
-    context 'when the child company does not have an identifier' do
+    context 'when the company does not have an identifier' do
       context 'when the company is found with the reconciliation api' do
         before do
           @jurisdiction_code = 'ca'
