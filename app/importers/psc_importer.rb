@@ -56,11 +56,29 @@ class PscImporter
   end
 
   def child_entity!(company_number)
-    @entity_resolver.resolve!(
+    entity = @entity_resolver.resolve!(
       jurisdiction_code: 'gb',
       company_number: company_number,
       name: nil,
     )
+
+    return entity unless entity.nil?
+
+    child_entity_with_document_id!(company_number)
+  end
+
+  def child_entity_with_document_id!(company_number)
+    attributes = {
+      identifiers: [
+        {
+          'document_id' => document_id,
+          'company_number' => company_number,
+        },
+      ],
+      type: Entity::Types::LEGAL_ENTITY,
+    }
+
+    Entity.new(attributes).tap(&:upsert)
   end
 
   def parent_entity!(data)
@@ -82,13 +100,13 @@ class PscImporter
         end
       end
 
-      entity_with_document_id!(
+      parent_entity_with_document_id!(
         data,
         name: data.name,
         jurisdiction_code: jurisdiction_code,
       )
     when 'individual-person-with-significant-control'
-      entity_with_document_id!(
+      parent_entity_with_document_id!(
         data,
         name: data.name_elements.presence && name_string(data.name_elements) || data.name,
         nationality: country_from_nationality(data.nationality).try(:alpha2),
@@ -96,14 +114,14 @@ class PscImporter
         dob: entity_dob(data.date_of_birth),
       )
     when 'legal-person-person-with-significant-control'
-      entity_with_document_id!(
+      parent_entity_with_document_id!(
         data,
         name: data.name,
       )
     end
   end
 
-  def entity_with_document_id!(data, attrs = {})
+  def parent_entity_with_document_id!(data, attrs = {})
     attributes = attrs.merge(
       identifiers: [
         {
