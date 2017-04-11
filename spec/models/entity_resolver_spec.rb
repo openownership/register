@@ -159,7 +159,11 @@ RSpec.describe EntityResolver do
 
         it 'retries resolving with returned details' do
           allow(entity_resolver).to receive(:resolve!).and_call_original
-          expect(entity_resolver).to receive(:resolve!).with(jurisdiction_code: 'gb', company_number: '00902239', name: 'BG INTERNATIONAL LIMITED').and_return(nil)
+          expect(entity_resolver).to receive(:resolve!).with(
+            jurisdiction_code: 'gb',
+            company_number: '00902239',
+            name: 'BG INTERNATIONAL LIMITED',
+          ).and_return(nil)
 
           subject
         end
