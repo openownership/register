@@ -26,6 +26,7 @@ gem 'iso8601'
 gem 'devise'
 gem 'roadie-rails'
 gem 'factory_girl_rails'
+gem 'aws-sdk'
 
 group :development, :test do
   gem 'byebug'
