@@ -9,4 +9,6 @@ task :postdeploy => ['db:reset', 'db:mongoid:create_indexes'] do
   Rake::Task['eiti:import'].invoke(source)
 
   Entity.import(force: true)
+
+  Rake::Task['db:seed'].invoke
 end

@@ -23,13 +23,13 @@ gem 'countries'
 gem 'iso8601'
 gem 'devise'
 gem 'roadie-rails'
+gem 'factory_girl_rails'
 
 group :development, :test do
   gem 'byebug'
   gem 'rspec-rails'
   gem 'dotenv-rails'
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
   gem 'webmock'
   gem 'launchy'
 end
