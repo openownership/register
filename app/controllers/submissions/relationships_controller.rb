@@ -24,7 +24,7 @@ module Submissions
         :ownership_of_shares_percentage,
         :voting_rights_percentage,
         :right_to_appoint_and_remove_directors,
-        :other_significant_influence_or_control
+        :other_significant_influence_or_control,
       )
     end
 

@@ -226,8 +226,8 @@ RSpec.describe Entity do
       {
         _id: {
           'jurisdiction_code' => jurisdiction_code,
-          'company_number' => '01234567'
-        }
+          'company_number' => '01234567',
+        },
       }
     end
 

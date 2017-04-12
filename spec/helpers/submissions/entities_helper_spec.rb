@@ -7,7 +7,7 @@ RSpec.describe Submissions::EntitiesHelper do
     it 'returns the options' do
       expect(subject).to include(
         %w(Argentina ar),
-        ['United Kingdom', 'gb']
+        ['United Kingdom', 'gb'],
       )
     end
 
@@ -57,7 +57,7 @@ RSpec.describe Submissions::EntitiesHelper do
       it 'returns options for create form' do
         expect(subject).to eq(
           url: submission_entities_path(entity.submission.id),
-          method: :post
+          method: :post,
         )
       end
     end
@@ -68,7 +68,7 @@ RSpec.describe Submissions::EntitiesHelper do
       it 'returns options for update form' do
         expect(subject).to eq(
           url: submission_entity_path(entity.submission.id, entity.id),
-          method: :put
+          method: :put,
         )
       end
     end

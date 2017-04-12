@@ -9,12 +9,12 @@ RSpec.describe OpencorporatesHelper do
         {
           previous_names: [
             {
-              company_name: 'FOO LIMITED'
+              company_name: 'FOO LIMITED',
             },
             {
-              company_name: 'BAR LIMITED'
-            }
-          ]
+              company_name: 'BAR LIMITED',
+            },
+          ],
         }
       end
 
@@ -26,7 +26,7 @@ RSpec.describe OpencorporatesHelper do
     context 'when the company has no previous names' do
       let(:company_hash) do
         {
-          previous_names: []
+          previous_names: [],
         }
       end
 
@@ -46,10 +46,10 @@ RSpec.describe OpencorporatesHelper do
             {
               industry_code: {
                 code: '62012',
-                description: 'Business and domestic software development'
-              }
-            }
-          ]
+                description: 'Business and domestic software development',
+              },
+            },
+          ],
         }
       end
 
@@ -61,7 +61,7 @@ RSpec.describe OpencorporatesHelper do
     context 'when the company has no industry codes' do
       let(:company_hash) do
         {
-          industry_codes: []
+          industry_codes: [],
         }
       end
 
@@ -78,7 +78,7 @@ RSpec.describe OpencorporatesHelper do
       let(:officer_hash) do
         {
           name: 'Joe Bloggs',
-          inactive: false
+          inactive: false,
         }
       end
 
@@ -86,9 +86,9 @@ RSpec.describe OpencorporatesHelper do
         {
           officers: [
             {
-              officer: officer_hash
-            }
-          ]
+              officer: officer_hash,
+            },
+          ],
         }
       end
 
@@ -101,15 +101,15 @@ RSpec.describe OpencorporatesHelper do
           {
             officers: [
               {
-                officer: officer_hash
+                officer: officer_hash,
               },
               {
                 officer: {
                   name: 'A. N. Other',
-                  inactive: true
-                }
-              }
-            ]
+                  inactive: true,
+                },
+              },
+            ],
           }
         end
 
@@ -122,7 +122,7 @@ RSpec.describe OpencorporatesHelper do
     context 'when the company has no officers' do
       let(:company_hash) do
         {
-          officers: []
+          officers: [],
         }
       end
 
@@ -139,7 +139,7 @@ RSpec.describe OpencorporatesHelper do
       let(:officer_hash) do
         {
           position: 'director',
-          start_date: '2011-07-15'
+          start_date: '2011-07-15',
         }
       end
 

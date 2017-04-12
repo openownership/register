@@ -4,7 +4,7 @@ RSpec.describe Search do
   describe '.query' do
     let(:search_params) do
       {
-        q: 'smith'
+        q: 'smith',
       }
     end
 
@@ -15,9 +15,9 @@ RSpec.describe Search do
         match: {
           name: {
             query: 'smith',
-            operator: 'AND'
-          }
-        }
+            operator: 'AND',
+          },
+        },
       }
 
       expect(subject[:bool][:must]).to include(match_query)
@@ -26,15 +26,15 @@ RSpec.describe Search do
     context 'when the type param is present' do
       let(:search_params) do
         {
-          type: Entity::Types::NATURAL_PERSON
+          type: Entity::Types::NATURAL_PERSON,
         }
       end
 
       it 'includes a term query filter for the type field' do
         filter = {
           term: {
-            type: Entity::Types::NATURAL_PERSON
-          }
+            type: Entity::Types::NATURAL_PERSON,
+          },
         }
 
         expect(subject[:bool][:filter]).to include(filter)
@@ -44,15 +44,15 @@ RSpec.describe Search do
     context 'when the country param is present' do
       let(:search_params) do
         {
-          country: 'GB'
+          country: 'GB',
         }
       end
 
       it 'includes a term query filter for the country_code field' do
         filter = {
           term: {
-            country_code: 'GB'
-          }
+            country_code: 'GB',
+          },
         }
 
         expect(subject[:bool][:filter]).to include(filter)

@@ -20,7 +20,7 @@ RSpec.describe InferredRelationship do
         [
           Relationship.new(source: entities[0], target: entities[1]),
           Relationship.new(source: entities[1], target: entities[2]),
-          Relationship.new(source: entities[2], target: entities[3])
+          Relationship.new(source: entities[2], target: entities[3]),
         ]
       end
 

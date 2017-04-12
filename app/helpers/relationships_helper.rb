@@ -3,7 +3,7 @@ module RelationshipsHelper
     /^Ownership of shares - [\d\.]+%$/,
     /^Ownership of voting rights - ([\d\.]+)%$/,
     /^Right to appoint and remove directors$/,
-    /^Other \(.+\)$/
+    /^Other \(.+\)$/,
   ].freeze
 
   def known_interests_for(relationship)

@@ -68,7 +68,7 @@ module Submissions
       entity.relationships_as_target.each do |relationship_as_target|
         @submission.relationships.find_or_create_by!(
           source: relationship_as_target.source,
-          target: relationship.target
+          target: relationship.target,
         )
         relationship_as_target.destroy!
       end
@@ -124,17 +124,17 @@ module Submissions
       params[:source_ids].each do |source_id|
         relationship = @submission.relationships.find_by!(
           source_id: source_id,
-          target_id: params[:target_id]
+          target_id: params[:target_id],
         )
 
         @submission.relationships.find_or_create_by!(
           source: relationship.source,
-          target: @entity
+          target: @entity,
         )
 
         @submission.relationships.find_or_create_by!(
           source: @entity,
-          target: relationship.target
+          target: relationship.target,
         )
 
         relationship.destroy!
@@ -146,7 +146,7 @@ module Submissions
         .slice(*Submissions::Entity::ATTRIBUTES_FOR_SUBMISSION)
         .merge(
           type: Entity::Types::LEGAL_ENTITY,
-          address: result[:company][:registered_address_in_full]
+          address: result[:company][:registered_address_in_full],
         )
 
       Submissions::Entity.new(attributes)
@@ -155,21 +155,21 @@ module Submissions
     def create_relationship_as_source
       @submission.relationships.find_or_create_by!(
         source: @entity,
-        target_id: params[:target_id]
+        target_id: params[:target_id],
       )
     end
 
     def continue_params
       params.permit(
         :target_id,
-        source_ids: []
+        source_ids: [],
       )
     end
 
     def entity_params
       @entity_params ||= params.require(:entity).permit(
         *Submissions::Entity::ATTRIBUTES_FOR_SUBMISSION,
-        :user_created
+        :user_created,
       )
     end
 

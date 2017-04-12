@@ -21,7 +21,7 @@ RSpec.describe EntityHelper do
         expect(helper).to receive(:glossary_tooltip).with(
           content_tag(:span, "unknown persons", class: "unknown"),
           :unknown_persons,
-          anything
+          anything,
         ).and_return(:tooltip)
 
         expect(subject).to eq(:tooltip)
@@ -167,7 +167,7 @@ RSpec.describe EntityHelper do
       nil => nil,
       ISO8601::Date.new('1980') => '1980',
       ISO8601::Date.new('1980-02') => 'February 1980',
-      ISO8601::Date.new('1980-02-27') => 'February 1980'
+      ISO8601::Date.new('1980-02-27') => 'February 1980',
     }.each do |date, expected|
       context "when entity dob is #{date ? date.mongoize : date.inspect}" do
         let(:dob) { date }

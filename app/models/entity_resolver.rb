@@ -22,7 +22,7 @@ class EntityResolver
       resolve!(
         jurisdiction_code: response.fetch(:jurisdiction_code),
         identifier: response.fetch(:company_number),
-        name: response.fetch(:name)
+        name: response.fetch(:name),
       )
     end
   end
@@ -35,9 +35,9 @@ class EntityResolver
         {
           _id: {
             jurisdiction_code: response.fetch(:jurisdiction_code),
-            company_number: response.fetch(:company_number)
-          }
-        }
+            company_number: response.fetch(:company_number),
+          },
+        },
       ],
       type: Entity::Types::LEGAL_ENTITY,
       name: response.fetch(:name),
@@ -46,7 +46,7 @@ class EntityResolver
       company_number: response[:company_number].presence,
       incorporation_date: response[:incorporation_date].presence,
       dissolution_date: response[:dissolution_date].presence,
-      company_type: response[:company_type].presence
+      company_type: response[:company_type].presence,
     }
 
     Entity.new(attributes).tap(&:upsert)

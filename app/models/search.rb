@@ -6,12 +6,12 @@ class Search
           match: {
             name: {
               query: search_params[:q],
-              operator: 'AND'
-            }
-          }
+              operator: 'AND',
+            },
+          },
         ],
-        filter: filters(search_params)
-      }
+        filter: filters(search_params),
+      },
     }
   end
 
@@ -19,14 +19,14 @@ class Search
     {
       type: {
         terms: {
-          field: :type
-        }
+          field: :type,
+        },
       },
       country: {
         terms: {
-          field: :country_code
-        }
-      }
+          field: :country_code,
+        },
+      },
     }
   end
 
@@ -42,8 +42,8 @@ class Search
 
     {
       term: {
-        key => value
-      }
+        key => value,
+      },
     }
   end
 end

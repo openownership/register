@@ -8,8 +8,8 @@ RSpec.describe RelationshipGraph do
   def entity!(identifier, name, type = Entity::Types::LEGAL_ENTITY)
     id = {
       _id: {
-        identifier: identifier
-      }
+        identifier: identifier,
+      },
     }
 
     entity = Entity.where(identifiers: id).first_or_create!(identifiers: [id], type: type, name: name)

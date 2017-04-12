@@ -20,15 +20,15 @@ class SubmissionImporter
     @entity_resolver.resolve!(
       jurisdiction_code: submission_entity.jurisdiction_code,
       identifier: submission_entity.company_number,
-      name: submission_entity.name
+      name: submission_entity.name,
     )
   end
 
   def upsert_entity!(submission_entity)
     Entity.new(
       submission_entity.attributes_for_submission.merge(
-        identifiers: [{ _id: submission_entity.id }]
-      )
+        identifiers: [{ _id: submission_entity.id }],
+      ),
     ).tap(&:upsert)
   end
 
@@ -43,7 +43,7 @@ class SubmissionImporter
       target: entity!(submission_relationship.target),
       interests: submission_relationship.interests,
       sample_date: sample_date,
-      provenance: provenance
+      provenance: provenance,
     ).tap(&:upsert)
   end
 
@@ -56,7 +56,7 @@ class SubmissionImporter
       source_url: "https://register.openownership.org",
       source_name: "OpenOwnership Register",
       retrieved_at: @submission.submitted_at,
-      imported_at: Time.now.utc
+      imported_at: Time.now.utc,
     )
   end
 end

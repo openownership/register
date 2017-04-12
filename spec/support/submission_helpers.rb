@@ -26,21 +26,21 @@ module SubmissionHelpers
               publisher: "UK Companies House",
               url: "http://xmlgw.companieshouse.gov.uk/",
               terms: "UK Crown Copyright",
-              retrieved_at: "2017-03-13T00:54:31+00:00"
+              retrieved_at: "2017-03-13T00:54:31+00:00",
             },
             registered_address: {
               street_address: "123 Example Road",
               locality: "London",
               region: nil,
               postal_code: "AB1 2XY",
-              country: "United Kingdom"
+              country: "United Kingdom",
             },
             registered_address_in_full: "123 Example Road, London, AB1 2XY",
             restricted_for_marketing: nil,
-            native_company_number: nil
-          }
-        }
-      ]
+            native_company_number: nil,
+          },
+        },
+      ],
     )
   end
 end

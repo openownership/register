@@ -34,13 +34,13 @@ class RelationshipGraph
           source: entity,
           target: @entity,
           interests: relationships.first.interests,
-          sourced_relationships: relationships
+          sourced_relationships: relationships,
         )
       else
         attributes = {
           source: entity,
           target: @entity,
-          sourced_relationships: relationships
+          sourced_relationships: relationships,
         }
 
         state << InferredRelationship.new(attributes)

@@ -18,7 +18,7 @@ RSpec.feature 'remove entity' do
         :submission_relationship,
         submission: submission,
         source: entity,
-        target: root
+        target: root,
       )
     end
 
@@ -37,21 +37,21 @@ RSpec.feature 'remove entity' do
         :submission_relationship,
         submission: submission,
         source: intermediate,
-        target: root
+        target: root,
       )
 
       create(
         :submission_relationship,
         submission: submission,
         source: create(:submission_natural_person, submission: submission),
-        target: intermediate
+        target: intermediate,
       )
 
       create(
         :submission_relationship,
         submission: submission,
         source: create(:submission_natural_person, submission: submission),
-        target: intermediate
+        target: intermediate,
       )
     end
 

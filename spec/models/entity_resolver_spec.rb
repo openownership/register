@@ -28,7 +28,7 @@ RSpec.describe EntityResolver do
             registered_address_in_full: "123 Main Street, Example Town, Exampleshire, EX4 2MP",
             incorporation_date: "1980-02-27",
             dissolution_date: "1980-02-27",
-            company_type: "Limited company"
+            company_type: "Limited company",
           }
 
           expect(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(response)
@@ -96,9 +96,9 @@ RSpec.describe EntityResolver do
                 registered_address_in_full: "123 Main Street, Example Town, Exampleshire, EX4 2MP",
                 incorporation_date: "1980-02-27",
                 dissolution_date: "1980-02-27",
-                company_type: "Limited company"
-              }
-            }
+                company_type: "Limited company",
+              },
+            },
           ]
 
           expect(opencorporates_client).to receive(:get_company).with(@jurisdiction_code, @identifier).and_return(nil)
@@ -174,7 +174,7 @@ RSpec.describe EntityResolver do
           response = {
             jurisdiction_code: @jurisdiction_code,
             company_number: @company_number,
-            name: @company_name
+            name: @company_name,
           }
 
           expect(reconciliation_client).to receive(:reconcile).with(@jurisdiction_code, @name).and_return(response)

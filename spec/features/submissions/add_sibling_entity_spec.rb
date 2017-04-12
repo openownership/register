@@ -12,7 +12,7 @@ RSpec.feature 'add sibling entity' do
       :submission_relationship,
       submission: submission,
       source: create(:submission_natural_person, submission: submission),
-      target: create(:submission_legal_entity, submission: submission)
+      target: create(:submission_legal_entity, submission: submission),
     )
   end
 

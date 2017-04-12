@@ -147,7 +147,7 @@ RSpec.describe OpencorporatesClient do
         jurisdiction_code: 'gb',
         fields: 'company_number',
         order: 'score',
-        api_token: api_token
+        api_token: api_token,
       }
 
       @stub = stub_request(:get, url).with(query: query)
@@ -207,7 +207,7 @@ RSpec.describe OpencorporatesClient do
         q: 'Example Ltd',
         fields: 'company_name',
         order: 'score',
-        api_token: api_token
+        api_token: api_token,
       }
 
       @stub = stub_request(:get, url).with(query: query)

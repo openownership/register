@@ -23,7 +23,7 @@ RSpec.describe SubmissionImporter do
         expect(entity_resolver).to have_received(:resolve!).with(
           jurisdiction_code: company.jurisdiction_code,
           identifier: company.company_number,
-          name: company.name
+          name: company.name,
         )
       end
 
@@ -32,7 +32,7 @@ RSpec.describe SubmissionImporter do
           allow(entity_resolver).to receive(:resolve!).with(
             jurisdiction_code: company.jurisdiction_code,
             identifier: company.company_number,
-            name: company.name
+            name: company.name,
           ).and_return(nil)
 
           subject.import

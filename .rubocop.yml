@@ -21,3 +21,9 @@ Style/HashSyntax:
 
 Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
