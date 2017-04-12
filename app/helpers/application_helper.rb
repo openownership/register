@@ -49,4 +49,8 @@ module ApplicationHelper
 
     PARTIAL_DATE_FORMATS[iso8601_date.atoms.size] % iso8601_date.atoms
   end
+
+  def show_referral_message?
+    params[:referrer] == 'WhoControlsIt'
+  end
 end
