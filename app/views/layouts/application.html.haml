@@ -16,6 +16,7 @@
     %link{ href: "/manifest.json", rel: "manifest" }/
     %link{ color: "#3b26d8", href: "/safari-pinned-tab.svg", rel: "mask-icon" }/
     %meta{ content: "#12171d", name: "theme-color" }/
+    = yield :head
   %body
     %header.site-header{ class: ("site-header-small" unless current_page?(root_path)) }
       .container-fluid
