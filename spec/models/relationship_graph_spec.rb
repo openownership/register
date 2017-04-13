@@ -21,7 +21,7 @@ RSpec.describe RelationshipGraph do
 
   def relationships!
     entities.each_cons(2) do |(target, source)|
-      Relationship.create!(target: target, source: source)
+      create(:relationship, target: target, source: source)
     end
   end
 
@@ -63,10 +63,10 @@ RSpec.describe RelationshipGraph do
         entity_c = entity!('0000000C', 'C')
         entity_d = entity!('0000000D', 'D')
 
-        Relationship.create!(target: entity_b, source: entity_a)
-        Relationship.create!(target: entity_c, source: entity_a)
-        Relationship.create!(target: entity_d, source: entity_b)
-        Relationship.create!(target: entity_d, source: entity_c)
+        create(:relationship, target: entity_b, source: entity_a)
+        create(:relationship, target: entity_c, source: entity_a)
+        create(:relationship, target: entity_d, source: entity_b)
+        create(:relationship, target: entity_d, source: entity_c)
 
         relationships = RelationshipGraph.new(entity_d).ultimate_source_relationships
 
@@ -90,7 +90,7 @@ RSpec.describe RelationshipGraph do
 
         entity = Entity.create!(name: 'A Person', type: Entity::Types::NATURAL_PERSON)
 
-        Relationship.create!(target: entities[-2], source: entity)
+        create(:relationship, target: entities[-2], source: entity)
 
         relationships = RelationshipGraph.new(entities.first).ultimate_source_relationships
 
@@ -183,10 +183,10 @@ RSpec.describe RelationshipGraph do
         entity_c = entity!('0000000C', 'C')
         entity_d = entity!('0000000D', 'D')
 
-        Relationship.create!(target: entity_b, source: entity_a)
-        Relationship.create!(target: entity_c, source: entity_a)
-        Relationship.create!(target: entity_d, source: entity_b)
-        Relationship.create!(target: entity_d, source: entity_c)
+        create(:relationship, target: entity_b, source: entity_a)
+        create(:relationship, target: entity_c, source: entity_a)
+        create(:relationship, target: entity_d, source: entity_b)
+        create(:relationship, target: entity_d, source: entity_c)
 
         relationships = RelationshipGraph.new(entities.last).relationships_to(entities.first)
 
