@@ -109,8 +109,6 @@ class EitiImporter
   end
 
   def entity_with_document_id!(name, type, attrs = {})
-    name = name.strip
-
     attributes = attrs.merge(
       identifiers: [
         {
@@ -164,7 +162,7 @@ class EitiImporter
     self.class.columns.each do |column|
       next if column.name.nil?
 
-      hash[column.name] = row[column.index]
+      hash[column.name] = row[column.index].try(:strip)
     end
 
     OpenStruct.new(hash)
