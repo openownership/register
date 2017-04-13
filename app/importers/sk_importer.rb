@@ -50,7 +50,12 @@ class SkImporter
   def child_entity!(record)
     item = record.PartneriVerejnehoSektora.first
 
-    entity = @entity_resolver.resolve!(jurisdiction_code: 'sk', company_number: item.Ico, name: item.ObchodneMeno)
+    entity = Entity.new(
+      jurisdiction_code: 'sk',
+      company_number: item.Ico,
+      name: item.ObchodneMeno,
+    )
+    entity = @entity_resolver.resolve!(entity)
 
     return entity unless entity.nil?
 

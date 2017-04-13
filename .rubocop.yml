@@ -15,6 +15,9 @@ Lint/EndAlignment:
 Style/CaseIndentation:
   IndentWhenRelativeTo: end
 
+Style/FirstParameterIndentation:
+  EnforcedStyle: consistent
+
 Style/HashSyntax:
   Exclude:
     - lib/tasks/**/*.rake

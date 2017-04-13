@@ -17,11 +17,12 @@ class SubmissionImporter
   end
 
   def resolve_entity!(submission_entity)
-    @entity_resolver.resolve!(
+    entity = Entity.new(
       jurisdiction_code: submission_entity.jurisdiction_code,
       company_number: submission_entity.company_number,
       name: submission_entity.name,
     )
+    @entity_resolver.resolve!(entity)
   end
 
   def upsert_entity!(submission_entity)

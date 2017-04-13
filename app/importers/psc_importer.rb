@@ -56,11 +56,11 @@ class PscImporter
   end
 
   def child_entity!(company_number)
-    entity = @entity_resolver.resolve!(
+    entity = Entity.new(
       jurisdiction_code: 'gb',
       company_number: company_number,
-      name: nil,
     )
+    entity = @entity_resolver.resolve!(entity)
 
     return entity unless entity.nil?
 
@@ -90,11 +90,12 @@ class PscImporter
         jurisdiction_code = @opencorporates_client.get_jurisdiction_code(country)
 
         unless jurisdiction_code.nil?
-          entity = @entity_resolver.resolve!(
+          entity = Entity.new(
             jurisdiction_code: jurisdiction_code,
             company_number: data.identification.registration_number,
             name: data.name,
           )
+          entity = @entity_resolver.resolve!(entity)
 
           return entity unless entity.nil?
         end
