@@ -4,6 +4,9 @@
     "postdeploy": "rake postdeploy"
   },
   "env": {
+    "ADMIN_BASIC_AUTH": {
+      "required": true
+    },
     "BASIC_AUTH": {
       "required": true
     },
