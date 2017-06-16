@@ -26,6 +26,8 @@ module Submissions
       split_relationships if params[:source_ids].present? && params[:target_id].present?
       create_relationship_as_source if params[:source_ids].blank? && params[:target_id].present?
 
+      @submission.changed!
+
       redirect_to edit_submission_path(@submission)
     end
 
@@ -37,6 +39,7 @@ module Submissions
       @entity.assign_attributes(entity_params)
 
       if @entity.save
+        @submission.changed!
         split_relationships if params[:source_ids].present? && params[:target_id].present?
         create_relationship_as_source if params[:source_ids].blank? && params[:target_id].present?
         redirect_to edit_submission_path(@submission)
@@ -55,6 +58,7 @@ module Submissions
       validate_dob
 
       if @entity.update_attributes(entity_params)
+        @submission.changed!
         redirect_to edit_submission_path(@submission)
       else
         render :edit
@@ -74,6 +78,8 @@ module Submissions
       end
 
       relationship.destroy!
+
+      @submission.changed!
 
       redirect_to edit_submission_path(@submission)
     end

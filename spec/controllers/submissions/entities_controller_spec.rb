@@ -92,6 +92,10 @@ RSpec.describe Submissions::EntitiesController do
       expect(assigns(:entity).name).to eq(entity.name)
     end
 
+    it "updated changed_at for submission" do
+      expect { subject }.to change { submission.reload.changed_at }
+    end
+
     context "targeting an entity" do
       let(:target) { create(:submission_legal_entity, submission: submission) }
 
@@ -151,6 +155,10 @@ RSpec.describe Submissions::EntitiesController do
     it "creates an entity" do
       subject
       expect(Submissions::Entity.last.name).to eq('Example Entity')
+    end
+
+    it "updated changed_at for submission" do
+      expect { subject }.to change { submission.reload.changed_at }
     end
 
     context "targeting an entity" do
@@ -251,6 +259,10 @@ RSpec.describe Submissions::EntitiesController do
       subject
       expect(response).to redirect_to edit_submission_path(submission)
     end
+
+    it "updated changed_at for submission" do
+      expect { subject }.to change { submission.reload.changed_at }
+    end
   end
 
   describe "DELETE #destroy" do
@@ -283,6 +295,10 @@ RSpec.describe Submissions::EntitiesController do
 
       expect(relationship.source).to eq(target)
       expect(relationship.target).to eq(entity)
+    end
+
+    it "updated changed_at for submission" do
+      expect { subject }.to change { submission.reload.changed_at }
     end
   end
 end

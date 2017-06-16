@@ -8,6 +8,8 @@ en:
         none: None
       show:
         heading: "%{name} submitted control information for"
+        created_at: "Created at %{date}"
+        changed_at: "Last updated at %{date}"
         submitted_at: "Submitted at %{date}"
         approved_at: "Approved at %{date}"
         back: Back to all submissions

@@ -11,6 +11,7 @@ module Submissions
       @relationship = @submission.relationships.find(params[:id])
 
       if @relationship.update_attributes(relationship_params)
+        @submission.changed!
         redirect_to edit_submission_path(@submission)
       else
         render :edit

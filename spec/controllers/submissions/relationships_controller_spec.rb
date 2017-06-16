@@ -44,5 +44,9 @@ RSpec.describe Submissions::RelationshipsController do
       subject
       expect(response).to redirect_to edit_submission_path(submission)
     end
+
+    it "updated changed_at for submission" do
+      expect { subject }.to change { submission.reload.changed_at }
+    end
   end
 end
