@@ -19,6 +19,7 @@ RSpec.feature 'edit entity' do
     scenario 'successfully' do
       visit edit_submission_path(submission)
       click_on entity.name
+      expect(find(:css, 'select#entity_jurisdiction_code').value).to eq('gb')
       fill_in 'entity_name', with: 'New Company'
       click_on continue_button
       expect(page).to have_link 'New Company'

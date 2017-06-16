@@ -13,7 +13,7 @@
     = f.text_field :company_number, class: 'form-control'
   .form-group
     = f.label :jurisdiction_code, t('.jurisdiction_code_label')
-    = f.select :jurisdiction_code, jurisdictions_for_select, { prompt: '' }, class: 'form-control'
+    = f.select :jurisdiction_code, jurisdictions_for_select(entity.jurisdiction_code), { prompt: '' }, class: 'form-control'
   .form-group
     = f.label :incorporation_date
     = f.date_field :incorporation_date, placeholder: 'YYYY-MM-DD', class: 'form-control'
