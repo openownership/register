@@ -3,6 +3,7 @@ machine:
     HOST: "http://localhost"
     SEARCHBOX_SSL_URL: "http://localhost:9200"
     ADMIN_BASIC_AUTH: "name:password"
+    DEFAULT_USERS: "test@example.com"
 test:
   post:
     - bundle exec rubocop
