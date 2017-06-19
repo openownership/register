@@ -20,7 +20,7 @@ RSpec.describe Submissions::EntitiesHelper do
   end
 
   describe '#jurisdictions_for_select' do
-    subject { helper.jurisdictions_for_select }
+    subject { helper.jurisdictions_for_select("us_me") }
 
     it 'sorts alphabetically' do
       uk_index = subject.index('United Kingdom')
@@ -42,6 +42,10 @@ RSpec.describe Submissions::EntitiesHelper do
     it 'includes subjurisdictions' do
       expect(subject).to match(/<option value=\"ca_qc\">/)
       expect(subject).to match(/<option value=\"us_ny\">/)
+    end
+
+    it "sets default value" do
+      expect(subject).to match(/<option selected="selected" value="us_me">/)
     end
   end
 
