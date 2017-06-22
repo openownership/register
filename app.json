@@ -13,6 +13,9 @@
     "BUCKETEER_BUCKET_NAME": {
       "required": true
     },
+    "DEFAULT_USERS": {
+      "required": true
+    },
     "ERROR_PAGE_URL": {
       "required": true
     },
