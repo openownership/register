@@ -27,7 +27,10 @@ class SubmissionImporter
   def upsert_entity!(submission_entity)
     Entity.new(
       submission_entity.attributes_for_submission.merge(
-        identifiers: [{ _id: submission_entity.id }],
+        identifiers: [{
+          'submission_id' => @submission.id,
+          'entity_id' => submission_entity.id,
+        }],
       ),
     ).tap(&:upsert)
   end
@@ -38,7 +41,10 @@ class SubmissionImporter
 
   def relationship!(submission_relationship)
     Relationship.new(
-      _id: submission_relationship.id,
+      _id: {
+        'submission_id' => @submission.id,
+        'relationship_id' => submission_relationship.id,
+      },
       source: entity!(submission_relationship.source),
       target: entity!(submission_relationship.target),
       interests: submission_relationship.interests,

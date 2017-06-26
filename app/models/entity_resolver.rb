@@ -33,10 +33,8 @@ class EntityResolver
     attributes = {
       identifiers: [
         {
-          _id: {
-            jurisdiction_code: response.fetch(:jurisdiction_code),
-            company_number: response.fetch(:company_number),
-          },
+          'jurisdiction_code' => response.fetch(:jurisdiction_code),
+          'company_number' => response.fetch(:company_number),
         },
       ],
       type: Entity::Types::LEGAL_ENTITY,

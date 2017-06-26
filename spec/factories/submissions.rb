@@ -32,13 +32,24 @@ FactoryGirl.define do
         )
 
         submission.entities.each do |entity|
-          entities[entity.id] = create(:entity, entity.attributes_for_submission.merge(identifiers: [{ _id: entity.id }]))
+          entities[entity.id] = create(
+            :entity,
+            entity.attributes_for_submission.merge(
+              identifiers: [{
+                'submission_id' => submission.id,
+                'entity_id' => entity.id,
+              }],
+            ),
+          )
         end
 
         submission.relationships.each do |relationship|
           create(
             :relationship,
-            _id: relationship.id,
+            _id: {
+              'submission_id' => submission.id,
+              'relationship_id' => relationship.id,
+            },
             source: entities[relationship.source_id],
             target: entities[relationship.target_id],
             interests: relationship.interests,

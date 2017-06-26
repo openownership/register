@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe Submissions::RelationshipsController do
   include Devise::Test::ControllerHelpers
 
-  let(:submission) { FactoryGirl.create(:submission) }
-  let(:relationship) { FactoryGirl.create(:submission_relationship, submission: submission) }
+  let(:submission) { create(:submission) }
+  let(:relationship) { create(:submission_relationship, submission: submission) }
 
   before do
     sign_in submission.user

@@ -40,7 +40,10 @@ RSpec.describe SubmissionImporter do
 
         it 'creates an entity with an identifier' do
           entity = Entity.find_by(name: company.name)
-          expect(entity.identifiers.first._id).to eq(company.id)
+          expect(entity.identifiers.first).to eq(
+            'submission_id' => submission.id,
+            'entity_id' => company.id,
+          )
         end
       end
     end
@@ -52,7 +55,10 @@ RSpec.describe SubmissionImporter do
 
       it 'creates an entity with an identifier' do
         entity = Entity.find_by(name: person.name)
-        expect(entity.identifiers.first._id).to eq(person.id)
+        expect(entity.identifiers.first).to eq(
+          'submission_id' => submission.id,
+          'entity_id' => person.id,
+        )
       end
     end
 
@@ -64,7 +70,10 @@ RSpec.describe SubmissionImporter do
 
       relationship = Relationship.last
 
-      expect(relationship.id).to eq(submission.relationships.first.id)
+      expect(relationship.id).to eq(
+        'submission_id' => submission.id,
+        'relationship_id' => submission.relationships.first.id,
+      )
       expect(relationship.source.name).to eq(person.name)
       expect(relationship.target.name).to eq(company.name)
       expect(relationship.interests).to eq(submission.relationships.first.interests)

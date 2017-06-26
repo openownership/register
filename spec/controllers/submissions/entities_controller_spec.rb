@@ -4,15 +4,15 @@ RSpec.describe Submissions::EntitiesController do
   include Devise::Test::ControllerHelpers
   include SubmissionHelpers
 
-  let(:submission) { FactoryGirl.create(:submission) }
+  let(:submission) { create(:submission) }
 
   before do
     sign_in submission.user
   end
 
   describe "GET #choose" do
-    let!(:company) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
-    let!(:person) { FactoryGirl.create(:submission_natural_person, submission: submission) }
+    let!(:company) { create(:submission_legal_entity, submission: submission) }
+    let!(:person) { create(:submission_natural_person, submission: submission) }
 
     subject do
       get :choose, params: { submission_id: submission.id }
@@ -52,7 +52,7 @@ RSpec.describe Submissions::EntitiesController do
   end
 
   describe "GET #search" do
-    let!(:entity) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
+    let!(:entity) { create(:submission_legal_entity, submission: submission) }
 
     before do
       stub_opencorporates_api_for_search
@@ -75,7 +75,7 @@ RSpec.describe Submissions::EntitiesController do
   end
 
   describe "POST #use" do
-    let(:entity) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
+    let(:entity) { create(:submission_legal_entity, submission: submission) }
     let(:params) do
       {
         submission_id: submission.id,
@@ -93,7 +93,7 @@ RSpec.describe Submissions::EntitiesController do
     end
 
     context "targeting an entity" do
-      let(:target) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
+      let(:target) { create(:submission_legal_entity, submission: submission) }
 
       before do
         params[:target_id] = target.id
@@ -110,9 +110,9 @@ RSpec.describe Submissions::EntitiesController do
     end
 
     context "inserting an entity" do
-      let(:target) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
-      let(:source) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
-      let!(:relationship) { FactoryGirl.create(:submission_relationship, submission: submission, target: target, source: source) }
+      let(:target) { create(:submission_legal_entity, submission: submission) }
+      let(:source) { create(:submission_legal_entity, submission: submission) }
+      let!(:relationship) { create(:submission_relationship, submission: submission, target: target, source: source) }
 
       before do
         params[:source_ids] = [source.id]
@@ -154,7 +154,7 @@ RSpec.describe Submissions::EntitiesController do
     end
 
     context "targeting an entity" do
-      let(:target) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
+      let(:target) { create(:submission_legal_entity, submission: submission) }
 
       before do
         params[:target_id] = target.id
@@ -171,9 +171,9 @@ RSpec.describe Submissions::EntitiesController do
     end
 
     context "inserting an entity" do
-      let(:target) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
-      let(:source) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
-      let!(:relationship) { FactoryGirl.create(:submission_relationship, submission: submission, target: target, source: source) }
+      let(:target) { create(:submission_legal_entity, submission: submission) }
+      let(:source) { create(:submission_legal_entity, submission: submission) }
+      let!(:relationship) { create(:submission_relationship, submission: submission, target: target, source: source) }
 
       before do
         params[:source_ids] = [source.id]
@@ -205,7 +205,7 @@ RSpec.describe Submissions::EntitiesController do
   end
 
   describe "GET #edit" do
-    let(:entity) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
+    let(:entity) { create(:submission_legal_entity, submission: submission) }
     let(:params) do
       {
         submission_id: submission.id,
@@ -229,7 +229,7 @@ RSpec.describe Submissions::EntitiesController do
   end
 
   describe "PUT #update" do
-    let(:entity) { FactoryGirl.create(:submission_legal_entity, submission: submission) }
+    let(:entity) { create(:submission_legal_entity, submission: submission) }
     let(:params) do
       {
         submission_id: submission.id,
@@ -254,11 +254,11 @@ RSpec.describe Submissions::EntitiesController do
   end
 
   describe "DELETE #destroy" do
-    let!(:entity) { FactoryGirl.create(:submission_legal_entity, submission: submission, name: 'Root') }
-    let!(:target) { FactoryGirl.create(:submission_legal_entity, submission: submission, name: 'Target') }
-    let!(:source) { FactoryGirl.create(:submission_legal_entity, submission: submission, name: 'Source') }
-    let!(:relationship_a) { FactoryGirl.create(:submission_relationship, submission: submission, target: entity, source: target) }
-    let!(:relationship_b) { FactoryGirl.create(:submission_relationship, submission: submission, target: target, source: source) }
+    let!(:entity) { create(:submission_legal_entity, submission: submission, name: 'Root') }
+    let!(:target) { create(:submission_legal_entity, submission: submission, name: 'Target') }
+    let!(:source) { create(:submission_legal_entity, submission: submission, name: 'Source') }
+    let!(:relationship_a) { create(:submission_relationship, submission: submission, target: entity, source: target) }
+    let!(:relationship_b) { create(:submission_relationship, submission: submission, target: target, source: source) }
 
     let(:params) do
       {

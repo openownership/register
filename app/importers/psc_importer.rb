@@ -96,10 +96,8 @@ class PscImporter
     attributes = attrs.merge(
       identifiers: [
         {
-          _id: {
-            document_id: document_id,
-            link: data.links.self,
-          },
+          'document_id' => document_id,
+          'link' => data.links.self,
         },
       ],
       type: entity_type(data),
@@ -112,8 +110,8 @@ class PscImporter
   def relationship!(child_entity, parent_entity, data)
     attributes = {
       _id: {
-        document_id: document_id,
-        link: data.links.self,
+        'document_id' => document_id,
+        'link' => data.links.self,
       },
       source: parent_entity,
       target: child_entity,

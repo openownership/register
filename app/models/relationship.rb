@@ -1,6 +1,8 @@
 class Relationship
   include Mongoid::Document
 
+  field :_id, type: Hash
+
   field :interests, type: Array, default: []
   field :sample_date, type: String
 
