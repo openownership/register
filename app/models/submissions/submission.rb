@@ -1,6 +1,7 @@
 module Submissions
   class Submission
     include Mongoid::Document
+    include Mongoid::Timestamps::Created
 
     scope :started, -> { where(:entities_count.gt => 0) }
     scope :draft, -> { started.where(submitted_at: nil) }
@@ -15,6 +16,7 @@ module Submissions
 
     field :submitted_at, type: Time
     field :approved_at, type: Time
+    field :changed_at, type: Time
 
     def entity
       entities.legal_entities.first
@@ -38,6 +40,10 @@ module Submissions
 
     def reviewable?
       submitted? && !approved?
+    end
+
+    def changed!
+      update_attribute(:changed_at, Time.zone.now)
     end
   end
 end

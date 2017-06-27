@@ -15,6 +15,8 @@
           .submission-entity-link
             = render 'submissions/entities/long_snippet', entity: @submission.entity
 
+      %p= t('.created_at', date: @submission.created_at)
+      %p= t('.changed_at', date: @submission.changed_at)
       - if @submission.submitted?
         %p= t('.submitted_at', date: @submission.submitted_at)
       - if @submission.approved?
