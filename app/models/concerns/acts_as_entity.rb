@@ -23,6 +23,9 @@ module ActsAsEntity
     field :incorporation_date, type: Date
     field :dissolution_date, type: Date
     field :company_type, type: String
+
+    scope :legal_entities, -> { where(type: Types::LEGAL_ENTITY) }
+    scope :natural_persons, -> { where(type: Types::NATURAL_PERSON) }
   end
 
   def natural_person?

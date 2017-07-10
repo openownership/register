@@ -16,9 +16,6 @@ module Submissions
       :company_type,
     ].freeze
 
-    scope :legal_entities, -> { where(type: Types::LEGAL_ENTITY) }
-    scope :natural_persons, -> { where(type: Types::NATURAL_PERSON) }
-
     belongs_to :submission, inverse_of: :entities, counter_cache: true
     has_many :relationships_as_source, class_name: "Submissions::Relationship", inverse_of: :source
     has_many :relationships_as_target, class_name: "Submissions::Relationship", inverse_of: :target
