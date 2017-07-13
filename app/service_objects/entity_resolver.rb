@@ -5,13 +5,13 @@ class EntityResolver
     @reconciliation_client = reconciliation_client
   end
 
-  def resolve!(jurisdiction_code:, identifier:, name:)
-    if identifier
-      response = @opencorporates_client.get_company(jurisdiction_code, identifier)
+  def resolve!(jurisdiction_code:, company_number:, name:)
+    if company_number
+      response = @opencorporates_client.get_company(jurisdiction_code, company_number)
 
       return entity!(response) unless response.nil?
 
-      response = @opencorporates_client.search_companies(jurisdiction_code, identifier)
+      response = @opencorporates_client.search_companies(jurisdiction_code, company_number)
 
       return entity!(response.first.fetch(:company)) unless response.empty?
     else
@@ -21,7 +21,7 @@ class EntityResolver
 
       resolve!(
         jurisdiction_code: response.fetch(:jurisdiction_code),
-        identifier: response.fetch(:company_number),
+        company_number: response.fetch(:company_number),
         name: response.fetch(:name),
       )
     end

@@ -19,7 +19,7 @@ class SubmissionImporter
   def resolve_entity!(submission_entity)
     @entity_resolver.resolve!(
       jurisdiction_code: submission_entity.jurisdiction_code,
-      identifier: submission_entity.company_number,
+      company_number: submission_entity.company_number,
       name: submission_entity.name,
     )
   end

@@ -239,7 +239,7 @@ RSpec.describe Entity do
       end
 
       it 'updates the fields of the existing document' do
-        expect { subject.upsert }.to change { Entity.first.name }.to(name)
+        expect { subject.upsert }.to change { @entity.reload.name }.to(name)
       end
 
       it 'updates the id of the subject to match the existing document' do

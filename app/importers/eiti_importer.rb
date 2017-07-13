@@ -71,7 +71,7 @@ class EitiImporter
 
     entity = @entity_resolver.resolve!(
       jurisdiction_code: jurisdiction_code,
-      identifier: record.child_identifier,
+      company_number: record.child_identifier,
       name: record.child_name,
     )
 
@@ -93,7 +93,7 @@ class EitiImporter
       if jurisdiction_code
         entity = @entity_resolver.resolve!(
           jurisdiction_code: jurisdiction_code,
-          identifier: record.parent_identifier,
+          company_number: record.parent_identifier,
           name: record.parent_name,
         )
 
@@ -109,8 +109,6 @@ class EitiImporter
   end
 
   def entity_with_document_id!(name, type, attrs = {})
-    name = name.strip
-
     attributes = attrs.merge(
       identifiers: [
         {
@@ -164,7 +162,7 @@ class EitiImporter
     self.class.columns.each do |column|
       next if column.name.nil?
 
-      hash[column.name] = row[column.index]
+      hash[column.name] = row[column.index].try(:strip)
     end
 
     OpenStruct.new(hash)

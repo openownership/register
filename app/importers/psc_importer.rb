@@ -45,11 +45,7 @@ class PscImporter
          'exemptions'
       :ignore
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
-      child_entity = @entity_resolver.resolve!(
-        jurisdiction_code: 'gb',
-        identifier: record.company_number,
-        name: nil,
-      )
+      child_entity = child_entity!(record.company_number)
 
       parent_entity = parent_entity!(record.data)
 
@@ -57,6 +53,14 @@ class PscImporter
     else
       raise "unexpected kind: #{record.data.kind}"
     end
+  end
+
+  def child_entity!(company_number)
+    @entity_resolver.resolve!(
+      jurisdiction_code: 'gb',
+      company_number: company_number,
+      name: nil,
+    )
   end
 
   def parent_entity!(data)
@@ -70,7 +74,7 @@ class PscImporter
         unless jurisdiction_code.nil?
           entity = @entity_resolver.resolve!(
             jurisdiction_code: jurisdiction_code,
-            identifier: data.identification.registration_number,
+            company_number: data.identification.registration_number,
             name: data.name,
           )
 
@@ -78,7 +82,11 @@ class PscImporter
         end
       end
 
-      entity_with_document_id!(data, name: data.name, jurisdiction_code: jurisdiction_code)
+      entity_with_document_id!(
+        data,
+        name: data.name,
+        jurisdiction_code: jurisdiction_code,
+      )
     when 'individual-person-with-significant-control'
       entity_with_document_id!(
         data,
@@ -88,7 +96,10 @@ class PscImporter
         dob: entity_dob(data.date_of_birth),
       )
     when 'legal-person-person-with-significant-control'
-      entity_with_document_id!(data, name: data.name)
+      entity_with_document_id!(
+        data,
+        name: data.name,
+      )
     end
   end
 
