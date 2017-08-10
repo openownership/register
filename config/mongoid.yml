@@ -3,7 +3,7 @@ development:
     default:
       database: open_ownership_register_development
       hosts:
-        - localhost:27017
+        - <%= ENV['MONGODB_HOST'] %>
       options:
   options:
     scope_overwrite_exception: true
@@ -12,7 +12,7 @@ test:
     default:
       database: open_ownership_register_test
       hosts:
-        - localhost:27017
+        - <%= ENV['MONGODB_HOST'] %>
       options:
         read:
           mode: :primary
