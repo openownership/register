@@ -1,0 +1,25 @@
+version: "3"
+services:
+  app:
+    build: .
+    command: bundle exec rails server -p ${PORT} -b '0.0.0.0'
+    depends_on:
+      - db
+      - search
+      - mail
+    environment:
+      SEARCHBOX_SSL_URL: http://search:9200
+      MONGODB_HOST: db:27017
+      SMTP_ADDRESS: mail
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ".:/app"
+  db:
+    image: mongo:3.2.16
+  mail:
+    image: schickling/mailcatcher
+    ports:
+      - "${MAIL_SERVER_PORT}:1080"
+  search:
+    image: elasticsearch:2.3.3
