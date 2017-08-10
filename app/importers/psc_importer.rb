@@ -57,32 +57,28 @@ class PscImporter
 
   def child_entity!(company_number)
     entity = Entity.new(
+      identifiers: [
+        {
+          'document_id' => document_id,
+          'company_number' => company_number,
+        },
+      ],
       type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: 'gb',
       company_number: company_number,
     )
     @entity_resolver.resolve!(entity)
-
-    return entity.tap(&:upsert) if entity.identifiers.any?
-
-    child_entity_with_document_id!(entity)
-  end
-
-  def child_entity_with_document_id!(entity)
-    entity.assign_attributes(
-      identifiers: [
-        {
-          'document_id' => document_id,
-          'company_number' => entity.company_number,
-        },
-      ],
-    )
-
     entity.tap(&:upsert)
   end
 
   def parent_entity!(data)
     entity = Entity.new(
+      identifiers: [
+        {
+          'document_id' => document_id,
+          'link' => data.links.self,
+        },
+      ],
       address: data.address.presence && address_string(data.address),
     )
 
@@ -104,12 +100,8 @@ class PscImporter
             company_number: data.identification.registration_number,
           )
           @entity_resolver.resolve!(entity)
-
-          return entity.tap(&:upsert) if entity.identifiers.any?
         end
       end
-
-      parent_entity_with_document_id!(entity, data)
     when 'individual-person-with-significant-control'
       entity.assign_attributes(
         type: Entity::Types::NATURAL_PERSON,
@@ -118,25 +110,12 @@ class PscImporter
         country_of_residence: data.country_of_residence.presence,
         dob: entity_dob(data.date_of_birth),
       )
-      parent_entity_with_document_id!(entity, data)
     when 'legal-person-person-with-significant-control'
       entity.assign_attributes(
         type: Entity::Types::LEGAL_ENTITY,
         name: data.name,
       )
-      parent_entity_with_document_id!(entity, data)
     end
-  end
-
-  def parent_entity_with_document_id!(entity, data)
-    entity.assign_attributes(
-      identifiers: [
-        {
-          'document_id' => document_id,
-          'link' => data.links.self,
-        },
-      ],
-    )
 
     entity.tap(&:upsert)
   end

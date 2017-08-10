@@ -51,28 +51,19 @@ class SkImporter
     item = record.PartneriVerejnehoSektora.first
 
     entity = Entity.new(
-      type: Entity::Types::LEGAL_ENTITY,
-      jurisdiction_code: 'sk',
-      company_number: item.Ico,
-      name: item.ObchodneMeno,
-      address: address_string(item.Adresa),
-    )
-    @entity_resolver.resolve!(entity)
-
-    return entity.tap(&:upsert) if entity.identifiers.any?
-
-    child_entity_with_document_id!(entity)
-  end
-
-  def child_entity_with_document_id!(entity)
-    entity.assign_attributes(
       identifiers: [
         {
           'document_id' => document_id,
-          'company_number' => entity.company_number,
+          'company_number' => item.Ico,
         },
       ],
+      type: Entity::Types::LEGAL_ENTITY,
+      jurisdiction_code: 'sk',
+      company_number: item.Ico,
+      name: item.ObchodneMeno.strip,
+      address: address_string(item.Adresa),
     )
+    @entity_resolver.resolve!(entity)
 
     entity.tap(&:upsert)
   end
