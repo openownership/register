@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+echo 'Shutdown, rebuild and restart containers'
+echo 'CTRL+C to exit logging (once built)'
+echo '-----------------------------------------'
+echo ''
+
+docker-compose down
+docker-compose up --build -d
+docker-compose logs -f
