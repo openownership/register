@@ -1,6 +1,9 @@
 OpenOwnership Register
 ======================
 
+The application can be run in a local development environment or through
+Docker.
+
 Installation
 ------------
 
@@ -11,13 +14,11 @@ Install and run bundler
     gem install bundler
     bundle
 
-Create `.env.local` and add in your `OPENCORPORATES_API_TOKEN`.
-To get an API token go to https://opencorporates.com/users/account, click
-'Get Account', click 'Sign up' under 'Public Benefit' and fill in the form
-(content is not important). Someone will then approve your request and you'll
-be emailed a key.
+Create `.env.local` and add in your `OPENCORPORATES_API_TOKEN`. To get an API token go to https://opencorporates.com/users/account, click 'Get Account', click 'Sign up' under 'Public Benefit' and fill in the form (content is not important). Someone will then approve your request and you'll be emailed a key.
 
 Override any other settings from `.env` in the new `.env.local` file.
+
+### Running locally
 
 Install and run mongodb, elasticsearch and mailcatcher
 
@@ -27,7 +28,7 @@ Install and run mongodb, elasticsearch and mailcatcher
     brew services start elasticsearch
     gem install mailcatcher
 
-Run setup command, which will create, seed and add indexes to the DB and elastic search.
+Run setup command, which will create, seed and add indexes to the DB and elasticsearch
 
     ./bin/setup
 
@@ -38,6 +39,22 @@ Run the tests
 Run the server
 
     rails server
+
+### Running with Docker
+
+Build and start the containers
+
+    compose/up
+
+Shell into the app
+
+    compose/shell
+
+In the shell, run the tests
+
+    rake
+
+The server will already be running
 
 Import more data
 ----------------
