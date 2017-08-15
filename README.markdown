@@ -31,7 +31,7 @@ gem install mailcatcher
 
 Run setup command, which will create, seed and add indexes to the DB and elastic search.
 
-`./bin setup`
+`./bin/setup`
 
 Run the tests
 
