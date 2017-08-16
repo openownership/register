@@ -11,11 +11,13 @@ Install and run bundler
     gem install bundler
     bundle
 
-Copy .env.example to .env
+Create `.env.local` and add in your `OPENCORPORATES_API_TOKEN`.
+To get an API token go to https://opencorporates.com/users/account, click
+'Get Account', click 'Sign up' under 'Public Benefit' and fill in the form
+(content is not important). Someone will then approve your request and you'll
+be emailed a key.
 
-    cp .env.example .env
-
-The only variable that needs changing in .env is `OPENCORPORATES_API_TOKEN`. You can find or create your API key at https://opencorporates.com/users/account, then copy it into your .env file.
+Override any other settings from `.env` in the new `.env.local` file.
 
 Install and run mongodb, elasticsearch and mailcatcher
 
