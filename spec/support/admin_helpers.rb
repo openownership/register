@@ -4,7 +4,8 @@ module AdminHelpers
   end
 
   def stub_elasticsearch
-    stub_request(:any, /#{ENV['SEARCHBOX_SSL_URL']}.*/)
+    uri = URI.parse ENV['SEARCHBOX_SSL_URL']
+    stub_request(:any, /#{uri.host}:#{uri.port}/)
   end
 
   def stub_opencorporates_client_get_company

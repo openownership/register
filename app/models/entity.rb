@@ -4,8 +4,6 @@ class Entity
 
   UNKNOWN_ID_MODIFIER = "-unknown".freeze
 
-  scope :legal_entities, -> { where(type: Types::LEGAL_ENTITY) }
-
   field :identifiers, type: Array, default: []
 
   has_many :relationships_as_source, class_name: "Relationship", inverse_of: :source
