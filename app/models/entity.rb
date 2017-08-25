@@ -79,4 +79,26 @@ class Entity
   def relationships_as_target_excluding(ids)
     relationships_as_target.reject { |r| ids.include?(r.id) }
   end
+
+  def to_builder
+    Jbuilder.new do |json|
+      json.id id.to_s
+      json.type type
+      json.name name
+      json.address address
+
+      case type
+      when Types::NATURAL_PERSON
+        json.nationality nationality
+        json.country_of_residence country_of_residence
+        json.dob dob&.atoms
+      when Types::LEGAL_ENTITY
+        json.jurisdiction_code jurisdiction_code
+        json.company_number company_number
+        json.incorporation_date incorporation_date
+        json.dissolution_date dissolution_date
+        json.company_type company_type
+      end
+    end
+  end
 end

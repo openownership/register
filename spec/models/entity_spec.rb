@@ -314,4 +314,56 @@ RSpec.describe Entity do
       subject.upsert
     end
   end
+
+  describe '#to_builder' do
+    subject do
+      described_class.new(
+        id: 1,
+        type: type,
+        name: 'name',
+        address: 'address',
+        nationality: 'British',
+        country_of_residence: 'GB',
+        dob: '1975-08-24',
+        jurisdiction_code: 'blue',
+        company_number: '123456789',
+        incorporation_date: '21/08/1990',
+        company_type: 'funky',
+      )
+    end
+
+    context 'when a person' do
+      let(:type) { Entity::Types::NATURAL_PERSON }
+
+      it 'returns a JSON representation' do
+        expect(JSON.parse(subject.to_builder.target!)).to eq(
+          'id' => '1',
+          'type' => Entity::Types::NATURAL_PERSON,
+          'name' => 'name',
+          'address' => 'address',
+          'nationality' => 'British',
+          'country_of_residence' => 'GB',
+          'dob' => [1975, 8, 24],
+        )
+      end
+    end
+
+    context 'when a legal entity' do
+      let(:type) { Entity::Types::LEGAL_ENTITY }
+
+      it 'returns a JSON representation' do
+        expect(JSON.parse(subject.to_builder.target!)).to eq(
+          'id' => '1',
+          'type' => Entity::Types::LEGAL_ENTITY,
+          'name' => 'name',
+          'address' => 'address',
+          'jurisdiction_code' => 'blue',
+          'company_number' => '123456789',
+          'incorporation_date' => '1990-08-21',
+          'dissolution_date' => nil,
+          'company_type' => 'funky',
+        )
+      end
+    end
+  end
 end
