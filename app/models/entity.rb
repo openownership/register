@@ -45,7 +45,7 @@ class Entity
   # are found using their embeddeded identifiers instead of the _id field.
   def upsert
     selector = {
-      identifiers: { :$in => identifiers },
+      identifiers: { :$elemMatch => { :$in => identifiers } },
     }
 
     attributes = as_document.except('_id', 'identifiers')
