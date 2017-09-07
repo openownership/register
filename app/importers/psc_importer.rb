@@ -60,9 +60,9 @@ class PscImporter
       jurisdiction_code: 'gb',
       company_number: company_number,
     )
-    entity = @entity_resolver.resolve!(entity)
+    @entity_resolver.resolve!(entity)
 
-    return entity.tap(&:upsert) unless entity.nil?
+    return entity.tap(&:upsert) if entity.identifiers.any?
 
     child_entity_with_document_id!(company_number)
   end
@@ -95,9 +95,9 @@ class PscImporter
             company_number: data.identification.registration_number,
             name: data.name,
           )
-          entity = @entity_resolver.resolve!(entity)
+          @entity_resolver.resolve!(entity)
 
-          return entity.tap(&:upsert) unless entity.nil?
+          return entity.tap(&:upsert) if entity.identifiers.any?
         end
       end
 

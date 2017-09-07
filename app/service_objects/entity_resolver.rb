@@ -9,17 +9,23 @@ class EntityResolver
     if entity.company_number
       response = @opencorporates_client.get_company(entity.jurisdiction_code, entity.company_number)
 
-      return entity!(response) unless response.nil?
+      unless response.nil?
+        merge(entity, response)
+        return
+      end
 
       response = @opencorporates_client.search_companies(entity.jurisdiction_code, entity.company_number)
 
-      return entity!(response.first.fetch(:company)) unless response.empty?
+      unless response.empty?
+        merge(entity, response.first.fetch(:company))
+        return
+      end
     else
       response = @reconciliation_client.reconcile(entity.jurisdiction_code, entity.name)
 
       return if response.nil?
 
-      entity = Entity.new(
+      entity.assign_attributes(
         jurisdiction_code: response.fetch(:jurisdiction_code),
         company_number: response.fetch(:company_number),
         name: response.fetch(:name),
@@ -31,14 +37,12 @@ class EntityResolver
 
   private
 
-  def entity!(response)
+  def merge(entity, response)
+    identifier = {
+      'jurisdiction_code' => response.fetch(:jurisdiction_code),
+      'company_number' => response.fetch(:company_number),
+    }
     attributes = {
-      identifiers: [
-        {
-          'jurisdiction_code' => response.fetch(:jurisdiction_code),
-          'company_number' => response.fetch(:company_number),
-        },
-      ],
       type: Entity::Types::LEGAL_ENTITY,
       name: response.fetch(:name),
       address: response[:registered_address_in_full].presence.try(:gsub, "\n", ", "),
@@ -49,6 +53,7 @@ class EntityResolver
       company_type: response[:company_type].presence,
     }
 
-    Entity.new(attributes)
+    entity.assign_attributes(attributes)
+    entity.identifiers << identifier
   end
 end

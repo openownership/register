@@ -55,9 +55,9 @@ class SkImporter
       company_number: item.Ico,
       name: item.ObchodneMeno,
     )
-    entity = @entity_resolver.resolve!(entity)
+    @entity_resolver.resolve!(entity)
 
-    return entity.tap(&:upsert) unless entity.nil?
+    return entity.tap(&:upsert) if entity.identifiers.any?
 
     child_entity_with_document_id!(item)
   end

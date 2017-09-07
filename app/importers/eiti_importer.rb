@@ -75,9 +75,9 @@ class EitiImporter
       name: record.child_name,
     )
 
-    entity = @entity_resolver.resolve!(entity)
+    @entity_resolver.resolve!(entity)
 
-    return entity.tap(&:upsert) unless entity.nil?
+    return entity.tap(&:upsert) if entity.identifiers.any?
 
     entity_with_document_id!(
       record.child_name,
@@ -98,9 +98,9 @@ class EitiImporter
           company_number: record.parent_identifier,
           name: record.parent_name,
         )
-        entity = @entity_resolver.resolve!(entity)
+        @entity_resolver.resolve!(entity)
 
-        return entity.tap(&:upsert) unless entity.nil?
+        return entity.tap(&:upsert) if entity.identifiers.any?
       end
     end
 

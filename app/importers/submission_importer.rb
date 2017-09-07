@@ -11,8 +11,13 @@ class SubmissionImporter
   private
 
   def entity!(submission_entity)
-    entity = resolve_entity!(submission_entity).try(:tap, &:upsert) if submission_entity.legal_entity?
-    entity = upsert_entity!(submission_entity) if entity.nil?
+    entity = resolve_entity!(submission_entity) if submission_entity.legal_entity?
+    if entity && entity.identifiers.any?
+      entity.upsert
+    else
+      entity = upsert_entity!(submission_entity)
+    end
+
     entity.tap(&method(:index_entity))
   end
 
