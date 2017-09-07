@@ -77,7 +77,7 @@ class EitiImporter
 
     entity = @entity_resolver.resolve!(entity)
 
-    return entity unless entity.nil?
+    return entity.tap(&:upsert) unless entity.nil?
 
     entity_with_document_id!(
       record.child_name,
@@ -100,7 +100,7 @@ class EitiImporter
         )
         entity = @entity_resolver.resolve!(entity)
 
-        return entity unless entity.nil?
+        return entity.tap(&:upsert) unless entity.nil?
       end
     end
 

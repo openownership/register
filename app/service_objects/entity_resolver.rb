@@ -49,6 +49,6 @@ class EntityResolver
       company_type: response[:company_type].presence,
     }
 
-    Entity.new(attributes).tap(&:upsert)
+    Entity.new(attributes)
   end
 end

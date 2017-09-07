@@ -57,7 +57,7 @@ class SkImporter
     )
     entity = @entity_resolver.resolve!(entity)
 
-    return entity unless entity.nil?
+    return entity.tap(&:upsert) unless entity.nil?
 
     child_entity_with_document_id!(item)
   end
