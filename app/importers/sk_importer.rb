@@ -51,6 +51,7 @@ class SkImporter
     item = record.PartneriVerejnehoSektora.first
 
     entity = Entity.new(
+      type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: 'sk',
       company_number: item.Ico,
       name: item.ObchodneMeno,

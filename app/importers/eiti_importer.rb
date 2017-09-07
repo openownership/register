@@ -70,6 +70,7 @@ class EitiImporter
     jurisdiction_code = jurisdiction && @opencorporates_client.get_jurisdiction_code(jurisdiction) || source_jurisdiction_code
 
     entity = Entity.new(
+      type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: jurisdiction_code,
       company_number: record.child_identifier,
       name: record.child_name,
@@ -94,6 +95,7 @@ class EitiImporter
 
       if jurisdiction_code
         entity = Entity.new(
+          type: Entity::Types::LEGAL_ENTITY,
           jurisdiction_code: jurisdiction_code,
           company_number: record.parent_identifier,
           name: record.parent_name,

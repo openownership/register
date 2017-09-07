@@ -57,6 +57,7 @@ class PscImporter
 
   def child_entity!(company_number)
     entity = Entity.new(
+      type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: 'gb',
       company_number: company_number,
     )
@@ -91,6 +92,7 @@ class PscImporter
 
         unless jurisdiction_code.nil?
           entity = Entity.new(
+            type: Entity::Types::LEGAL_ENTITY,
             jurisdiction_code: jurisdiction_code,
             company_number: data.identification.registration_number,
             name: data.name,

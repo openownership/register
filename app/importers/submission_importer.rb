@@ -23,6 +23,7 @@ class SubmissionImporter
 
   def resolve_entity!(submission_entity)
     entity = Entity.new(
+      type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: submission_entity.jurisdiction_code,
       company_number: submission_entity.company_number,
       name: submission_entity.name,

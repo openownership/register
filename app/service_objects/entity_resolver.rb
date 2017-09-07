@@ -43,7 +43,6 @@ class EntityResolver
       'company_number' => response.fetch(:company_number),
     }
     attributes = {
-      type: Entity::Types::LEGAL_ENTITY,
       name: response.fetch(:name),
       address: response[:registered_address_in_full].presence.try(:gsub, "\n", ", "),
       jurisdiction_code: response[:jurisdiction_code].presence,
