@@ -6,6 +6,7 @@
 !/tmp/.keep
 
 .byebug_history
-.env
+.env.local
+.env.test.local
 
 /spec/examples.txt
