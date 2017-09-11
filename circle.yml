@@ -1,6 +1,12 @@
 machine:
+  services:
+    - docker
   environment:
 test:
+  pre:
+    - sudo service mongod stop
+    - docker run -d -p 27017:27017 mongo:3.2.16
+    - docker run -d -p 9200:9200 elasticsearch:2.3.3
   post:
     - bundle exec rubocop
     - bundle exec haml-lint .
