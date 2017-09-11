@@ -12,4 +12,9 @@ Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
+
+  config.before(:all) do
+    Mongoid::Tasks::Database.remove_undefined_indexes
+    Mongoid::Tasks::Database.create_indexes
+  end
 end
