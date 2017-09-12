@@ -31,6 +31,9 @@
     "MAINTENANCE_PAGE_URL": {
       "required": true
     },
+    "MONGODB_URI_ENV_NAME": {
+      "required": true
+    },
     "OPENCORPORATES_API_TOKEN": {
       "required": true
     },
