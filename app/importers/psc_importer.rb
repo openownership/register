@@ -102,12 +102,14 @@ class PscImporter
 
       parent_entity_with_document_id!(
         data,
+        type: Entity::Types::LEGAL_ENTITY,
         name: data.name,
         jurisdiction_code: jurisdiction_code,
       )
     when 'individual-person-with-significant-control'
       parent_entity_with_document_id!(
         data,
+        type: Entity::Types::NATURAL_PERSON,
         name: data.name_elements.presence && name_string(data.name_elements) || data.name,
         nationality: country_from_nationality(data.nationality).try(:alpha2),
         country_of_residence: data.country_of_residence.presence,
@@ -116,6 +118,7 @@ class PscImporter
     when 'legal-person-person-with-significant-control'
       parent_entity_with_document_id!(
         data,
+        type: Entity::Types::LEGAL_ENTITY,
         name: data.name,
       )
     end
@@ -129,7 +132,6 @@ class PscImporter
           'link' => data.links.self,
         },
       ],
-      type: entity_type(data),
       address: data.address.presence && address_string(data.address),
     )
 
@@ -173,12 +175,6 @@ class PscImporter
     countries = ISO3166::Country.find_all_countries_by_nationality(nationality)
     return if countries.count > 1 # too ambiguous
     countries[0]
-  end
-
-  def entity_type(data)
-    return Entity::Types::NATURAL_PERSON if data.kind == 'individual-person-with-significant-control'
-
-    Entity::Types::LEGAL_ENTITY
   end
 
   def entity_dob(elements)
