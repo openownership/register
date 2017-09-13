@@ -66,14 +66,15 @@ RSpec.describe OpencorporatesClient do
 
   describe '#get_company' do
     before do
-      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/gb/01234567"
+      @number = '01234567'
+      @url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/gb/"
 
       @body = %({"results":{"company":{"name":"EXAMPLE LIMITED"}}})
 
-      @stub = stub_request(:get, @url).with(query: "sparse=true&api_token=#{api_token}")
+      @stub = stub_request(:get, URI.join(@url, @number)).with(query: "sparse=true&api_token=#{api_token}")
     end
 
-    subject { client.get_company('gb', '01234567') }
+    subject { client.get_company('gb', @number) }
 
     context "when the company with given jurisdiction_code and company_number is found" do
       before do
@@ -82,6 +83,17 @@ RSpec.describe OpencorporatesClient do
 
       it 'returns company data' do
         expect(subject).to eq(name: 'EXAMPLE LIMITED')
+      end
+
+      context 'when company number contains square brackets' do
+        before do
+          @number = '123456[S]'
+          stub_request(:get, @url + @number).with(query: "sparse=true&api_token=#{api_token}").to_return(body: @body)
+        end
+
+        it 'returns company data' do
+          expect(subject).to eq(name: 'EXAMPLE LIMITED')
+        end
       end
     end
 
@@ -97,7 +109,7 @@ RSpec.describe OpencorporatesClient do
 
     context 'when called with sparse: false' do
       before do
-        stub_request(:get, @url).with(query: "api_token=#{api_token}").to_return(body: @body)
+        stub_request(:get, URI.join(@url, @number)).with(query: "api_token=#{api_token}").to_return(body: @body)
       end
 
       subject { client.get_company('gb', '01234567', sparse: false) }

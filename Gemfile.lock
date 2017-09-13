@@ -310,6 +310,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  addressable
   bootstrap (~> 4.0.0.alpha5)
   byebug
   capybara
