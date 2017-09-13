@@ -11,35 +11,21 @@ class SubmissionImporter
   private
 
   def entity!(submission_entity)
-    entity = resolve_entity!(submission_entity) if submission_entity.legal_entity?
-    if entity && entity.identifiers.any?
-      entity.upsert
-    else
-      entity = upsert_entity!(submission_entity)
-    end
+    entity = Entity.new(submission_entity.attributes_for_submission)
 
-    entity.tap(&method(:index_entity))
-  end
+    @entity_resolver.resolve!(entity) if submission_entity.legal_entity?
 
-  def resolve_entity!(submission_entity)
-    entity = Entity.new(
-      type: Entity::Types::LEGAL_ENTITY,
-      jurisdiction_code: submission_entity.jurisdiction_code,
-      company_number: submission_entity.company_number,
-      name: submission_entity.name,
-    )
-    @entity_resolver.resolve!(entity)
-  end
-
-  def upsert_entity!(submission_entity)
-    Entity.new(
-      submission_entity.attributes_for_submission.merge(
+    unless entity.identifiers.any?
+      entity.assign_attributes(
         identifiers: [{
           'submission_id' => @submission.id,
           'entity_id' => submission_entity.id,
         }],
-      ),
-    ).tap(&:upsert)
+      )
+    end
+
+    entity.upsert
+    entity.tap(&method(:index_entity))
   end
 
   def index_entity(entity)

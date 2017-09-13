@@ -55,29 +55,26 @@ class SkImporter
       jurisdiction_code: 'sk',
       company_number: item.Ico,
       name: item.ObchodneMeno,
+      address: address_string(item.Adresa),
     )
     @entity_resolver.resolve!(entity)
 
     return entity.tap(&:upsert) if entity.identifiers.any?
 
-    child_entity_with_document_id!(item)
+    child_entity_with_document_id!(entity)
   end
 
-  def child_entity_with_document_id!(item)
-    attributes = {
+  def child_entity_with_document_id!(entity)
+    entity.assign_attributes(
       identifiers: [
         {
           'document_id' => document_id,
-          'company_number' => item.Ico,
+          'company_number' => entity.company_number,
         },
       ],
-      type: Entity::Types::LEGAL_ENTITY,
-      name: item.ObchodneMeno.strip,
-      jurisdiction_code: 'sk',
-      address: address_string(item.Adresa),
-    }
+    )
 
-    Entity.new(attributes).tap(&:upsert)
+    entity.tap(&:upsert)
   end
 
   def parent_entity!(item)

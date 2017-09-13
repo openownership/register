@@ -65,37 +65,43 @@ class PscImporter
 
     return entity.tap(&:upsert) if entity.identifiers.any?
 
-    child_entity_with_document_id!(company_number)
+    child_entity_with_document_id!(entity)
   end
 
-  def child_entity_with_document_id!(company_number)
-    attributes = {
+  def child_entity_with_document_id!(entity)
+    entity.assign_attributes(
       identifiers: [
         {
           'document_id' => document_id,
-          'company_number' => company_number,
+          'company_number' => entity.company_number,
         },
       ],
-      type: Entity::Types::LEGAL_ENTITY,
-    }
+    )
 
-    Entity.new(attributes).tap(&:upsert)
+    entity.tap(&:upsert)
   end
 
   def parent_entity!(data)
+    entity = Entity.new(
+      address: data.address.presence && address_string(data.address),
+    )
+
     case data.kind
     when 'corporate-entity-person-with-significant-control'
+      entity.assign_attributes(
+        type: Entity::Types::LEGAL_ENTITY,
+        name: data.name,
+      )
+
       country = data.identification.country_registered
 
       unless country.nil?
         jurisdiction_code = @opencorporates_client.get_jurisdiction_code(country)
 
         unless jurisdiction_code.nil?
-          entity = Entity.new(
-            type: Entity::Types::LEGAL_ENTITY,
+          entity.assign_attributes(
             jurisdiction_code: jurisdiction_code,
             company_number: data.identification.registration_number,
-            name: data.name,
           )
           @entity_resolver.resolve!(entity)
 
@@ -103,42 +109,36 @@ class PscImporter
         end
       end
 
-      parent_entity_with_document_id!(
-        data,
-        type: Entity::Types::LEGAL_ENTITY,
-        name: data.name,
-        jurisdiction_code: jurisdiction_code,
-      )
+      parent_entity_with_document_id!(entity, data)
     when 'individual-person-with-significant-control'
-      parent_entity_with_document_id!(
-        data,
+      entity.assign_attributes(
         type: Entity::Types::NATURAL_PERSON,
         name: data.name_elements.presence && name_string(data.name_elements) || data.name,
         nationality: country_from_nationality(data.nationality).try(:alpha2),
         country_of_residence: data.country_of_residence.presence,
         dob: entity_dob(data.date_of_birth),
       )
+      parent_entity_with_document_id!(entity, data)
     when 'legal-person-person-with-significant-control'
-      parent_entity_with_document_id!(
-        data,
+      entity.assign_attributes(
         type: Entity::Types::LEGAL_ENTITY,
         name: data.name,
       )
+      parent_entity_with_document_id!(entity, data)
     end
   end
 
-  def parent_entity_with_document_id!(data, attrs = {})
-    attributes = attrs.merge(
+  def parent_entity_with_document_id!(entity, data)
+    entity.assign_attributes(
       identifiers: [
         {
           'document_id' => document_id,
           'link' => data.links.self,
         },
       ],
-      address: data.address.presence && address_string(data.address),
     )
 
-    Entity.new(attributes).tap(&:upsert)
+    entity.tap(&:upsert)
   end
 
   def relationship!(child_entity, parent_entity, data)

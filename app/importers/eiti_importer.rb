@@ -80,25 +80,24 @@ class EitiImporter
 
     return entity.tap(&:upsert) if entity.identifiers.any?
 
-    entity_with_document_id!(
-      record.child_name,
-      Entity::Types::LEGAL_ENTITY,
-      jurisdiction_code: jurisdiction_code,
-    )
+    entity_with_document_id!(entity)
   end
 
   def parent_entity!(record)
     type = entity_type(record)
 
+    entity = Entity.new(
+      type: type,
+      name: record.parent_name,
+    )
+
     if type == Entity::Types::LEGAL_ENTITY && record.parent_jurisdiction
       jurisdiction_code = @opencorporates_client.get_jurisdiction_code(record.parent_jurisdiction)
 
       if jurisdiction_code
-        entity = Entity.new(
-          type: Entity::Types::LEGAL_ENTITY,
+        entity.assign_attributes(
           jurisdiction_code: jurisdiction_code,
           company_number: record.parent_identifier,
-          name: record.parent_name,
         )
         @entity_resolver.resolve!(entity)
 
@@ -106,26 +105,20 @@ class EitiImporter
       end
     end
 
-    entity_with_document_id!(
-      record.parent_name,
-      type,
-      jurisdiction_code: jurisdiction_code,
-    )
+    entity_with_document_id!(entity)
   end
 
-  def entity_with_document_id!(name, type, attrs = {})
-    attributes = attrs.merge(
+  def entity_with_document_id!(entity)
+    entity.assign_attributes(
       identifiers: [
         {
           'document_id' => document_id,
-          'name' => name,
+          'name' => entity.name,
         },
       ],
-      type: type,
-      name: name,
     )
 
-    Entity.new(attributes).tap(&:upsert)
+    entity.tap(&:upsert)
   end
 
   def relationship!(child_entity, parent_entity, record)
