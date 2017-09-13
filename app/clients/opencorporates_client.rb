@@ -1,5 +1,4 @@
 require 'net/http/persistent'
-require 'cgi'
 require 'json'
 
 class OpencorporatesClient
@@ -70,9 +69,8 @@ class OpencorporatesClient
   def get(path, params)
     params[:api_token] = @api_token
 
-    uri = URI.join(@api_url, URI.escape(path))
-
-    uri.query = params.map { |k, v| "#{escape(k)}=#{escape(v)}" }.join('&')
+    uri = URI(Addressable::URI.parse(Addressable::URI.join(@api_url, path)).normalize.to_s)
+    uri.query = params.to_query
 
     response = @http.request(uri)
 
@@ -85,9 +83,5 @@ class OpencorporatesClient
   rescue Net::HTTP::Persistent::Error => e
     Rails.logger.info("Received #{e.inspect} when calling #{path} (#{params})")
     nil
-  end
-
-  def escape(component)
-    CGI.escape(component.to_s)
   end
 end
