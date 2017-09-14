@@ -33,6 +33,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'webmock'
   gem 'launchy'
+  gem 'pry'
 end
 
 group :development do
