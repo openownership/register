@@ -4,7 +4,7 @@ module AdminHelpers
   end
 
   def stub_elasticsearch
-    uri = URI.parse ENV['SEARCHBOX_SSL_URL']
+    uri = URI.parse ENV[ENV['ELASTICSEARCH_URL_ENV_NAME']]
     stub_request(:any, /#{uri.host}:#{uri.port}/)
   end
 

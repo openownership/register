@@ -22,6 +22,9 @@
     "DEFAULT_USERS": {
       "required": true
     },
+    "ELASTICSEARCH_URL_ENV_NAME": {
+      "required": true
+    },
     "ERROR_PAGE_URL": {
       "required": true
     },
