@@ -9,15 +9,18 @@ RSpec.describe TreeNode do
   describe "#nodes" do
     context "recursive relationship" do
       before do
-        allow(entity).to receive(:relationships_as_target_excluding).with([]).and_return([relationship])
+        allow(entity).to receive(:relationships_as_target).and_return([relationship])
         allow(relationship).to receive(:id).and_return('test-id')
         allow(relationship).to receive(:source).and_return(entity)
-        allow(entity).to receive(:relationships_as_target_excluding).with(['test-id']).and_return([])
+        allow(entity).to receive(:relationships_as_target).and_return([relationship])
       end
 
       it "returns the node once" do
         expect(subject.nodes.size).to eq(1)
-        expect(subject.nodes.first.nodes.size).to eq(0)
+      end
+
+      it "returns an circular ownership entity" do
+        expect(subject.nodes.first.nodes.first.entity).to be_an(CircularOwnershipEntity)
       end
     end
   end
@@ -25,7 +28,7 @@ RSpec.describe TreeNode do
   describe "#leaf_nodes" do
     context "has no nodes" do
       before do
-        allow(entity).to receive(:relationships_as_target_excluding).and_return([])
+        allow(entity).to receive(:relationships_as_target).and_return([])
       end
 
       it "returns self" do
@@ -40,11 +43,11 @@ RSpec.describe TreeNode do
       let(:relationship_2) { instance_double('Relationship', id: 'test-id-2') }
 
       before do
-        allow(entity).to receive(:relationships_as_target_excluding).and_return([relationship_1])
+        allow(entity).to receive(:relationships_as_target).and_return([relationship_1])
         allow(relationship_1).to receive(:source).and_return(entity_1)
-        allow(entity_1).to receive(:relationships_as_target_excluding).and_return([relationship_2])
+        allow(entity_1).to receive(:relationships_as_target).and_return([relationship_2])
         allow(relationship_2).to receive(:source).and_return(entity_2)
-        allow(entity_2).to receive(:relationships_as_target_excluding).and_return([])
+        allow(entity_2).to receive(:relationships_as_target).and_return([])
       end
 
       it "returns the leaf nodes" do
