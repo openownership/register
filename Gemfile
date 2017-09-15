@@ -11,6 +11,7 @@ gem 'haml-rails'
 gem 'bootstrap', '~> 4.0.0.alpha5'
 gem 'font-awesome-sass', '~> 4.7.0'
 gem 'tether-rails'
+gem 'jbuilder'
 
 gem 'jquery-rails'
 
@@ -25,6 +26,7 @@ gem 'iso8601'
 gem 'devise'
 gem 'roadie-rails'
 gem 'factory_girl_rails'
+gem 'aws-sdk'
 
 group :development, :test do
   gem 'byebug'
