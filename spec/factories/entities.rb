@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :entity do
+    sequence(:identifiers) { |n| [{ 'entity_factory' => n }] }
+
     factory :legal_entity do
       type Entity::Types::LEGAL_ENTITY
       sequence(:name) { |n| "Example Company #{n}" }
