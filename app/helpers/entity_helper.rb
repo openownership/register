@@ -8,10 +8,10 @@ module EntityHelper
   end
 
   def entity_link(entity, &block)
-    if entity.is_a?(UnknownPersonsEntity)
-      capture(&block)
-    else
+    if entity.persisted?
       link_to(entity_path(entity), &block)
+    else
+      capture(&block)
     end
   end
 
