@@ -1,7 +1,7 @@
 module EntityHelper
   def entity_name_or_tooltip(entity, position)
     if entity.is_a?(UnknownPersonsEntity)
-      glossary_tooltip(content_tag(:span, "unknown persons", class: "unknown"), :unknown_persons, position)
+      glossary_tooltip(content_tag(:span, "unknown", class: "unknown"), :unknown_persons, position)
     else
       entity.name
     end

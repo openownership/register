@@ -126,7 +126,7 @@ en:
     natural-person: person
 
   unknown_persons_entity:
-    name: unknown persons
+    name: unknown
 
   circular_ownership_entity:
     name: circular ownership

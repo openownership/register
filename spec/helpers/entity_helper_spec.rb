@@ -19,7 +19,7 @@ RSpec.describe EntityHelper do
 
       it "returns a tooltip" do
         expect(helper).to receive(:glossary_tooltip).with(
-          content_tag(:span, "unknown persons", class: "unknown"),
+          content_tag(:span, "unknown", class: "unknown"),
           :unknown_persons,
           anything,
         ).and_return(:tooltip)
