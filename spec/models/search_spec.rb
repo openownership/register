@@ -12,10 +12,10 @@ RSpec.describe Search do
 
     it 'includes a match query for the name' do
       match_query = {
-        match: {
+        match_phrase: {
           name: {
             query: 'smith',
-            operator: 'AND',
+            slop: 50,
           },
         },
       }

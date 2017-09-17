@@ -3,10 +3,10 @@ class Search
     {
       bool: {
         must: [
-          match: {
+          match_phrase: {
             name: {
               query: search_params[:q],
-              operator: 'AND',
+              slop: 50,
             },
           },
         ],
