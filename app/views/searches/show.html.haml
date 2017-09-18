@@ -41,8 +41,15 @@
 
               %ul.list-unstyled.list-entities
                 - @response.records.to_a.each do |record|
-                  %li
-                    = render "shared/entity_title", entity: record
+                  %li.item
+                    = render "shared/entity_title", entity: record, with_company: true
+                    %span
+                      :ruby
+                        controls = record.relationships_as_source
+                          .sort_by { |relationship| relationship.target.name }
+                          .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
+                      Controls:
+                      = safe_join controls, ', '
 
               = paginate @response.results
 
