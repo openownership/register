@@ -8,6 +8,6 @@ class PullRequestNumber
   end
 
   def call
-    @from.try(:[], /--(pr-\d+$)/, 1)
+    @from.try(:[], /-(pr-\d+$)/, 1)
   end
 end
