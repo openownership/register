@@ -10,11 +10,17 @@ namespace :eiti do
       index_file.each_line do |line|
         source = JSON.parse(line, symbolize_names: true)
 
-        open(source.fetch(:url)) do |source_file|
-          importer.source_jurisdiction_code = source[:jurisdiction_code]
-          importer.document_id = source[:document_id]
-          importer.retrieved_at = Time.zone.parse(source[:retrieved_at])
-          importer.parse(source_file)
+        print '.'
+        begin
+          open(source.fetch(:url)) do |source_file|
+            importer.source_jurisdiction_code = source[:jurisdiction_code]
+            importer.document_id = source[:document_id]
+            importer.retrieved_at = Time.zone.parse(source[:retrieved_at])
+            importer.parse(source_file)
+          end
+        rescue
+          puts "\nJurisdiction: '#{source[:jurisdiction_code]}', url: #{source[:url]} FAILED. Retrying..."
+          retry
         end
       end
     end
