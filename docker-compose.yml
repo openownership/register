@@ -8,7 +8,7 @@ services:
       - search
       - mail
     environment:
-      SEARCHBOX_SSL_URL: http://search:9200
+      ELASTICSEARCH_URL: http://search:9200
       MONGODB_HOST: db:27017
       SMTP_ADDRESS: mail
     ports:

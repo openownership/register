@@ -68,7 +68,7 @@ class Entity
     self.identifiers = document.fetch('identifiers')
   rescue Mongo::Error::OperationFailure => exception
     raise unless exception.message.start_with?('E11000')
-
+    raise "Unable to upsert entity due to #{identifiers} matching multiple documents" if Entity.where(selector).count > 1
     retry
   end
 

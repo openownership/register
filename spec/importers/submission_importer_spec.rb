@@ -20,20 +20,20 @@ RSpec.describe SubmissionImporter do
       it 'resolves the company' do
         subject.import
 
-        expect(entity_resolver).to have_received(:resolve!).with(
+        expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
           jurisdiction_code: company.jurisdiction_code,
           company_number: company.company_number,
           name: company.name,
-        )
+        ))
       end
 
       context 'when the company does not resolve' do
         before do
-          allow(entity_resolver).to receive(:resolve!).with(
+          allow(entity_resolver).to receive(:resolve!).with(having_attributes(
             jurisdiction_code: company.jurisdiction_code,
             company_number: company.company_number,
             name: company.name,
-          ).and_return(nil)
+          )).and_return(nil)
 
           subject.import
         end

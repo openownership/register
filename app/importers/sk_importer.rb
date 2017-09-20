@@ -50,15 +50,7 @@ class SkImporter
   def child_entity!(record)
     item = record.PartneriVerejnehoSektora.first
 
-    entity = @entity_resolver.resolve!(jurisdiction_code: 'sk', company_number: item.Ico, name: item.ObchodneMeno)
-
-    return entity unless entity.nil?
-
-    child_entity_with_document_id!(item)
-  end
-
-  def child_entity_with_document_id!(item)
-    attributes = {
+    entity = Entity.new(
       identifiers: [
         {
           'document_id' => document_id,
@@ -66,12 +58,14 @@ class SkImporter
         },
       ],
       type: Entity::Types::LEGAL_ENTITY,
-      name: item.ObchodneMeno.strip,
       jurisdiction_code: 'sk',
+      company_number: item.Ico,
+      name: item.ObchodneMeno.strip,
       address: address_string(item.Adresa),
-    }
+    )
+    @entity_resolver.resolve!(entity)
 
-    Entity.new(attributes).tap(&:upsert)
+    entity.tap(&:upsert)
   end
 
   def parent_entity!(item)

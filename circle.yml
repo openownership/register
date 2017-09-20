@@ -1,11 +1,12 @@
 machine:
+  services:
+    - docker
   environment:
-    HOST: "http://localhost"
-    SEARCHBOX_SSL_URL: "http://localhost:9200"
-    ADMIN_BASIC_AUTH: "name:password"
-    DEFAULT_USERS: "test@example.com"
-    BUCKETEER_BUCKET_NAME: 'example-bucket'
 test:
+  pre:
+    - sudo service mongod stop
+    - docker run -d -p 27017:27017 mongo:3.2.16
+    - docker run -d -p 9200:9200 elasticsearch:2.3.3
   post:
     - bundle exec rubocop
     - bundle exec haml-lint .

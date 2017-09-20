@@ -271,6 +271,16 @@ RSpec.describe Entity do
             other_identifier,
           ])
         end
+
+        context "when a second document with one of the other identifiers exists in the database" do
+          before do
+            Entity.create!(identifiers: [other_identifier])
+          end
+
+          it "raises an exception mentioning the identifiers" do
+            expect { subject.upsert }.to raise_error(RuntimeError, /#{subject.identifiers}/)
+          end
+        end
       end
 
       context "when the existing document also has other identifiers" do

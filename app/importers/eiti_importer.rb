@@ -69,58 +69,51 @@ class EitiImporter
 
     jurisdiction_code = jurisdiction && @opencorporates_client.get_jurisdiction_code(jurisdiction) || source_jurisdiction_code
 
-    entity = @entity_resolver.resolve!(
+    entity = Entity.new(
+      identifiers: [
+        {
+          'document_id' => document_id,
+          'name' => record.child_name,
+        },
+      ],
+      type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: jurisdiction_code,
       company_number: record.child_identifier,
       name: record.child_name,
     )
 
-    return entity unless entity.nil?
+    @entity_resolver.resolve!(entity)
 
-    entity_with_document_id!(
-      record.child_name,
-      Entity::Types::LEGAL_ENTITY,
-      jurisdiction_code: jurisdiction_code,
-    )
+    entity.tap(&:upsert)
   end
 
   def parent_entity!(record)
     type = entity_type(record)
 
+    entity = Entity.new(
+      identifiers: [
+        {
+          'document_id' => document_id,
+          'name' => record.parent_name,
+        },
+      ],
+      type: type,
+      name: record.parent_name,
+    )
+
     if type == Entity::Types::LEGAL_ENTITY && record.parent_jurisdiction
       jurisdiction_code = @opencorporates_client.get_jurisdiction_code(record.parent_jurisdiction)
 
       if jurisdiction_code
-        entity = @entity_resolver.resolve!(
+        entity.assign_attributes(
           jurisdiction_code: jurisdiction_code,
           company_number: record.parent_identifier,
-          name: record.parent_name,
         )
-
-        return entity unless entity.nil?
+        @entity_resolver.resolve!(entity)
       end
     end
 
-    entity_with_document_id!(
-      record.parent_name,
-      type,
-      jurisdiction_code: jurisdiction_code,
-    )
-  end
-
-  def entity_with_document_id!(name, type, attrs = {})
-    attributes = attrs.merge(
-      identifiers: [
-        {
-          'document_id' => document_id,
-          'name' => name,
-        },
-      ],
-      type: type,
-      name: name,
-    )
-
-    Entity.new(attributes).tap(&:upsert)
+    entity.tap(&:upsert)
   end
 
   def relationship!(child_entity, parent_entity, record)
