@@ -63,9 +63,9 @@
                       = name
                       %small.grouping-size.pull-right
                         = t(".instances", count: relationships.size)
+                    .note
+                      = t(".note")
                     .collapse{ id: name.parameterize }
-                      .note
-                        = t(".note")
                       = render partial: 'ultimate_source_relationship', collection: relationships, as: :relationship
                 - else
                   = render partial: 'ultimate_source_relationship', locals: { relationship: relationships.first }
