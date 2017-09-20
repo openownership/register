@@ -7,8 +7,8 @@
       .tree-link
         = render 'tree_node', node: child_node
 
-.tree-node{ class: tree_node_classes(entity, relationship), "data-node": entity.name }
-  - unless entity.natural_person?
+.tree-node{ class: tree_node_classes(node), "data-node": entity.name }
+  - unless node.leaf?
     - if entity.relationships_as_target.any?
       = link_to search_submission_entities_path(@submission, source_ids: entity.relationships_as_target.map(&:source_id), target_id: entity.id), class: 'tree-node__insert tree-node__insert--above', data: { toggle: 'tooltip', title: t('.insert_company_above'), placement: 'top' } do
         %span.fa.fa-plus-circle

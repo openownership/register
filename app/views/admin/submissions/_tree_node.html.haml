@@ -4,7 +4,7 @@
       .tree-link
         = render 'tree_node', node: child_node
 
-.tree-node{ class: tree_node_classes(node.entity, node.relationship), "data-node": node.entity.name }
+.tree-node{ class: tree_node_classes(node), "data-node": node.entity.name }
   .tree-node__content
     .tree-node__entity
       = link_to "#entity-#{node.entity.id}" do

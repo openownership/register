@@ -4,12 +4,21 @@ class TreeNode
   def initialize(entity, relationship = nil, seen_ids = [])
     @entity = entity
     @relationship = relationship
-    @nodes = build_nodes(seen_ids)
+    @seen_ids = seen_ids
+    @nodes = build_nodes(@seen_ids)
   end
 
   def leaf_nodes
     return [self] if nodes.empty?
     nodes.map(&:leaf_nodes).flatten
+  end
+
+  def leaf?
+    @entity.natural_person?
+  end
+
+  def root?
+    @seen_ids.empty?
   end
 
   private
