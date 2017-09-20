@@ -33,10 +33,6 @@ module Submissions
     validates :nationality, presence: true, if: :natural_person?
     validates :address, presence: true, if: :natural_person?
 
-    def relationships_as_target_excluding(ids)
-      relationships_as_target.where(:id.nin => ids)
-    end
-
     def attributes_for_submission
       attributes.with_indifferent_access.slice(*ATTRIBUTES_FOR_SUBMISSION)
     end

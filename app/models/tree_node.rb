@@ -4,7 +4,8 @@ class TreeNode
   def initialize(entity, relationship = nil, seen_ids = [])
     @entity = entity
     @relationship = relationship
-    @nodes = build_nodes(seen_ids)
+    @seen_ids = seen_ids
+    @nodes = build_nodes(@seen_ids)
   end
 
   def leaf_nodes
@@ -12,13 +13,27 @@ class TreeNode
     nodes.map(&:leaf_nodes).flatten
   end
 
+  def leaf?
+    @entity.natural_person? || @entity.is_a?(CircularOwnershipEntity)
+  end
+
+  def root?
+    @seen_ids.empty?
+  end
+
   private
 
   def build_nodes(seen_ids)
     return [] if entity.nil?
 
-    entity.relationships_as_target_excluding(seen_ids).map do |relationship|
-      TreeNode.new(relationship.source, relationship, seen_ids += [relationship.id])
+    relationships = entity.relationships_as_target
+
+    if relationships.any? { |relationship| seen_ids.include?(relationship.id) }
+      [TreeNode.new(CircularOwnershipEntity.new(id: "#{relationship.id}-circular-ownership"), nil, seen_ids)]
+    else
+      relationships.map do |relationship|
+        TreeNode.new(relationship.source, relationship, seen_ids += [relationship.id])
+      end
     end
   end
 end

@@ -132,7 +132,8 @@ $tree-background: #f4f6f8;
     display: none;
   }
 
-  .tree-node--root & {
+  .tree-node--root &,
+  .tree-node--circular-ownership & {
     font-size: 16px;
   }
 
@@ -405,4 +406,24 @@ $tree-background: #f4f6f8;
   &--root:after {
     bottom: 50%;
   }
+}
+
+.tree-canvas--show-submission .tree-node--circular-ownership,
+.tree-canvas--edit-submission .tree-node--circular-ownership {
+  margin: 20px 10px;
+}
+
+.tree-node--circular-ownership:after,
+.tree-canvas--show-submission .tree-node--circular-ownership:after,
+.tree-canvas--edit-submission .tree-node--circular-ownership:after {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid $electricBlue;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -20px;
+  margin-left: -5px;
+  top: auto;
 }

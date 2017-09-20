@@ -76,10 +76,6 @@ class Entity
     as_json(only: [:name, :type], methods: :country_code)
   end
 
-  def relationships_as_target_excluding(ids)
-    relationships_as_target.reject { |r| ids.include?(r.id) }
-  end
-
   def to_builder
     Jbuilder.new do |json|
       json.id id.to_s
