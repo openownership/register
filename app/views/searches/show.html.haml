@@ -43,7 +43,7 @@
                 - @response.records.to_a.each do |record|
                   %li.item
                     = render "shared/entity_title", entity: record, with_company: true
-                    %span
+                    .result-controls
                       :ruby
                         controls = record.relationships_as_source
                           .sort_by { |relationship| relationship.target.name }

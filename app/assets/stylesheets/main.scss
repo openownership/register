@@ -118,7 +118,7 @@ a, button {
   margin-left: 2px;
 }
 
-.list-entities, .relationship-details {
+.relationship-details {
   .type-icon {
     top: 13px;
     right: 15px;
@@ -271,37 +271,6 @@ a, button {
   color: #808080;
   background-color: #F4F6F8;
   padding: 11px 20px 10px 20px;
-}
-
-.list-entities {
-  margin-bottom: 0px;
-  a {
-    display: block;
-    position: relative;
-    padding: 15px 60px 14px 15px;
-    margin-bottom: 5px;
-    background-color: $white;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
-    border-radius: $border-radius;
-    color: $darkBlue;
-    font-size: 1rem;
-    transition: all .25s ease;
-    &:hover {
-      text-decoration: none;
-      box-shadow: 0px 1px 6px rgba(0, 0, 0, .25);
-      color: $electricBlue;
-    }
-    small {
-      font-size: 0.8125rem;
-    }
-  }
-  li {
-    &:last-child {
-      a {
-        margin-bottom: 0;
-      }
-    }
-  }
 }
 
 .pagination {
@@ -528,7 +497,7 @@ a, button {
   }
 }
 
-.ultimate-source-relationships, .source-relationships, .relationship-details {
+.ultimate-source-relationships, .source-relationships, .relationship-details, .list-entities {
   .entity-title {
     padding-bottom: 5px;
     font-size: 1rem;
@@ -684,7 +653,7 @@ span.tooltip-helper {
   }
 }
 
-.ultimate-source-relationships, .source-relationships {
+.ultimate-source-relationships, .source-relationships, .list-entities {
   position: relative;
   padding: 20px;
   margin-bottom: 20px;
@@ -780,6 +749,19 @@ span.tooltip-helper {
     }
   }
 
+  .result-controls {
+    border-top: 1px solid #DBDFE5;
+    padding-top: 7px;
+    margin-top: 1px;
+    color: #AEAEAE;
+    font-size: .8125rem;
+    a {
+      color: #666666;
+      font-size: .75rem;
+      text-decoration: underline;
+    }
+  }
+
   .view-as-tree {
     position: absolute;
     top: 20px;
@@ -797,6 +779,10 @@ span.tooltip-helper {
       transform: rotate(180deg);
     }
   }
+}
+
+.list-entities {
+  padding: 0;
 }
 
 .ultimate-source-relationships {
