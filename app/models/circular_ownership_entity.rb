@@ -10,4 +10,9 @@ class CircularOwnershipEntity < Entity
   def relationships_as_target
     []
   end
+
+  # Routing helpers are used to generate links, which require the instance to be "persisted".
+  def persisted?
+    true
+  end
 end

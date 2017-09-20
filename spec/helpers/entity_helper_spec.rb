@@ -44,6 +44,14 @@ RSpec.describe EntityHelper do
       end
     end
 
+    context "when entity is a circular ownership entity" do
+      let(:entity) { CircularOwnershipEntity.new }
+
+      it 'returns just the label' do
+        expect(subject).to eq("label")
+      end
+    end
+
     context "when entity is a unknown persons entity" do
       let(:entity) { UnknownPersonsEntity.new }
 
