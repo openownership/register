@@ -332,6 +332,10 @@ $tree-background: #f4f6f8;
   }
 }
 
+.tree-link:only-child > .tree-node .tree-node__insert--below {
+  display: none;
+}
+
 .tree-node__remove-button {
   @include prefix(appearance, none);
 
