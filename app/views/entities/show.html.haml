@@ -143,3 +143,15 @@
             %p= link_to 'Google', google_search_uri(q: @entity.name), class: 'external', target: '_blank'
             - if @entity.natural_person?
               %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank'
+
+    - if @similar_people && @similar_people.results.total > 1
+      .row
+        .col-lg-8
+          .frame
+            .frame-wrap
+              %h5 People with similar names
+              %ul.list-unstyled.list-entities
+                - @similar_people.records.to_a.each do |record|
+                  - next if record == @entity
+                  %li
+                    = render "shared/entity_title", entity: record
