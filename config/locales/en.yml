@@ -105,7 +105,7 @@ en:
       remove_filter: Remove filter
   shared:
     relationship_interests:
-      unknown: Undefined interest
+      unknown: Interests unknown
     search_bar:
       new_search: Search company or name of person
     referral_message:

@@ -27,8 +27,8 @@ class Entity
   end
 
   def self.find_or_unknown(id)
-    if id.include?(UNKNOWN_ID_MODIFIER)
-      UnknownPersonsEntity.new(id: id)
+    if id.to_s.include?('statement')
+      UnknownPersonsEntity.new(id: id, name: id)
     else
       find(id)
     end
@@ -38,7 +38,7 @@ class Entity
     if type == Types::NATURAL_PERSON
       []
     else
-      _relationships_as_target.entries.presence || [Relationship.new(source: UnknownPersonsEntity.new(id: "#{id}-unknown"), target: self)]
+      _relationships_as_target.entries.presence || CreateRelationshipsForStatements.call(self)
     end
   end
 

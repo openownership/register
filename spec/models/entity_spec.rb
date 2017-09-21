@@ -16,7 +16,7 @@ RSpec.describe Entity do
     end
 
     context "when id is id of an unknown persons entity" do
-      let(:id) { "1234#{Entity::UNKNOWN_ID_MODIFIER}" }
+      let(:id) { 'unknown-person-statement' }
 
       it "returns an unknown persons entity" do
         expect(subject).to be_a(UnknownPersonsEntity)

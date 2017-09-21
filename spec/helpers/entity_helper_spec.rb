@@ -18,9 +18,9 @@ RSpec.describe EntityHelper do
       let(:entity) { UnknownPersonsEntity.new }
 
       it "returns a tooltip" do
-        expect(helper).to receive(:glossary_tooltip).with(
-          content_tag(:span, "unknown", class: "unknown"),
-          :unknown_persons,
+        expect(helper).to receive(:tooltip).with(
+          content_tag(:span, "Unknown", class: "unknown"),
+          'unknown',
           anything,
         ).and_return(:tooltip)
 
@@ -52,11 +52,32 @@ RSpec.describe EntityHelper do
       end
     end
 
-    context "when entity is a unknown persons entity" do
-      let(:entity) { UnknownPersonsEntity.new }
+    context 'when entity is a unknown persons entity' do
+      let(:statement) { nil }
+      let(:entity) { UnknownPersonsEntity.new(id: id, name: statement) }
+      let(:tooltip) { content_tag(:span, label, class: 'unknown') }
 
-      it 'returns just the label' do
-        expect(subject).to eq("label")
+      before { allow(helper).to receive(:tooltip) }
+
+      context 'when no PSC' do
+        let(:id) { 'no-individual-or-entity-with-signficant-control' }
+        let(:label) { 'No person' }
+        let(:statement) { 'statement' }
+
+        it 'returns "No person" with tooltip' do
+          subject
+          expect(helper).to have_received(:tooltip).with(tooltip, statement, :top)
+        end
+      end
+
+      context 'when unknown PSC' do
+        let(:id) { 1234 }
+        let(:label) { 'Unknown' }
+
+        it 'returns "Unknown" with tooltip' do
+          subject
+          expect(helper).to have_received(:tooltip).with(tooltip, 'unknown', :top)
+        end
       end
     end
   end
