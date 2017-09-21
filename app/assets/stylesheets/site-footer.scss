@@ -8,7 +8,7 @@
   text-align: center;
   padding: 10px 0;
   a {
-    color: #999999;
+    color: $text-light;
     margin: 8px;
     &:hover {
       color: $darkBlue;
@@ -17,7 +17,7 @@
 }
 
 .supporters-footer, .links-footer {
-  border-top: 1px solid lighten( $darkBlue, 75% );
+  border-top: 1px solid $border-color;
 }
 
 .supporters-footer {
@@ -122,7 +122,7 @@
     font-weight: normal;
     font-style: italic;
     text-align: center;
-    color: #999999;
+    color: $text-light;
     padding-top: 10px;
     padding-bottom: 4px;
     border-bottom: 2px solid #E6E6E6;

@@ -1,11 +1,18 @@
 $darkBlue: #191D23;
 $electricBlue: #3C31D4;
 $greyBlue: #363F4D;
-$lightGrey: #EBEEF2;
+$lightGrey: #E4E8ED; // was #EBEEF2
 $white: #FFFFFF;
 
 $red: red;
 $green: #31A95B;
+
+$background-color: #F4F6F8;
+$border-color: darken($lightGrey, 8%);
+
+$text-dark: $darkBlue;
+$text-default: #4D4D4D; // was #666666
+$text-light: #999999; // was #AEAEAE
 
 $headline: 'Publico Headline', 'Times New Roman', Times, Georgia, serif;
 $serif: 'Publico Text', 'Times New Roman', Times, Georgia, serif;
