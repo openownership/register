@@ -42,7 +42,7 @@ class PscImporter
     when 'totals#persons-of-significant-control-snapshot'
       :ignore
     when 'persons-with-significant-control-statement', 'super-secure-person-with-significant-control', 'exemptions'
-      child_entity = @entity_resolver.resolve!(jurisdiction_code: 'gb', company_number: record.company_number, name: nil)
+      child_entity = child_entity!(record.company_number)
 
       statement!(child_entity, record.data)
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
