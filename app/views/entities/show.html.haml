@@ -154,4 +154,13 @@
                 - @similar_people.records.to_a.each do |record|
                   - next if record == @entity
                   %li
-                    = render "shared/entity_title", entity: record
+                    .item
+                      = render "shared/entity_title", entity: record
+                      - if record.natural_person?
+                        .result-controls
+                          :ruby
+                            controls = record.relationships_as_source
+                              .sort_by { |relationship| relationship.target.name }
+                              .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
+                          Controls:
+                          = safe_join controls, ', '
