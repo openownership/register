@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
-  background-color: #F4F6F8;
+  background-color: $background-color;
 }
 
 .content {
@@ -20,14 +20,14 @@
 
 .frame {
   margin-bottom: 20px;
-  background: #EBEEF2;
+  background: $lightGrey;
   border-radius: 2px;
 }
 
 .frame-light {
   margin-bottom: 20px;
   background-color: #FFF;
-  border: 1px solid lighten($darkBlue, 76%);
+  border: 1px solid $border-color;
   border-radius: 2px;
 }
 
