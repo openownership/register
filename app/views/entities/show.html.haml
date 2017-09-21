@@ -143,6 +143,7 @@
             %p= link_to 'Google', google_search_uri(q: @entity.name), class: 'external', target: '_blank'
             - if @entity.natural_person?
               %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank'
+        = link_to t(".report_incorrect_data"), 'https://docs.google.com/forms/d/18-kex64GHUc_EIRBYOl1oedSthU0UOlllKDZrtarCOk', class: 'feedback-button', target: '_blank'
 
     - if @similar_people && @similar_people.results.total > 1
       .row

@@ -18,6 +18,7 @@ en:
       no_further_information_known: No further information known about this %{type}
       no_data_from_opencorporates: OpenCorporates data not available
       more_on: "More on %{name}"
+      report_incorrect_data: Report incorrect data
       details: Details ›
       fields:
         nationality: Nationality

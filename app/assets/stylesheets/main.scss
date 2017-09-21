@@ -914,3 +914,29 @@ span.tooltip-helper {
     margin: 100px auto;
   }
 }
+
+.feedback-button {
+  display: block;
+  border-radius: 2px;
+  padding: 10px 18px 8px;
+  max-width: 320px;
+  font-weight: bold;
+  font-size: 14px;
+  background: image-url('icon-report.svg') calc(100% - 20px) center no-repeat;
+  background-color: $darkBlue;
+  color: white;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+
+  &:hover,
+  &:active,
+  &:visited,
+  &:focus {
+    text-decoration: none;
+    color: white;
+  }
+
+  &:hover,
+  &:active {
+    background-color: lighten($darkBlue, 5%);
+  }
+}
