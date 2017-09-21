@@ -4,7 +4,7 @@ class UnknownPersonsEntity < Entity
   end
 
   def name
-    I18n.t("unknown_persons_entity.name")
+    self[:name] || I18n.t("unknown_persons_entity.name")
   end
 
   # Routing helpers are used to generate links, which require the instance to be "persisted".

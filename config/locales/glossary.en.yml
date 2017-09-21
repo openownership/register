@@ -5,7 +5,7 @@ en:
     beneficial_ownership_chain: The entire chain of entities that are linked by their control of one company, starting at that company and stretching to the beneficial owner, including any intermediate companies.
     retrieved_at: The date this information was last accessed from the source
     sample_date: The date this information was known to be true
-    undefined_interest: The person or company controls or benefits from the entity through undefined means
+    undefined_interest: There is no data available on how the person benefits from this company
     unknown_persons: There is no data available on who owns this company
     legal-entity: A company, government, or other legal construct
     interest: The means through which control is exercised or benefit is gained.

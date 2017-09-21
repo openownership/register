@@ -16,7 +16,7 @@ RSpec.describe Entity do
     end
 
     context "when id is id of an unknown persons entity" do
-      let(:id) { "1234#{Entity::UNKNOWN_ID_MODIFIER}" }
+      let(:id) { 'unknown-person-statement' }
 
       it "returns an unknown persons entity" do
         expect(subject).to be_a(UnknownPersonsEntity)
@@ -80,6 +80,26 @@ RSpec.describe Entity do
 
     context "when entity type is not Entity::Types::NATURAL_PERSON" do
       let(:type) { Entity::Types::LEGAL_ENTITY }
+
+      it "returns false" do
+        expect(subject).to be false
+      end
+    end
+  end
+
+  describe '#legal_entity?' do
+    subject { Entity.new(type: type).legal_entity? }
+
+    context "when entity type is Entity::Types::LEGAL_ENTITY" do
+      let(:type) { Entity::Types::LEGAL_ENTITY }
+
+      it "returns true" do
+        expect(subject).to be true
+      end
+    end
+
+    context "when entity type is not Entity::Types::LEGAL_ENTITY" do
+      let(:type) { Entity::Types::NATURAL_PERSON }
 
       it "returns false" do
         expect(subject).to be false

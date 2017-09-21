@@ -4,6 +4,8 @@ class RelationshipsController < ApplicationController
 
     @source_entity = Entity.find_or_unknown(params[:id])
 
+    CreateRelationshipsForStatements.call(@source_entity)
+
     @relationships = RelationshipGraph.new(@target_entity).relationships_to(@source_entity)
 
     raise Mongoid::Errors::DocumentNotFound.new(Relationship, [@target_entity.id, @source_entity.id]) if @relationships.empty?

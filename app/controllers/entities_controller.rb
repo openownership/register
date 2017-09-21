@@ -4,7 +4,7 @@ class EntitiesController < ApplicationController
 
     @source_relationships = @entity.relationships_as_source
 
-    @ultimate_source_relationship_groupings = RelationshipGraph.new(@entity).ultimate_source_relationships.group_by { |r| r.source.name }.sort
+    @ultimate_source_relationship_groupings = RelationshipGraph.new(@entity).ultimate_source_relationships.group_by { |r| group_entity_not_statement(r.source) }.sort
 
     @opencorporates_company_hash = get_opencorporates_company_hash(@entity)
 
@@ -23,6 +23,10 @@ class EntitiesController < ApplicationController
 
   def search_params
     { q: @entity.name, type: 'natural-person' }
+  end
+
+  def group_entity_not_statement(source)
+    source.id.to_s.include?('statement') ? rand : source.name
   end
 
   def get_opencorporates_company_hash(entity)
