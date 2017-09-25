@@ -61,3 +61,4 @@
 
 .footer-data-info
   = t(".footer", count: number_with_delimiter(@legal_entity_count))
+  = link_to t(".download_data"), ENV['DATA_DOWNLOAD_URL'] if ENV['DATA_DOWNLOAD_URL'].present?
