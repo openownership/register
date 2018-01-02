@@ -95,7 +95,7 @@ en:
     show:
       blurb: OpenOwnership is a new platform to collect and publish beneficial ownership to fight corruption and crime and improve business integrity.
       legal-entity_count: Currently showing %{count} companies
-      footer: Free and open information on %{count} companies, from UK PSC Register, Slovakia Public Sector Partners Register and EITI pilot data.
+      footer: Free and open information on %{count} companies, from UK PSC Register, Slovakia Public Sector Partners Register, Ukraine Unified States Register and EITI pilot data.
       download_data: Download data
       headline: Who controls, influences, or benefits from a company?
       placeholder: Search company or name of person
