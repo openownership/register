@@ -30,9 +30,7 @@ module OpenOwnershipRegister
     host_uri = if ENV.key?('HEROKU_APP_NAME')
       URI("https://#{ENV['HEROKU_APP_NAME']}.herokuapp.com")
     else
-      uri = ENV.fetch('HOST')
-      uri += ":#{ENV['PORT']}" if ENV['PORT']
-      URI(uri)
+      URI(ENV.fetch('SITE_BASE_URL'))
     end
 
     config.action_mailer.default_url_options = { host: host_uri.hostname }
