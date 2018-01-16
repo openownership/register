@@ -5,6 +5,53 @@ RSpec.describe OpencorporatesClient do
 
   let(:client) { OpencorporatesClient.new(api_token: api_token) }
 
+  shared_examples_for "response errors" do |log_text, empty_return_value|
+    context "when a response error is returned" do
+      before do
+        @stub.to_return(status: 500)
+      end
+
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/500.*#{log_text}/)
+        subject
+      end
+
+      it 'returns an empty value' do
+        expect(subject).to eq(empty_return_value)
+      end
+    end
+
+    context "when a response exception is raised" do
+      before do
+        @stub.to_raise(Net::HTTP::Persistent::Error)
+      end
+
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*#{log_text}/)
+        subject
+      end
+
+      it 'returns an empty value' do
+        expect(subject).to eq(empty_return_value)
+      end
+    end
+
+    context "when an open timeout is raised" do
+      before do
+        allow_any_instance_of(Net::HTTP).to receive(:start).and_raise(Net::OpenTimeout)
+      end
+
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/Net::OpenTimeout.*#{log_text}/)
+        subject
+      end
+
+      it 'returns an empty value' do
+        expect(subject).to eq(empty_return_value)
+      end
+    end
+  end
+
   describe '#get_jurisdiction_code' do
     before do
       url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/jurisdictions/match"
@@ -12,6 +59,8 @@ RSpec.describe OpencorporatesClient do
     end
 
     subject { client.get_jurisdiction_code('United Kingdom') }
+
+    include_examples "response errors", "United Kingdom", nil
 
     context "when jurisdiction is matched" do
       before do
@@ -32,36 +81,6 @@ RSpec.describe OpencorporatesClient do
         expect(subject).to be_nil
       end
     end
-
-    context "when a response error occurs" do
-      before do
-        @stub.to_return(status: 500)
-      end
-
-      it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/500.*United Kingdom/)
-        subject
-      end
-
-      it 'returns nil' do
-        expect(subject).to be_nil
-      end
-    end
-
-    context "when a response exception is raised" do
-      before do
-        @stub.to_raise(Net::HTTP::Persistent::Error)
-      end
-
-      it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*United Kingdom/)
-        subject
-      end
-
-      it 'returns nil' do
-        expect(subject).to be_nil
-      end
-    end
   end
 
   describe '#get_company' do
@@ -75,6 +94,8 @@ RSpec.describe OpencorporatesClient do
     end
 
     subject { client.get_company('gb', @number) }
+
+    include_examples "response errors", "gb.*01234567", nil
 
     context "when the company with given jurisdiction_code and company_number is found" do
       before do
@@ -118,36 +139,6 @@ RSpec.describe OpencorporatesClient do
         subject
       end
     end
-
-    context "when a response error occurs" do
-      before do
-        @stub.to_return(status: 500)
-      end
-
-      it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/500.*gb.*01234567/)
-        subject
-      end
-
-      it 'returns nil' do
-        expect(subject).to be_nil
-      end
-    end
-
-    context "when a response exception is raised" do
-      before do
-        @stub.to_raise(Net::HTTP::Persistent::Error)
-      end
-
-      it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*gb.*01234567/)
-        subject
-      end
-
-      it 'returns nil' do
-        expect(subject).to be_nil
-      end
-    end
   end
 
   describe '#search_companies' do
@@ -167,6 +158,8 @@ RSpec.describe OpencorporatesClient do
 
     subject { client.search_companies('gb', '01234567') }
 
+    include_examples "response errors", "01234567.*gb", []
+
     context "when given jurisdiction_code and query returns results" do
       before do
         @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LIMITED"}}]}}))
@@ -177,36 +170,6 @@ RSpec.describe OpencorporatesClient do
         expect(subject.size).to eq(1)
         expect(subject.first).to be_a(Hash)
         expect(subject.first.fetch(:company).fetch(:name)).to eq('EXAMPLE LIMITED')
-      end
-    end
-
-    context "when a response error occurs" do
-      before do
-        @stub.to_return(status: 500)
-      end
-
-      it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/500.*01234567.*gb/)
-        subject
-      end
-
-      it 'returns empty array' do
-        expect(subject).to eq([])
-      end
-    end
-
-    context "when a response exception is raised" do
-      before do
-        @stub.to_raise(Net::HTTP::Persistent::Error)
-      end
-
-      it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*01234567.*gb/)
-        subject
-      end
-
-      it 'returns empty array' do
-        expect(subject).to eq([])
       end
     end
   end
@@ -227,6 +190,8 @@ RSpec.describe OpencorporatesClient do
 
     subject { client.search_companies_by_name('Example Ltd') }
 
+    include_examples "response errors", "Example Ltd", []
+
     context "when given name and query returns results" do
       before do
         @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LTD"}}]}}))
@@ -237,36 +202,6 @@ RSpec.describe OpencorporatesClient do
         expect(subject.size).to eq(1)
         expect(subject.first).to be_a(Hash)
         expect(subject.first.fetch(:company).fetch(:name)).to eq('EXAMPLE LTD')
-      end
-    end
-
-    context "when a response error occurs" do
-      before do
-        @stub.to_return(status: 500)
-      end
-
-      it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/500.*Example Ltd/)
-        subject
-      end
-
-      it 'returns empty array' do
-        expect(subject).to eq([])
-      end
-    end
-
-    context "when a response exception is raised" do
-      before do
-        @stub.to_raise(Net::HTTP::Persistent::Error)
-      end
-
-      it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*Example Ltd/)
-        subject
-      end
-
-      it 'returns empty array' do
-        expect(subject).to eq([])
       end
     end
   end
