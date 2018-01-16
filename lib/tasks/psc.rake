@@ -1,3 +1,5 @@
+require 'zip'
+
 namespace :psc do
   desc 'Import PSC data from source (URL or path)'
   task :import, [:source, :retrieved_at] => [:environment] do |_task, args|
@@ -10,7 +12,15 @@ namespace :psc do
     importer.retrieved_at = Time.zone.parse(args.retrieved_at)
 
     open(args.source) do |file|
-      file = Zlib::GzipReader.new(file) if File.extname(args.source) == ".gz"
+      case File.extname(args.source)
+      when ".gz"
+        file = Zlib::GzipReader.new(file)
+      when ".zip"
+        zip = Zip::File.new(file)
+        raise if zip.count > 1
+
+        file = zip.first.get_input_stream
+      end
 
       importer.parse(file)
     end
