@@ -80,7 +80,7 @@ class OpencorporatesClient
       Rails.logger.info("Received #{response.code} from api.opencorporates.com when calling #{path} (#{params})")
       nil
     end
-  rescue Net::HTTP::Persistent::Error => e
+  rescue Net::HTTP::Persistent::Error, Net::OpenTimeout => e
     Rails.logger.info("Received #{e.inspect} when calling #{path} (#{params})")
     nil
   end

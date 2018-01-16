@@ -35,6 +35,21 @@ RSpec.describe OpencorporatesClient do
         expect(subject).to eq(empty_return_value)
       end
     end
+
+    context "when an open timeout is raised" do
+      before do
+        allow_any_instance_of(Net::HTTP).to receive(:start).and_raise(Net::OpenTimeout)
+      end
+
+      it 'logs response errors' do
+        expect(Rails.logger).to receive(:info).with(/Net::OpenTimeout.*#{log_text}/)
+        subject
+      end
+
+      it 'returns an empty value' do
+        expect(subject).to eq(empty_return_value)
+      end
+    end
   end
 
   describe '#get_jurisdiction_code' do
