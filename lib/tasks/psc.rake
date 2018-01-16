@@ -10,7 +10,10 @@ namespace :psc do
     importer.retrieved_at = Time.zone.parse(args.retrieved_at)
 
     open(args.source) do |file|
-      file = Zlib::GzipReader.new(file) if File.extname(args.source) == ".gz"
+      case File.extname(args.source)
+      when ".gz"
+        file = Zlib::GzipReader.new(file)
+      end
 
       importer.parse(file)
     end
