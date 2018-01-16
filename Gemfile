@@ -27,6 +27,7 @@ gem 'devise'
 gem 'roadie-rails'
 gem 'factory_girl_rails'
 gem 'aws-sdk'
+gem 'rubyzip', require: false
 
 group :development, :test do
   gem 'byebug'
