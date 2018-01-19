@@ -5,8 +5,13 @@ RSpec.feature "seeds" do
     File.join(Rails.root, 'db', 'seeds.rb')
   end
 
+  let(:ua_import_task) { double }
+
   before do
     allow(Entity).to receive(:import)
+
+    allow(Rake.application).to receive(:[]).with('ua:import') { ua_import_task }
+    allow(ua_import_task).to receive(:invoke).with('db/ua_seed_data.jsonl', anything)
   end
 
   it "runs without error" do
