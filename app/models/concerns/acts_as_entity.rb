@@ -24,6 +24,8 @@ module ActsAsEntity
     field :dissolution_date, type: Date
     field :company_type, type: String
 
+    field :lang_code, type: String
+
     scope :legal_entities, -> { where(type: Types::LEGAL_ENTITY) }
     scope :natural_persons, -> { where(type: Types::NATURAL_PERSON) }
   end
@@ -57,5 +59,9 @@ module ActsAsEntity
 
   def country_code
     country.try(:alpha2)
+  end
+
+  def name_transliterated
+    TransliterationService.for(lang_code).transliterate(name)
   end
 end

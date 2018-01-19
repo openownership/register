@@ -28,6 +28,7 @@ gem 'roadie-rails'
 gem 'factory_girl_rails'
 gem 'aws-sdk'
 gem 'rubyzip', require: false
+gem 'twitter_cldr', '~> 4.4', '>= 4.4.2'
 
 group :development, :test do
   gem 'byebug'

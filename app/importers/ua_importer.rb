@@ -42,6 +42,7 @@ class UaImporter
 
   def child_entity!(record)
     entity = Entity.new(
+      lang_code: 'uk',
       identifiers: [
         {
           'document_id' => document_id,
@@ -62,6 +63,7 @@ class UaImporter
 
   def parent_entity!(record)
     attributes = {
+      lang_code: 'uk',
       identifiers: [
         {
           'document_id' => document_id,
