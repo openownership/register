@@ -14,8 +14,8 @@ class TransliterationService
   end
 
   def transliterate(value)
-    # Return the original value if we have a blank lang code or the lang code is not currently supported for transliteration
-    if @lang_code.blank? || !LANG_CODE_TO_RULE_SETS.key?(@lang_code)
+    # Return the original value if we have a blank value, blank lang code or the lang code is not currently supported for transliteration
+    if value.blank? || @lang_code.blank? || !LANG_CODE_TO_RULE_SETS.key?(@lang_code)
       return value
     end
 

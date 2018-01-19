@@ -29,6 +29,7 @@ gem 'factory_girl_rails'
 gem 'aws-sdk'
 gem 'rubyzip', require: false
 gem 'twitter_cldr', '~> 4.4', '>= 4.4.2'
+gem 'draper', '~> 3.0', '>= 3.0.1'
 
 group :development, :test do
   gem 'byebug'

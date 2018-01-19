@@ -59,4 +59,20 @@ module ApplicationHelper
   def report_incorrect_data_url
     REPORT_INCORRECT_DATA_URL
   end
+
+  def transliteration_action(should_transliterate)
+    link_to_if !should_transliterate, t('shared.transliteration.transliterate'), params_with_transliterated do
+      link_to t('shared.transliteration.dont_transliterate'), params_without_transliterated
+    end
+  end
+
+  private
+
+  def params_with_transliterated
+    request.params.dup.merge(transliterated: 'true')
+  end
+
+  def params_without_transliterated
+    request.params.dup.merge(transliterated: nil)
+  end
 end

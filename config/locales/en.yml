@@ -121,6 +121,9 @@ en:
         whocontrolsit: WhoControlsIt
       continue: Continue
     report_incorrect_data: Report incorrect data
+    transliteration:
+      transliterate: Transliterate
+      dont_transliterate: "Don't transliterate"
 
   entity_types:
     default: entity

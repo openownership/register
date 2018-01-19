@@ -29,6 +29,10 @@ GEM
       globalid (>= 0.3.6)
     activemodel (5.0.0.1)
       activesupport (= 5.0.0.1)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
+      builder (~> 3.1)
     activerecord (5.0.0.1)
       activemodel (= 5.0.0.1)
       activesupport (= 5.0.0.1)
@@ -99,6 +103,12 @@ GEM
     dotenv-rails (2.1.1)
       dotenv (= 2.1.1)
       railties (>= 4.0, < 5.1)
+    draper (3.0.1)
+      actionpack (~> 5.0)
+      activemodel (~> 5.0)
+      activemodel-serializers-xml (~> 1.0)
+      activesupport (~> 5.0)
+      request_store (~> 1.0)
     elasticsearch (5.0.0)
       elasticsearch-api (= 5.0.0)
       elasticsearch-transport (= 5.0.0)
@@ -236,6 +246,8 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
+    request_store (1.4.0)
+      rack (>= 1.4)
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
     roadie (3.2.1)
@@ -345,6 +357,7 @@ DEPENDENCIES
   database_cleaner
   devise
   dotenv-rails
+  draper (~> 3.0, >= 3.0.1)
   elasticsearch-model
   factory_girl_rails
   font-awesome-sass (~> 4.7.0)
