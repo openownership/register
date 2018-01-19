@@ -31,7 +31,7 @@ class UaImporter
   def process(line)
     record = JSON.parse(line)
 
-    return if !record['Is beneficial owner'] || record['Name EN'].blank?
+    return if !record['Is beneficial owner'] || record['Name'].blank?
 
     child_entity = child_entity!(record)
 
@@ -51,7 +51,7 @@ class UaImporter
       type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: 'ua',
       company_number: record['Company number'],
-      name: record['Company name EN'].presence,
+      name: record['Company name'].presence,
       address: record['Company address'].presence,
     )
 
@@ -65,11 +65,11 @@ class UaImporter
       identifiers: [
         {
           'document_id' => document_id,
-          'beneficial_owner_id' => record['Name EN'],
+          'beneficial_owner_id' => record['Name'],
         },
       ],
       type: Entity::Types::NATURAL_PERSON,
-      name: record['Name EN'],
+      name: record['Name'],
       country_of_residence: record['Country of residence'].presence,
       address: record['Address of residence'].presence,
     }
@@ -81,7 +81,7 @@ class UaImporter
     attributes = {
       _id: {
         'document_id' => document_id,
-        'beneficial_owner_id' => record['Name EN'],
+        'beneficial_owner_id' => record['Name'],
       },
       source: parent_entity,
       target: child_entity,
