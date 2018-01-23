@@ -67,6 +67,7 @@ class UaImporter
       identifiers: [
         {
           'document_id' => document_id,
+          'company_number' => record['Company number'],
           'beneficial_owner_id' => record['Name'],
         },
       ],
@@ -83,6 +84,7 @@ class UaImporter
     attributes = {
       _id: {
         'document_id' => document_id,
+        'company_number' => record['Company number'],
         'beneficial_owner_id' => record['Name'],
       },
       source: parent_entity,
