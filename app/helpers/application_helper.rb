@@ -53,4 +53,10 @@ module ApplicationHelper
   def show_referral_message?
     params[:referrer] == 'WhoControlsIt'
   end
+
+  REPORT_INCORRECT_DATA_URL = 'https://docs.google.com/forms/d/18-kex64GHUc_EIRBYOl1oedSthU0UOlllKDZrtarCOk'.freeze
+
+  def report_incorrect_data_url
+    REPORT_INCORRECT_DATA_URL
+  end
 end

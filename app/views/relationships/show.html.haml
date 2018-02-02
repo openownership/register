@@ -20,8 +20,7 @@
                 %a{ href: "#" }
                   Transliterate this page
               %li.option-report.last
-                %a{ href: "#" }
-                  Report incorrect data
+                = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank'
 
 .content
   .container-fluid
@@ -42,3 +41,4 @@
               %h6= glossary_tooltip(t(".provenance"), :provenance, :right)
               %ol
                 = render partial: 'provenance', collection: relationship.sourced_relationships, as: :relationship
+          = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, class: 'feedback-button', target: '_blank'

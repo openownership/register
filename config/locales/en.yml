@@ -18,7 +18,6 @@ en:
       no_further_information_known: No further information known about this %{type}
       no_data_from_opencorporates: OpenCorporates data not available
       more_on: "More on %{name}"
-      report_incorrect_data: Report incorrect data
       details: Details ›
       fields:
         nationality: Nationality
@@ -121,6 +120,7 @@ en:
         see_here: See here
         whocontrolsit: WhoControlsIt
       continue: Continue
+    report_incorrect_data: Report incorrect data
 
   entity_types:
     default: entity
