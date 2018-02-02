@@ -41,6 +41,20 @@
                   %h6= t(".fields.company_type")
                   %p= company_type
 
+  .options-bar
+    .container-fluid
+      .row
+        .col-lg-12
+          .options
+            %h6 Options
+            %ul.list-unstyled
+              %li.option-transliterate
+                %a{ :href => "#" }
+                  Transliterate this page
+              %li.option-report.last
+                %a{ :href => "#" }
+                  Report incorrect data
+
 .content.entity-content
   .container-fluid
     .row
