@@ -552,49 +552,64 @@ a, button {
   @include media-breakpoint-up(md) {
     display: flex;
   }
-  li {
+  a {
+    font-size: 0.8125rem;
+    color: $darkBlue;
+    &:after {
+      content: '';
+      display: inline-block;
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 15px;
+      height: 16px;
+      opacity: .5;
+      margin-left: 2px;
+      position: relative;
+      top: 5px;
+      @include media-breakpoint-down(sm) {
+        top: 3px;
+      }
+    }
+  }
+  a:hover, a:active, a:focus {
+    text-decoration: none;
+    &:after {
+      opacity: 1;
+    }
+  }
+}
+
+.search-content {
+  .options {
+    position: absolute;
+    top: 19px;
+    right: 31px;
     a {
-      font-size: 0.8125rem;
-      color: $darkBlue;
-      &:after {
-        content: '';
-        display: inline-block;
-        background-size: contain;
-        background-repeat: no-repeat;
-        width: 15px;
-        height: 16px;
-        opacity: .5;
-        margin-left: 2px;
-        position: relative;
-        top: 5px;
-        @include media-breakpoint-down(sm) {
-          top: 3px;
-        }
-      }
-    }
-    &.option-transliterate {
-      a {
-        &:after {
-          background-image: asset-url("icon-transliterate.svg");
-        }
-      }
-    }
-    &.option-report {
-      a {
-        &:after {
-          background-image: asset-url("icon-report-dark.svg");
-          width: 14px;
-          height: 14px;
-          opacity: .4;
-          top: 3px;
-        }
-      }
-    }
-    a:hover, a:active, a:focus {
-      text-decoration: none;
-      &:after {
+      padding-bottom: 3px;
+      border-bottom: 1px solid $border-color;
+      opacity: .75;
+      &:hover, &:active, &:focus {
         opacity: 1;
       }
+    }
+  }
+}
+
+.option-transliterate {
+  a {
+    &:after {
+      background-image: asset-url("icon-transliterate.svg");
+    }
+  }
+}
+.option-report {
+  a {
+    &:after {
+      background-image: asset-url("icon-report-dark.svg");
+      width: 14px;
+      height: 14px;
+      opacity: .4;
+      top: 3px;
     }
   }
 }
