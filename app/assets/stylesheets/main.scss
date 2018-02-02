@@ -579,7 +579,7 @@ a, button {
   }
 }
 
-.search-content {
+.search-content, .tree-controls {
   .options {
     position: absolute;
     top: 19px;
@@ -592,6 +592,14 @@ a, button {
         opacity: 1;
       }
     }
+  }
+}
+
+.tree-controls {
+  .options {
+    position: absolute;
+    top: 28px;
+    right: 0px;
   }
 }
 
