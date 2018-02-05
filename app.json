@@ -57,7 +57,12 @@
   },
   "addons": [
     "mongolab:sandbox",
-    "searchbox:starter"
+    {
+      "plan": "searchbox:starter",
+      "options": {
+        "es_version": "2"
+      }
+    }
   ],
   "buildpacks": [
   ]
