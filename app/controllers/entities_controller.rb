@@ -1,32 +1,48 @@
 class EntitiesController < ApplicationController
   def show
-    @entity = Entity.find(params[:id])
+    entity = Entity.find(params[:id])
 
-    @source_relationships = @entity.relationships_as_source
+    @opencorporates_company_hash = get_opencorporates_company_hash(entity)
 
-    @ultimate_source_relationship_groupings = RelationshipGraph.new(@entity).ultimate_source_relationships.group_by { |r| group_entity_not_statement(r.source) }.sort
+    @source_relationships = decorate(entity.relationships_as_source)
 
-    @opencorporates_company_hash = get_opencorporates_company_hash(@entity)
+    @ultimate_source_relationship_groups = decorate_with(
+      ultimate_source_relationship_groups(entity),
+      UltimateSourceRelationshipGroupDecorator,
+    )
 
-    @similar_people = @entity.natural_person? && Entity.search(
-      query: Search.query(search_params),
-      aggs: Search.aggregations,
-    ).limit(11)
+    @similar_people = entity.natural_person? ? decorate(similar_people(entity)) : nil
+
+    @entity = decorate(entity)
   end
 
   def tree
-    @entity = Entity.find(params[:id])
-    @node = TreeNode.new(@entity)
+    entity = Entity.find(params[:id])
+    @node = decorate_with(TreeNode.new(entity), TreeNodeDecorator)
+    @entity = decorate(entity)
   end
 
   private
 
-  def search_params
-    { q: @entity.name, type: 'natural-person' }
+  def ultimate_source_relationship_groups(entity)
+    label_for = ->(r) { r.source.id.to_s.include?('statement') ? rand : r.source.name }
+
+    groups = RelationshipGraph.new(entity).ultimate_source_relationships.group_by(&label_for)
+
+    groups.map do |label, relationships|
+      {
+        label: label,
+        label_lang_code: relationships.first.source.lang_code,
+        relationships: relationships,
+      }
+    end
   end
 
-  def group_entity_not_statement(source)
-    source.id.to_s.include?('statement') ? rand : source.name
+  def similar_people(entity)
+    Entity.search(
+      query: Search.query(q: entity.name, type: 'natural-person'),
+      aggs: Search.aggregations,
+    ).limit(11).records.to_a
   end
 
   def get_opencorporates_company_hash(entity)

@@ -22,8 +22,10 @@ class Entity
 
   mapping do
     indexes :name
+    indexes :name_transliterated
     indexes :type, index: :not_analyzed
     indexes :country_code, index: :not_analyzed
+    indexes :lang_code, index: :not_analyzed
   end
 
   def self.find_or_unknown(id)
@@ -74,7 +76,7 @@ class Entity
   end
 
   def as_indexed_json(_options = {})
-    as_json(only: [:name, :type], methods: :country_code)
+    as_json(only: [:name, :type, :lang_code], methods: [:name_transliterated, :country_code])
   end
 
   def to_builder

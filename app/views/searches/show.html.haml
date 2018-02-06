@@ -38,11 +38,14 @@
           .frame
             .frame-wrap
               %p= page_entries_info @response.results, entry_name: 'result'
+              .options
+                .option-transliterate
+                  = transliteration_action(@should_transliterate)
 
               %ul.list-unstyled.list-entities
                 - @response.records.to_a.each do |record|
                   %li.item
-                    = render "shared/entity_title", entity: record, with_company: true
+                    = render "shared/entity_title", entity: decorate(record), with_company: true
                     - if record.natural_person?
                       .result-controls
                         :ruby

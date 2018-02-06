@@ -8,6 +8,9 @@
     %span.fa.fa-search-minus
     %input.tree-zoom{ type: "range", data: { toggle: 'tooltip', title: t('tree.zoom'), placement: 'bottom' } }
     %span.fa.fa-search-plus
+    .options
+      .option-transliterate
+        = transliteration_action(@should_transliterate)
 
   .tree-help
     .fa.fa-info-circle

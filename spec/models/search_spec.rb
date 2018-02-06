@@ -10,7 +10,7 @@ RSpec.describe Search do
 
     subject { Search.query(search_params) }
 
-    it 'includes a match query for the name' do
+    it 'includes a match query for the name field' do
       match_query = {
         match_phrase: {
           name: {
@@ -20,7 +20,24 @@ RSpec.describe Search do
         },
       }
 
-      expect(subject[:bool][:must]).to include(match_query)
+      expect(subject[:bool][:should]).to include(match_query)
+    end
+
+    it 'includes a match query for the name_transliterated field' do
+      match_query = {
+        match_phrase: {
+          name_transliterated: {
+            query: 'smith',
+            slop: 50,
+          },
+        },
+      }
+
+      expect(subject[:bool][:should]).to include(match_query)
+    end
+
+    it 'should match on either the name or name_transliterated fields, or both' do
+      expect(subject[:bool][:minimum_should_match]).to eq 1
     end
 
     context 'when the type param is present' do

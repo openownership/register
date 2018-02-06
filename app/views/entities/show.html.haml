@@ -41,13 +41,25 @@
                   %h6= t(".fields.company_type")
                   %p= company_type
 
+  .options-bar
+    .container-fluid
+      .row
+        .col-lg-12
+          .options
+            %h6 Options
+            %ul.list-unstyled
+              %li.option-transliterate
+                = transliteration_action(@should_transliterate)
+              %li.option-report.last
+                = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank'
+
 .content.entity-content
   .container-fluid
     .row
       .col-lg-8
         - unless @entity.natural_person?
           .ultimate-source-relationships
-            - if @ultimate_source_relationship_groupings.empty?
+            - if @ultimate_source_relationship_groups.empty?
               %h2.empty-entities
                 = t(".controlling_entities_none.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities_none.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
             - else
@@ -56,19 +68,19 @@
               = link_to tree_entity_path(@entity), class: 'btn btn-sm btn-primary view-as-tree' do
                 %i.fa.fa-sitemap
                 %span= t(".view_as_tree")
-              - @ultimate_source_relationship_groupings.each do |name, relationships|
-                - if relationships.size > 1
+              - @ultimate_source_relationship_groups.each do |group|
+                - if group.relationships.size > 1
                   .grouping
-                    %a.grouping-header{ 'aria-controls' => name.parameterize, 'aria-expanded' => 'false', 'data-toggle' => 'collapse', 'href' => '#' + name.parameterize }
-                      = name
+                    %a.grouping-header{ 'aria-controls' => group.label.parameterize, 'aria-expanded' => 'false', 'data-toggle' => 'collapse', 'href' => '#' + group.label.parameterize }
+                      = group.label
                       %small.grouping-size.pull-right
-                        = t(".instances", count: relationships.size)
+                        = t(".instances", count: group.relationships.size)
                     .note
                       = t(".note")
-                    .collapse{ id: name.parameterize }
-                      = render partial: 'ultimate_source_relationship', collection: relationships, as: :relationship
+                    .collapse{ id: group.label.parameterize }
+                      = render partial: 'ultimate_source_relationship', collection: group.relationships, as: :relationship
                 - else
-                  = render partial: 'ultimate_source_relationship', locals: { relationship: relationships.first }
+                  = render partial: 'ultimate_source_relationship', locals: { relationship: group.relationships.first }
 
         .source-relationships
           - if @source_relationships.empty?
@@ -143,16 +155,16 @@
             %p= link_to 'Google', google_search_uri(q: @entity.name), class: 'external', target: '_blank'
             - if @entity.natural_person?
               %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank'
-        = link_to t(".report_incorrect_data"), 'https://docs.google.com/forms/d/18-kex64GHUc_EIRBYOl1oedSthU0UOlllKDZrtarCOk', class: 'feedback-button', target: '_blank'
+        = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, class: 'feedback-button', target: '_blank'
 
-    - if @similar_people && @similar_people.results.total > 1
+    - if @similar_people && @similar_people.length > 1
       .row
         .col-lg-8
           .frame
             .frame-wrap
               %h5 People with similar names
               %ul.list-unstyled.list-entities
-                - @similar_people.records.to_a.each do |record|
+                - @similar_people.each do |record|
                   - next if record == @entity
                   %li
                     .item

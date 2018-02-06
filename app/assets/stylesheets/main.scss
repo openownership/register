@@ -497,6 +497,131 @@ a, button {
   }
 }
 
+.options-bar {
+  width: 100%;
+  border-top: 1px solid $border-color;
+  @include media-breakpoint-up(md) {
+    height: 39px;
+  }
+  h6 {
+    margin-top: 15px;
+  }
+  ul {
+    margin-top: 8px;
+    flex-grow: 1;
+    @include media-breakpoint-up(md) {
+      display: flex;
+    }
+  }
+  li {
+    @include media-breakpoint-down(sm) {
+      width: 100%;
+    }
+    @include media-breakpoint-up(md) {
+      margin-left: 16px;
+      line-height: 0;
+      &:before {
+        content: '';
+        width: 1px;
+        height: 16px;
+        background-color: $border-color;
+        display: inline-block;
+        position: relative;
+        top: 3px;
+        margin-right: 11px;
+      }
+    }
+    a {
+      @include media-breakpoint-down(sm) {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        background-color: $lightGrey;
+        border-radius: 2px;
+        padding: 8px;
+        margin-bottom: 4px;
+      }
+    }
+    &.last a {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.options {
+  @include media-breakpoint-up(md) {
+    display: flex;
+  }
+  a {
+    font-size: 0.8125rem;
+    color: $darkBlue;
+    &:after {
+      content: '';
+      display: inline-block;
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 15px;
+      height: 16px;
+      opacity: .5;
+      margin-left: 5px;
+      position: relative;
+      top: 5px;
+      @include media-breakpoint-down(sm) {
+        top: 3px;
+      }
+    }
+  }
+  a:hover, a:active, a:focus {
+    text-decoration: none;
+    &:after {
+      opacity: 1;
+    }
+  }
+}
+
+.search-content, .tree-controls {
+  .options {
+    position: absolute;
+    top: 19px;
+    right: 31px;
+    a {
+      padding-bottom: 3px;
+      border-bottom: 1px solid $border-color;
+      opacity: .75;
+      &:hover, &:active, &:focus {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.tree-controls {
+  .options {
+    position: absolute;
+    top: 28px;
+    right: 0px;
+  }
+}
+
+.option-transliterate {
+  a {
+    &:after {
+      background-image: asset-url("icon-transliterate.svg");
+    }
+  }
+}
+.option-report {
+  a {
+    &:after {
+      background-image: asset-url("icon-report-dark.svg");
+      width: 14px;
+      height: 14px;
+      opacity: .4;
+      top: 3px;
+    }
+  }
+}
+
 .ultimate-source-relationships, .source-relationships, .relationship-details, .list-entities {
   .entity-title {
     padding-bottom: 5px;

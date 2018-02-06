@@ -2,14 +2,25 @@ class Search
   def self.query(search_params)
     {
       bool: {
-        must: [
-          match_phrase: {
-            name: {
-              query: search_params[:q],
-              slop: 50,
+        should: [
+          {
+            match_phrase: {
+              name: {
+                query: search_params[:q],
+                slop: 50,
+              },
+            },
+          },
+          {
+            match_phrase: {
+              name_transliterated: {
+                query: search_params[:q],
+                slop: 50,
+              },
             },
           },
         ],
+        minimum_should_match: 1,
         filter: filters(search_params),
       },
     }
