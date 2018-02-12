@@ -69,7 +69,9 @@ class PscImporter
       company_number: company_number,
     )
     @entity_resolver.resolve!(entity)
-    entity.tap(&:upsert)
+    entity
+      .tap(&:upsert)
+      .tap(&method(:index_entity))
   end
 
   def parent_entity!(data)
@@ -118,7 +120,9 @@ class PscImporter
       )
     end
 
-    entity.tap(&:upsert)
+    entity
+      .tap(&:upsert)
+      .tap(&method(:index_entity))
   end
 
   def relationship!(child_entity, parent_entity, data)
@@ -201,5 +205,9 @@ class PscImporter
     parts << format('%02d', elements.month) if elements.month
     parts << format('%02d', elements.day) if elements.month && elements.day
     ISO8601::Date.new(parts.join('-'))
+  end
+
+  def index_entity(entity)
+    IndexEntityService.new(entity).index
   end
 end
