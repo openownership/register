@@ -46,11 +46,15 @@ class PscImporter
 
       statement!(child_entity, record.data)
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
-      child_entity = child_entity!(record.company_number)
+      begin
+        child_entity = child_entity!(record.company_number)
 
-      parent_entity = parent_entity!(record.data)
+        parent_entity = parent_entity!(record.data)
 
-      relationship!(child_entity, parent_entity, record.data)
+        relationship!(child_entity, parent_entity, record.data)
+      rescue PotentiallyBadEntityMergeDetectedAndStopped => ex
+        Rails.logger.warn "[PSC import] Failed to handle a required entity merge as a potentially bad merge has been detected and stopped: #{ex.message} - will not complete the import of this line: #{line}"
+      end
     else
       raise "unexpected kind: #{record.data.kind}"
     end
@@ -70,7 +74,7 @@ class PscImporter
     )
     @entity_resolver.resolve!(entity)
     entity
-      .tap(&:upsert)
+      .tap(&method(:upsert_entity_and_handle_dups))
       .tap(&method(:index_entity))
   end
 
@@ -121,7 +125,7 @@ class PscImporter
     end
 
     entity
-      .tap(&:upsert)
+      .tap(&method(:upsert_entity_and_handle_dups))
       .tap(&method(:index_entity))
   end
 
@@ -209,5 +213,22 @@ class PscImporter
 
   def index_entity(entity)
     IndexEntityService.new(entity).index
+  end
+
+  def upsert_entity_and_handle_dups(entity)
+    entity.upsert
+  rescue DuplicateEntitiesDetected => ex
+    handle_duplicate_entities!(ex.criteria)
+    retry
+  end
+
+  def handle_duplicate_entities!(criteria)
+    entities = criteria.entries
+
+    to_remove, to_keep = EntityMergeDecider.new(*entities).call
+
+    Rails.logger.info "[PSC import] Duplicate entities detected for selector: #{criteria.selector} - attempting to merge entity A into entity B. A = ID: #{to_remove._id}, name: #{to_remove.name}, identifiers: #{to_remove.identifiers}; B = ID: #{to_keep._id}, name: #{to_keep.name}, identifiers: #{to_keep.identifiers};"
+
+    EntityMerger.new(to_remove, to_keep).call
   end
 end

@@ -38,10 +38,6 @@ class EntityResolver
   private
 
   def merge(entity, response)
-    identifier = {
-      'jurisdiction_code' => response.fetch(:jurisdiction_code),
-      'company_number' => response.fetch(:company_number),
-    }
     attributes = {
       name: response.fetch(:name),
       address: response[:registered_address_in_full].presence.try(:gsub, "\n", ", "),
@@ -53,6 +49,6 @@ class EntityResolver
     }
 
     entity.assign_attributes(attributes)
-    entity.identifiers << identifier
+    entity.add_oc_identifier(response)
   end
 end

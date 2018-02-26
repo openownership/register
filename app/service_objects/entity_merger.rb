@@ -12,6 +12,7 @@ class EntityMerger
     raise 'Already merged' if @merged
 
     check_types
+    check_for_potential_bad_merge
     merge_fields_if_empty
     merge_identifiers
     update_references!
@@ -29,6 +30,19 @@ class EntityMerger
 
   def check_types
     raise "to_remove entity type '#{@to_remove.type}' does not match to_keep entity type '#{@to_keep.type}' - cannot merge" unless @to_remove.type == @to_keep.type
+  end
+
+  def check_for_potential_bad_merge
+    # We have a potentially bad merge if the entities have OC identifiers.
+    # This is because we have no way of saying for sure that those two entities
+    # can/should be merged and so we should err on the side of caution here.
+    to_remove_oc_identifier = @to_remove.oc_identifier
+    to_keep_oc_identifier = @to_keep.oc_identifier
+    if to_remove_oc_identifier.present? &&
+       to_keep_oc_identifier.present? &&
+       to_remove_oc_identifier != to_keep_oc_identifier
+      raise PotentiallyBadEntityMergeDetectedAndStopped, 'differing OC identifiers detected'
+    end
   end
 
   def merge_fields_if_empty
@@ -54,4 +68,7 @@ class EntityMerger
   def reindex_entity_to_keep_for_search
     IndexEntityService.new(@to_keep).index
   end
+end
+
+class PotentiallyBadEntityMergeDetectedAndStopped < StandardError
 end

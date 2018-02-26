@@ -97,26 +97,63 @@ RSpec.describe EntityMerger do
   end
 
   context 'with different entities of the same type' do
-    let(:to_remove_name) { 'Foo Ltd.' }
-    let!(:to_remove) { create :legal_entity, name: to_remove_name, address: '123 street' }
-    let!(:to_keep) { create :legal_entity, name: nil, address: '345 street' }
+    context 'when only one entity has an OC identifier' do
+      let(:to_remove_name) { 'Foo Ltd.' }
 
-    let! :merged_identifiers do
-      to_remove.identifiers + to_keep.identifiers
+      let(:to_remove_oc_identifier) do
+        Entity.build_oc_identifier(
+          jurisdiction_code: 'gb',
+          company_number: 1234,
+        )
+      end
+
+      let!(:to_remove) { create :legal_entity, identifiers: [to_remove_oc_identifier], name: to_remove_name, address: '123 street' }
+
+      let!(:to_keep) { create :legal_entity, name: nil, address: '345 street' }
+
+      let! :merged_identifiers do
+        to_remove.identifiers + to_keep.identifiers
+      end
+
+      let! :merged_fields do
+        (Entity.fields.keys - EntityMerger::PROTECTED_FIELDS).each_with_object({}) do |f, h|
+          h[f] = to_keep[f]
+        end.merge(
+          'name' => to_remove_name,
+        )
+      end
+
+      it 'should remove the to_remove entity and merge certain bits of data into the to_keep entity and update all relevant references to the to_remove entity' do
+        set_up_search_index_updated_expectations
+        subject.call
+        expect_merged(merged_identifiers, merged_fields)
+      end
     end
 
-    let! :merged_fields do
-      (Entity.fields.keys - EntityMerger::PROTECTED_FIELDS).each_with_object({}) do |f, h|
-        h[f] = to_keep[f]
-      end.merge(
-        'name' => to_remove_name,
-      )
-    end
+    context 'when the two entities have differing OC identifiers' do
+      let(:to_remove_oc_identifier) do
+        Entity.build_oc_identifier(
+          jurisdiction_code: 'gb',
+          company_number: 1234,
+        )
+      end
 
-    it 'should remove the to_remove entity and merge certain bits of data into the to_keep entity and update all relevant references to the to_remove entity' do
-      set_up_search_index_updated_expectations
-      subject.call
-      expect_merged(merged_identifiers, merged_fields)
+      let(:to_keep_oc_identifier) do
+        Entity.build_oc_identifier(
+          jurisdiction_code: 'pl',
+          company_number: 1234,
+        )
+      end
+
+      let!(:to_remove) { create :legal_entity, identifiers: [to_remove_oc_identifier] }
+
+      let!(:to_keep) { create :legal_entity, identifiers: [to_keep_oc_identifier] }
+
+      it 'should raise an error when trying to merge and not merge anything' do
+        set_up_search_index_not_updated_expectations
+        expect { subject.call }.to raise_error(PotentiallyBadEntityMergeDetectedAndStopped, 'differing OC identifiers detected')
+        expect_not_merged
+      end
     end
   end
 end

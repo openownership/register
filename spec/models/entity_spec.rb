@@ -298,7 +298,7 @@ RSpec.describe Entity do
           end
 
           it "raises an exception mentioning the identifiers" do
-            expect { subject.upsert }.to raise_error(RuntimeError, /#{subject.identifiers}/)
+            expect { subject.upsert }.to raise_error(DuplicateEntitiesDetected, /#{subject.identifiers}/)
           end
         end
       end
@@ -393,6 +393,40 @@ RSpec.describe Entity do
           'dissolution_date' => nil,
           'company_type' => 'funky',
         )
+      end
+    end
+  end
+
+  describe '#oc_identifier' do
+    subject { build :legal_entity }
+
+    let(:data) do
+      {
+        jurisdiction_code: 'gb',
+        company_number: 1234,
+      }
+    end
+
+    context 'when the entity has an OC identifier added to it' do
+      before do
+        subject.add_oc_identifier(data)
+      end
+
+      it 'should return the identifier as unexpected' do
+        expect(subject.oc_identifier).to eq(
+          'jurisdiction_code' => 'gb',
+          'company_number' => 1234,
+        )
+      end
+    end
+
+    context 'when the entity does not have an OC identifier' do
+      before do
+        subject.identifiers << { 'foo' => 1, 'bar' => 'abc' }
+      end
+
+      it 'should return nil' do
+        expect(subject.oc_identifier).to be nil
       end
     end
   end
