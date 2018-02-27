@@ -56,14 +56,14 @@ RSpec.describe EntityMerger do
 
   def set_up_search_index_not_updated_expectations
     expect(to_remove).to receive(:__elasticsearch__).never
-    expect(index_entity_service).to receive(:call).never
+    expect(index_entity_service).to receive(:index).never
   end
 
   def set_up_search_index_updated_expectations
     es = double
     expect(to_remove).to receive(:__elasticsearch__).and_return(es)
     expect(es).to receive(:delete_document)
-    expect(index_entity_service).to receive(:call)
+    expect(index_entity_service).to receive(:index)
   end
 
   context 'with the same entity for both to_remove and to_keep' do

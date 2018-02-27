@@ -29,7 +29,7 @@ class SubmissionImporter
   end
 
   def index_entity(entity)
-    IndexEntityService.new(entity).call
+    IndexEntityService.new(entity).index
   end
 
   def relationship!(submission_relationship)

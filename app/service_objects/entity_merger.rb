@@ -52,6 +52,6 @@ class EntityMerger
   end
 
   def reindex_entity_to_keep_for_search
-    IndexEntityService.new(@to_keep).call
+    IndexEntityService.new(@to_keep).index
   end
 end

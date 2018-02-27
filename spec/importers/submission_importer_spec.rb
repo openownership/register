@@ -10,7 +10,7 @@ RSpec.describe SubmissionImporter do
   describe '#import' do
     before do
       allow(IndexEntityService).to receive(:new).and_return(index_entity_service)
-      allow(index_entity_service).to receive(:call)
+      allow(index_entity_service).to receive(:index)
       allow(entity_resolver).to receive(:resolve!)
     end
 
