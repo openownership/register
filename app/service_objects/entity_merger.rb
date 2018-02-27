@@ -48,7 +48,7 @@ class EntityMerger
   end
 
   def delete_entity_to_remove_from_search
-    @to_remove.__elasticsearch__.delete_document
+    IndexEntityService.new(@to_remove).delete
   end
 
   def reindex_entity_to_keep_for_search

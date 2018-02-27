@@ -15,6 +15,7 @@ RSpec.describe EntityMerger do
   let!(:other_statement) { create :statement, entity: other_entity }
 
   before do
+    allow(IndexEntityService).to receive(:new).with(to_remove).and_return(index_entity_service)
     allow(IndexEntityService).to receive(:new).with(to_keep).and_return(index_entity_service)
   end
 
@@ -55,14 +56,12 @@ RSpec.describe EntityMerger do
   end
 
   def set_up_search_index_not_updated_expectations
-    expect(to_remove).to receive(:__elasticsearch__).never
+    expect(index_entity_service).to receive(:delete).never
     expect(index_entity_service).to receive(:index).never
   end
 
   def set_up_search_index_updated_expectations
-    es = double
-    expect(to_remove).to receive(:__elasticsearch__).and_return(es)
-    expect(es).to receive(:delete_document)
+    expect(index_entity_service).to receive(:delete)
     expect(index_entity_service).to receive(:index)
   end
 
