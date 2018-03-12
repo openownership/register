@@ -62,7 +62,8 @@
       "options": {
         "es_version": "2"
       }
-    }
+    },
+    "heroku-redis:hobby-dev"
   ],
   "buildpacks": [
   ]

@@ -34,6 +34,15 @@ Rails.application.routes.draw do
         post :approve
       end
     end
+
+    require 'sidekiq/web'
+    mount Sidekiq::Web => '/sidekiq'
+    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+      expected_username, expected_password = ENV.fetch('ADMIN_BASIC_AUTH').split(':')
+      ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(username), ::Digest::SHA256.hexdigest(expected_username)) &
+        ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(password), ::Digest::SHA256.hexdigest(expected_password))
+    end
+
     root to: redirect('admin/submissions')
   end
   root "searches#show"

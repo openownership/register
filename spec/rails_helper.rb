@@ -7,6 +7,9 @@ require 'support/devise'
 require 'support/submission_helpers'
 require 'support/admin_helpers'
 
+require 'sidekiq/testing'
+Sidekiq::Logging.logger = nil
+
 Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
