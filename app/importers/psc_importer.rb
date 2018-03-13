@@ -22,7 +22,7 @@ class PscImporter
       queue << Parallel::Stop
     end
 
-    Parallel.each(queue, in_threads: 20) do |line|
+    Parallel.each(queue, in_threads: Concurrent.processor_count) do |line|
       begin
         process(line)
       rescue Timeout::Error

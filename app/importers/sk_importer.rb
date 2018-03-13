@@ -22,7 +22,7 @@ class SkImporter
       queue << Parallel::Stop
     end
 
-    Parallel.each(queue, in_threads: 20) do |record|
+    Parallel.each(queue, in_threads: Concurrent.processor_count) do |record|
       begin
         process(record)
       rescue Timeout::Error
