@@ -63,7 +63,8 @@
         "es_version": "2"
       }
     },
-    "heroku-redis:hobby-dev"
+    "heroku-redis:hobby-dev",
+    "papertrail:choklad"
   ],
   "buildpacks": [
   ]
