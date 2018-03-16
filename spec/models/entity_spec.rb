@@ -397,6 +397,34 @@ RSpec.describe Entity do
     end
   end
 
+  describe '#with_identifiers scope' do
+    let(:identifier1) { { a: 'b', c: 'd' } }
+
+    let(:identifier2) { { e: 'f' } }
+
+    let!(:entity) do
+      create :legal_entity, identifiers: [identifier1, identifier2]
+    end
+
+    it 'should find the entity with an expected identifier' do
+      expect(Entity.with_identifiers([identifier1]).first).to eq entity
+    end
+
+    it 'should find the entity with an expected identifier' do
+      expect(Entity.with_identifiers([identifier2]).first).to eq entity
+    end
+
+    it 'should not find any entities with a partially matched identifier' do
+      i = { c: 'd' }
+      expect(Entity.with_identifiers([i]).first).to be nil
+    end
+
+    it 'should not find any entities with an unknown identifier' do
+      i = { foo: 'unknown' }
+      expect(Entity.with_identifiers([i]).first).to be nil
+    end
+  end
+
   describe '#oc_identifier' do
     subject { build :legal_entity }
 

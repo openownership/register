@@ -47,9 +47,7 @@ class Entity
   # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
   # are found using their embeddeded identifiers instead of the _id field.
   def upsert
-    selector = {
-      identifiers: { :$elemMatch => { :$in => identifiers } },
-    }
+    selector = Entity.with_identifiers(identifiers).selector
 
     attributes = as_document.except('_id', 'identifiers')
 
@@ -108,6 +106,10 @@ class Entity
       end
     end
   end
+
+  scope :with_identifiers, ->(identifiers) {
+    where(identifiers: { :$elemMatch => { :$in => identifiers } })
+  }
 
   OC_IDENTIFIER_KEYS = %w(jurisdiction_code company_number).freeze
 

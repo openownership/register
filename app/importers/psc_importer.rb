@@ -61,7 +61,7 @@ class PscImporter
   end
 
   def child_entity!(company_number)
-    entity = Entity.new(
+    attributes = {
       identifiers: [
         {
           'document_id' => document_id,
@@ -71,11 +71,29 @@ class PscImporter
       type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: 'gb',
       company_number: company_number,
-    )
-    @entity_resolver.resolve!(entity)
-    entity
-      .tap(&method(:upsert_entity_and_handle_dups))
-      .tap(&method(:index_entity))
+    }
+
+    # If an entity already exists for this PSC record, and it contains an OC
+    # identifier, then we can short circuit and use this entity directly
+    # (saving us having to resolve against the OC API again, etc.)
+    #
+    # This does mean we won't pull in the latest info from OC, which is a
+    # separate issue we can solve later.
+
+    new_or_updated_child_entity = -> do
+      entity = Entity.new(attributes)
+      @entity_resolver.resolve!(entity)
+      entity
+        .tap(&method(:upsert_entity_and_handle_dups))
+        .tap(&method(:index_entity))
+    end
+
+    entity = Entity.with_identifiers(attributes[:identifiers]).first
+    if entity && entity.oc_identifier.present?
+      entity
+    else
+      new_or_updated_child_entity.call
+    end
   end
 
   def parent_entity!(data)
