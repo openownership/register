@@ -36,8 +36,6 @@ class PscImporter
   def process(line)
     record = JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
 
-    return if record.data.ceased_on.present?
-
     case record.data.kind
     when 'totals#persons-of-significant-control-snapshot'
       :ignore
@@ -157,6 +155,7 @@ class PscImporter
       target: child_entity,
       interests: data.natures_of_control,
       sample_date: data.notified_on.presence,
+      ended_date: data.ceased_on.presence,
       provenance: {
         source_url: source_url,
         source_name: source_name,
@@ -175,6 +174,7 @@ class PscImporter
         link: data.links.self,
       },
       entity: entity,
+      ended_date: data.ceased_on.presence,
     }
 
     attributes.merge!(statement_attributes(data))
