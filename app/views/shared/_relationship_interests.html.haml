@@ -1,4 +1,5 @@
 .relationship-interests
+  - show_ended = local_assigns.fetch :show_ended, false
   %ul.list-unstyled{ id: ("cite-back-#{relationship[:reference_number]}" if relationship[:reference_number]) }
     - if relationship.interests.empty?
       %li.unknown
@@ -9,6 +10,9 @@
       - if unknown_interests_for(relationship).any?
         %li.unknown
           = glossary_tooltip(t(".unknown"), :undefined_interest, :right)
+    - if show_ended && relationship.ended_date
+      %li.ended_date
+        = t("shared.relationship_ended", date: relationship.ended_date)
     - if relationship[:reference_number]
       %sup.reference
         %a{ href: "#cite-#{relationship[:reference_number]}" }

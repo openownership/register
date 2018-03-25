@@ -124,6 +124,7 @@ en:
     transliteration:
       transliterate: Transliterate
       dont_transliterate: "Don't transliterate"
+    relationship_ended: Relationship ended on %{date}
 
   entity_types:
     default: entity

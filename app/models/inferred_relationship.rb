@@ -9,7 +9,12 @@ class InferredRelationship
   embeds_many :sourced_relationships, class_name: 'Relationship'
 
   def intermediate_entities
-    return [] unless sourced_relationships.any?
+    return [] unless sourced_relationships.present?
     sourced_relationships[1..-1].map(&:source)
+  end
+
+  def first_ended_relationship_in_chain
+    return nil unless sourced_relationships.present?
+    sourced_relationships.detect { |r| r.ended_date.present? } # rubocop:disable Style/CollectionMethods
   end
 end

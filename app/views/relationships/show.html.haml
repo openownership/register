@@ -28,9 +28,9 @@
         .col-lg-8
           .relationship-details
             - relationship.sourced_relationships.each do |sourced_relationship|
-              .item.relationship-source
+              .item.relationship-source{ class: ('ended' if sourced_relationship.ended_date.present?) }
                 = render partial: 'shared/entity_title', locals: { entity: sourced_relationship.source }
-                = render partial: 'shared/relationship_interests', locals: { relationship: sourced_relationship }
+                = render partial: 'shared/relationship_interests', locals: { relationship: sourced_relationship, show_ended: true }
 
             .item.relationship-target
               = render partial: 'shared/entity_title', locals: { entity: @target_entity }

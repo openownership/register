@@ -103,6 +103,10 @@ $tree-background: #f4f6f8;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
   transition: opacity 0.1s linear;
 
+  &.ended {
+    background-color: $background-color;
+  }
+
   a {
     color: $darkBlue;
   }
@@ -255,6 +259,13 @@ $tree-background: #f4f6f8;
 
   ul {
     margin-bottom: 0;
+  }
+
+  .ended_date {
+    margin-top: 3px;
+    border-top: 1px dotted $border-color;
+    padding-top: 3px;
+    font-style: italic;
   }
 }
 

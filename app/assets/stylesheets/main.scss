@@ -825,14 +825,24 @@ span.tooltip-helper {
   }
   .item {
     background-color: $white;
-    .relationship-link {
-      display: block;
-      position: relative;
-      padding: 7px 10px;
+    &.ended {
+      background-color: $background-color;
+    }
+    .relationship-link, .ended_date {
       font-size: 0.8125rem;
       line-height: 1.75em;
       background-color: $background-color;
       color: $text-default;
+    }
+    .ended_date {
+      border-top: 1px dotted $border-color;
+      padding-top: 7px;
+      font-style: italic;
+    }
+    .relationship-link {
+      display: block;
+      position: relative;
+      padding: 7px 10px;
       border-radius: 1px;
       transition: all .25s ease;
       &:hover {
@@ -988,6 +998,12 @@ span.tooltip-helper {
         font-weight: normal;
         color: $text-default;
       }
+      li.ended_date {
+        margin-top: 4px;
+        border-top: 1px dotted $border-color;
+        padding-top: 4px;
+        font-style: italic;
+      }
       .reference {
         position: absolute;
         top: 38px;
@@ -1004,6 +1020,9 @@ span.tooltip-helper {
   }
   .relationship-source {
     margin-bottom: 0;
+    &.ended .entity-link {
+      background-color: $background-color;
+    }
   }
   .entity-title {
     font-size: 1.125rem;
