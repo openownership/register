@@ -6,10 +6,11 @@
     - if relationship.provenance
       %a.external{ href: relationship.provenance.source_url, title: relationship.provenance.source_name, target: '_blank' }
         = relationship.provenance.source_name
-      - partial_date_format(relationship.sample_date).try do |sample_date|
+      - sample_date = get_most_likely_sample_date(relationship)
+      - partial_date_format(sample_date).try do |formatted|
         %p
           = glossary_tooltip(t(".sample_date"), :sample_date, :right)
-          = sample_date
+          = formatted
       %p.meta-secondary
         = glossary_tooltip(t(".retrieved_at"), :retrieved_at, :right)
         = relationship.provenance.retrieved_at.to_date
