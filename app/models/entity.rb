@@ -47,9 +47,7 @@ class Entity
   # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
   # are found using their embeddeded identifiers instead of the _id field.
   def upsert
-    selector = {
-      identifiers: { :$elemMatch => { :$in => identifiers } },
-    }
+    selector = Entity.with_identifiers(identifiers).selector
 
     attributes = as_document.except('_id', 'identifiers')
 
@@ -71,7 +69,15 @@ class Entity
     self.identifiers = document.fetch('identifiers')
   rescue Mongo::Error::OperationFailure => exception
     raise unless exception.message.start_with?('E11000')
-    raise "Unable to upsert entity due to #{identifiers} matching multiple documents" if Entity.where(selector).count > 1
+
+    criteria = Entity.where(selector)
+    if criteria.count > 1
+      raise DuplicateEntitiesDetected.new(
+        "Unable to upsert entity due to #{identifiers} matching multiple documents",
+        criteria,
+      )
+    end
+
     retry
   end
 
@@ -99,5 +105,36 @@ class Entity
         json.company_type company_type
       end
     end
+  end
+
+  scope :with_identifiers, ->(identifiers) {
+    where(identifiers: { :$elemMatch => { :$in => identifiers } })
+  }
+
+  OC_IDENTIFIER_KEYS = %w(jurisdiction_code company_number).sort.freeze
+
+  def self.build_oc_identifier(data)
+    OC_IDENTIFIER_KEYS.each_with_object({}) do |k, h|
+      k_sym = k.to_sym
+      raise "Cannot build OC identifier - data is missing required key '#{k}' - data = #{data.inspect}" unless data.key?(k_sym)
+      h[k] = data[k_sym]
+    end
+  end
+
+  def add_oc_identifier(data)
+    identifiers << Entity.build_oc_identifier(data)
+  end
+
+  def oc_identifier
+    identifiers.find { |i| i.keys.map(&:to_s).sort == OC_IDENTIFIER_KEYS }
+  end
+end
+
+class DuplicateEntitiesDetected < StandardError
+  attr_reader :criteria
+
+  def initialize(msg, criteria)
+    super(msg)
+    @criteria = criteria
   end
 end

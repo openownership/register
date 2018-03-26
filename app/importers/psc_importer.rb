@@ -22,7 +22,7 @@ class PscImporter
       queue << Parallel::Stop
     end
 
-    Parallel.each(queue, in_threads: 20) do |line|
+    Parallel.each(queue, in_threads: Concurrent.processor_count) do |line|
       begin
         process(line)
       rescue Timeout::Error
@@ -36,8 +36,6 @@ class PscImporter
   def process(line)
     record = JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
 
-    return if record.data.ceased_on.present?
-
     case record.data.kind
     when 'totals#persons-of-significant-control-snapshot'
       :ignore
@@ -46,18 +44,22 @@ class PscImporter
 
       statement!(child_entity, record.data)
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
-      child_entity = child_entity!(record.company_number)
+      begin
+        child_entity = child_entity!(record.company_number)
 
-      parent_entity = parent_entity!(record.data)
+        parent_entity = parent_entity!(record.data)
 
-      relationship!(child_entity, parent_entity, record.data)
+        relationship!(child_entity, parent_entity, record.data)
+      rescue PotentiallyBadEntityMergeDetectedAndStopped => ex
+        Rails.logger.warn "[PSC import] Failed to handle a required entity merge as a potentially bad merge has been detected and stopped: #{ex.message} - will not complete the import of this line: #{line}"
+      end
     else
       raise "unexpected kind: #{record.data.kind}"
     end
   end
 
   def child_entity!(company_number)
-    entity = Entity.new(
+    attributes = {
       identifiers: [
         {
           'document_id' => document_id,
@@ -67,9 +69,29 @@ class PscImporter
       type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: 'gb',
       company_number: company_number,
-    )
-    @entity_resolver.resolve!(entity)
-    entity.tap(&:upsert)
+    }
+
+    # If an entity already exists for this PSC record, and it contains an OC
+    # identifier, then we can short circuit and use this entity directly
+    # (saving us having to resolve against the OC API again, etc.)
+    #
+    # This does mean we won't pull in the latest info from OC, which is a
+    # separate issue we can solve later.
+
+    new_or_updated_child_entity = -> do
+      entity = Entity.new(attributes)
+      @entity_resolver.resolve!(entity)
+      entity
+        .tap(&method(:upsert_entity_and_handle_dups))
+        .tap(&method(:index_entity))
+    end
+
+    entity = Entity.with_identifiers(attributes[:identifiers]).first
+    if entity && entity.oc_identifier.present?
+      entity
+    else
+      new_or_updated_child_entity.call
+    end
   end
 
   def parent_entity!(data)
@@ -118,7 +140,9 @@ class PscImporter
       )
     end
 
-    entity.tap(&:upsert)
+    entity
+      .tap(&method(:upsert_entity_and_handle_dups))
+      .tap(&method(:index_entity))
   end
 
   def relationship!(child_entity, parent_entity, data)
@@ -131,6 +155,7 @@ class PscImporter
       target: child_entity,
       interests: data.natures_of_control,
       sample_date: data.notified_on.presence,
+      ended_date: data.ceased_on.presence,
       provenance: {
         source_url: source_url,
         source_name: source_name,
@@ -149,6 +174,7 @@ class PscImporter
         link: data.links.self,
       },
       entity: entity,
+      ended_date: data.ceased_on.presence,
     }
 
     attributes.merge!(statement_attributes(data))
@@ -201,5 +227,26 @@ class PscImporter
     parts << format('%02d', elements.month) if elements.month
     parts << format('%02d', elements.day) if elements.month && elements.day
     ISO8601::Date.new(parts.join('-'))
+  end
+
+  def index_entity(entity)
+    IndexEntityService.new(entity).index
+  end
+
+  def upsert_entity_and_handle_dups(entity)
+    entity.upsert
+  rescue DuplicateEntitiesDetected => ex
+    handle_duplicate_entities!(ex.criteria)
+    retry
+  end
+
+  def handle_duplicate_entities!(criteria)
+    entities = criteria.entries
+
+    to_remove, to_keep = EntityMergeDecider.new(*entities).call
+
+    Rails.logger.info "[PSC import] Duplicate entities detected for selector: #{criteria.selector} - attempting to merge entity A into entity B. A = ID: #{to_remove._id}, name: #{to_remove.name}, identifiers: #{to_remove.identifiers}; B = ID: #{to_keep._id}, name: #{to_keep.name}, identifiers: #{to_keep.identifiers};"
+
+    EntityMerger.new(to_remove, to_keep).call
   end
 end

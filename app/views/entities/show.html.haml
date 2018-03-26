@@ -90,12 +90,15 @@
             %h2
               = t(".controlled_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
             - @source_relationships.sort_by { |relationship| relationship.target.name }.each do |relationship|
-              .item
+              .item{ class: ('ended' if relationship.ended_date) }
                 = render partial: 'shared/entity_title', locals: { entity: relationship.target }
                 = link_to entity_relationship_path(relationship.target, @entity), class: 'relationship-link' do
                   = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
                   %span.details
                     = t(".details")
+                - if relationship.ended_date
+                  .ended_date
+                    = t("shared.relationship_ended", date: relationship.ended_date)
 
       - content_for(:meta) do
         - if @entity.natural_person?
@@ -173,7 +176,9 @@
                         .result-controls
                           :ruby
                             controls = record.relationships_as_source
+                              .select { |relationship| relationship.ended_date.blank? }
                               .sort_by { |relationship| relationship.target.name }
                               .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
-                          Controls:
-                          = safe_join controls, ', '
+                          - if controls.present?
+                            Controls:
+                            = safe_join controls, ', '

@@ -22,6 +22,7 @@ class CreateRelationshipsForStatements
           name: I18n.t("statement-descriptions.#{statement.type}"),
         ),
         target: source,
+        ended_date: statement.ended_date,
       )
     end
   end

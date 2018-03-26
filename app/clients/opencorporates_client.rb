@@ -2,6 +2,8 @@ require 'net/http/persistent'
 require 'json'
 
 class OpencorporatesClient
+  extend Memoist
+
   API_VERSION = 'v0.4.6'.freeze
 
   attr_reader :http
@@ -20,6 +22,7 @@ class OpencorporatesClient
 
     parse(response).fetch(:jurisdiction)[:code]
   end
+  memoize :get_jurisdiction_code
 
   def get_company(jurisdiction_code, company_number, sparse: true)
     params = {}

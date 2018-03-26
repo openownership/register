@@ -3,7 +3,11 @@ class IndexEntityService
     @entity = entity
   end
 
-  def call
+  def index
     @entity.__elasticsearch__.index_document
+  end
+
+  def delete
+    @entity.__elasticsearch__.delete_document
   end
 end

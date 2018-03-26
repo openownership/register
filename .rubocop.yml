@@ -33,3 +33,6 @@ Style/TrailingCommaInArguments:
 
 Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
+
+Style/Lambda:
+  EnforcedStyle: literal
