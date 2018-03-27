@@ -4,7 +4,9 @@ class EntitiesController < ApplicationController
 
     @opencorporates_company_hash = get_opencorporates_company_hash(entity)
 
-    @source_relationships = decorate(entity.relationships_as_source)
+    @source_relationships = decorate(
+      RelationshipsSorter.new(entity.relationships_as_source).call,
+    )
 
     @ultimate_source_relationship_groups = decorate_with(
       ultimate_source_relationship_groups(entity),
@@ -27,15 +29,17 @@ class EntitiesController < ApplicationController
   def ultimate_source_relationship_groups(entity)
     label_for = ->(r) { r.source.id.to_s.include?('statement') ? rand : r.source.name }
 
-    groups = RelationshipGraph.new(entity).ultimate_source_relationships.group_by(&label_for)
+    relationships = RelationshipGraph.new(entity).ultimate_source_relationships
 
-    groups.map do |label, relationships|
-      {
-        label: label,
-        label_lang_code: relationships.first.source.lang_code,
-        relationships: relationships,
-      }
-    end
+    RelationshipsSorter.new(relationships).call
+      .group_by(&label_for)
+      .map do |label, rels|
+        {
+          label: label,
+          label_lang_code: rels.first.source.lang_code,
+          relationships: rels,
+        }
+      end
   end
 
   def similar_people(entity)
