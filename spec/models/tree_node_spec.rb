@@ -6,6 +6,16 @@ RSpec.describe TreeNode do
 
   subject { described_class.new(entity) }
 
+  def mock_relationships_sorter(relationships)
+    sorter = instance_double('RelationshipsSorter')
+    allow(RelationshipsSorter).to receive(:new).with(relationships).and_return(sorter)
+    allow(sorter).to receive(:call).and_return(relationships)
+  end
+
+  before do
+    mock_relationships_sorter([])
+  end
+
   describe "#nodes" do
     context "recursive relationship" do
       before do
@@ -13,6 +23,8 @@ RSpec.describe TreeNode do
         allow(relationship).to receive(:id).and_return('test-id')
         allow(relationship).to receive(:source).and_return(entity)
         allow(entity).to receive(:relationships_as_target).and_return([relationship])
+
+        mock_relationships_sorter([relationship])
       end
 
       it "returns the node once" do
@@ -48,6 +60,9 @@ RSpec.describe TreeNode do
         allow(entity_1).to receive(:relationships_as_target).and_return([relationship_2])
         allow(relationship_2).to receive(:source).and_return(entity_2)
         allow(entity_2).to receive(:relationships_as_target).and_return([])
+
+        mock_relationships_sorter([relationship_1])
+        mock_relationships_sorter([relationship_2])
       end
 
       it "returns the leaf nodes" do

@@ -6,7 +6,10 @@ class RelationshipsController < ApplicationController
 
     CreateRelationshipsForStatements.call(source_entity)
 
-    relationships = RelationshipGraph.new(target_entity).relationships_to(source_entity)
+    relationships = RelationshipGraph
+      .new(target_entity)
+      .relationships_to(source_entity)
+    relationships = RelationshipsSorter.new(relationships).call
 
     raise Mongoid::Errors::DocumentNotFound.new(Relationship, [target_entity.id, source_entity.id]) if relationships.empty?
 
