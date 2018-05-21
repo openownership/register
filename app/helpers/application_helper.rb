@@ -11,6 +11,25 @@ module ApplicationHelper
     Haml::Engine.new(haml).render(self)
   end
 
+  def google_analytics
+    return unless Rails.application.config.enable_analytics
+
+    safe_join([
+      raw(
+        <<-GA
+        <script async src="https://www.googletagmanager.com/gtag/js?id=#{Rails.application.config.ga_tracking_id}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '#{Rails.application.config.ga_tracking_id}');
+        </script>
+        GA
+      ),
+    ])
+  end
+
   def glossary_tooltip(label, glossary_key, position)
     tooltip(label, t("glossary.#{glossary_key}"), position)
   end
