@@ -1,0 +1,59 @@
+version: 2
+jobs:
+  build:
+    parallelism: 1
+    working_directory: ~/openownership/register
+
+    docker:
+
+      - image: circleci/ruby:2.3.7-node
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
+
+      - image: mongo:3.2.16
+
+      - image: elasticsearch:2.3.3
+
+    steps:
+
+      - checkout
+
+      # Which version of bundler?
+      - run:
+          name: Which bundler?
+          command: bundle -v
+
+      # Restore bundle cache
+      - restore_cache:
+          keys:
+            - app-bundle-v1-{{ checksum "Gemfile.lock" }}
+            - app-bundle-v1-
+
+      - run:
+          name: Bundle install
+          command: bundle check || bundle install
+
+      # Store bundle cache
+      - save_cache:
+          key: app-bundle-v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Wait for MongoDB
+          command: dockerize -wait tcp://localhost:27017 -timeout 1m
+
+      - run:
+          name: Wait for ElasticSearch
+          command: dockerize -wait tcp://localhost:9200 -timeout 1m
+
+      - run:
+          command: bundle exec rspec --color --require spec_helper --format progress spec
+          environment:
+            RAILS_ENV: test
+            RACK_ENV: test
+      - run: bundle exec rubocop
+      - run: bundle exec haml-lint .
