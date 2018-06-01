@@ -60,7 +60,7 @@
     {
       "plan": "searchbox:starter",
       "options": {
-        "es_version": "2"
+        "es_version": "5"
       }
     },
     "heroku-redis:hobby-dev",
