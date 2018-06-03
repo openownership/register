@@ -17,7 +17,7 @@ gem 'jquery-rails'
 
 gem 'mongoid'
 gem 'kaminari-mongoid'
-gem 'elasticsearch-model'
+gem 'elasticsearch-model', '~> 5.0', '>= 5.0.2'
 gem 'net-http-persistent', '~> 2.0'
 gem 'parallel'
 gem 'rollbar'

@@ -23,9 +23,9 @@ class Entity
   mapping do
     indexes :name
     indexes :name_transliterated
-    indexes :type, index: :not_analyzed
-    indexes :country_code, index: :not_analyzed
-    indexes :lang_code, index: :not_analyzed
+    indexes :type, type: :keyword
+    indexes :country_code, type: :keyword
+    indexes :lang_code, type: :keyword
   end
 
   def self.find_or_unknown(id)
