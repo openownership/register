@@ -41,6 +41,6 @@
             %p= t('.choose_from_submission')
             = render partial: 'submissions/entities/search_result', collection: @companies_from_submission, as: :entity
 
-- unless params[:q].present?
+- if params[:q].blank?
   :javascript
     $('.submission-search-field .form-control').tooltip({ title: '#{t('.search_tooltip')}', placement: 'top', trigger: 'manual', offset: '5 0', template: SIGNPOST_TEMPLATE }).tooltip('show');

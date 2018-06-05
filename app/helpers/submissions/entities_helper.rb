@@ -10,7 +10,7 @@ module Submissions
     end
 
     def jurisdictions_for_select(default_value = nil)
-      safe_join sorted_countries.map { |c| country_for_select(c, default_value) }
+      safe_join(sorted_countries.map { |c| country_for_select(c, default_value) })
     end
 
     def form_options_for_entity(entity)

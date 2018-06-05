@@ -2,7 +2,7 @@ require 'optparse'
 
 namespace :ua do
   desc 'Import Ukraine data from source (URL or path)'
-  task :import, [:source, :retrieved_at] => [:environment] do |_task, args|
+  task :import, %i[source retrieved_at] => [:environment] do |_task, args|
     Rails.application.eager_load!
 
     importer = UaImporter.new

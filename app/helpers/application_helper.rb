@@ -15,7 +15,7 @@ module ApplicationHelper
     return unless Rails.application.config.enable_analytics
 
     safe_join([
-      raw(
+      raw( # rubocop:disable Rails/OutputSafety
         <<-GA
         <script async src="https://www.googletagmanager.com/gtag/js?id=#{Rails.application.config.ga_tracking_id}"></script>
         <script>

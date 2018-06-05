@@ -4,7 +4,7 @@ class RelationshipsSorter
   end
 
   def call
-    return @relationships unless @relationships.present?
+    return @relationships if @relationships.blank?
 
     # We need to handle all forms of relationships here
 

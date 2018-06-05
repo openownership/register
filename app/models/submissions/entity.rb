@@ -2,18 +2,18 @@ module Submissions
   class Entity
     include ActsAsEntity
 
-    ATTRIBUTES_FOR_SUBMISSION = [
-      :type,
-      :name,
-      :address,
-      :nationality,
-      :country_of_residence,
-      :dob,
-      :jurisdiction_code,
-      :company_number,
-      :incorporation_date,
-      :dissolution_date,
-      :company_type,
+    ATTRIBUTES_FOR_SUBMISSION = %i[
+      type
+      name
+      address
+      nationality
+      country_of_residence
+      dob
+      jurisdiction_code
+      company_number
+      incorporation_date
+      dissolution_date
+      company_type
     ].freeze
 
     belongs_to :submission, inverse_of: :entities, counter_cache: true

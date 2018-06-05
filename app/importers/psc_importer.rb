@@ -198,18 +198,18 @@ class PscImporter
 
       {
         type: exemption.exemption_type,
-        date: Date.parse(exemption.items.map(&:exempt_from).sort.last),
+        date: Date.parse(exemption.items.map(&:exempt_from).max),
       }
     end
   end
 
-  ADDRESS_KEYS = [:premises, :address_line_1, :address_line_2, :locality, :region, :postal_code].freeze
+  ADDRESS_KEYS = %i[premises address_line_1 address_line_2 locality region postal_code].freeze
 
   def address_string(address)
     address.to_h.values_at(*ADDRESS_KEYS).map(&:presence).compact.join(', ')
   end
 
-  NAME_KEYS = [:forename, :middle_name, :surname].freeze
+  NAME_KEYS = %i[forename middle_name surname].freeze
 
   def name_string(name_elements)
     name_elements.to_h.values_at(*NAME_KEYS).map(&:presence).compact.join(' ')
