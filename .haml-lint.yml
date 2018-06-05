@@ -2,5 +2,11 @@ exclude:
   - vendor/**/*
 
 linters:
+  IdNames:
+    enabled: false
+  InstanceVariables:
+    enabled: false
   LineLength:
+    enabled: false
+  ViewLength:
     enabled: false

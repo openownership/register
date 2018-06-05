@@ -4,4 +4,4 @@ Rails.application.config.assets.precompile << proc do |_filename, path|
   path =~ %r{/vendor/assets/images/[A-Z]+\.svg$}
 end
 
-Rails.application.config.assets.precompile += %w(admin.css)
+Rails.application.config.assets.precompile += %w[admin.css]

@@ -19,7 +19,7 @@ namespace :eiti do
           importer.retrieved_at = Time.zone.parse(source[:retrieved_at])
           importer.parse(source_file)
         end
-      rescue
+      rescue # rubocop:disable Style/RescueStandardError
         puts "\nJurisdiction: '#{source[:jurisdiction_code]}', url: #{source[:url]} FAILED. Retrying..."
         retry
       end

@@ -12,11 +12,11 @@ Rails.application.routes.draw do
   get 'privacy' => 'pages#privacy'
   get 'faq' => 'pages#faq'
   get 'glossary' => 'pages#glossary'
-  resources :submissions, only: [:index, :create, :show, :edit], controller: 'submissions/submissions' do
+  resources :submissions, only: %i[index create show edit], controller: 'submissions/submissions' do
     member do
       post :submit
     end
-    resources :entities, only: [:new, :create, :edit, :update, :destroy], controller: 'submissions/entities' do
+    resources :entities, only: %i[new create edit update destroy], controller: 'submissions/entities' do
       collection do
         get :choose
         get :search
@@ -26,10 +26,10 @@ Rails.application.routes.draw do
         get :remove
       end
     end
-    resources :relationships, only: [:edit, :update], controller: 'submissions/relationships'
+    resources :relationships, only: %i[edit update], controller: 'submissions/relationships'
   end
   namespace :admin do
-    resources :submissions, only: [:index, :show] do
+    resources :submissions, only: %i[index show] do
       member do
         post :approve
       end

@@ -14,7 +14,7 @@ module OpenOwnershipRegister
   class Application < Rails::Application
     if ENV["BASIC_AUTH"].present?
       config.middleware.insert_after(ActionDispatch::Static, Rack::Auth::Basic) do |u, p|
-        [u, p] == ENV["BASIC_AUTH"].split(':')
+        ENV["BASIC_AUTH"].split(':') == [u, p]
       end
     end
 

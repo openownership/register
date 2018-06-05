@@ -6,14 +6,14 @@ RSpec.describe Submissions::EntitiesHelper do
 
     it 'returns the options' do
       expect(subject).to include(
-        %w(Argentina ar),
+        %w[Argentina ar],
         ['United Kingdom', 'gb'],
       )
     end
 
     it 'sorts alphabetically' do
       uk_index = subject.index(['United Kingdom', 'gb'])
-      th_index = subject.index(%w(Thailand th))
+      th_index = subject.index(%w[Thailand th])
 
       expect(uk_index).to be > th_index
     end

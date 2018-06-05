@@ -6,33 +6,60 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
-    - bin/spring
+    - bin/*
     - vendor/**/*
 
-Lint/EndAlignment:
-  AlignWith: variable
+Bundler/OrderedGems:
+  Enabled: false
 
-Style/CaseIndentation:
-  IndentWhenRelativeTo: end
+Layout/CaseIndentation:
+  EnforcedStyle: end
 
-Style/FirstParameterIndentation:
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Layout/FirstParameterIndentation:
   EnforcedStyle: consistent
+
+Layout/IndentArray:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
+Rails/ActiveRecordAliases:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Security/Open:
+  Enabled: false
+
+Style/FormatStringToken:
+  EnforcedStyle: template
 
 Style/HashSyntax:
   Exclude:
     - lib/tasks/**/*.rake
 
-Style/IndentArray:
-  EnforcedStyle: consistent
-
-Style/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
+Style/Lambda:
+  EnforcedStyle: literal
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
 
-Style/Lambda:
-  EnforcedStyle: literal
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma

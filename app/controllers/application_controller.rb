@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :company_name, :position])
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[name company_name position])
   end
 
   attr_reader :should_transliterate

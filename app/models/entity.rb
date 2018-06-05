@@ -82,7 +82,7 @@ class Entity
   end
 
   def as_indexed_json(_options = {})
-    as_json(only: [:name, :type, :lang_code], methods: [:name_transliterated, :country_code])
+    as_json(only: %i[name type lang_code], methods: %i[name_transliterated country_code])
   end
 
   def to_builder
@@ -111,7 +111,7 @@ class Entity
     where(identifiers: { :$elemMatch => { :$in => identifiers } })
   }
 
-  OC_IDENTIFIER_KEYS = %w(jurisdiction_code company_number).sort.freeze
+  OC_IDENTIFIER_KEYS = %w[jurisdiction_code company_number].sort.freeze
 
   def self.build_oc_identifier(data)
     OC_IDENTIFIER_KEYS.each_with_object({}) do |k, h|

@@ -20,7 +20,7 @@ module ISO8601
     end
 
     def self.demongoize(string)
-      return unless string.present?
+      return if string.blank?
 
       new(string)
     end

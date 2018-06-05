@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature "seeds" do
   let(:file) do
-    File.join(Rails.root, 'db', 'seeds.rb')
+    Rails.root.join('db', 'seeds.rb')
   end
 
   let(:ua_import_task) { double }
