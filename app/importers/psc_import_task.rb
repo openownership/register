@@ -1,4 +1,5 @@
 require 'zip'
+require 'open-uri'
 
 class PscImportTask
   def initialize(source, retrieved_at)
