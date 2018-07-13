@@ -23,6 +23,7 @@ module ActsAsEntity
     field :incorporation_date, type: Date
     field :dissolution_date, type: Date
     field :company_type, type: String
+    field :restricted_for_marketing, type: Boolean
 
     field :lang_code, type: String
 

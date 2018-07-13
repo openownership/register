@@ -22,6 +22,12 @@
     "DEFAULT_USERS": {
       "required": true
     },
+    "DK_CVR_USERNAME": {
+      "required": true
+    },
+    "DK_CVR_PASSWORD": {
+      "required": true
+    },
     "ELASTICSEARCH_URL_ENV_NAME": {
       "required": true
     },

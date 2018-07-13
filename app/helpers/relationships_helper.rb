@@ -29,6 +29,8 @@ module RelationshipsHelper
   private
 
   def known_interest?(interest)
+    return true if interest.is_a?(Hash)
+
     I18n.exists?("relationship_interests.#{interest}") || SUBMISSION_INTEREST_MATCHERS.any? { |r| r =~ interest }
   end
 end

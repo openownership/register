@@ -828,22 +828,15 @@ span.tooltip-helper {
     &.ended {
       background-color: $background-color;
     }
-    .relationship-link, .ended_date {
-      font-size: 0.8125rem;
-      line-height: 1.75em;
-      background-color: $background-color;
-      color: $text-default;
-    }
-    .ended_date {
-      border-top: 1px dotted $border-color;
-      padding-top: 7px;
-      font-style: italic;
-    }
     .relationship-link {
       display: block;
       position: relative;
+      background-color: $background-color;
       padding: 7px 10px;
       border-radius: 1px;
+      font-size: 0.8125rem;
+      line-height: 1.75em;
+      color: $text-default;
       transition: all .25s ease;
       &:hover {
         background-color: darken( #f4f6f8, 2% );
@@ -998,12 +991,6 @@ span.tooltip-helper {
         font-weight: normal;
         color: $text-default;
       }
-      li.ended_date {
-        margin-top: 4px;
-        border-top: 1px dotted $border-color;
-        padding-top: 4px;
-        font-style: italic;
-      }
       .reference {
         position: absolute;
         top: 38px;
@@ -1029,6 +1016,20 @@ span.tooltip-helper {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
+  }
+}
+
+.relationship-interests,
+.relationship-link {
+  .started_date,
+  .ended_date {
+    font-style: italic;
+  }
+  .started_date {
+    margin-bottom: 3px;
+  }
+  .ended_date {
+    margin-top: 3px;
   }
 }
 

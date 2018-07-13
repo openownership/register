@@ -10,18 +10,11 @@ class RelationshipsSorter
 
     first_obj = @relationships.first
     case first_obj
-    when Relationship
+    when Relationship, InferredRelationship
       @relationships.sort do |a, b|
         comparison_function(
           a.ended_date.try(:to_date),
           b.ended_date.try(:to_date),
-        )
-      end
-    when InferredRelationship
-      @relationships.sort do |a, b|
-        comparison_function(
-          a.first_ended_relationship_in_chain.try(:ended_date).try(:to_date),
-          b.first_ended_relationship_in_chain.try(:ended_date).try(:to_date),
         )
       end
     when Submissions::Relationship
