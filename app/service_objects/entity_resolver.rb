@@ -46,6 +46,7 @@ class EntityResolver
       incorporation_date: response[:incorporation_date].presence,
       dissolution_date: response[:dissolution_date].presence,
       company_type: response[:company_type].presence,
+      restricted_for_marketing: response[:restricted_for_marketing],
     }
 
     entity.assign_attributes(attributes)

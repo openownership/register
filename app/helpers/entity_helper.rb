@@ -52,4 +52,8 @@ module EntityHelper
     parts << entity.dob.year
     parts.join(" ")
   end
+
+  def from_denmark_cvr?(entity)
+    entity.identifiers.any? { |e| e['document_id'].present? && e['document_id'] == 'Denmark CVR' }
+  end
 end

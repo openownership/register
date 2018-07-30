@@ -6,6 +6,9 @@ module Submissions
     belongs_to :source, class_name: 'Submissions::Entity', inverse_of: :relationships_as_source
     belongs_to :target, class_name: 'Submissions::Entity', inverse_of: :relationships_as_target
 
+    field :started_date, type: ISO8601::Date
+    field :ended_date, type: ISO8601::Date
+
     field :ownership_of_shares_percentage, type: Float
     field :voting_rights_percentage, type: Float
     field :right_to_appoint_and_remove_directors, type: Boolean, default: false

@@ -25,7 +25,6 @@ en:
         address: Address
         date_of_birth: Born
         jurisdiction: Jurisdiction
-        address: Address
         company_number: Company number
         company_type: Type
         incorporation_date: Incorporation date
@@ -34,6 +33,10 @@ en:
         previous_names: Previous names
         industry_codes: Industry codes
         officers: Officers
+      advertising_protection:
+        title: Advertising protection
+        text: License prohibits advertising
+        terms_of_use: 'terms of use'
       instances:
         one: 1 Match
         other: "%{count} Matches"
@@ -94,7 +97,7 @@ en:
     show:
       blurb: OpenOwnership is a new platform to collect and publish beneficial ownership to fight corruption and crime and improve business integrity.
       legal-entity_count: Currently showing %{count} companies
-      footer: Free and open information on %{count} companies, from UK PSC Register, Slovakia Public Sector Partners Register, Ukraine Unified States Register and EITI pilot data.
+      footer: Free and open information on %{count} companies, from UK PSC Register, Denmark Central Business Register (CVR), Slovakia Public Sector Partners Register, Ukraine Unified States Register (EDR) and EITI pilot data.
       download_data: Download data
       headline: Who controls, influences, or benefits from a company?
       placeholder: Search company or name of person
@@ -107,6 +110,8 @@ en:
   shared:
     relationship_interests:
       unknown: Interests unknown
+      started: Started on %{date}
+      ended: Ended on %{date}
     search_bar:
       new_search: Search company or name of person
     referral_message:
@@ -124,7 +129,6 @@ en:
     transliteration:
       transliterate: Transliterate
       dont_transliterate: "Don't transliterate"
-    relationship_ended: Relationship ended on %{date}
 
   entity_types:
     default: entity
@@ -169,6 +173,10 @@ en:
     psc-exempt-as-shares-admitted-on-market: "The company has been or is exempt from keeping a PSC register, as it has voting shares admitted to trading on a market listed in the Register of People with Significant Control Regulations 2016."
 
   relationship_interests:
+    shareholding-exact: "Ownership of shares - %{share}%"
+    shareholding-range: "Ownership of shares – Between %{share_min}% and %{share_max}% (inclusive)"
+    voting-rights-exact: "Ownership of voting rights - %{share}%"
+    voting-rights-range: "Ownership of voting rights – Between %{share_min}% and %{share_max}% (inclusive)"
     ownership-of-shares-25-to-50-percent: "Ownership of shares – More than 25% but not more than 50%"
     ownership-of-shares-50-to-75-percent: "Ownership of shares – More than 50% but less than 75%"
     ownership-of-shares-75-to-100-percent: "Ownership of shares – 75% or more"

@@ -96,9 +96,6 @@
                   = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
                   %span.details
                     = t(".details")
-                - if relationship.ended_date
-                  .ended_date
-                    = t("shared.relationship_ended", date: relationship.ended_date)
 
       - content_for(:meta) do
         - if @entity.natural_person?
@@ -123,6 +120,16 @@
               = yield :meta
             - else
               %p.unknown= t(".no_further_information_known", type: t("entity_types.#{@entity.type}", default: t("entity_types.default")))
+
+        - if @entity.restricted_for_marketing
+          .frame-light.meta
+            .frame-wrap
+              %h6= t(".advertising_protection.title")
+              %p
+                = t(".advertising_protection.text")
+                - if from_denmark_cvr?(@entity)
+                  = ' - '
+                  = link_to(t(".advertising_protection.terms_of_use"), 'https://datacvr.virk.dk/data/cvr-help/conditions-use', target: '_blank')
 
         - unless @entity.natural_person?
           - if @opencorporates_company_hash

@@ -12,6 +12,3 @@
     - if node.relationship.present? && !node.entity.id.to_s.include?('statement')
       .tree-node__relationship
         = render partial: "shared/relationship_interests", locals: { relationship: node.relationship }
-        - if node.relationship.ended_date
-          .ended_date
-            = t("shared.relationship_ended", date: node.relationship.ended_date)

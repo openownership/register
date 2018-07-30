@@ -13,8 +13,16 @@ class InferredRelationship
     sourced_relationships[1..-1].map(&:source)
   end
 
-  def first_ended_relationship_in_chain
+  def started_date
+    return nil if sourced_relationships.length != 1
+
+    sourced_relationships.first.started_date
+  end
+
+  def ended_date
     return nil unless sourced_relationships.any?
-    sourced_relationships.detect { |r| r.ended_date.present? } # rubocop:disable Style/CollectionMethods
+
+    relationship = sourced_relationships.detect { |r| r.ended_date.present? } # rubocop:disable Style/CollectionMethods
+    relationship.try(:ended_date)
   end
 end

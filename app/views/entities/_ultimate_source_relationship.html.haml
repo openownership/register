@@ -1,6 +1,6 @@
-- first_ended_relationship_in_chain = relationship.first_ended_relationship_in_chain
+- ended_date = relationship.ended_date
 
-.item{ class: ('ended' if first_ended_relationship_in_chain) }
+.item{ class: ('ended' if ended_date) }
   = render partial: 'shared/entity_title', locals: { entity: relationship.source }
 
   = link_to entity_relationship_path(relationship.target, relationship.source), class: 'relationship-link' do
@@ -18,11 +18,10 @@
         %span.target
           = @entity.name
         = country_flag(@entity.country)
+        - if ended_date
+          .ended_date
+            = t("shared.relationship_interests.ended", date: ended_date)
     - else
       = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
     %span.details
       = t(".details")
-
-  - if first_ended_relationship_in_chain
-    .ended_date
-      = t("shared.relationship_ended", date: first_ended_relationship_in_chain.ended_date)
