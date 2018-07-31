@@ -1,3 +1,6 @@
+
+require 'open-uri'
+
 class PscImportTrigger
   BASE_URL = 'http://download.companieshouse.gov.uk'.freeze
   DOWNLOAD_PAGE = "#{BASE_URL}/en_pscdata.html".freeze

@@ -1,4 +1,5 @@
 require 'optparse'
+require 'open-uri'
 
 namespace :ua do
   desc 'Import Ukraine data from source (URL or path)'

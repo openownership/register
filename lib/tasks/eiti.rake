@@ -1,3 +1,5 @@
+require 'open-uri'
+
 namespace :eiti do
   desc 'Import EITI data from source (URL or path)'
   task :import, [:source] => [:environment] do |_task, args|
