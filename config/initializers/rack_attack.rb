@@ -3,6 +3,10 @@ Rails.application.config.blocked_ips = ENV.fetch('BLOCKED_IPS', '').split(',').m
 X_FORWARDED_FOR_HEADER = 'HTTP_X_FORWARDED_FOR'.freeze
 
 Rack::Attack.blocklist("blocked IPs") do |request|
-  ip = request.get_header(X_FORWARDED_FOR_HEADER)
-  Rails.application.config.blocked_ips.include?(ip) if ip.present?
+  ips = request.get_header(X_FORWARDED_FOR_HEADER)
+  if ips.present?
+    ips.split(',').map(&:strip).map(&:presence).compact.any? do |ip|
+      Rails.application.config.blocked_ips.include?(ip)
+    end
+  end
 end
