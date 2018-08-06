@@ -4,7 +4,7 @@ require 'parallel'
 class PscImporter
   attr_accessor :source_url, :source_name, :document_id, :retrieved_at
 
-  def initialize(opencorporates_client: OpencorporatesClient.new, entity_resolver: EntityResolver.new)
+  def initialize(opencorporates_client: OpencorporatesClient.new_for_imports, entity_resolver: EntityResolver.new)
     @opencorporates_client = opencorporates_client
 
     @entity_resolver = entity_resolver

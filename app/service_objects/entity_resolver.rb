@@ -1,5 +1,5 @@
 class EntityResolver
-  def initialize(opencorporates_client: OpencorporatesClient.new, reconciliation_client: ReconciliationClient.new)
+  def initialize(opencorporates_client: OpencorporatesClient.new_for_imports, reconciliation_client: ReconciliationClient.new)
     @opencorporates_client = opencorporates_client
 
     @reconciliation_client = reconciliation_client
