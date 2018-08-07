@@ -6,9 +6,13 @@ class OpencorporatesClient
 
   API_VERSION = 'v0.4.6'.freeze
 
+  def self.new_for_imports
+    new(api_token: Rails.application.config.oc_api.token_protected)
+  end
+
   attr_reader :http
 
-  def initialize(api_token: ENV.fetch('OPENCORPORATES_API_TOKEN'))
+  def initialize(api_token: Rails.application.config.oc_api.token)
     @api_token = api_token
 
     @api_url = 'https://api.opencorporates.com/'

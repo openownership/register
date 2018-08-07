@@ -46,6 +46,9 @@
     "OPENCORPORATES_API_TOKEN": {
       "required": true
     },
+    "OPENCORPORATES_API_TOKEN_PROTECTED": {
+      "required": true
+    },
     "ROLLBAR_ACCESS_TOKEN": {
       "required": true
     },
