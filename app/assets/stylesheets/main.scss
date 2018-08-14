@@ -910,6 +910,13 @@ span.tooltip-helper {
     background: $greyBlue;
     border-color: $greyBlue;
 
+    @include media-breakpoint-down(sm) {
+      position: relative;
+      top: auto;
+      right: auto;
+      display: block;
+    }
+
     &:hover {
       background: $darkBlue;
       border-color: $darkBlue;
