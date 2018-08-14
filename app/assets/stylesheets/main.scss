@@ -595,6 +595,18 @@ a, button {
   }
 }
 
+.search-content {
+  .options {
+    @include media-breakpoint-down(sm) {
+      position: relative;
+      top: auto;
+      right: auto;
+      width: 100%;
+      text-align: right;
+    }
+  }
+}
+
 .tree-controls {
   .options {
     position: absolute;
