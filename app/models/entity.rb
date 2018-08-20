@@ -112,7 +112,7 @@ class Entity
     where(identifiers: { :$elemMatch => { :$in => identifiers } })
   }
 
-  OC_IDENTIFIER_KEYS = %w[jurisdiction_code company_number].sort.freeze
+  OC_IDENTIFIER_KEYS = %w[jurisdiction_code company_number].freeze
 
   def self.build_oc_identifier(data)
     OC_IDENTIFIER_KEYS.each_with_object({}) do |k, h|
@@ -127,7 +127,7 @@ class Entity
   end
 
   def oc_identifier
-    identifiers.find { |i| i.keys.map(&:to_s).sort == OC_IDENTIFIER_KEYS }
+    identifiers.find { |i| i.keys.map(&:to_s) == OC_IDENTIFIER_KEYS }
   end
 end
 
