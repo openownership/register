@@ -595,6 +595,18 @@ a, button {
   }
 }
 
+.search-content {
+  .options {
+    @include media-breakpoint-down(sm) {
+      position: relative;
+      top: auto;
+      right: auto;
+      width: 100%;
+      text-align: right;
+    }
+  }
+}
+
 .tree-controls {
   .options {
     position: absolute;
@@ -897,6 +909,13 @@ span.tooltip-helper {
     color: white;
     background: $greyBlue;
     border-color: $greyBlue;
+
+    @include media-breakpoint-down(sm) {
+      position: relative;
+      top: auto;
+      right: auto;
+      display: block;
+    }
 
     &:hover {
       background: $darkBlue;
