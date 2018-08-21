@@ -26,6 +26,7 @@ class Entity
     indexes :type, type: :keyword
     indexes :country_code, type: :keyword
     indexes :lang_code, type: :keyword
+    indexes :company_number, type: :keyword
   end
 
   def self.find_or_unknown(id)
@@ -82,7 +83,7 @@ class Entity
   end
 
   def as_indexed_json(_options = {})
-    as_json(only: %i[name type lang_code], methods: %i[name_transliterated country_code])
+    as_json(only: %i[name type lang_code company_number], methods: %i[name_transliterated country_code])
   end
 
   def to_builder

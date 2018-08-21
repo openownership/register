@@ -19,6 +19,13 @@ class Search
               },
             },
           },
+          {
+            match: {
+              company_number: {
+                query: search_params[:q],
+              },
+            },
+          },
         ],
         minimum_should_match: 1,
         filter: filters(search_params),
