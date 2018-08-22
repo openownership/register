@@ -440,7 +440,7 @@ RSpec.describe Entity do
         subject.add_oc_identifier(data)
       end
 
-      it 'should return the identifier as unexpected' do
+      it 'returns the identifier as unexpected' do
         expect(subject.oc_identifier).to eq(
           'jurisdiction_code' => 'gb',
           'company_number' => 1234,
@@ -453,8 +453,24 @@ RSpec.describe Entity do
         subject.identifiers << { 'foo' => 1, 'bar' => 'abc' }
       end
 
-      it 'should return nil' do
+      it 'returns nil' do
         expect(subject.oc_identifier).to be nil
+      end
+    end
+
+    context 'when the entity has an OC identifier but with keys in reverse order' do
+      before do
+        subject.identifiers << {
+          'company_number' => 1234,
+          'jurisdiction_code' => 'gb',
+        }
+      end
+
+      it 'still returns this as an OC identifier, for backwards compatibility' do
+        expect(subject.oc_identifier).to eq(
+          'company_number' => 1234,
+          'jurisdiction_code' => 'gb',
+        )
       end
     end
   end
