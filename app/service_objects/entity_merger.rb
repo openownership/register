@@ -33,7 +33,7 @@ class EntityMerger
   end
 
   def check_for_potential_bad_merge
-    # We have a potentially bad merge if the entities have OC identifiers.
+    # We have a potentially bad merge if the entities have *differing* OC identifiers.
     # This is because we have no way of saying for sure that those two entities
     # can/should be merged and so we should err on the side of caution here.
     to_remove_oc_identifier = @to_remove.oc_identifier
