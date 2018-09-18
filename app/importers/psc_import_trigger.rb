@@ -1,4 +1,3 @@
-
 require 'open-uri'
 
 class PscImportTrigger
@@ -7,14 +6,14 @@ class PscImportTrigger
 
   FILENAME_REGEX = /^psc-snapshot-\d{4}-\d{2}-\d{2}_\d+of\d+.zip$/
 
-  def call
+  def call(chunk_size)
     snapshot_links = parse_snapshot_links
 
     raise "No PSC snapshot links found on #{BASE_URL}" if snapshot_links.blank?
 
     Rails.logger.info "Scheduling PSC import jobs for the following snapshot links: #{snapshot_links}"
 
-    snapshot_links.each { |l| PscImportWorker.perform_async(l) }
+    snapshot_links.each { |l| PscFileProcessorWorker.perform_async(l, chunk_size) }
   end
 
   private

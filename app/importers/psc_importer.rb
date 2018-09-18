@@ -10,28 +10,9 @@ class PscImporter
     @entity_resolver = entity_resolver
   end
 
-  def parse(file)
-    queue = SizedQueue.new(100)
-
-    Thread.abort_on_exception = true
-    Thread.new do
-      file.each_line do |line|
-        queue << line
-      end
-
-      queue << Parallel::Stop
-    end
-
-    Parallel.each(queue, in_threads: Concurrent.processor_count) do |line|
-      begin
-        process(line)
-      rescue Timeout::Error
-        retry
-      end
-    end
+  def process_lines(lines)
+    lines.each { |l| process(l) }
   end
-
-  private
 
   def process(line)
     record = JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
@@ -57,6 +38,8 @@ class PscImporter
       raise "unexpected kind: #{record.data.kind}"
     end
   end
+
+  private
 
   def child_entity!(company_number)
     attributes = {
