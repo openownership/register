@@ -119,6 +119,8 @@ module FixOCIdentifiersOrderingHelper
     adjust_identifiers(entity, actual_oc_identifier)
     entity.upsert
 
+    entity.reload
+
     # Then fix identifiers again and save to remove the bad OC identifier
     adjust_identifiers(entity, actual_oc_identifier)
     entity.save!
@@ -141,7 +143,7 @@ module FixOCIdentifiersOrderingHelper
     # `Array#delete` deletes all instances of that Hash, regardless of key order, e.g.:
     # > [{a:1,b:2},{b:2,a:1},{a:2,b:1}].delete({a:1,b:2})
     # => {:b=>2, :a=>1}
-    identifiers = entity.identifiers.dup
+    identifiers = entity.identifiers.deep_dup
     identifiers.delete(actual_oc_identifier)
     identifiers.push(actual_oc_identifier)
     entity.identifiers = identifiers
