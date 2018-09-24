@@ -21,3 +21,7 @@ production:
   clients:
     default:
       uri: <%= ENV[ENV['MONGODB_URI_ENV_NAME']] %>
+      options:
+        max_pool_size: 60
+        connect_timeout: 10
+        wait_queue_timeout: 10
