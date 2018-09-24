@@ -1,11 +1,9 @@
-OpenOwnership Register
-======================
+# OpenOwnership Register
 
 The application can be run in a local development environment or through
 Docker.
 
-Installation
-------------
+## Installation
 
 Install the version of ruby specified in ./.ruby-version using your favourite ruby version manager.
 
@@ -56,14 +54,12 @@ In the shell, run the tests
 
 The server will already be running
 
-Import more data
-----------------
+## Import more data
 
 The above will create a few example records, but you can import a subset of real data, by running:
 
     rake postdeploy
 
-Writing an importer
--------------------
+## Writing an importer
 
 Importers are intended to run multiple times and so must be idempotent. If the source data itself is idempotent (i.e. it doesn't matter which order records are imported), then importers can be parallelised.
