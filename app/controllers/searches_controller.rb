@@ -4,7 +4,14 @@ class SearchesController < ApplicationController
 
     return if params[:q].blank?
 
+    @fallback = false
+
     @response = Entity.search(query: Search.query(search_params), aggs: Search.aggregations).page(params[:page]).per(10)
+
+    if @response.results.total.zero? # rubocop:disable Style/GuardClause
+      @fallback = true
+      @response = Entity.search(query: Search.fallback_query(search_params), aggs: Search.aggregations).page(params[:page]).per(10)
+    end
   end
 
   protected

@@ -37,7 +37,11 @@
         .col-lg-7.offset-lg-1
           .frame
             .frame-wrap
-              %p= page_entries_info @response.results, entry_name: 'result'
+              %p.search-results-header
+                - if @fallback
+                  %em= t(".fallback", query: params[:q])
+                  %br
+                = page_entries_info @response.results, entry_name: 'result'
               .options
                 .option-transliterate
                   = transliteration_action(@should_transliterate)

@@ -37,6 +37,33 @@ class Search
     }
   end
 
+  def self.fallback_query(search_params)
+    query = normalise_query(search_params[:q])
+
+    {
+      bool: {
+        should: [
+          {
+            match: {
+              name: {
+                query: query,
+              },
+            },
+          },
+          {
+            match: {
+              name_transliterated: {
+                query: query,
+              },
+            },
+          },
+        ],
+        minimum_should_match: 1,
+        filter: filters(search_params),
+      },
+    }
+  end
+
   def self.aggregations
     {
       type: {
@@ -71,6 +98,6 @@ class Search
 
   def self.normalise_query(query)
     return '' if query.blank?
-    query.gsub(EXCLUDED_TERMS_REGEX, '')
+    query.gsub(EXCLUDED_TERMS_REGEX, '').strip
   end
 end

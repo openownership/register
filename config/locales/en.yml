@@ -103,6 +103,7 @@ en:
       placeholder: Search company or name of person
       no_results: No results to show
       search: Search
+      fallback: "No results containing all your search terms were found. Matches on some of your search terms:"
     filter:
       filter_by: "Filter by %{key}"
       filtered_by: "Filtered by %{key}"
