@@ -40,6 +40,18 @@ RSpec.describe Search do
       expect(subject[:bool][:minimum_should_match]).to eq 1
     end
 
+    context 'when excluded terms are present' do
+      let(:search_params) do
+        {
+          q: 'foolimited bar inc',
+        }
+      end
+
+      it 'removes only whole matched excluded terms' do
+        expect(subject[:bool][:should].first[:match_phrase][:name][:query]).to eq 'foolimited bar '
+      end
+    end
+
     context 'when the type param is present' do
       let(:search_params) do
         {

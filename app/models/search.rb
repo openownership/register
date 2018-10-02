@@ -1,12 +1,16 @@
 class Search
+  EXCLUDED_TERMS_REGEX = /\b(llp|llc|plc|inc|ltd|limited)\b/i
+
   def self.query(search_params)
+    query = normalise_query(search_params[:q])
+
     {
       bool: {
         should: [
           {
             match_phrase: {
               name: {
-                query: search_params[:q],
+                query: query,
                 slop: 50,
               },
             },
@@ -14,7 +18,7 @@ class Search
           {
             match_phrase: {
               name_transliterated: {
-                query: search_params[:q],
+                query: query,
                 slop: 50,
               },
             },
@@ -22,7 +26,7 @@ class Search
           {
             match: {
               company_number: {
-                query: search_params[:q],
+                query: query,
               },
             },
           },
@@ -63,5 +67,10 @@ class Search
         key => value,
       },
     }
+  end
+
+  def self.normalise_query(query)
+    return '' if query.blank?
+    query.gsub(EXCLUDED_TERMS_REGEX, '')
   end
 end
