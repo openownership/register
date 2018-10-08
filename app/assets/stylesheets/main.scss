@@ -579,6 +579,12 @@ a, button {
   }
 }
 
+.search-content {
+  .search-results-header {
+    margin-right: 110px;
+  }
+}
+
 .search-content, .tree-controls {
   .options {
     position: absolute;
@@ -596,8 +602,12 @@ a, button {
 }
 
 .search-content {
-  .options {
-    @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(sm) {
+    .search-results-header {
+      margin-right: 0;
+    }
+
+    .options {
       position: relative;
       top: auto;
       right: auto;

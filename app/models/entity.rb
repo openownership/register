@@ -127,8 +127,22 @@ class Entity
     identifiers << Entity.build_oc_identifier(data)
   end
 
+  def oc_identifiers
+    identifiers.select { |i| i.keys.map(&:to_s).to_set == OC_IDENTIFIER_KEYS_SET }
+  end
+
   def oc_identifier
     identifiers.find { |i| i.keys.map(&:to_s).to_set == OC_IDENTIFIER_KEYS_SET }
+  end
+
+  def psc_self_link_identifier?(identifier)
+    identifier['document_id'] == 'GB PSC Snapshot' && identifier.key?('link')
+  end
+
+  def psc_self_link_identifiers
+    identifiers.select do |i|
+      psc_self_link_identifier? i
+    end
   end
 end
 

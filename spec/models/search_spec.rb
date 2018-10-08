@@ -1,6 +1,44 @@
 require 'rails_helper'
 
 RSpec.describe Search do
+  shared_examples 'search filters' do
+    context 'when the type param is present' do
+      let(:search_params) do
+        {
+          type: Entity::Types::NATURAL_PERSON,
+        }
+      end
+
+      it 'includes a term query filter for the type field' do
+        filter = {
+          term: {
+            type: Entity::Types::NATURAL_PERSON,
+          },
+        }
+
+        expect(subject[:bool][:filter]).to include(filter)
+      end
+    end
+
+    context 'when the country param is present' do
+      let(:search_params) do
+        {
+          country: 'GB',
+        }
+      end
+
+      it 'includes a term query filter for the country_code field' do
+        filter = {
+          term: {
+            country_code: 'GB',
+          },
+        }
+
+        expect(subject[:bool][:filter]).to include(filter)
+      end
+    end
+  end
+
   describe '.query' do
     let(:search_params) do
       {
@@ -40,41 +78,71 @@ RSpec.describe Search do
       expect(subject[:bool][:minimum_should_match]).to eq 1
     end
 
-    context 'when the type param is present' do
+    context 'when excluded terms are present' do
       let(:search_params) do
         {
-          type: Entity::Types::NATURAL_PERSON,
+          q: 'foolimited bar Inc',
         }
       end
 
-      it 'includes a term query filter for the type field' do
-        filter = {
-          term: {
-            type: Entity::Types::NATURAL_PERSON,
-          },
-        }
-
-        expect(subject[:bool][:filter]).to include(filter)
+      it 'removes only whole matched excluded terms' do
+        expect(subject[:bool][:should].first[:match_phrase][:name][:query]).to eq 'foolimited bar'
       end
     end
 
-    context 'when the country param is present' do
+    include_examples 'search filters'
+  end
+
+  describe '.fallback_query' do
+    let(:search_params) do
+      {
+        q: 'smith',
+      }
+    end
+
+    subject { Search.fallback_query(search_params) }
+
+    it 'includes a match query for the name field' do
+      match_query = {
+        match: {
+          name: {
+            query: 'smith',
+          },
+        },
+      }
+
+      expect(subject[:bool][:should]).to include(match_query)
+    end
+
+    it 'includes a match query for the name_transliterated field' do
+      match_query = {
+        match: {
+          name_transliterated: {
+            query: 'smith',
+          },
+        },
+      }
+
+      expect(subject[:bool][:should]).to include(match_query)
+    end
+
+    it 'should match on either the name or name_transliterated fields, or both' do
+      expect(subject[:bool][:minimum_should_match]).to eq 1
+    end
+
+    context 'when excluded terms are present' do
       let(:search_params) do
         {
-          country: 'GB',
+          q: 'foolimited bar Inc',
         }
       end
 
-      it 'includes a term query filter for the country_code field' do
-        filter = {
-          term: {
-            country_code: 'GB',
-          },
-        }
-
-        expect(subject[:bool][:filter]).to include(filter)
+      it 'removes only whole matched excluded terms' do
+        expect(subject[:bool][:should].first[:match][:name][:query]).to eq 'foolimited bar'
       end
     end
+
+    include_examples 'search filters'
   end
 
   describe '.aggregations' do
