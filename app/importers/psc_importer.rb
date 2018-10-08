@@ -102,6 +102,13 @@ class PscImporter
 
         unless jurisdiction_code.nil?
           entity.assign_attributes(
+            identifiers: [
+              {
+                'document_id' => document_id,
+                'link' => data.links.self,
+                'company_number' => data.identification.registration_number,
+              },
+            ],
             jurisdiction_code: jurisdiction_code,
             company_number: data.identification.registration_number,
           )
