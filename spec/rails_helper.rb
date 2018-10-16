@@ -6,11 +6,14 @@ require 'rspec/rails'
 require 'support/devise'
 require 'support/submission_helpers'
 require 'support/admin_helpers'
+require 'support/bods_schema_matcher'
 
 require 'sidekiq/testing'
 Sidekiq::Logging.logger = nil
 
 Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
+
+JSON::Validator.schema_reader = JSON::Schema::Reader.new(accept_uri: false, accept_file: true)
 
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
