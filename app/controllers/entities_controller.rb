@@ -2,8 +2,6 @@ class EntitiesController < ApplicationController
   def show
     entity = Entity.find(params[:id])
 
-    @opencorporates_company_hash = get_opencorporates_company_hash(entity)
-
     @source_relationships = decorate(
       RelationshipsSorter.new(entity.relationships_as_source).call,
     )
@@ -13,9 +11,32 @@ class EntitiesController < ApplicationController
       UltimateSourceRelationshipGroupDecorator,
     )
 
-    @similar_people = entity.natural_person? ? decorate(similar_people(entity)) : nil
+    unless request.format.json?
+      @opencorporates_company_hash = get_opencorporates_company_hash(entity)
+
+      @similar_people = entity.natural_person? ? decorate(similar_people(entity)) : nil
+    end
 
     @entity = decorate(entity)
+
+    respond_to do |format|
+      format.html
+      format.json do
+        relationships = (
+          @source_relationships +
+          @ultimate_source_relationship_groups.map do |g|
+            g[:relationships].map(&:sourced_relationships)
+          end.flatten.compact
+        )
+
+        serializer = BodsSerializer.new(
+          relationships,
+          BodsMapper.instance,
+        )
+
+        render json: serializer.statements
+      end
+    end
   end
 
   def tree
