@@ -162,7 +162,8 @@ a, button {
   }
   .legal-entity-count {
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
   }
   .search-filter {
     ul {
@@ -254,7 +255,7 @@ a, button {
   text-align: center;
   color: #333333;
   margin-top: 10px;
-  margin-bottom: 26px;
+  margin-bottom: 0;
   span {
     font-weight: bold;
     color: $electricBlue;
@@ -265,12 +266,10 @@ a, button {
   }
 }
 
-.footer-data-info {
+.data-sources-info {
   text-align: center;
   font-size: 0.875rem;
-  color: #808080;
-  background-color: $background-color;
-  padding: 11px 20px 10px 20px;
+  padding: 0;
 }
 
 .pagination {

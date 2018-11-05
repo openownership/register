@@ -95,10 +95,11 @@ en:
       title_html: "%{source} to %{target}"
   searches:
     show:
-      blurb: OpenOwnership is a new platform to collect and publish beneficial ownership to fight corruption and crime and improve business integrity.
+      blurb_html: OpenOwnership is a new platform to collect and publish %{bo_link} to fight corruption and crime and improve business integrity.<br />%{more_info_link}
+      bo_link_text: beneficial ownership
+      more_info_link_text: More info
       legal-entity_count: Currently showing %{count} companies
-      footer: Free and open information on %{count} companies, from UK PSC Register, Denmark Central Business Register (CVR), Slovakia Public Sector Partners Register, Ukraine Unified States Register (EDR) and EITI pilot data.
-      download_data: Download data
+      data_sources_preface: "Free and open information on %{count} companies, from:"
       headline: Who controls, influences, or benefits from a company?
       placeholder: Search company or name of person
       no_results: No results to show
