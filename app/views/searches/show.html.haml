@@ -6,7 +6,8 @@
     .row
       .col-lg-12
         %h1= t(".headline")
-        %p.legal-entity-count= t(".legal-entity_count", count: number_to_human(@legal_entity_count, precision: 2).downcase)
+        - if params[:q].blank?
+          %p.legal-entity-count= t(".legal-entity_count", count: number_to_human(@legal_entity_count, precision: 2).downcase)
       .col-lg-6.offset-lg-3
         .form-group
           = form_tag search_path, method: 'get', class: 'search-form' do
@@ -18,17 +19,32 @@
       - if params[:q].blank?
         .col-lg-6.offset-lg-3
           .oo-intro
-            %p= t(".blurb")
-            %p
+            %p= t(".blurb_html", bo_link: link_to(t('.bo_link_text'), glossary_path), more_info_link: link_to(t('.more_info_link_text'), faq_path))
+
+            %hr
+
+            .data-sources-info
+              %p= t(".data_sources_preface", count: number_with_delimiter(@legal_entity_count))
+              %ul.list-unstyled
+                %li= link_to('UK PSC Register', 'http://download.companieshouse.gov.uk/en_pscdata.html', target: '_blank')
+                %li= link_to('Denmark Central Business Register (CVR)', 'https://cvr.dk', target: '_blank')
+                %li= link_to('Slovakia Public Sector Partners Register', 'https://rpvs.gov.sk/', target: '_blank')
+                %li= link_to('Ukraine Unified States Register (EDR)', 'http://data.gov.ua/passport/73cfe78e-89ef-4f06-b3ab-eb5f16aea237', target: '_blank')
+                %li EITI pilot data
+                %li User submissions
+
+            %hr
+
             - if user_signed_in?
               %p
-                = link_to "Add your company’s beneficial ownership", submissions_path, class: 'btn btn-primary btn-lg'
+                = link_to "Add your company’s beneficial ownership", submissions_path, class: 'btn btn-primary'
             - else
               %p
-                = link_to "Sign up to add your company’s beneficial ownership", new_user_registration_path, class: 'btn btn-primary btn-lg'
+                = link_to "Sign up to add your company’s beneficial ownership", new_user_registration_path, class: 'btn btn-primary'
               %p
                 Already signed up?
                 = link_to "Sign in here", new_user_session_path
+
       - elsif @response.results.total.zero?
         .col-lg-6.offset-lg-3
           .no-results
@@ -65,7 +81,3 @@
         - unless params[:q].blank? || @response.results.empty?
           = render partial: 'filter', locals: { key: 'type', helper: method(:search_filter_type) }
           = render partial: 'filter', locals: { key: 'country', helper: method(:search_filter_country) }
-
-.footer-data-info
-  = t(".footer", count: number_with_delimiter(@legal_entity_count))
-  = link_to t(".download_data"), ENV['DATA_DOWNLOAD_URL'] if ENV['DATA_DOWNLOAD_URL'].present?
