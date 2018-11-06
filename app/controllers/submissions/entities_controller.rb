@@ -113,9 +113,7 @@ module Submissions
     end
 
     def opencorporates_client
-      OpencorporatesClient.new.tap do |client|
-        client.http.read_timeout = 10.0
-      end
+      OpencorporatesClient.new_for_app timeout: 10.0
     end
 
     def find_companies_from_submission

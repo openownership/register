@@ -3,7 +3,29 @@ require 'rails_helper'
 RSpec.describe OpencorporatesClient do
   let(:api_token) { 'api_token_xxx' }
 
-  let(:client) { OpencorporatesClient.new(api_token: api_token) }
+  let :mock_req_headers do
+    {
+      'Accept' => 'application/json',
+      'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Connection' => 'keep-alive',
+      'Keep-Alive' => '30',
+      'User-Agent' => 'Faraday v0.15.3',
+    }
+  end
+
+  let :mock_res_headers do
+    {
+      'Content-Type' => 'application/json',
+    }
+  end
+
+  let :client do
+    OpencorporatesClient.new(
+      api_token: api_token,
+      open_timeout: 1.0,
+      read_timeout: 1.0,
+    )
+  end
 
   shared_examples_for "response errors" do |log_text, empty_return_value|
     context "when a response error is returned" do
@@ -21,13 +43,13 @@ RSpec.describe OpencorporatesClient do
       end
     end
 
-    context "when a response exception is raised" do
+    context "when a Faraday::ConnectionFailed error is raised" do
       before do
-        @stub.to_raise(Net::HTTP::Persistent::Error)
+        @stub.to_raise(Faraday::ConnectionFailed)
       end
 
       it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/Net::HTTP::Persistent::Error.*#{log_text}/)
+        expect(Rails.logger).to receive(:info).with(/Faraday::ConnectionFailed.*#{log_text}/)
         subject
       end
 
@@ -42,7 +64,7 @@ RSpec.describe OpencorporatesClient do
       end
 
       it 'logs response errors' do
-        expect(Rails.logger).to receive(:info).with(/Net::OpenTimeout.*#{log_text}/)
+        expect(Rails.logger).to receive(:info).with(/Faraday::ConnectionFailed.*#{log_text}/)
         subject
       end
 
@@ -55,7 +77,7 @@ RSpec.describe OpencorporatesClient do
   describe '#get_jurisdiction_code' do
     before do
       url = "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/jurisdictions/match"
-      @stub = stub_request(:get, url).with(query: "q=United+Kingdom&api_token=#{api_token}")
+      @stub = stub_request(:get, url).with(query: "q=United+Kingdom&api_token=#{api_token}", headers: mock_req_headers)
     end
 
     subject { client.get_jurisdiction_code('United Kingdom') }
@@ -64,7 +86,7 @@ RSpec.describe OpencorporatesClient do
 
     context "when jurisdiction is matched" do
       before do
-        @stub.to_return(body: %({"results":{"jurisdiction":{"code":"gb"}}}))
+        @stub.to_return(body: %({"results":{"jurisdiction":{"code":"gb"}}}), headers: mock_res_headers)
       end
 
       it 'returns the jurisdiction code matching the given text' do
@@ -74,7 +96,7 @@ RSpec.describe OpencorporatesClient do
 
     context "when jurisdiction is not matched" do
       before do
-        @stub.to_return(body: %({"results":{"jurisdiction":{}}}))
+        @stub.to_return(body: %({"results":{"jurisdiction":{}}}), headers: mock_res_headers)
       end
 
       it 'returns nil' do
@@ -90,7 +112,7 @@ RSpec.describe OpencorporatesClient do
 
       @body = %({"results":{"company":{"name":"EXAMPLE LIMITED"}}})
 
-      @stub = stub_request(:get, URI.join(@url, @number)).with(query: "sparse=true&api_token=#{api_token}")
+      @stub = stub_request(:get, URI.join(@url, @number)).with(query: "sparse=true&api_token=#{api_token}", headers: mock_req_headers)
     end
 
     subject { client.get_company('gb', @number) }
@@ -99,7 +121,7 @@ RSpec.describe OpencorporatesClient do
 
     context "when the company with given jurisdiction_code and company_number is found" do
       before do
-        @stub.to_return(body: @body)
+        @stub.to_return(body: @body, headers: mock_res_headers)
       end
 
       it 'returns company data' do
@@ -109,7 +131,7 @@ RSpec.describe OpencorporatesClient do
       context 'when company number contains square brackets' do
         before do
           @number = '123456[S]'
-          stub_request(:get, @url + @number).with(query: "sparse=true&api_token=#{api_token}").to_return(body: @body)
+          stub_request(:get, @url + @number).with(query: "sparse=true&api_token=#{api_token}", headers: mock_req_headers).to_return(body: @body, headers: mock_res_headers)
         end
 
         it 'returns company data' do
@@ -130,7 +152,7 @@ RSpec.describe OpencorporatesClient do
 
     context 'when called with sparse: false' do
       before do
-        stub_request(:get, URI.join(@url, @number)).with(query: "api_token=#{api_token}").to_return(body: @body)
+        stub_request(:get, URI.join(@url, @number)).with(query: "api_token=#{api_token}", headers: mock_req_headers).to_return(body: @body, headers: mock_res_headers)
       end
 
       subject { client.get_company('gb', '01234567', sparse: false) }
@@ -153,7 +175,7 @@ RSpec.describe OpencorporatesClient do
         api_token: api_token,
       }
 
-      @stub = stub_request(:get, url).with(query: query)
+      @stub = stub_request(:get, url).with(query: query, headers: mock_req_headers)
     end
 
     subject { client.search_companies('gb', '01234567') }
@@ -162,7 +184,7 @@ RSpec.describe OpencorporatesClient do
 
     context "when given jurisdiction_code and query returns results" do
       before do
-        @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LIMITED"}}]}}))
+        @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LIMITED"}}]}}), headers: mock_res_headers)
       end
 
       it 'returns them' do
@@ -185,7 +207,7 @@ RSpec.describe OpencorporatesClient do
         api_token: api_token,
       }
 
-      @stub = stub_request(:get, url).with(query: query)
+      @stub = stub_request(:get, url).with(query: query, headers: mock_req_headers)
     end
 
     subject { client.search_companies_by_name('Example Ltd') }
@@ -194,7 +216,7 @@ RSpec.describe OpencorporatesClient do
 
     context "when given name and query returns results" do
       before do
-        @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LTD"}}]}}))
+        @stub.to_return(body: %({"results":{"companies":[{"company":{"name":"EXAMPLE LTD"}}]}}), headers: mock_res_headers)
       end
 
       it 'returns an array of results' do

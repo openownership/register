@@ -21,7 +21,6 @@ module AdminHelpers
   def opencorporates_client
     @opencorporates_client ||= instance_double("OpencorporatesClient").tap do |instance|
       allow(OpencorporatesClient).to receive(:new).and_return(instance)
-      allow(instance).to receive(:http).and_return(double.as_null_object)
     end
   end
 end

@@ -73,9 +73,7 @@ class EntitiesController < ApplicationController
   def get_opencorporates_company_hash(entity)
     return unless entity.jurisdiction_code? && entity.company_number?
 
-    client = OpencorporatesClient.new
-    client.http.open_timeout = 1.0
-    client.http.read_timeout = 1.0
+    client = OpencorporatesClient.new_for_app timeout: 1.0
     client.get_company(entity.jurisdiction_code, entity.company_number, sparse: false)
   end
 end
