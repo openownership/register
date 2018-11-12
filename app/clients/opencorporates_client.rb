@@ -4,11 +4,14 @@ require 'json'
 class OpencorporatesClient
   API_VERSION = 'v0.4.6'.freeze
 
+  CACHE_EXPIRY_SECS = 31.days.to_i
+
   def self.new_for_imports
     new(
       api_token: Rails.application.config.oc_api.token_protected,
       open_timeout: 30.0,
       read_timeout: 60.0,
+      enable_retries: true,
     )
   end
 
@@ -17,10 +20,11 @@ class OpencorporatesClient
       api_token: Rails.application.config.oc_api.token,
       open_timeout: timeout,
       read_timeout: timeout,
+      enable_retries: false,
     )
   end
 
-  def initialize(api_token:, open_timeout:, read_timeout:)
+  def initialize(api_token:, open_timeout:, read_timeout:, enable_retries: false)
     @api_token = api_token
 
     @connection = Faraday.new(url: "https://api.opencorporates.com") do |c|
@@ -28,9 +32,32 @@ class OpencorporatesClient
 
       c.response :follow_redirects
 
+      if enable_retries
+        c.request :retry,
+                  max: 2,
+                  interval: 2,
+                  interval_randomness: 1,
+                  backoff_factor: 5,
+                  exceptions: [Errno::ETIMEDOUT, Net::OpenTimeout, 'Timeout::Error', Faraday::Error::RetriableResponse, Faraday::TimeoutError]
+      end
+
       c.response :json,
                  content_type: /\bjson$/,
                  parser_options: { symbolize_names: true }
+
+      if ENV['CACHE_OC_API'] == 'true'
+        c.response :caching, ignore_params: %w[api_token] do
+          ActiveSupport::Cache::MemCacheStore.new(
+            *ENV.fetch('MEMCACHE_SERVERS').split(','),
+            username: ENV.fetch('MEMCACHE_USERNAME'),
+            password: ENV.fetch('MEMCACHE_PASSWORD'),
+            namespace: "OpencorporatesClient_#{Rails.env}",
+            expires_in: CACHE_EXPIRY_SECS,
+            race_condition_ttl: 10,
+            compress: true,
+          )
+        end
+      end
 
       c.adapter :net_http_persistent do |http|
         http.open_timeout = open_timeout
@@ -101,11 +128,11 @@ class OpencorporatesClient
     if response.success?
       response.body.fetch(:results)
     else
-      Rails.logger.info("Received #{response.status} from api.opencorporates.com when calling #{path} (#{params})")
+      Rails.logger.info("Received #{response.status} from api.opencorporates.com when calling #{normalised_path} (#{params})")
       nil
     end
   rescue Faraday::ConnectionFailed, Faraday::TimeoutError => e
-    Rails.logger.info("Received #{e.inspect} when calling #{path} (#{params})")
+    Rails.logger.info("Received #{e.inspect} when calling #{normalised_path} (#{params})")
     nil
   end
 end

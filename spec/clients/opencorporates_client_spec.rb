@@ -34,6 +34,7 @@ RSpec.describe OpencorporatesClient do
       end
 
       it 'logs response errors' do
+        allow(Rails.logger).to receive(:info)
         expect(Rails.logger).to receive(:info).with(/500.*#{log_text}/)
         subject
       end
@@ -49,6 +50,7 @@ RSpec.describe OpencorporatesClient do
       end
 
       it 'logs response errors' do
+        allow(Rails.logger).to receive(:info)
         expect(Rails.logger).to receive(:info).with(/Faraday::ConnectionFailed.*#{log_text}/)
         subject
       end
@@ -64,6 +66,7 @@ RSpec.describe OpencorporatesClient do
       end
 
       it 'logs response errors' do
+        allow(Rails.logger).to receive(:info)
         expect(Rails.logger).to receive(:info).with(/Faraday::ConnectionFailed.*#{log_text}/)
         subject
       end

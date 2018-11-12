@@ -22,6 +22,9 @@
     "DEFAULT_USERS": {
       "required": true
     },
+    "CACHE_OC_API": {
+      "required": true
+    },
     "DK_CVR_USERNAME": {
       "required": true
     },
@@ -73,7 +76,8 @@
       }
     },
     "heroku-redis:hobby-dev",
-    "papertrail:choklad"
+    "papertrail:choklad",
+    "memcachier:dev"
   ],
   "buildpacks": [
   ]

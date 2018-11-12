@@ -92,6 +92,7 @@ GEM
     crass (1.0.4)
     css_parser (1.6.0)
       addressable
+    dalli (2.7.9)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
     devise (4.2.0)
@@ -376,6 +377,7 @@ DEPENDENCIES
   capybara
   coffee-rails (~> 4.2)
   countries
+  dalli (~> 2.7, >= 2.7.9)
   database_cleaner
   devise
   dotenv-rails
