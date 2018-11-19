@@ -109,8 +109,8 @@ class EntityIntegrityChecker
   end
 
   def check_no_relationships(entity)
-    as_source_count = entity.relationships_as_source.count
-    as_target_count = entity._relationships_as_target.count
+    as_source_count = Relationship.where(source_id: entity.id).count
+    as_target_count = Relationship.where(target_id: entity.id).count
 
     return nil if as_source_count.positive? || as_target_count.positive?
 
