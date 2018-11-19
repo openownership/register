@@ -32,13 +32,14 @@ RSpec.describe EntityIntegrityChecker do
   end
 
   describe '#check' do
-    context 'an entity with no integrity issues' do
+    context 'a legal entity with no integrity issues' do
       let! :entity do
         e = create :legal_entity
         e.add_oc_identifier(
           jurisdiction_code: 'gb',
-          company_number: '12345',
+          company_number: e.company_number,
         )
+        create :relationship, target: e
         e
       end
 
@@ -47,15 +48,19 @@ RSpec.describe EntityIntegrityChecker do
       end
     end
 
-    context 'an entity with no OC identifier' do
-      let!(:entity) { create :legal_entity }
+    context 'a legal entity with no OC identifier' do
+      let! :entity do
+        e = create :legal_entity
+        create :relationship, target: e
+        e
+      end
 
       it 'should return a Hash with an appropriate check result' do
         expect(subject.check(entity)).to eq(no_oc_identifier: {})
       end
     end
 
-    context 'an entity with multiple OC identifiers' do
+    context 'a legal entity with multiple OC identifiers' do
       let! :entity do
         e = create :legal_entity
         e.add_oc_identifier(
@@ -66,6 +71,7 @@ RSpec.describe EntityIntegrityChecker do
           jurisdiction_code: 'gb',
           company_number: '6789',
         )
+        create :relationship, target: e
         e
       end
 
@@ -79,6 +85,9 @@ RSpec.describe EntityIntegrityChecker do
               { 'jurisdiction_code' => 'gb', 'company_number' => '6789' },
             ],
             company_number_set_on_record: entity.company_number,
+          },
+          multiple_company_numbers: {
+            company_numbers: [entity.company_number, '12345', '6789'].sort,
           },
         )
       end
@@ -95,12 +104,77 @@ RSpec.describe EntityIntegrityChecker do
           'document_id' => 'GB PSC Snapshot',
           'link' => 'uri://foo',
         }
+        create :relationship, target: e
         e
       end
 
       it 'should return a Hash with an appropriate check result' do
         expect(subject.check(entity)).to eq(
           self_link_missing_company_number: { count: 1 },
+        )
+      end
+    end
+
+    context 'a legal entity with no company_number field set' do
+      let! :entity do
+        e = create :legal_entity, company_number: nil
+        e.add_oc_identifier(
+          jurisdiction_code: 'gb',
+          company_number: '12345',
+        )
+        create :relationship, target: e
+        e
+      end
+
+      it 'should return a Hash with an appropriate check result' do
+        expect(subject.check(entity)).to eq(missing_company_number_field: {})
+      end
+    end
+
+    context 'a legal entity with no company number set' do
+      let! :entity do
+        e = create :legal_entity, company_number: nil
+        create :relationship, target: e
+        e
+      end
+
+      it 'should return a Hash with an appropriate check result' do
+        expect(subject.check(entity)).to eq(
+          no_oc_identifier: {},
+          missing_company_number_field: {},
+          no_company_number_at_all: {},
+        )
+      end
+    end
+
+    context 'a legal entity with multiple company numbers set' do
+      let! :entity do
+        e = create :legal_entity, company_number: '12345'
+        e.add_oc_identifier(
+          jurisdiction_code: 'gb',
+          company_number: 'AAAAA',
+        )
+        create :relationship, target: e
+        e
+      end
+
+      it 'should return a Hash with an appropriate check result' do
+        expect(subject.check(entity)).to eq(
+          multiple_company_numbers: {
+            company_numbers: %w[12345 AAAAA],
+          },
+        )
+      end
+    end
+
+    context 'an entity with no relationships' do
+      let! :entity do
+        create :natural_person
+      end
+
+      it 'should return a Hash with an appropriate check result' do
+        expect(subject.check(entity)).to eq(
+          no_relationships: { type: 'natural-person' },
         )
       end
     end

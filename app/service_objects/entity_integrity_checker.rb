@@ -22,11 +22,17 @@ class EntityIntegrityChecker
   end
 
   def check(entity)
-    result = {
-      no_oc_identifier: check_no_oc_identifier(entity),
-      multiple_oc_identifiers: check_multiple_oc_identifiers(entity),
-      self_link_missing_company_number: check_self_link_missing_company_number(entity),
-    }.compact
+    result = %i[
+      no_oc_identifier
+      multiple_oc_identifiers
+      self_link_missing_company_number
+      missing_company_number_field
+      no_company_number_at_all
+      multiple_company_numbers
+      no_relationships
+    ].each_with_object({}) do |c, acc|
+      acc[c] = send("check_#{c}", entity)
+    end.compact
 
     unless result.empty?
       Rails.logger.info "[EntityIntegrityChecker] Found issue(s) for entity '#{entity._id}': #{result.to_json}"
@@ -73,5 +79,52 @@ class EntityIntegrityChecker
     {
       count: self_link_identifiers_wo_company_number.size,
     }
+  end
+
+  def check_missing_company_number_field(entity)
+    return nil unless entity.legal_entity?
+
+    entity.company_number.blank? ? {} : nil
+  end
+
+  def check_no_company_number_at_all(entity)
+    return nil unless entity.legal_entity?
+    return nil if entity.company_number.present?
+
+    company_numbers = unique_company_numbers_for entity
+
+    company_numbers.size.zero? ? {} : nil
+  end
+
+  def check_multiple_company_numbers(entity)
+    return nil unless entity.legal_entity?
+
+    company_numbers = unique_company_numbers_for entity
+
+    return nil if company_numbers.size < 2
+
+    {
+      company_numbers: company_numbers,
+    }
+  end
+
+  def check_no_relationships(entity)
+    as_source_count = entity.relationships_as_source.count
+    as_target_count = entity._relationships_as_target.count
+
+    return nil if as_source_count.positive? || as_target_count.positive?
+
+    {
+      type: entity.type,
+    }
+  end
+
+  def unique_company_numbers_for(entity)
+    (
+      [entity.company_number] +
+      entity.identifiers.map do |i|
+        i['company_number']
+      end
+    ).compact.uniq.sort
   end
 end
