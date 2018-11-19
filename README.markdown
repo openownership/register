@@ -104,3 +104,20 @@ Once all jobs have been processed in the Sidekiq admin panel…
 1. Downgrade the `openredis` instance to the `Micro` plan.
 1. From the logs, note down the timestamp when the last worker job finished and note down how long the whole import took.
 1. Note down the new `Entity.count` and `Relationship.count` and note down the differences (can share these with the team on Slack if substantial).
+1. Run the `EntityIntegrityChecker` – see below for instructions – and then note down the final results from the logs.
+
+## The `EntityIntegrityChecker`
+
+… is used to detect various potential issues with entities in the database.
+
+Currently, all issues detected + a final summary are outputted to the log.
+
+It doesn't perform any fixes, but it can be used as the basis for a script / rake task that performs fixes as it emits issues, to be handled separately. See examples under `lib/tasks/migrations`.
+
+Most of the checks are specific to _legal entities_, but some may also be for _natural persons_. Where a check is for both a `type` value will be outputted in the individual log lines.
+
+To run the checker in production:
+
+```bash
+heroku run:detached -s performance-m --app openownership-register time bin/rails runner "EntityIntegrityChecker.new.check_all"
+```
