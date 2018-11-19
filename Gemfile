@@ -33,6 +33,9 @@ gem 'draper', '~> 3.0', '>= 3.0.1'
 gem 'sidekiq', '~> 5.2.2', '>= 5.2.2'
 gem 'memoist', '~> 0.16.0'
 gem 'rack-attack', '~> 5.4'
+gem 'faraday', '~> 0.15.3'
+gem 'faraday_middleware', '~> 0.12.2'
+gem 'dalli', '~> 2.7', '>= 2.7.9'
 
 group :development, :test do
   gem 'byebug'

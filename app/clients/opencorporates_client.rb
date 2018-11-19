@@ -2,40 +2,87 @@ require 'net/http/persistent'
 require 'json'
 
 class OpencorporatesClient
-  extend Memoist
-
   API_VERSION = 'v0.4.6'.freeze
 
+  CACHE_EXPIRY_SECS = 31.days.to_i
+
   def self.new_for_imports
-    new(api_token: Rails.application.config.oc_api.token_protected)
+    new(
+      api_token: Rails.application.config.oc_api.token_protected,
+      open_timeout: 30.0,
+      read_timeout: 60.0,
+      enable_retries: true,
+    )
   end
 
-  attr_reader :http
+  def self.new_for_app(timeout:)
+    new(
+      api_token: Rails.application.config.oc_api.token,
+      open_timeout: timeout,
+      read_timeout: timeout,
+      enable_retries: false,
+    )
+  end
 
-  def initialize(api_token: Rails.application.config.oc_api.token)
+  def initialize(api_token:, open_timeout:, read_timeout:, enable_retries: false)
     @api_token = api_token
 
-    @api_url = 'https://api.opencorporates.com/'
+    @connection = Faraday.new(url: "https://api.opencorporates.com") do |c|
+      c.request :json
 
-    @http = Net::HTTP::Persistent.new(self.class.name)
+      c.response :follow_redirects
+
+      if enable_retries
+        c.request :retry,
+                  max: 2,
+                  interval: 2,
+                  interval_randomness: 1,
+                  backoff_factor: 5,
+                  exceptions: [Errno::ETIMEDOUT, Net::OpenTimeout, 'Timeout::Error', Faraday::Error::RetriableResponse, Faraday::TimeoutError]
+      end
+
+      c.response :json,
+                 content_type: /\bjson$/,
+                 parser_options: { symbolize_names: true }
+
+      if ENV['CACHE_OC_API'] == 'true'
+        c.response :caching, ignore_params: %w[api_token] do
+          ActiveSupport::Cache::MemCacheStore.new(
+            *ENV.fetch('MEMCACHE_SERVERS').split(','),
+            username: ENV.fetch('MEMCACHE_USERNAME'),
+            password: ENV.fetch('MEMCACHE_PASSWORD'),
+            namespace: "OpencorporatesClient_#{Rails.env}",
+            expires_in: CACHE_EXPIRY_SECS,
+            race_condition_ttl: 10,
+            compress: true,
+          )
+        end
+      end
+
+      c.adapter :net_http_persistent do |http|
+        http.open_timeout = open_timeout
+        http.read_timeout = read_timeout
+      end
+    end
   end
 
   def get_jurisdiction_code(name)
-    response = get("/#{API_VERSION}/jurisdictions/match", q: name)
+    response = get('/jurisdictions/match', q: name)
+
     return unless response
 
-    parse(response).fetch(:jurisdiction)[:code]
+    response.fetch(:jurisdiction)[:code]
   end
-  memoize :get_jurisdiction_code
 
   def get_company(jurisdiction_code, company_number, sparse: true)
     params = {}
     params[:sparse] = true if sparse
 
-    response = get("/#{API_VERSION}/companies/#{jurisdiction_code}/#{company_number}", params)
+    response = get("/companies/#{jurisdiction_code}/#{company_number}", params)
+
     return unless response
 
-    parse(response).fetch(:company)
+    response.fetch(:company)
   end
 
   def search_companies(jurisdiction_code, company_number)
@@ -46,10 +93,11 @@ class OpencorporatesClient
       order: 'score',
     }
 
-    response = get("/#{API_VERSION}/companies/search", params)
+    response = get('/companies/search', params)
+
     return [] unless response
 
-    parse(response).fetch(:companies)
+    response.fetch(:companies)
   end
 
   def search_companies_by_name(name)
@@ -59,36 +107,32 @@ class OpencorporatesClient
       order: 'score',
     }
 
-    response = get("/#{API_VERSION}/companies/search", params)
+    response = get('/companies/search', params)
+
     return [] unless response
 
-    parse(response).fetch(:companies)
+    response.fetch(:companies)
   end
 
   private
 
-  def parse(response)
-    object = JSON.parse(response.body, symbolize_names: true)
-
-    object.fetch(:results)
-  end
-
   def get(path, params)
-    params[:api_token] = @api_token
+    normalised_path = Addressable::URI.parse("/#{API_VERSION}#{path}").normalize.to_s
 
-    uri = URI(Addressable::URI.parse(Addressable::URI.join(@api_url, path)).normalize.to_s)
-    uri.query = params.to_query
+    response = @connection.get do |req|
+      req.url normalised_path, params
+      req.params['api_token'] = @api_token
+      req.headers['Accept'] = 'application/json'
+    end
 
-    response = @http.request(uri)
-
-    if response.is_a?(Net::HTTPSuccess)
-      response
+    if response.success?
+      response.body.fetch(:results)
     else
-      Rails.logger.info("Received #{response.code} from api.opencorporates.com when calling #{path} (#{params})")
+      Rails.logger.info("Received #{response.status} from api.opencorporates.com when calling #{normalised_path} (#{params})")
       nil
     end
-  rescue Net::HTTP::Persistent::Error, Net::OpenTimeout => e
-    Rails.logger.info("Received #{e.inspect} when calling #{path} (#{params})")
+  rescue Faraday::ConnectionFailed, Faraday::TimeoutError => e
+    Rails.logger.info("Received #{e.inspect} when calling #{normalised_path} (#{params})")
     nil
   end
 end
