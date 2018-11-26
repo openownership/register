@@ -7,7 +7,7 @@ namespace :ua do
     Rails.application.eager_load!
 
     importer = UaImporter.new
-    importer.source_url = 'http://data.gov.ua/passport/73cfe78e-89ef-4f06-b3ab-eb5f16aea237'
+    importer.source_url = 'https://data.gov.ua/dataset/1c7f3815-3259-45e0-bdf1-64dca07ddc10'
     importer.source_name = 'Ukraine Consolidated State Registry (Edinyy Derzhavnyj Reestr [EDR])'
     importer.document_id = 'Ukraine EDR'
     importer.retrieved_at = Time.zone.parse(args.retrieved_at)
