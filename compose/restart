@@ -1,9 +1,0 @@
-#!/usr/bin/env sh
-
-echo 'restart the app container'
-echo 'CTRL+C to exit logging (once built)'
-echo '-----------------------------------------'
-echo ''
-
-docker-compose restart app
-docker-compose logs -f

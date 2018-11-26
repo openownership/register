@@ -1,64 +1,47 @@
 # OpenOwnership Register
 
-The application can be run in a local development environment or through
-Docker.
+## Setup
 
-## Installation
+Install the version of ruby specified in `.ruby-version` using your favourite ruby version manager.
 
-Install the version of ruby specified in ./.ruby-version using your favourite ruby version manager.
+Install and run bundler:
 
-Install and run bundler
+```bash
+gem install bundler
+bundle
+```
 
-    gem install bundler
-    bundle
+Create an `.env.local` and add in the various required env vars from `.env` – generally, you can use config values from the Heroku app `openownership-register-staging`.
 
-Create `.env.local` and add in your `OPENCORPORATES_API_TOKEN`. To get an API token go to https://opencorporates.com/users/account, click 'Get Account', click 'Sign up' under 'Public Benefit' and fill in the form (content is not important). Someone will then approve your request and you'll be emailed a key.
+For data stores and other local services, you can use Docker Compose:
 
-Override any other settings from `.env` in the new `.env.local` file.
+```bash
+docker-compose up -d
+```
 
-### Running locally
+Alternatively, you can use your own local method for running these services. See the `docker-compose.yml` file for the required services and versions, and the `.env` file for expected config.
 
-Install and run mongodb, elasticsearch and mailcatcher
+Run the setup command, which will create, seed and add indexes to the DB and elasticsearch
 
-    brew install mongodb
-    brew services start mongodb
-    brew install elasticsearch
-    brew services start elasticsearch
-    gem install mailcatcher
+```bash
+bin/setup
+```
 
-Run setup command, which will create, seed and add indexes to the DB and elasticsearch
+Then you're ready to use the usual `rails` commands (like `rails serve`) to run / work with the app.
 
-    ./bin/setup
+To run tests:
 
-Run the tests
-
-    rake
-
-Run the server
-
-    rails server
-
-### Running with Docker
-
-Build and start the containers
-
-    compose/up
-
-Shell into the app
-
-    compose/shell
-
-In the shell, run the tests
-
-    rake
-
-The server will already be running
+```bash
+bundle exec rspec
+```
 
 ## Import more data
 
 The above will create a few example records, but you can import a subset of real data, by running:
 
-    rake postdeploy
+```bash
+rake postdeploy
+```
 
 ## Writing an importer
 
