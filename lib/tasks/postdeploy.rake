@@ -6,9 +6,11 @@ task :postdeploy => ['db:reset', 'db:mongoid:create_indexes'] do
 
   PscImportTask.new(open(source).readlines, '2016-12-06 06:15:37').call
 
-  source = "http://#{ENV.fetch('BUCKETEER_BUCKET_NAME')}.s3.amazonaws.com/public/eiti-data.txt"
-
-  Rake::Task['eiti:import'].invoke(source)
+  # Temporarily disable EITI sample import as it's causing Heroku review app creation to time out.
+  #
+  # source = "http://#{ENV.fetch('BUCKETEER_BUCKET_NAME')}.s3.amazonaws.com/public/eiti-data.txt"
+  #
+  # Rake::Task['eiti:import'].invoke(source)
 
   Entity.import(force: true)
 end
