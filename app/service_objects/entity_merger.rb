@@ -24,6 +24,8 @@ class EntityMerger
     reindex_entity_to_keep_for_search
 
     @merged = true
+
+    @to_keep
   end
 
   private

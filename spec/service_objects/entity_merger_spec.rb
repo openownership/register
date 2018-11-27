@@ -125,7 +125,8 @@ RSpec.describe EntityMerger do
 
       it 'should remove the to_remove entity and merge certain bits of data into the to_keep entity and update all relevant references to the to_remove entity' do
         set_up_search_index_updated_expectations
-        subject.call
+        merged_entity = subject.call
+        expect(merged_entity).to eq to_keep
         expect_merged(merged_identifiers, merged_fields)
       end
     end

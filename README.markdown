@@ -104,3 +104,15 @@ To run the checker in production:
 ```bash
 heroku run:detached -s performance-m --app openownership-register time bin/rails runner "EntityIntegrityChecker.new.check_all"
 ```
+
+## The `NaturalPersonsDuplicatesMerger`
+
+… is used to find and merge natural person entities that match on all of `name`, `address` and `dob` (all must be set and not empty).
+
+To run the checker in production:
+
+```bash
+heroku run:detached -s performance-l --app openownership-register time bin/rails runner "NaturalPersonsDuplicatesMerger.new.run"
+```
+
+Check the log for results and stats.
