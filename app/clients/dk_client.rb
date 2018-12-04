@@ -40,12 +40,16 @@ class DkClient
   end
 
   def scroll(scroll_id)
-    @client.scroll(
+    start = Time.now.utc
+    results = @client.scroll(
       body: {
         scroll: SCROLL_DURATION,
         scroll_id: scroll_id,
       },
     )
+    duration = (Time.now.utc - start) * 1000
+    Rails.logger.info "[#{self.class.name}] Scrolled ElasticSearch in #{duration.round}ms"
+    results
   end
 
   def process_hits(hits, yielder)
