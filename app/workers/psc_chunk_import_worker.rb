@@ -7,7 +7,10 @@ class PscChunkImportWorker
 
   def perform(chunk, retrieved_at)
     lines = ChunkHelper.from_chunk chunk
+    records = lines.map do |line|
+      JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
+    end
 
-    PscImportTask.new(lines, retrieved_at).call
+    PscImportTask.new(records, retrieved_at).call
   end
 end
