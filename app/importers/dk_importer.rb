@@ -10,29 +10,8 @@ class DkImporter
     @entity_resolver = entity_resolver
   end
 
-  def import
-    queue = SizedQueue.new(100)
-
-    Thread.abort_on_exception = true
-    Thread.new do
-      client = DkClient.new(
-        Rails.application.config.dk_cvr.username,
-        Rails.application.config.dk_cvr.password,
-      )
-      client.all_records.each do |record|
-        queue << record
-      end
-
-      queue << Parallel::Stop
-    end
-
-    Parallel.each(queue, in_threads: Concurrent.processor_count) do |record|
-      begin
-        process(record)
-      rescue Timeout::Error
-        retry
-      end
-    end
+  def process_records(records)
+    records.each { |r| process(r) }
   end
 
   def process(record)
