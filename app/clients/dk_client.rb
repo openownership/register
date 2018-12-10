@@ -1,5 +1,5 @@
 class DkClient
-  PAGE_SIZE = 2000
+  PAGE_SIZE = 500
   SCROLL_DURATION = '10m'.freeze
 
   def initialize(username, password)
