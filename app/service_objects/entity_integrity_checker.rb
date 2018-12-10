@@ -9,14 +9,14 @@ class EntityIntegrityChecker
     Entity.all.each do |entity|
       stats[:processed] += 1
 
-      Rails.logger.info "#{stats[:processed]} out of #{total} entities processed" if (stats[:processed] % 100_000).zero?
+      Rails.logger.info "[#{self.class.name}] #{stats[:processed]} out of #{total} entities processed" if (stats[:processed] % 100_000).zero?
 
       result = check entity, &block
 
       result.keys.each { |k| stats[k] += 1 }
     end
 
-    Rails.logger.info "[EntityIntegrityChecker] check_all finished with stats: #{stats.to_json}"
+    Rails.logger.info "[#{self.class.name}] check_all finished with stats: #{stats.to_json}"
 
     stats
   end
@@ -35,7 +35,7 @@ class EntityIntegrityChecker
     end.compact
 
     unless result.empty?
-      Rails.logger.info "[EntityIntegrityChecker] Found issue(s) for entity '#{entity._id}': #{result.to_json}"
+      Rails.logger.info "[#{self.class.name}] Found issue(s) for entity '#{entity._id}': #{result.to_json}"
 
       yield entity, result if block_given?
     end
