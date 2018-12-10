@@ -116,3 +116,87 @@ heroku run:detached -s performance-l --app openownership-register time bin/rails
 ```
 
 Check the log for results and stats.
+
+## Setting up a review app to mimic production (e.g. to review data imports)
+
+Create a review app in the usual way through the Heroku admin and then after the
+review app is up and running:
+
+Go into the "Resources" section of the review app (on Heroku) and:
+- Click on "Change Dyno Type" and set it to the "Professional" dyno type (as
+  you'll need to use these bigger instances).
+- Upgrade MemCachier to a higher plan (production uses a 1GB cache, but if you
+  don't need to test cache effectiveness on this review app you can use a much
+  smaller plan, e.g. 250MB).
+- Remove the Heroku Redis instance
+- Remove the mLab MongoDB instance (because upgrading to a clustered plan is not
+  possible)
+- Remove the SearchBox Elasticsearch instance
+- Add Redis: `heroku addons:create openredis:micro --app openownership-register--pr-XXX`
+- Set the `REDIS_PROVIDER` config var to `OPENREDIS_URL` so that the app can talk
+  to redis
+- Add MongoDB: `heroku addons:create mongolab:dedicated-cluster-m1 --db-version 3.4 --app openownership-register--pr-XXX`
+- Add ElasticSearch: `heroku addons:create foundelasticsearch:beagle-standard --elasticsearch-version 5.6.9 --app openownership-register--pr-XXX`
+
+Whilst these are getting set up, we need to copy across the production db to
+have relevant data. This needs a fast and stable internet connection, so it's
+best done from an EC2 instance in the same datacenter as the database
+(EU-west-1):
+- Spin up an EC2 t2.micro instance on Ubuntu 18.04, editing the disk space to
+  give it 20GB (but leaving all of the other settings at their defaults)
+- In the last step of the instance creation where it asks about access keys,
+  create a new key pair for the instance and download the .pem file.
+- SSH into the new instance: `ssh -i <path/to/new-key-file.pem> ubuntu@<host-name-of-instance>`
+- Install the right version of MongoDB and its tools following their docs e.g.
+  https://docs.mongodb.com/v3.4/tutorial/install-mongodb-on-ubuntu/
+- Dump the production db:
+  `mongodump -h ds135134-a0.mlab.com:35134 -d heroku_kjwvs0sm -u readonly -o dump`
+  (this will prompt you for a password, ask another dev to share the readonly
+  user's password with you).
+
+Back in the Heroku console for the review app, click on the "Elasticsearch" addon to open it's console, then:
+- Reset the password by going to the "Shield" tab and clicking on "Reset" – the
+  new username and password will show on screen.
+- Now add this username and password in the `FOUNDELASTICSEARCH_URL` config
+  variable in the review app's config (via the Heroku console) – since it uses
+  Basic Auth, the URL should end up like: `https://<username>:<password>@<host>`.
+- Now update the `ELASTICSEARCH_URL_ENV_NAME` config variable to be
+  `FOUNDELASTICSEARCH_URL`
+
+Now open the Mlab admin by clicking on the "mLab MongoDB …" addon, then:
+- Wait for this to finish being set up.
+- Once set up and ready, click to drill down into the deployment.
+- Click on the "Networking" tab and then the "Allow all public internet traffic"
+  and then "Apply security changes" – this may take a few minutes to complete.
+- Assuming the data dump earlier is ready…
+- Obtain the full URI for your instance:
+  `heroku config:get MONGODB_URI --app openownership-register--pr-XXX`
+
+On your EC2 instance:
+- Use the username, password and host address from this to construct and run
+  the data import command from your EC2 instance using the following structure:
+  `mongorestore -h <host_address_incl_port> -d <username> -u <username> dump/heroku_kjwvs0sm`
+  make sure to run this from the directory you ran the data dump in (it
+  currently takes about 45 mins). Again this will prompt you for the password,
+  which can be found in the heroku settings for the review app.
+
+Locally, once the restore has finished:
+- Sanitize the database by running:
+  `heroku run --app openownership-register--pr-XXX bin/rails sanitize`
+
+In the Mlab admin
+- Then go back to the MongoDB console and make a manual backup (this is useful
+  if you need to restore to a clean state).
+- Verify the database works as expected by opening up a Rails console using:
+  `heroku run --app openownership-register--pr-XXX bin/rails c` and typing in:
+  `Entity.count`. If a number is outputted then this means the app can talk to
+  the db okay.
+
+- Index the entities into search by running:
+ `heroku run:detached -s standard-2x --app openownership-register--pr-XXX time bin/rails runner "Entity.import(force: true)"`.
+ This can take a few hours (roughly 4 hours currently).
+- Test that the site works as expected, by doing a few searches.
+- Finally, run your import, e.g.
+  `heroku run -s standard-2x --app openownership-register--pr-186 bin/rails dk:trigger`
+  You probably need to run it with at least a 2x instance to avoid memory
+  errors.
