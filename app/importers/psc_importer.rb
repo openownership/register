@@ -10,13 +10,11 @@ class PscImporter
     @entity_resolver = entity_resolver
   end
 
-  def process_lines(lines)
-    lines.each { |l| process(l) }
+  def process_records(records)
+    records.each { |r| process(r) }
   end
 
-  def process(line)
-    record = JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
-
+  def process(record)
     case record.data.kind
     when 'totals#persons-of-significant-control-snapshot'
       :ignore

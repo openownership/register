@@ -1,6 +1,6 @@
 class PscImportTask
-  def initialize(lines, retrieved_at)
-    @lines = lines
+  def initialize(records, retrieved_at)
+    @records = records
     @retrieved_at = retrieved_at
   end
 
@@ -9,7 +9,7 @@ class PscImportTask
     importer.source_url = 'http://download.companieshouse.gov.uk/en_pscdata.html'
     importer.source_name = 'UK PSC Register'
     importer.document_id = 'GB PSC Snapshot'
-    importer.retrieved_at = Time.zone.parse(@retrieved_at)
-    importer.process_lines @lines
+    importer.retrieved_at = @retrieved_at
+    importer.process_records @records
   end
 end
