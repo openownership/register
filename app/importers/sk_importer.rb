@@ -28,7 +28,7 @@ class SkImporter
   private
 
   def child_entity!(record)
-    item = record['PartneriVerejnehoSektora'].first
+    item = record['PartneriVerejnehoSektora'].find { |p| p['PlatnostDo'].nil? }
 
     # See OO-251
     if item['ObchodneMeno'].nil?
