@@ -30,8 +30,8 @@ class SkClient
       return nil
     end
 
-    JSON.parse(response.body, object_class: OpenStruct).tap do |object|
-      object.value.each { |record| yielder << record }
+    JSON.parse(response.body).tap do |object|
+      object['value'].each { |record| yielder << record }
     end
   end
 end

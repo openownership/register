@@ -30,12 +30,12 @@ class SkImporter
   end
 
   def process(record)
-    return unless slovakian_address?(record.PartneriVerejnehoSektora.first.Adresa)
+    return unless slovakian_address?(record['PartneriVerejnehoSektora'].first['Adresa'])
 
     child_entity = child_entity!(record)
 
-    record.KonecniUzivateliaVyhod.each do |item|
-      next unless item.PlatnostDo.nil?
+    record['KonecniUzivateliaVyhod'].each do |item|
+      next unless item['PlatnostDo'].nil?
 
       parent_entity = parent_entity!(item)
 
@@ -46,20 +46,20 @@ class SkImporter
   private
 
   def child_entity!(record)
-    item = record.PartneriVerejnehoSektora.first
+    item = record['PartneriVerejnehoSektora'].first
 
     entity = Entity.new(
       identifiers: [
         {
           'document_id' => document_id,
-          'company_number' => item.Ico,
+          'company_number' => item['Ico'],
         },
       ],
       type: Entity::Types::LEGAL_ENTITY,
       jurisdiction_code: 'sk',
-      company_number: item.Ico,
-      name: item.ObchodneMeno.strip,
-      address: address_string(item.Adresa),
+      company_number: item['Ico'],
+      name: item['ObchodneMeno'].strip,
+      address: address_string(item['Adresa']),
     )
     @entity_resolver.resolve!(entity)
 
@@ -71,14 +71,14 @@ class SkImporter
       identifiers: [
         {
           'document_id' => document_id,
-          'beneficial_owner_id' => item.Id,
+          'beneficial_owner_id' => item['Id'],
         },
       ],
       type: Entity::Types::NATURAL_PERSON,
       name: name_string(item),
       nationality: country_from_nationality(item).try(:alpha2),
-      address: item.Adresa.presence && address_string(item.Adresa),
-      dob: entity_dob(item.DatumNarodenia),
+      address: item['Adresa'].presence && address_string(item['Adresa']),
+      dob: entity_dob(item['DatumNarodenia']),
     }
 
     Entity.new(attributes).tap(&:upsert)
@@ -88,11 +88,11 @@ class SkImporter
     attributes = {
       _id: {
         'document_id' => document_id,
-        'beneficial_owner_id' => item.Id,
+        'beneficial_owner_id' => item['Id'],
       },
       source: parent_entity,
       target: child_entity,
-      sample_date: Date.parse(item.PlatnostOd).to_s,
+      sample_date: Date.parse(item['PlatnostOd']).to_s,
       provenance: {
         source_url: source_url,
         source_name: source_name,
@@ -105,21 +105,21 @@ class SkImporter
   end
 
   def slovakian_address?(address)
-    address.Psc.present? && address.Psc.strip =~ /^\d{3} ?\d{2}$/
+    address['Psc'].present? && address['Psc'].strip =~ /^\d{3} ?\d{2}$/
   end
 
   def address_string(address)
-    first_line = [address.OrientacneCislo, address.MenoUlice].map(&:presence).compact.join(' ')
+    first_line = [address['OrientacneCislo'], address['MenoUlice']].map(&:presence).compact.join(' ')
 
-    [first_line, address.Mesto, address.Psc].map(&:presence).compact.map(&:strip).join(', ')
+    [first_line, address['Mesto'], address['Psc']].map(&:presence).compact.map(&:strip).join(', ')
   end
 
   def name_string(item)
-    item.to_h.values_at(:Meno, :Priezvisko).map(&:presence).compact.join(' ')
+    item.values_at('Meno', 'Priezvisko').map(&:presence).compact.join(' ')
   end
 
   def country_from_nationality(item)
-    ISO3166::Country.find_country_by_number(item.StatnaPrislusnost.StatistickyKod)
+    ISO3166::Country.find_country_by_number(item['StatnaPrislusnost']['StatistickyKod'])
   end
 
   def entity_dob(timestamp)
