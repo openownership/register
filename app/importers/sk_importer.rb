@@ -14,6 +14,8 @@ class SkImporter
 
     child_entity = child_entity!(record)
 
+    return if child_entity.nil?
+
     record['KonecniUzivateliaVyhod'].each do |item|
       next unless item['PlatnostDo'].nil?
 
@@ -27,6 +29,12 @@ class SkImporter
 
   def child_entity!(record)
     item = record['PartneriVerejnehoSektora'].first
+
+    # See OO-251
+    if item['ObchodneMeno'].nil?
+      Rails.logger.warn("[#{self.class.name}] record Id: #{record['Id']} has a child entity (PartneriVerejnehoSektora) with no company name (ObchodneMeno)")
+      return
+    end
 
     entity = Entity.new(
       identifiers: [
