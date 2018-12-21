@@ -1,13 +1,7 @@
 namespace :sk do
-  desc 'Import Slovakia data from rpvs.gov.sk'
-  task :import => [:environment] do
-    Rails.application.eager_load!
-
-    importer = SkImporter.new
-    importer.source_url = 'https://rpvs.gov.sk/'
-    importer.source_name = 'Slovakia Public Sector Partners Register (Register partnerov verejného sektora)'
-    importer.document_id = 'Slovakia PSP Register'
-    importer.retrieved_at = Time.zone.now
-    importer.import
+  desc 'Trigger a Slovakia data import in a background job'
+  task :trigger, %i[chunk_size] => :environment do |_task, args|
+    chunk_size = (args.chunk_size || 100).to_i
+    SkImportTrigger.new.call chunk_size
   end
 end
