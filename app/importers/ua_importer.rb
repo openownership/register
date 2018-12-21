@@ -1,3 +1,5 @@
+require 'parallel'
+
 class UaImporter
   attr_accessor :source_url, :source_name, :document_id, :retrieved_at
 

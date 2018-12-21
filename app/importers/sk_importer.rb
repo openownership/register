@@ -1,5 +1,3 @@
-require 'parallel'
-
 class SkImporter
   attr_accessor :source_url, :source_name, :document_id, :retrieved_at
 
