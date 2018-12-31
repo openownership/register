@@ -183,9 +183,11 @@ best done from an EC2 instance in the same datacenter as the database
   give it 20GB (but leaving all of the other settings at their defaults)
 - In the last step of the instance creation where it asks about access keys,
   create a new key pair for the instance and download the .pem file.
+- `chmod 400 <path/to/new-key-file.pem>` the key file so that SSH will use it
 - SSH into the new instance: `ssh -i <path/to/new-key-file.pem> ubuntu@<host-name-of-instance>`
 - Install the right version of MongoDB and its tools following their docs e.g.
-  https://docs.mongodb.com/v3.4/tutorial/install-mongodb-on-ubuntu/
+  https://docs.mongodb.com/v3.4/tutorial/install-mongodb-on-ubuntu/ (the 16.04
+  docs seem to work equally well for 18.04)
 - Dump the production db:
   `mongodump -h ds135134-a0.mlab.com:35134 -d heroku_kjwvs0sm -u readonly -o dump`
   (this will prompt you for a password, ask another dev to share the readonly
@@ -216,6 +218,7 @@ On your EC2 instance:
   make sure to run this from the directory you ran the data dump in (it
   currently takes about 45 mins). Again this will prompt you for the password,
   which can be found in the heroku settings for the review app.
+- Once this has run, you can terminate the EC2 instance.
 
 Locally, once the restore has finished:
 - Sanitize the database by running:
