@@ -1,2 +1,14 @@
 User-Agent: *
-Disallow: 
+Disallow:
+
+User-Agent: dotbot
+Disallow: /
+
+User-Agent: semrushbot
+Disallow: /
+
+User-Agent: mj12bot
+Disallow: /
+
+User-Agent: ahrefsbot
+Disallow: /
