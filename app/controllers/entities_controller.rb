@@ -12,8 +12,6 @@ class EntitiesController < ApplicationController
     )
 
     unless request.format.json?
-      @opencorporates_company_hash = get_opencorporates_company_hash(entity)
-
       @similar_people = entity.natural_person? ? decorate(similar_people(entity)) : nil
     end
 
@@ -43,6 +41,12 @@ class EntitiesController < ApplicationController
     entity = Entity.find(params[:id])
     @node = decorate_with(TreeNode.new(entity), TreeNodeDecorator)
     @entity = decorate(entity)
+  end
+
+  def opencorporates_additional_info
+    entity = Entity.find(params[:id])
+    @opencorporates_company_hash = get_opencorporates_company_hash(entity)
+    render partial: 'opencorporates_additional_info'
   end
 
   private

@@ -132,32 +132,10 @@
                   = link_to(t(".advertising_protection.terms_of_use"), 'https://datacvr.virk.dk/data/cvr-help/conditions-use', target: '_blank')
 
         - unless @entity.natural_person?
-          - if @opencorporates_company_hash
+          .js-opencorporates-additional-info{ 'data-additional-info-url' => opencorporates_additional_info_entity_path(@entity), 'data-no-data-msg' => t(".no_data_from_opencorporates") }
             .frame-light.meta
               .frame-wrap
-                - @opencorporates_company_hash[:current_status].try do |current_status|
-                  %h6= t(".fields.current_status")
-                  %p= current_status
-                - previous_names(@opencorporates_company_hash).presence.try do |previous_names|
-                  %h6= t(".fields.previous_names")
-                  %p= previous_names
-                - industry_codes(@opencorporates_company_hash).presence.try do |industry_codes|
-                  %h6= t(".fields.industry_codes")
-                  %p= industry_codes
-                - officers(@opencorporates_company_hash).presence.try do |officers|
-                  %h6= t(".fields.officers")
-                  %ul
-                    - officers.each do |officer_hash|
-                      %li
-                        = officer_hash[:name]
-                        - officer_attributes_snippet(officer_hash).presence.try do |attributes|
-                          %span.meta-secondary= attributes
-              %a.oo-link{ href: @opencorporates_company_hash[:opencorporates_url], target: '_blank' }
-                = t(".data_from_opencorporates_html", opencorporates: render_haml("%span OpenCorporates"))
-          - else
-            .frame-light.meta
-              .frame-wrap
-                %p.unknown= t(".no_data_from_opencorporates")
+                %p.unknown= t(".loading_data_from_opencorporates")
 
         .frame-light.meta.entity-search-links
           .frame-wrap
