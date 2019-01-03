@@ -1113,3 +1113,10 @@ span.tooltip-helper {
     background-color: lighten($darkBlue, 5%);
   }
 }
+
+// Classes for things dependent on the js/no-js document class toggling
+.js {
+  .no-js-message {
+    display: none;
+  }
+}
