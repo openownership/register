@@ -17,6 +17,7 @@ en:
       data_from_opencorporates_html: "Data from %{opencorporates}"
       no_further_information_known: No further information known about this %{type}
       no_data_from_opencorporates: OpenCorporates data not available
+      loading_data_from_opencorporates: Loading data from OpenCorporates
       more_on: "More on %{name}"
       details: Details ›
       fields:
@@ -131,6 +132,7 @@ en:
     transliteration:
       transliterate: Transliterate
       dont_transliterate: "Don't transliterate"
+    javascript_required: (Javascript is required to view this content)
 
   entity_types:
     default: entity

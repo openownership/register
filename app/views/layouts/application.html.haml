@@ -1,5 +1,5 @@
 !!!
-%html
+%html.no-js
   %head
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }/
     %meta{ content: "width=device-width, initial-scale=1", name: "viewport" }/
@@ -7,6 +7,7 @@
       OpenOwnership Register
       - yield(:title).presence.try do |title|
         | #{title}
+    %script document.documentElement.className = document.documentElement.className.replace("no-js","js");
     = google_analytics
     = csrf_meta_tags
     = stylesheet_link_tag 'application', media: 'all'
