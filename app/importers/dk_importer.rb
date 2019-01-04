@@ -1,5 +1,3 @@
-require 'parallel'
-
 # NOTE: some of the logic in this importer is based on the OC script:
 # https://gist.github.com/skenaja/cf843d127e8937b5f79fa6d0e81d1543
 
