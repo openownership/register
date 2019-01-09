@@ -23,13 +23,13 @@
               .form-group
                 = f.label :email
                 %em= t(".email_help")
-                = f.email_field :email, class: 'form-control form-control-lg'
+                = f.email_field :email, autocomplete: 'email', class: 'form-control form-control-lg'
               .form-group
                 = f.label :password
                 - if @minimum_password_length
                   %em
                     = t(".minimum_password_length", length: @minimum_password_length)
-                = f.password_field :password, autocomplete: 'off', class: 'form-control form-control-lg'
+                = f.password_field :password, autocomplete: 'new-password', class: 'form-control form-control-lg'
               .actions
                 = f.submit t(".submit"), class: 'btn btn-primary btn-lg btn-block'
             = render "devise/shared/links"
