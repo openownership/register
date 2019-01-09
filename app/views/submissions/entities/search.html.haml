@@ -16,12 +16,12 @@
             %p= t('.if_company_in_submission')
       .col-lg-6
         .submission-frame
-          = form_tag search_submission_entities_path, method: :get, class: 'submission-search-form' do
+          = form_with url: search_submission_entities_path, method: :get, class: 'submission-search-form', local: true do |f|
             = render 'continue_params'
             .form-group
               .submission-search-field
-                = text_field_tag :q, params[:q], id: 'search_q', autofocus: true, class: 'form-control form-control-lg'
-                = button_tag t('.submit'), name: nil, class: 'btn btn-primary'
+                = f.text_field :q, value: params[:q], autofocus: true, id: 'search_q', class: 'form-control form-control-lg'
+                = f.button t('.submit'), name: nil, class: 'btn btn-primary'
 
           - if params[:q].present?
             %hr

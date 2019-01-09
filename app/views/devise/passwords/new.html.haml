@@ -9,11 +9,11 @@
             %header
               %h1= t(".header")
 
-            = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
+            = form_with model: resource, url: password_path(resource_name), method: :post, local: true do |f|
               = devise_error_messages!
               .form-group
                 = f.label :email
-                = f.email_field :email, autofocus: true, autocomplete: 'email', class: 'form-control form-control-lg'
+                = f.email_field :email, autofocus: true, autocomplete: 'email', id: "#{resource_name}_email", class: 'form-control form-control-lg'
               .actions
                 = f.submit t(".submit"), class: 'btn btn-primary btn-lg btn-block'
             = render "devise/shared/links"
