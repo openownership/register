@@ -12,6 +12,8 @@ Bundler.require(*Rails.groups)
 
 module OpenOwnershipRegister
   class Application < Rails::Application
+    config.load_defaults 5.1
+
     config.middleware.use Rack::Attack
 
     if ENV["BASIC_AUTH"].present?
