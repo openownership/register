@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'add controlling entity' do
+RSpec.describe 'add controlling entity' do
   include SubmissionHelpers
 
   let(:submission) { create(:submission) }

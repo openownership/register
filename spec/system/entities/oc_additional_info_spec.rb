@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Additional entity info from OpenCorporates' do
+RSpec.describe 'Additional entity info from OpenCorporates' do
   let(:entity) { create(:legal_entity) }
   let(:oc_url) { "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/#{entity.jurisdiction_code}/#{entity.company_number}" }
   let(:oc_url_regex) { /#{Regexp.quote(oc_url)}/ }

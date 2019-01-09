@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'review submission' do
+RSpec.describe 'review submission' do
   include AdminHelpers
 
   let!(:submission) { create(:submitted_submission) }

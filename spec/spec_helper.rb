@@ -33,4 +33,13 @@ RSpec.configure do |config|
   end
 
   WebMock.disable_net_connect!(allow_localhost: true)
+
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, type: :system, js: true) do
+    # See spec/support/capybara.rb for the definition of this driver
+    driven_by :headless_chrome
+  end
 end

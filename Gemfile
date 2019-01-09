@@ -58,7 +58,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara'
+  gem 'capybara', '~> 2.13'
   gem 'rails-controller-testing'
   gem 'json-schema', '~> 2.8', '>= 2.8.1'
   gem "selenium-webdriver"

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'edit interests' do
+RSpec.describe 'edit interests' do
   let(:submission) { create(:submission) }
 
   before do

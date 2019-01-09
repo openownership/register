@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'add sibling entity' do
+RSpec.describe 'add sibling entity' do
   include SubmissionHelpers
 
   let(:submission) { create(:submission) }

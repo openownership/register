@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'remove entity' do
+RSpec.describe 'remove entity' do
   include SubmissionHelpers
 
   let(:submission) { create(:submission) }
