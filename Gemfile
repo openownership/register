@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby File.read(".ruby-version").strip
 
 gem 'addressable'
-gem 'rails', '~> 5.1.0', '>= 5.1.6.1'
+gem 'rails', '~> 5.2.0', '>= 5.2.2'
 gem 'puma', '~> 3.0'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -35,6 +35,7 @@ gem 'rack-attack', '~> 5.4'
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.12.2'
 gem 'dalli', '~> 2.7', '>= 2.7.9'
+gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   gem 'byebug'
@@ -57,7 +58,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', '~> 2.13'
+  gem 'capybara', '>= 2.15'
   gem 'rails-controller-testing'
   gem 'json-schema', '~> 2.8', '>= 2.8.1'
   gem "selenium-webdriver"
