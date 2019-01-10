@@ -79,6 +79,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (>= 2.0, < 4.0)
+    capybara-email (3.0.1)
+      capybara (>= 2.4, < 4.0)
+      mail
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     chromedriver-helper (2.1.0)
@@ -390,6 +393,7 @@ DEPENDENCIES
   bootstrap (~> 4.0.0.alpha5)
   byebug
   capybara (>= 2.15)
+  capybara-email
   chromedriver-helper
   countries
   dalli (~> 2.7, >= 2.7.9)

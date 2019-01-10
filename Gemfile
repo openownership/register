@@ -63,4 +63,5 @@ group :test do
   gem 'json-schema', '~> 2.8', '>= 2.8.1'
   gem "selenium-webdriver"
   gem "chromedriver-helper"
+  gem 'capybara-email'
 end
