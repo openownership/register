@@ -39,7 +39,6 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system, js: true) do
-    # See spec/support/capybara.rb for the definition of this driver
-    driven_by :headless_chrome
+    driven_by :selenium, using: :headless_chrome
   end
 end
