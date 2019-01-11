@@ -59,10 +59,8 @@ RSpec.describe Submissions::EntitiesHelper do
       before { allow(entity).to receive(:persisted?).and_return(false) }
 
       it 'returns options for create form' do
-        expect(subject).to eq(
-          url: submission_entities_path(entity.submission.id),
-          method: :post,
-        )
+        expect(subject[:url]).to eq submission_entities_path(entity.submission.id)
+        expect(subject[:method]).to eq :post
       end
     end
 
@@ -70,10 +68,8 @@ RSpec.describe Submissions::EntitiesHelper do
       before { allow(entity).to receive(:persisted?).and_return(true) }
 
       it 'returns options for update form' do
-        expect(subject).to eq(
-          url: submission_entity_path(entity.submission.id, entity.id),
-          method: :put,
-        )
+        expect(subject[:url]).to eq submission_entity_path(entity.submission.id, entity.id)
+        expect(subject[:method]).to eq :put
       end
     end
   end

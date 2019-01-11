@@ -13,7 +13,7 @@
               = devise_error_messages!
               .form-group
                 = f.label :email
-                = f.email_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), id: "#{resource_name}_email", class: 'form-control form-control-lg'
+                = f.email_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: 'form-control form-control-lg'
               .actions
                 = f.submit t(".submit"), class: 'btn btn-primary btn-lg btn-block'
             = render "devise/shared/links"
