@@ -16,13 +16,19 @@ module Submissions
     def form_options_for_entity(entity)
       if entity.persisted?
         {
+          model: entity,
           url: submission_entity_path(entity.submission, entity),
           method: :put,
+          scope: :entity,
+          local: true,
         }
       else
         {
+          model: entity,
           url: submission_entities_path(entity.submission),
           method: :post,
+          scope: :entity,
+          local: true,
         }
       end
     end

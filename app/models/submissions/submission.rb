@@ -9,7 +9,7 @@ module Submissions
     scope :reviewable, -> { submitted.where(approved_at: nil) }
     scope :approved, -> { where(:approved_at.ne => nil) }
 
-    belongs_to :user
+    belongs_to :user, class_name: "User", inverse_of: :submissions
 
     has_many :entities, class_name: 'Submissions::Entity'
     has_many :relationships, class_name: 'Submissions::Relationship'

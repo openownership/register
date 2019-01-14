@@ -46,6 +46,50 @@ en:
     ultimate_source_relationship:
       controls_via: Owned via
       details: Details ›
+  devise:
+    confirmations:
+      new:
+        title: Resend confirmation instructions
+        header: Resend confirmation instructions
+        submit: Resend confirmation instructions
+    passwords:
+      edit:
+        title: Change your password
+        header: Change your password
+        minimum_password_length: (%{length} characters minimum)
+        new_password: New password
+        submit: Change my password
+      new:
+        title: Forgot your password?
+        header: Forgot your password?
+        submit: Send me reset password instructions
+    registrations:
+      edit:
+        title: My account
+        current_password_help: (we need your current password to confirm your changes)
+        header: My account
+        new_password:
+          leave_blank: (leave blank if you don't want to change it)
+          minimum_length: "%{length} characters minimum"
+        pending_reconfirmation: "Currently waiting confirmation for: %{email}"
+        submit: Update
+      new:
+        title: Sign up
+        email_help: (Please use your company email address)
+        header: Sign up
+        minimum_password_length: (%{length} characters minimum)
+        submit: Sign up
+    sessions:
+      new:
+        title: Sign in
+        header: Sign in
+        submit: Sign in
+    shared:
+      links:
+        new_session: Sign in
+        new_registration: Sign up
+        new_password: Forgot your password?
+        new_confirmation: Didn't receive confirmation instructions?
   helpers:
     entities:
       entity_attributes_snippet:

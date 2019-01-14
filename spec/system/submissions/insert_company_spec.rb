@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'insert company' do
+RSpec.describe 'insert company' do
   include SubmissionHelpers
 
   let(:submission) { create(:submission) }

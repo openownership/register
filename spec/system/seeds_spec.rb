@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "seeds" do
+RSpec.describe "seeds" do
   let(:file) do
     Rails.root.join('db', 'seeds.rb')
   end

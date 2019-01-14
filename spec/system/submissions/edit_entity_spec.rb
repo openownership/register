@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'edit entity' do
+RSpec.describe 'edit entity' do
   let(:submission) { create(:submission) }
 
   before do

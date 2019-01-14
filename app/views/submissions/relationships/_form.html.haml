@@ -1,4 +1,4 @@
-= form_for relationship, as: :relationship, url: submission_relationship_path(relationship.submission, relationship) do |f|
+= form_with model: relationship, scope: :relationship, url: submission_relationship_path(relationship.submission, relationship), local: true do |f|
   %p
     %strong= t('.hint')
   %hr

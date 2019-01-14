@@ -10,10 +10,9 @@
           %p.legal-entity-count= t(".legal-entity_count", count: number_to_human(@legal_entity_count, precision: 2).downcase)
       .col-lg-6.offset-lg-3
         .form-group
-          = form_tag search_path, method: 'get', class: 'search-form' do
-            = text_field_tag :q, params[:q], class: 'form-control form-control-lg search-field', placeholder: t(".placeholder"), autofocus: true
-
-            = submit_tag t(".search"), name: nil, class: 'search-button'
+          = form_with url: search_path, method: 'get', class: 'search-form', local: true do |f|
+            = f.text_field :q, value: params[:q], class: 'form-control form-control-lg search-field', placeholder: t(".placeholder"), autofocus: true
+            = f.submit t(".search"), name: nil, class: 'search-button'
 
     .row
       - if params[:q].blank?

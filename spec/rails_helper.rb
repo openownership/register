@@ -3,11 +3,15 @@ require File.expand_path('../config/environment', __dir__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
+require 'capybara/rails'
+require 'capybara/rspec'
+require 'capybara/email/rspec'
 require 'support/capybara'
 require 'support/devise'
 require 'support/submission_helpers'
 require 'support/admin_helpers'
 require 'support/bods_schema_matcher'
+require 'support/user_helpers'
 
 require 'sidekiq/testing'
 Sidekiq::Logging.logger = nil
