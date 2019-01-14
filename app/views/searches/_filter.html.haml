@@ -8,7 +8,7 @@
             - helper.call(search_params[key]).each do |element|
               = element
             %span.document-count= @response.results.total
-            = link_to t('.remove_filter'), search_path(search_params.without(key)), class: "remove"
+            = link_to t('.remove_filter'), search_path(search_params.to_h.without(key)), class: "remove"
     - else
       %h6= t('.filter_by', key: key)
       %ul.list-unstyled
