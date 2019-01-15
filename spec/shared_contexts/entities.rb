@@ -20,8 +20,4 @@ RSpec.shared_context 'basic entity with stubbed OC api' do
       headers: { 'Content-Type' => 'application/json' },
     )
   end
-
-  def ownership_summary
-    I18n.t("relationship_interests.#{relationship.interests.first}")
-  end
 end

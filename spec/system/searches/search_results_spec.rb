@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Search results' do
+  include EntityHelpers
+
   let!(:company) { FactoryGirl.create(:legal_entity) }
   let!(:holding_company) { FactoryGirl.create(:legal_entity) }
   let!(:ceased_company) do
@@ -39,7 +41,7 @@ RSpec.describe 'Search results' do
 
     # Person results
     expect(page).to have_text 'British'
-    expect(page).to have_text "Born #{Date::MONTHNAMES[person.dob.month]} #{person.dob.year}"
+    expect(page).to have_text "Born #{birth_month_year(person)}"
     expect(page).to have_text "Controls: #{holding_company.name}"
     expect(page).to have_link person.name
     expect(page).to have_selector '.type-icon.natural-person'

@@ -1,7 +1,7 @@
 require 'rails_helper'
-require_relative 'shared_context.rb'
 
 RSpec.describe 'Additional entity info from OpenCorporates' do
+  include EntityHelpers
   include_context 'basic entity with stubbed OC api'
 
   context 'when the OC api has data for an entity' do
