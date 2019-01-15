@@ -77,6 +77,13 @@ below.
 
 See the source-specific documentation.
 
+Note when evaluating errors that 'failed' in the sidekiq web admin
+doesn't mean the job wasn't successful later. Jobs that fail are automatically
+retried up to 25 times so if e.g. an api timed out, they might succeed on a
+retry. 'Dead' jobs are the main concern, as these are jobs which failed every
+retry and so weren't run. See: https://github.com/mperham/sidekiq/wiki/API#dead
+for docs on how to access those jobs.
+
 ### Post-import
 
 Once all jobs have been processed in the Sidekiq admin panel (/admin/sidekiq)
