@@ -164,7 +164,7 @@ Most of the checks are specific to _legal entities_, but some may also be for _n
 To run the checker in production:
 
 ```bash
-heroku run:detached -s performance-m --app openownership-register time bin/rails runner "EntityIntegrityChecker.new.check_all"
+heroku run:detached -s performance-l --app openownership-register time bin/rails runner "EntityIntegrityChecker.new.check_all"
 ```
 
 ## The `NaturalPersonsDuplicatesMerger`
