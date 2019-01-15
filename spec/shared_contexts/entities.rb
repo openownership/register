@@ -15,6 +15,7 @@ RSpec.shared_context 'basic entity with stubbed OC api' do
   let(:oc_url_regex) { /#{Regexp.quote(oc_url)}/ }
 
   before do
+    Entity.import(force: true, refresh: true)
     stub_request(:get, oc_url_regex).to_return(
       body: '{"results":{"company":{"name":"EXAMPLE LIMITED","previous_names":[{"company_name":"FOO LIMITED"}],"industry_codes":[],"officers":[]}}}',
       headers: { 'Content-Type' => 'application/json' },
