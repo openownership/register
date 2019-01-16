@@ -1,5 +1,5 @@
-- if @opencorporates_company_hash
-  .frame-light.meta
+.frame-light.meta
+  - if @opencorporates_company_hash
     .frame-wrap
       - @opencorporates_company_hash[:current_status].try do |current_status|
         %h6= t("entities.show.fields.current_status")
@@ -20,7 +20,9 @@
                 %span.meta-secondary= attributes
     %a.oo-link{ href: @opencorporates_company_hash[:opencorporates_url], target: '_blank' }
       = t("entities.show.data_from_opencorporates_html", opencorporates: render_haml("%span OpenCorporates"))
-- else
-  .frame-light.meta
+  - elsif @oc_api_timed_out
+    .frame-wrap
+      %p.unknown= t("entities.show.opencorporates_api_timed_out")
+  - else
     .frame-wrap
       %p.unknown= t("entities.show.no_data_from_opencorporates")

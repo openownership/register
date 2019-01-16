@@ -18,6 +18,7 @@ en:
       no_further_information_known: No further information known about this %{type}
       no_data_from_opencorporates: OpenCorporates data not available
       loading_data_from_opencorporates: Loading data from OpenCorporates
+      opencorporates_api_timed_out: OpenCorporates took too long to respond. Reload the page to retry.
       more_on: "More on %{name}"
       details: Details ›
       fields:
