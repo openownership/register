@@ -12,11 +12,13 @@ require 'support/submission_helpers'
 require 'support/admin_helpers'
 require 'support/bods_schema_matcher'
 require 'support/user_helpers'
+require 'support/entity_helpers'
 
 require 'sidekiq/testing'
 Sidekiq::Logging.logger = nil
 
 Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
+Dir["./spec/shared_contexts/**/*.rb"].each { |f| require f }
 
 JSON::Validator.schema_reader = JSON::Schema::Reader.new(accept_uri: false, accept_file: true)
 
