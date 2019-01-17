@@ -8,6 +8,7 @@ module ActsAsEntity
 
   included do
     include Mongoid::Document
+    include Mongoid::Timestamps
 
     field :type, type: String
 
