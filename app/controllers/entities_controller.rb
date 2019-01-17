@@ -45,7 +45,11 @@ class EntitiesController < ApplicationController
 
   def opencorporates_additional_info
     entity = Entity.find(params[:id])
-    @opencorporates_company_hash = get_opencorporates_company_hash(entity)
+    begin
+      @opencorporates_company_hash = get_opencorporates_company_hash(entity)
+    rescue OpencorporatesClient::TimeoutError
+      @oc_api_timed_out = true
+    end
     render partial: 'opencorporates_additional_info'
   end
 

@@ -6,12 +6,16 @@ class OpencorporatesClient
 
   CACHE_EXPIRY_SECS = 31.days.to_i
 
+  class TimeoutError < StandardError
+  end
+
   def self.new_for_imports
     new(
       api_token: Rails.application.config.oc_api.token_protected,
       open_timeout: 30.0,
       read_timeout: 60.0,
       enable_retries: true,
+      raise_timeouts: false,
     )
   end
 
@@ -21,11 +25,13 @@ class OpencorporatesClient
       open_timeout: timeout,
       read_timeout: timeout,
       enable_retries: false,
+      raise_timeouts: true,
     )
   end
 
-  def initialize(api_token:, open_timeout:, read_timeout:, enable_retries: false)
+  def initialize(api_token:, open_timeout:, read_timeout:, enable_retries: false, raise_timeouts: false)
     @api_token = api_token
+    @raise_timeouts = raise_timeouts
 
     @connection = Faraday.new(url: "https://api.opencorporates.com") do |c|
       c.request :json
@@ -131,8 +137,12 @@ class OpencorporatesClient
       Rails.logger.info("Received #{response.status} from api.opencorporates.com when calling #{normalised_path} (#{params})")
       nil
     end
-  rescue Faraday::ConnectionFailed, Faraday::TimeoutError => e
+  rescue Faraday::ConnectionFailed => e
     Rails.logger.info("Received #{e.inspect} when calling #{normalised_path} (#{params})")
+    nil
+  rescue Faraday::TimeoutError => e
+    Rails.logger.info("Received #{e.inspect} when calling #{normalised_path} (#{params})")
+    raise TimeoutError if @raise_timeouts
     nil
   end
 end

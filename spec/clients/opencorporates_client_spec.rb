@@ -24,6 +24,7 @@ RSpec.describe OpencorporatesClient do
       api_token: api_token,
       open_timeout: 1.0,
       read_timeout: 1.0,
+      raise_timeouts: false,
     )
   end
 
@@ -73,6 +74,41 @@ RSpec.describe OpencorporatesClient do
 
       it 'returns an empty value' do
         expect(subject).to eq(empty_return_value)
+      end
+    end
+
+    context "when a Faraday::Timeout error is raised" do
+      before do
+        @stub.to_raise(Faraday::TimeoutError)
+      end
+
+      context "when raise_timeouts is false" do
+        it 'logs response errors' do
+          allow(Rails.logger).to receive(:info)
+          expect(Rails.logger).to receive(:info).with(/Faraday::Timeout.*#{log_text}/)
+          subject
+        end
+
+        it 'returns an empty value' do
+          expect(subject).to eq(empty_return_value)
+        end
+      end
+
+      context "when raise_timeouts is true" do
+        let :client do
+          OpencorporatesClient.new(
+            api_token: api_token,
+            open_timeout: 1.0,
+            read_timeout: 1.0,
+            raise_timeouts: true,
+          )
+        end
+
+        it 'logs response errors and raises a TimeoutError' do
+          allow(Rails.logger).to receive(:info)
+          expect(Rails.logger).to receive(:info).with(/Faraday::Timeout.*#{log_text}/)
+          expect { subject }.to raise_error(OpencorporatesClient::TimeoutError)
+        end
       end
     end
   end
