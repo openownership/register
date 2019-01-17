@@ -6,6 +6,8 @@ class Provenance
   field :retrieved_at, type: Time
   field :imported_at, type: Time
 
+  embedded_in :relationship
+
   def to_builder
     Jbuilder.new do |json|
       json.source_url source_url

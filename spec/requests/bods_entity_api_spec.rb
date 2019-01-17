@@ -76,7 +76,7 @@ RSpec.describe 'BODS Entity API', type: :request do
               'significant-influence-or-control',
               'blah nlah nlah',
             ],
-            provenance: create(:provenance, source_name: 'UK PSC Register'),
+            provenance: attributes_for(:provenance, source_name: 'UK PSC Register'),
           ),
           create(
             :relationship,
@@ -95,7 +95,7 @@ RSpec.describe 'BODS Entity API', type: :request do
               },
               'significant-influence-or-control',
             ],
-            provenance: create(:provenance, source_name: 'Denmark Central Business Register (Centrale Virksomhedsregister [CVR])'),
+            provenance: attributes_for(:provenance, source_name: 'Denmark Central Business Register (Centrale Virksomhedsregister [CVR])'),
           ),
         ]
       end
