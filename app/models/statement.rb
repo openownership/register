@@ -1,6 +1,8 @@
 class Statement
   include Mongoid::Document
 
+  field :_id, type: Hash
+
   field :type, type: String
   field :date, type: Date
 
