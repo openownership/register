@@ -17,6 +17,7 @@ class EntityResolver
       response = @opencorporates_client.search_companies(entity.jurisdiction_code, entity.company_number)
 
       unless response.empty?
+        log_reconciliation_changes(entity, response.first.fetch(:company))
         merge(entity, response.first.fetch(:company))
         return
       end
@@ -24,6 +25,8 @@ class EntityResolver
       response = @reconciliation_client.reconcile(entity.jurisdiction_code, entity.name)
 
       return if response.nil?
+
+      log_reconciliation_changes(entity, response)
 
       entity.assign_attributes(
         jurisdiction_code: response.fetch(:jurisdiction_code),
@@ -51,5 +54,32 @@ class EntityResolver
 
     entity.assign_attributes(attributes)
     entity.add_oc_identifier(response)
+  end
+
+  def log_reconciliation_changes(entity, oc_data)
+    original_number = normalise_company_number(entity.company_number)
+    new_number = normalise_company_number(oc_data.fetch(:company_number))
+    return if original_number == new_number
+    msg = "[#{self.class.name}] Resolution with OpenCorporates changed the " \
+          "company number of Entity with identifiers: #{entity.identifiers}. " \
+          "Old number: #{entity.company_number}. " \
+          "New number: #{oc_data.fetch(:company_number)}. " \
+          "Old name: #{entity.name}. New name: #{oc_data.fetch(:name)}."
+    Rails.logger.info msg
+  end
+
+  # Slightly reverse-engineered version of the normalisation that OpenCorporates
+  # does to company numbers, to help make meaningful changes more obvious
+  def normalise_company_number(original_number)
+    number = original_number.nil? ? "" : original_number.dup
+    # Strip leading zeroes
+    number.sub!(/^[0]+/, '')
+    # Remove spaces
+    number.gsub!(/\s/, '')
+    # Turn various separators into dashes
+    number.gsub!(%r{[/\.]}, '-')
+    # Uppercase everything
+    number.upcase!
+    number
   end
 end
