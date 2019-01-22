@@ -30,6 +30,9 @@ services:
 
   redis:
     image: redis:4.0.9-alpine
+    volumes:
+      - 'redis_data:/data'
+    command: ["redis-server", "--appendonly", "yes"]
     ports:
       - 6379:6379
     restart: always
@@ -48,3 +51,4 @@ services:
 volumes:
   mongodb_data:
   es_data:
+  redis_data:
