@@ -40,5 +40,7 @@ module OpenOwnershipRegister
     config.action_mailer.default_url_options = { host: host_uri.hostname }
     config.action_mailer.default_url_options[:port] = host_uri.port if host_uri.port != host_uri.default_port
     config.action_mailer.asset_host = host_uri.to_s
+
+    config.skylight.probes += %w[redis mongoid faraday]
   end
 end
