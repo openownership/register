@@ -36,6 +36,7 @@ gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.12.2'
 gem 'dalli', '~> 2.7', '>= 2.7.9'
 gem 'bootsnap', '>= 1.1.0', require: false
+gem 'skylight'
 
 group :development, :test do
   gem 'byebug'
