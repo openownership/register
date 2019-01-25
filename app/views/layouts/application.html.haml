@@ -35,11 +35,11 @@
                     %li.nav-item{ class: ("active" if submissions_section?) }
                       = link_to t(".nav.submissions"), submissions_path, class: "nav-link"
                   %li.nav-item
-                    %a.nav-link.external{ href: "http://openownership.org/about/", target: "_blank" }
-                      = t(".nav.about")
+                    %a.nav-link.external{ href: "https://www.openownership.org/what-we-do/", target: "_blank" }
+                      = t(".nav.what_we_do")
                   %li.nav-item
-                    %a.nav-link.external{ href: "http://openownership.org/get-involved/", target: "_blank" }
-                      = t(".nav.get_involved")
+                    %a.nav-link.external{ href: "https://www.openownership.org/connect-with-us/", target: "_blank" }
+                      = t(".nav.connect_with_us")
                   %li.nav-item{ class: ("active" if current_page?(feedback_path)) }
                     = link_to t(".nav.feedback"), feedback_path, class: "nav-link"
                   .float-md-right.sign-up-nav
@@ -62,6 +62,9 @@
                     %li.nav-item
                       %a.nav-link{ href: "https://medium.com/beneficial-ownership" }
                         %i.fa.fa-medium
+                    %li.nav-item
+                      %a.nav-link{ href: "https://github.com/openownership/data-standard" }
+                        %i.fa.fa-github
             .brand-header
               = link_to root_path do
                 = image_tag('OpenOwnership-Logo-Beta.svg', class: 'logo')
