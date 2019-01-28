@@ -263,3 +263,62 @@ In the Mlab admin
 - Test that the site works as expected, by doing a few searches.
 - Finally, run your import, see [Running data imports on production](#running-data-imports-on-production)
   for specific instructions on that.
+
+## Restoring from an offsite backup
+
+Note: If you're looking to restore from a normal backup, see [Setting up a review app to mimic production](#setting-up-a-review-app-to-mimic-production-eg-to-review-data-imports)
+
+In the event that something happens to mLab and the backups they store within
+their platform, we have several options to retrieve the production database.
+
+Firstly, mLab should have been making nightly backups to an S3 bucket under the
+OO AWS organisation account named 'oo-register-mlab-backups', and storing 8 days
+worth of old backups in there. If you can trust these backups and the S3 bucket
+is available, restoring from here will be the most efficient way to get the data
+back.
+
+If these backups are unavailable, or untrusted, the most recent 3 months of
+backups from this bucket should have also been duplicated to Google Cloud
+Storage under the OO-Register project. They're in a storage bucket with a
+similar name 'oo-register-mlab-backups'.
+
+### Verifying a backup locally
+Once you've chosen a backup source, download the zip file of the backup you want
+to restore and extract it locally. They can be accessed via the AWS Console or
+the GCP Console in a web browser. Then, restore it using `mongorestore` to your
+local mongodb (which must be running first):
+
+```shell
+$ mongorestore -h localhost:27017 ~/Downloads/rs-ds135134_2019-01-27T000458.000Z --drop --oplogReplay
+```
+
+This will restore the contents as faithfully as possible from the original
+backup, creating an `admin` db and a `heroku_some-random-chars` database for you
+locally, matching what mLab had in the production db. Note that it will drop
+any existing collections if those databases already exist, allowing you to run
+this multiple times. It takes a few minutes on a fast machine, so make a cup of
+tea.
+
+Finally, verify the database by switching the db name in `config/mongoid.yml` to
+the `heroku_some-random-chars` one you just created and perform some checks in
+the rails console:
+
+- Count the entities and relationships
+- Find some specific entities and check their networks
+- If relevant, ensure whatever corruption is present in the current production
+  db is not present in the backup
+
+As a final test, you can run the dev server and browse the data, though note that
+you'll have to re-index everything with elasticsearch for the search to work,
+which takes several hours.
+
+## Restoring a backup to production
+
+The details of this are too situation-specific to list, but assuming that you've
+identified a suitable backup to restore, and have a fresh, empty, MongoDB
+instance into which to restore it (making sure it's running the same version of
+MongoDB to avoid any compatibility issues), you can use `mongorestore` to
+rebuild the production instance and then edit heroku's config variables to point
+to the new instance. Exactly which databases you want to restore and how you
+want that process to execute is up to you, but you probably only want to restore
+the `heroku_` db, so `oplogReplay` won't be possible.
