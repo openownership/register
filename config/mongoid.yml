@@ -5,6 +5,7 @@ development:
       hosts:
         - <%= ENV['MONGODB_HOST'] %>
       options:
+        max_pool_size: 60
   options:
     scope_overwrite_exception: true
 test:

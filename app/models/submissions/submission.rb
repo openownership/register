@@ -1,7 +1,7 @@
 module Submissions
   class Submission
     include Mongoid::Document
-    include Mongoid::Timestamps::Created
+    include Mongoid::Timestamps
 
     scope :started, -> { where(:entities_count.gt => 0) }
     scope :draft, -> { started.where(submitted_at: nil) }

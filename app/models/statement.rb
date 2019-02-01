@@ -1,5 +1,8 @@
 class Statement
   include Mongoid::Document
+  include Mongoid::Timestamps
+
+  field :_id, type: Hash
 
   field :type, type: String
   field :date, type: Date

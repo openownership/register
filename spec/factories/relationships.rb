@@ -4,6 +4,6 @@ FactoryGirl.define do
     association :source, factory: :natural_person
     association :target, factory: :legal_entity
     sample_date '2017-01-23'
-    provenance
+    provenance { FactoryGirl.build(:provenance) }
   end
 end

@@ -1,5 +1,6 @@
 class Relationship
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   field :_id, type: Hash
 
