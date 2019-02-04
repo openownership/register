@@ -89,7 +89,7 @@
           - else
             %h2
               = t(".controlled_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
-            - @source_relationships.sort_by { |relationship| relationship.target.name }.each do |relationship|
+            - @source_relationships.sort_by { |relationship| relationship.target.name.to_s }.each do |relationship|
               .item{ class: ('ended' if relationship.ended_date) }
                 = render partial: 'shared/entity_title', locals: { entity: relationship.target }
                 = link_to entity_relationship_path(relationship.target, @entity), class: 'relationship-link' do
