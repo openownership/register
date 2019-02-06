@@ -49,21 +49,14 @@ Importers are intended to run multiple times and so must be idempotent. If the s
 
 ## Running data imports on production
 
-For all chunked imports (UK, SK and DK currently), make sure you follow these
-generic steps and then any additional source-specific steps from the sections
-below.
+We run all of the standard 'chunked' imports (UK, SK and DK currently) together
+in order to save time and effort over the whole import and integrity checking
+process.
 
 ### Initial assumptions / prerequisites:
 
-- Track each import in a separate ticket on JIRA (may need scheduling into a
-  sprint, etc.) – this is where stats, timestamps, special instructions, etc.
-  can be noted down.
 - No other import is currently running or has been triggered to run.
 - No worker dyno is currently running.
-- All Heroku stuff below can be carried out in the Heroku console for the
-  [production app](https://dashboard.heroku.com/apps/openownership-register)
-- To access a Rails console to the production app you can run:
-  - `heroku run --app openownership-register bin/rails c`
 
 ### Pre-import
 
@@ -72,10 +65,26 @@ below.
 1. Open the Papertrail console (via the Heroku console) to monitor logs.
 1. Open the [sidekiq admin panel](https://register.openownership.org/admin/sidekiq) to monitor the background jobs.
    - The login details for this can be found via the Config Vars for the production app, in the Heroku console.
+1. Upgrade openredis to the 'Extra large' instance type so that it has enough
+   room to store all of the downloaded data.
 
 ### Import
 
-See the source-specific documentation.
+1. Trigger the imports:
+   - `heroku run:detached --app openownership-register bin/rails psc:trigger`
+   - `heroku run:detached --app openownership-register bin/rails sk:trigger`
+   - `heroku run:detached --app openownership-register -s performance-m bin/rails dk:trigger`
+1. Now turn on **1** worker dyno, making sure it's a `performance-l`.
+1. Note down the time the worker was started.
+1. Monitor the status of the import via the Sidekiq admin panel, you should see
+   a spike in 'Enqueued' jobs as we download the PSC dump, a gradual increase as
+   the DK/SK triggers download data faster than we can process it, then the
+   number gradually decreasing as we work our way through the queue.
+
+Note: The full import takes roughly 36 hours, so don't need to constantly monitor things!
+
+Note: The DK import trigger needs a lot of memory to run, hence the
+performance-m dyno.
 
 Note when evaluating errors that 'failed' in the sidekiq web admin
 doesn't mean the job wasn't successful later. Jobs that fail are automatically
@@ -89,67 +98,11 @@ for docs on how to access those jobs.
 Once all jobs have been processed in the Sidekiq admin panel (/admin/sidekiq)
 
 1. Shut down the worker dyno in the Heroku console so no workers are running.
-1. Downgrade any add-ons you temporarily bumped up.
+1. Downgrade openredis to micro again.
 1. From the logs, note down the timestamp when the last worker job finished and note down how long the whole import took.
 1. Note down the new `Entity.count` and `Relationship.count` and note down the differences (can share these with the team on Slack if substantial).
 1. Run the [`EntityIntegrityChecker`](#the-entityintegritychecker) – and then note down the final results from the logs.
 1. Update [the tracking spreadsheet](https://docs.google.com/spreadsheets/d/1OWABqrHis4fznLZwTGu9TEpZjtRrD4Ko7T0kC7mFcCw/edit#gid=0) with the stats from the integrity checking
-
-### PSC (UK Companies House "Persons of Significant Control")
-
-Below are the sets of steps required to run a full PSC import on production.
-
-#### Pre-import
-
-1. Upgrade the `openredis` instance to the `Large` plan in the Heroku console (give this a few mins to get set up and for dyno(s) to restart).
-
-#### Import
-
-1. Trigger the import:
-   - `heroku run:detached --app openownership-register bin/rails psc:trigger`
-1. Now turn on **1** worker dyno, making sure it's a `performance-l`.
-1. Note down the time the worker was started.
-1. Monitor the status of the import via the Sidekiq admin panel + Papertrail logs.
-   - Look for failed jobs, or errors in the log, etc.
-   - The full import takes roughly 20 hours, so don't need to constantly monitor things!
-
-#### Post-import
-
-1. Downgrade openredis back to the micro plan.
-
-### DK CVR (Danish company register)
-
-#### Pre-import
-
-1. Upgrade the `openredis` instance to the `Large` plan in the Heroku console (give this a few mins to get set up and for dyno(s) to restart).
-
-#### Import
-
-1. Trigger the import:
-   `heroku run:detached -s performance-l --app openownership-register bin/rails dk:trigger`
-   (Note: we use a performance-l worker to download the data more effectively).
-1. Now turn on **1** worker dyno, making sure it's a `performance-l`.
-1. Note down the time the worker was started.
-1. Monitor the status of the import via the Sidekiq admin panel + Papertrail logs.
-   - Look for failed jobs, or errors in the log, etc.
-   - The full import takes roughly 20 hours, so don't need to constantly monitor things!
-
-### SK RPVS (Slovak company register)
-
-#### Pre-import
-
-1. Upgrade the `openredis` instance to the `Large` plan in the Heroku console (give this a few mins to get set up and for dyno(s) to restart).
-
-#### Import
-
-1. Trigger the import:
-   `heroku run:detached -s performance-l --app openownership-register bin/rails sk:trigger`
-   (Note: we use a performance-l worker to download the data more effectively).
-1. Now turn on **1** worker dyno, making sure it's a `performance-l`.
-1. Note down the time the worker was started.
-1. Monitor the status of the import via the Sidekiq admin panel + Papertrail logs.
-   - Look for failed jobs, or errors in the log, etc.
-   - The full import takes roughly 20 hours, so don't need to constantly monitor things!
 
 ## The `EntityIntegrityChecker`
 
