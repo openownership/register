@@ -13,9 +13,10 @@ Rack::Attack.blocklist("blocked IPs") do |request|
 end
 
 Rack::Attack.blocklist("blocked user agents") do |request|
-  ua = request.user_agent.strip
-  return false if ua.blank?
-  Rails.application.config.blocked_uas.any? do |blocked_ua|
-    ua.match(Regexp.new(blocked_ua, Regexp::IGNORECASE))
+  ua = request.user_agent
+  if ua.present?
+    Rails.application.config.blocked_uas.any? do |blocked_ua|
+      ua.match(Regexp.new(blocked_ua, Regexp::IGNORECASE))
+    end
   end
 end
