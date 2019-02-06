@@ -12,3 +12,6 @@ Disallow: /
 
 User-Agent: ahrefsbot
 Disallow: /
+
+User-Agent: blexbot
+Disallow: /
