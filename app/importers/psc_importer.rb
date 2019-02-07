@@ -142,6 +142,7 @@ class PscImporter
       target: child_entity,
       interests: data.natures_of_control,
       sample_date: data.notified_on.presence,
+      started_date: data.notified_on.presence,
       ended_date: data.ceased_on.presence,
       provenance: {
         source_url: source_url,
