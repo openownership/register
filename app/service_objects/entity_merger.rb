@@ -1,5 +1,5 @@
 class EntityMerger
-  PROTECTED_FIELDS = %w[_id type identifiers created_at updated_at].freeze
+  PROTECTED_FIELDS = %w[_id type identifiers updated_at].freeze
 
   def initialize(entity_to_remove, entity_to_keep)
     @to_remove = entity_to_remove

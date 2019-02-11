@@ -1,7 +1,7 @@
 module Submissions
   class Relationship
     include Mongoid::Document
-    include Mongoid::Timestamps
+    include Timestamps::UpdatedEvenOnUpsert
 
     belongs_to :submission
     belongs_to :source, class_name: 'Submissions::Entity', inverse_of: :relationships_as_source
