@@ -151,7 +151,7 @@ Go into the "Resources" section of the review app (on Heroku) and:
 - Set the `REDIS_PROVIDER` config var to `OPENREDIS_URL` so that the app can talk
   to redis
 - Add MongoDB: `heroku addons:create mongolab:dedicated-cluster-m1 --db-version 3.4 --app openownership-register--pr-XXX`
-- Add ElasticSearch: `heroku addons:create foundelasticsearch:beagle-standard --elasticsearch-version 5.6.9 --app openownership-register--pr-XXX`
+- Add ElasticSearch: `heroku addons:create foundelasticsearch:beagle-standard --elasticsearch-version 6.6.0 --app openownership-register--pr-XXX`
 
 Whilst these are getting set up, we need to copy across the production db to
 have relevant data. This needs a fast and stable internet connection, so it's
