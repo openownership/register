@@ -17,8 +17,6 @@ class SkImporter
     return if child_entity.nil?
 
     record['KonecniUzivateliaVyhod'].each do |item|
-      next unless item['PlatnostDo'].nil?
-
       parent_entity = parent_entity!(item)
 
       relationship!(child_entity, parent_entity, item)
@@ -84,6 +82,8 @@ class SkImporter
       source: parent_entity,
       target: child_entity,
       sample_date: Date.parse(item['PlatnostOd']).to_s,
+      started_date: Date.parse(item['PlatnostOd']).to_s,
+      ended_date: item['PlatnostDo'].presence && Date.parse(item['PlatnostDo']).to_s,
       provenance: {
         source_url: source_url,
         source_name: source_name,

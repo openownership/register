@@ -1,7 +1,7 @@
 module Submissions
   class Submission
     include Mongoid::Document
-    include Mongoid::Timestamps
+    include Timestamps::UpdatedEvenOnUpsert
 
     scope :started, -> { where(:entities_count.gt => 0) }
     scope :draft, -> { started.where(submitted_at: nil) }
@@ -44,6 +44,10 @@ module Submissions
 
     def changed!
       update_attribute(:changed_at, Time.zone.now)
+    end
+
+    def created_at
+      id.generation_time
     end
   end
 end

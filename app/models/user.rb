@@ -1,6 +1,6 @@
 class User
   include Mongoid::Document
-  include Mongoid::Timestamps
+  include Timestamps::UpdatedEvenOnUpsert
 
   field :name, type: String
   field :company_name, type: String

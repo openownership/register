@@ -1,6 +1,6 @@
 class Relationship
   include Mongoid::Document
-  include Mongoid::Timestamps
+  include Timestamps::UpdatedEvenOnUpsert
 
   field :_id, type: Hash
 
