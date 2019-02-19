@@ -1,8 +1,9 @@
 class SkImporter
   attr_accessor :source_url, :source_name, :document_id, :retrieved_at
 
-  def initialize(entity_resolver: EntityResolver.new)
+  def initialize(entity_resolver: EntityResolver.new, client: SkClient.new)
     @entity_resolver = entity_resolver
+    @client = client
   end
 
   def process_records(records)
@@ -13,9 +14,16 @@ class SkImporter
     child_entity = child_entity!(record)
     return if child_entity.nil?
 
-    record['KonecniUzivateliaVyhod'].each do |item|
-      parent_entity = parent_entity!(item)
+    parent_entities = record['KonecniUzivateliaVyhod']
+    # Some parent entity lists are paginated but the pagination links don't
+    # work, so we have to request the data from elsewhere
+    if record['KonecniUzivateliaVyhod@odata.nextLink']
+      Rails.logger.info("[#{self.class.name}] record Id: #{record['Id']} has paginated parent entities (KonecniUzivateliaVyhod)")
+      parent_entities = all_parent_entities(record)
+    end
 
+    parent_entities.each do |item|
+      parent_entity = parent_entity!(item)
       relationship!(child_entity, parent_entity, item)
     end
   end
@@ -115,5 +123,11 @@ class SkImporter
   def entity_dob(timestamp)
     return unless timestamp
     ISO8601::Date.new(timestamp.split('T')[0])
+  end
+
+  def all_parent_entities(record)
+    company_record = @client.company_record(record['Id'])
+    return [] if company_record.nil?
+    company_record['KonecniUzivateliaVyhod']
   end
 end
