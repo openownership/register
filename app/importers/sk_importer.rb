@@ -11,6 +11,12 @@ class SkImporter
   end
 
   def process(record)
+    # Pre-emptive check for pagination in child entities. We've never seen it,
+    # but we think it's theoretically possible and we want to know asap if it
+    # appears because it will mean we miss data
+    if record['PartneriVerejnehoSektora@odata.nextLink']
+      Rollbar.error("SK record Id: #{record['Id']} has paginated child entities (PartneriVerejnehoSektora)")
+    end
     child_entity = child_entity!(record)
     return if child_entity.nil?
 
