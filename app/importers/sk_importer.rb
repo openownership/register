@@ -1,8 +1,9 @@
 class SkImporter
   attr_accessor :source_url, :source_name, :document_id, :retrieved_at
 
-  def initialize(entity_resolver: EntityResolver.new)
+  def initialize(entity_resolver: EntityResolver.new, client: SkClient.new)
     @entity_resolver = entity_resolver
+    @client = client
   end
 
   def process_records(records)
@@ -10,15 +11,25 @@ class SkImporter
   end
 
   def process(record)
-    return unless slovakian_address?(record['PartneriVerejnehoSektora'].first['Adresa'])
-
+    # Pre-emptive check for pagination in child entities. We've never seen it,
+    # but we think it's theoretically possible and we want to know asap if it
+    # appears because it will mean we miss data
+    if record['PartneriVerejnehoSektora@odata.nextLink']
+      Rollbar.error("SK record Id: #{record['Id']} has paginated child entities (PartneriVerejnehoSektora)")
+    end
     child_entity = child_entity!(record)
-
     return if child_entity.nil?
 
-    record['KonecniUzivateliaVyhod'].each do |item|
-      parent_entity = parent_entity!(item)
+    parent_entities = record['KonecniUzivateliaVyhod']
+    # Some parent entity lists are paginated but the pagination links don't
+    # work, so we have to request the data from elsewhere
+    if record['KonecniUzivateliaVyhod@odata.nextLink']
+      Rails.logger.info("[#{self.class.name}] record Id: #{record['Id']} has paginated parent entities (KonecniUzivateliaVyhod)")
+      parent_entities = all_parent_entities(record)
+    end
 
+    parent_entities.each do |item|
+      parent_entity = parent_entity!(item)
       relationship!(child_entity, parent_entity, item)
     end
   end
@@ -28,9 +39,11 @@ class SkImporter
   def child_entity!(record)
     item = record['PartneriVerejnehoSektora'].find { |p| p['PlatnostDo'].nil? }
 
-    # See OO-251
     if item.nil?
       Rails.logger.warn("[#{self.class.name}] record Id: #{record['Id']} has no current child entity (PartneriVerejnehoSektora)")
+      return
+    elsif !slovakian_address?(item['Adresa'])
+      Rails.logger.warn("[#{self.class.name}] record Id: #{record['Id']} has a child entity (PartneriVerejnehoSektora) with a non-Slovakian address")
       return
     elsif item['ObchodneMeno'].nil?
       Rails.logger.warn("[#{self.class.name}] record Id: #{record['Id']} has a child entity (PartneriVerejnehoSektora) with no company name (ObchodneMeno)")
@@ -116,5 +129,11 @@ class SkImporter
   def entity_dob(timestamp)
     return unless timestamp
     ISO8601::Date.new(timestamp.split('T')[0])
+  end
+
+  def all_parent_entities(record)
+    company_record = @client.company_record(record['Id'])
+    return [] if company_record.nil?
+    company_record['KonecniUzivateliaVyhod']
   end
 end
