@@ -17,7 +17,7 @@ RSpec.describe 'Viewing an entity' do
 
     expect(page).to have_text person.name
     expect(page).to have_text "Born #{birth_month_year(person)}"
-    expect(page).to have_link "#{ownership_summary(relationship)} Details ›", href: relationship_href
+    expect(page).to have_link relationship_link(relationship), href: relationship_href(relationship)
   end
 
   it 'shows useful info for a person' do
@@ -33,11 +33,7 @@ RSpec.describe 'Viewing an entity' do
     expect(page).to have_link 'Report incorrect data'
 
     expect(page).to have_text company.incorporation_date.iso8601
-    expect(page).to have_link "#{ownership_summary(relationship)} Details ›", href: relationship_href
+    expect(page).to have_link relationship_link(relationship), href: relationship_href(relationship)
     expect(page).to have_text ownership_summary(relationship)
-  end
-
-  def relationship_href
-    entity_relationship_path(relationship.target, relationship.source)
   end
 end
