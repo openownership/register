@@ -65,7 +65,9 @@ class SkImporter
     )
     @entity_resolver.resolve!(entity)
 
-    entity.tap(&:upsert)
+    entity
+      .tap(&:upsert)
+      .tap(&method(:index_entity))
   end
 
   def parent_entity!(item)
@@ -83,7 +85,10 @@ class SkImporter
       dob: entity_dob(item['DatumNarodenia']),
     }
 
-    Entity.new(attributes).tap(&:upsert)
+    Entity
+      .new(attributes)
+      .tap(&:upsert)
+      .tap(&method(:index_entity))
   end
 
   def relationship!(child_entity, parent_entity, item)
@@ -135,5 +140,9 @@ class SkImporter
     company_record = @client.company_record(record['Id'])
     return [] if company_record.nil?
     company_record['KonecniUzivateliaVyhod']
+  end
+
+  def index_entity(entity)
+    IndexEntityService.new(entity).index
   end
 end

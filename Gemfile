@@ -45,7 +45,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'webmock'
   gem 'launchy'
-  gem 'pry'
+  gem 'pry-byebug'
 end
 
 group :development do

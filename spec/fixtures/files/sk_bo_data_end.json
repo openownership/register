@@ -1,1 +1,4 @@
-{"@odata.context":"https://rpvs.gov.sk/OpenData/$metadata#Partneri","value":[]}
+{
+    "@odata.context": "https://rpvs.gov.sk/OpenData/$metadata#Partneri",
+    "value": []
+}
