@@ -13,7 +13,7 @@ class Entity
   index({ identifiers: 1 }, unique: true, sparse: true)
   index(type: 1)
 
-  index_name "#{Rails.application.class.parent_name.underscore}_#{Rails.env}"
+  index_name "#{Rails.application.class.parent_name.underscore}_entities_#{Rails.env}"
 
   settings index: {
     number_of_shards: 1,

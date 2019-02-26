@@ -303,7 +303,7 @@ running, but empty.
 You need to copy across the settings that elasticsearch-model would normally
 make for us. The easiest way to find them is asking elasticsearch itself. e.g.
 
-`GET https://<old-elasticsearch-host>/open_ownership_register_production`
+`GET https://<old-elasticsearch-host>/open_ownership_register_entities_production`
 
 This is what they looked like at the time of writing, but check `index`
 definitions in our models (and the existing ES cluster) to make sure.
@@ -312,7 +312,7 @@ definitions in our models (and the existing ES cluster) to make sure.
 {
   "aliases": {},
   "mappings": {
-    "entity": {
+    "_doc": {
       "properties": {
         "company_number": {
           "type": "keyword"
@@ -345,7 +345,7 @@ definitions in our models (and the existing ES cluster) to make sure.
 To create a replica index, you just supply those same settings via the api:
 
 ```
-PUT <new-elasticsearch-host/open_ownership_register_production
+PUT <new-elasticsearch-host/open_ownership_register_entities_production
 {
   // JSON from above
 }
@@ -365,13 +365,13 @@ POST <new-elasticsearch-host>/_reindex
       "username": "elastic",
       "password": "PASSWORD"
     },
-    "index": "open_ownership_register_production",
+    "index": "open_ownership_register_entities_production",
     "query": {
       "match_all": {}
     }
   },
   "dest": {
-    "index": "open_ownership_register_production"
+    "index": "open_ownership_register_entities_production"
   }
 }
 
