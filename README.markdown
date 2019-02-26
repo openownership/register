@@ -151,7 +151,6 @@ Go into the "Resources" section of the review app (on Heroku) and:
 - Set the `REDIS_PROVIDER` config var to `OPENREDIS_URL` so that the app can talk
   to redis
 - Add MongoDB: `heroku addons:create mongolab:dedicated-cluster-m1 --db-version 3.4 --app openownership-register--pr-XXX`
-- Add ElasticSearch: `heroku addons:create foundelasticsearch:beagle-standard --elasticsearch-version 6.6.0 --app openownership-register--pr-XXX`
 
 Whilst these are getting set up, we need to copy across the production db to
 have relevant data. This needs a fast and stable internet connection, so it's
@@ -171,14 +170,30 @@ best done from an EC2 instance in the same datacenter as the database
   (this will prompt you for a password, ask another dev to share the readonly
   user's password with you).
 
-Back in the Heroku console for the review app, click on the "Elasticsearch" addon to open it's console, then:
-- Reset the password by going to the "Shield" tab and clicking on "Reset" – the
-  new username and password will show on screen.
-- Now add this username and password in the `FOUNDELASTICSEARCH_URL` config
-  variable in the review app's config (via the Heroku console) – since it uses
-  Basic Auth, the URL should end up like: `https://<username>:<password>@<host>`.
-- Now update the `ELASTICSEARCH_URL_ENV_NAME` config variable to be
-  `FOUNDELASTICSEARCH_URL`
+We also need to clone the production elastic search instance.
+- Go to https://cloud.elastic.co/deployments (login details in 1Password)
+- Click 'Create deployment'
+- Fill-in the following options:
+  - Name: Ticket name (e.g. OO-182 Upgrade Elasticsearch)
+  - Cloud platform: Leave as AWS
+  - Region: EU (Ireland)
+  - Version: Same as production (hopefully the default)
+  - Tick the box 'Select a deployment to restore from its latest snapshot' and
+    choose 'Production' from the dropdown that appears
+  - 'Optimize your deployment': Leave as the default
+  - Click 'Customize deployment' to set the instance sizes etc
+  - Reduce 'Fault tolerance' to '1 node'
+  - Select 2GB of ram per node
+  - Disable 'APM'
+- Finally, click 'Create deployment' and wait for it to start up.
+- Copy the password for the `elastic` user that's shown to you on the next page
+
+Back in the Heroku console for the review app
+- Add the full url to your new elastic cluster into a new `ELASTIC_CLOUD_URL`
+  setting – since it uses Basic Auth, the URL should end up like:
+  `https://elastic:<password>@<host>`, where `<password>` is what you copied
+  from the elastic cloud console.
+- Update the `ELASTICSEARCH_URL_ENV_NAME` config variable to `ELASTIC_CLOUD_URL`
 
 Now open the Mlab admin by clicking on the "mLab MongoDB …" addon, then:
 - Wait for this to finish being set up.
@@ -209,10 +224,6 @@ In the Mlab admin
   `heroku run --app openownership-register--pr-XXX bin/rails c` and typing in:
   `Entity.count`. If a number is outputted then this means the app can talk to
   the db okay.
-
-- Index the entities into search by running:
- `heroku run:detached -s standard-2x --app openownership-register--pr-XXX time bin/rails runner "Entity.import(force: true)"`.
- This can take a few hours (roughly 9 hours currently).
 - Test that the site works as expected, by doing a few searches.
 - Finally, run your import, see [Running data imports on production](#running-data-imports-on-production)
   for specific instructions on that.
