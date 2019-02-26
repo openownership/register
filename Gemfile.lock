@@ -121,16 +121,16 @@ GEM
       activemodel-serializers-xml (~> 1.0)
       activesupport (~> 5.0)
       request_store (~> 1.0)
-    elasticsearch (5.0.5)
-      elasticsearch-api (= 5.0.5)
-      elasticsearch-transport (= 5.0.5)
-    elasticsearch-api (5.0.5)
+    elasticsearch (6.1.0)
+      elasticsearch-api (= 6.1.0)
+      elasticsearch-transport (= 6.1.0)
+    elasticsearch-api (6.1.0)
       multi_json
-    elasticsearch-model (5.0.2)
+    elasticsearch-model (6.0.0)
       activesupport (> 3)
-      elasticsearch (~> 5)
+      elasticsearch (> 1)
       hashie
-    elasticsearch-transport (5.0.5)
+    elasticsearch-transport (6.1.0)
       faraday
       multi_json
     erubi (1.8.0)
@@ -141,7 +141,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faraday (0.15.3)
+    faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
@@ -166,7 +166,7 @@ GEM
       rubocop (>= 0.50.0)
       sysexits (~> 1.1)
     hashdiff (0.3.1)
-    hashie (3.5.7)
+    hashie (3.6.0)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
       haml (>= 4.0, < 6)
@@ -406,7 +406,7 @@ DEPENDENCIES
   devise
   dotenv-rails
   draper (~> 3.0, >= 3.0.1)
-  elasticsearch-model (~> 5.0, >= 5.0.2)
+  elasticsearch-model (~> 6.0)
   factory_girl_rails
   faraday (~> 0.15.3)
   faraday_middleware (~> 0.12.2)

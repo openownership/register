@@ -15,7 +15,7 @@ jobs:
 
       - image: mongo:3.4.7
 
-      - image: elasticsearch:5.6.9
+      - image: elasticsearch:6.6.0
 
     steps:
 

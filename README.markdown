@@ -151,7 +151,6 @@ Go into the "Resources" section of the review app (on Heroku) and:
 - Set the `REDIS_PROVIDER` config var to `OPENREDIS_URL` so that the app can talk
   to redis
 - Add MongoDB: `heroku addons:create mongolab:dedicated-cluster-m1 --db-version 3.4 --app openownership-register--pr-XXX`
-- Add ElasticSearch: `heroku addons:create foundelasticsearch:beagle-standard --elasticsearch-version 5.6.9 --app openownership-register--pr-XXX`
 
 Whilst these are getting set up, we need to copy across the production db to
 have relevant data. This needs a fast and stable internet connection, so it's
@@ -171,14 +170,30 @@ best done from an EC2 instance in the same datacenter as the database
   (this will prompt you for a password, ask another dev to share the readonly
   user's password with you).
 
-Back in the Heroku console for the review app, click on the "Elasticsearch" addon to open it's console, then:
-- Reset the password by going to the "Shield" tab and clicking on "Reset" – the
-  new username and password will show on screen.
-- Now add this username and password in the `FOUNDELASTICSEARCH_URL` config
-  variable in the review app's config (via the Heroku console) – since it uses
-  Basic Auth, the URL should end up like: `https://<username>:<password>@<host>`.
-- Now update the `ELASTICSEARCH_URL_ENV_NAME` config variable to be
-  `FOUNDELASTICSEARCH_URL`
+We also need to clone the production elastic search instance.
+- Go to https://cloud.elastic.co/deployments (login details in 1Password)
+- Click 'Create deployment'
+- Fill-in the following options:
+  - Name: Ticket name (e.g. OO-182 Upgrade Elasticsearch)
+  - Cloud platform: Leave as AWS
+  - Region: EU (Ireland)
+  - Version: Same as production (hopefully the default)
+  - Tick the box 'Select a deployment to restore from its latest snapshot' and
+    choose 'Production' from the dropdown that appears
+  - 'Optimize your deployment': Leave as the default
+  - Click 'Customize deployment' to set the instance sizes etc
+  - Reduce 'Fault tolerance' to '1 node'
+  - Select 2GB of ram per node
+  - Disable 'APM'
+- Finally, click 'Create deployment' and wait for it to start up.
+- Copy the password for the `elastic` user that's shown to you on the next page
+
+Back in the Heroku console for the review app
+- Add the full url to your new elastic cluster into a new `ELASTIC_CLOUD_URL`
+  setting – since it uses Basic Auth, the URL should end up like:
+  `https://elastic:<password>@<host>`, where `<password>` is what you copied
+  from the elastic cloud console.
+- Update the `ELASTICSEARCH_URL_ENV_NAME` config variable to `ELASTIC_CLOUD_URL`
 
 Now open the Mlab admin by clicking on the "mLab MongoDB …" addon, then:
 - Wait for this to finish being set up.
@@ -209,10 +224,6 @@ In the Mlab admin
   `heroku run --app openownership-register--pr-XXX bin/rails c` and typing in:
   `Entity.count`. If a number is outputted then this means the app can talk to
   the db okay.
-
-- Index the entities into search by running:
- `heroku run:detached -s standard-2x --app openownership-register--pr-XXX time bin/rails runner "Entity.import(force: true)"`.
- This can take a few hours (roughly 9 hours currently).
 - Test that the site works as expected, by doing a few searches.
 - Finally, run your import, see [Running data imports on production](#running-data-imports-on-production)
   for specific instructions on that.
@@ -275,3 +286,100 @@ rebuild the production instance and then edit heroku's config variables to point
 to the new instance. Exactly which databases you want to restore and how you
 want that process to execute is up to you, but you probably only want to restore
 the `heroku_` db, so `oplogReplay` won't be possible.
+
+# Migrating to a new elasticsearch host
+
+This was done in order to upgrade Elasticsearch from 5.6.9 (paid for through
+Heroku) to 6.6.1 (on a separate Elastic cloud account), as our experience doing
+the upgrade in-place found significant issues. However, it should apply to almost
+any data migration where you can't use a simpler method (like just restoring
+from a snapshot).
+
+As a prerequisite, this assumes you spun up a new cluster somewhere and it's
+running, but empty.
+
+## Create an index in the new cluster
+
+You need to copy across the settings that elasticsearch-model would normally
+make for us. The easiest way to find them is asking elasticsearch itself. e.g.
+
+`GET https://<old-elasticsearch-host>/open_ownership_register_production`
+
+This is what they looked like at the time of writing, but check `index`
+definitions in our models (and the existing ES cluster) to make sure.
+
+```json
+{
+  "aliases": {},
+  "mappings": {
+    "entity": {
+      "properties": {
+        "company_number": {
+          "type": "keyword"
+        },
+        "country_code": {
+          "type": "keyword"
+        },
+        "lang_code": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "text"
+        },
+        "name_transliterated": {
+          "type": "text"
+        },
+        "type": {
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "settings": {
+    "number_of_shards": "1",
+    "number_of_replicas": "0"
+  }
+}
+```
+
+To create a replica index, you just supply those same settings via the api:
+
+```
+PUT <new-elasticsearch-host/open_ownership_register_production
+{
+  // JSON from above
+}
+```
+
+## Reindex from the existing host
+
+Using elasticsearch's `_reindex` api, you can request your new cluster loads
+data from the existing one:
+
+```
+POST <new-elasticsearch-host>/_reindex
+{
+  "source": {
+    "remote": {
+      "host": "https://<old-elasticsearch-host>:9243",
+      "username": "elastic",
+      "password": "PASSWORD"
+    },
+    "index": "open_ownership_register_production",
+    "query": {
+      "match_all": {}
+    }
+  },
+  "dest": {
+    "index": "open_ownership_register_production"
+  }
+}
+
+Note: This request will try to wait for the full reindex to happen, which may
+take up to an hour or more, so it's likely to time out. The reindex task keeps
+going though, and you can check on it with the `_tasks` api:
+
+`GET <new-elasticsearch-host>/_tasks?actions=*reindex`
+
+When the response is `nodes:{}` (i.e. an empty list of tasks) the reindex is
+done
