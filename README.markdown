@@ -72,7 +72,7 @@ process.
 
 1. Trigger the imports:
    - `heroku run:detached --app openownership-register bin/rails psc:trigger`
-   - `heroku run:detached --app openownership-register bin/rails sk:trigger`
+   - `heroku run:detached --app openownership-register -s performance-m bin/rails sk:trigger`
    - `heroku run:detached --app openownership-register -s performance-m bin/rails dk:trigger`
 1. Now turn on **1** worker dyno, making sure it's a `performance-l`.
 1. Note down the time the worker was started.
