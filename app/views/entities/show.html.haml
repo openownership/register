@@ -89,13 +89,15 @@
           - else
             %h2
               = t(".controlled_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
-            - @source_relationships.sort_by { |relationship| relationship.target.name.to_s }.each do |relationship|
+            = page_entries_info @source_relationships, entry_name: 'company'
+            - @source_relationships.each do |relationship|
               .item{ class: ('ended' if relationship.ended_date) }
                 = render partial: 'shared/entity_title', locals: { entity: relationship.target }
                 = link_to entity_relationship_path(relationship.target, @entity), class: 'relationship-link' do
                   = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
                   %span.details
                     = t(".details")
+            = paginate @source_relationships
 
       - content_for(:meta) do
         - if @entity.natural_person?
