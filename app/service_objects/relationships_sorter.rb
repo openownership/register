@@ -11,12 +11,7 @@ class RelationshipsSorter
     first_obj = @relationships.first
     case first_obj
     when Relationship, InferredRelationship
-      @relationships.sort do |a, b|
-        comparison_function(
-          a.ended_date.try(:to_date),
-          b.ended_date.try(:to_date),
-        )
-      end
+      @relationships.sort_by { |r| [ended_time(r), r.target.name.to_s] }
     when Submissions::Relationship
       @relationships
     else
@@ -26,13 +21,8 @@ class RelationshipsSorter
 
   private
 
-  def comparison_function(a, b)
-    if a && b
-      # Reverse ordering if both have values
-      b <=> a
-    else
-      # At least one of them is nil so place this higher in ordering
-      a ? 1 : -1
-    end
+  def ended_time(relationship)
+    return 0 if relationship.ended_date.nil?
+    relationship.ended_date.to_time.to_i
   end
 end

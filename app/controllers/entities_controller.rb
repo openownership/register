@@ -2,9 +2,17 @@ class EntitiesController < ApplicationController
   def show
     entity = Entity.find(params[:id])
 
-    @source_relationships = decorate(
-      RelationshipsSorter.new(entity.relationships_as_source).call,
+    # It's annoying that we're going to paginate this straight after and so
+    # throw away a lot of the relationships we find, but it's the only way to
+    # sort them by target name and date, because MongoDB can't do that directly.
+    source_relationships = decorate(
+      RelationshipsSorter.new(
+        Relationship.includes(:target, :source).where(source_id: entity.id),
+      ).call,
     )
+    @source_relationships = Kaminari
+      .paginate_array(source_relationships)
+      .page(params[:page]).per(10)
 
     @ultimate_source_relationship_groups = decorate_with(
       ultimate_source_relationship_groups(entity),
