@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Viewing a relationship' do
   include EntityHelpers
-  include_context 'basic entity with stubbed OC api'
+  include_context 'basic entity with one owner'
 
   it 'shows useful info for a relationship' do
     visit entity_relationship_path(relationship.target, relationship.source)

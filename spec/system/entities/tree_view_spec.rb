@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Tree view' do
   include EntityHelpers
-  include_context 'basic entity with stubbed OC api'
+  include_context 'basic entity with one owner'
 
   it 'can view the beneficial owners as a tree' do
     visit url_for(company)

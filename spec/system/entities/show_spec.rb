@@ -24,7 +24,7 @@ RSpec.describe 'Entity pages' do
   end
 
   context 'for a simple one person, one company ownership' do
-    include_context 'basic entity with stubbed OC api'
+    include_context 'basic entity with one owner'
 
     it 'shows useful info for the company' do
       visit entity_path(company)
@@ -63,7 +63,7 @@ RSpec.describe 'Entity pages' do
   end
 
   context 'for a company that owns lots of others' do
-    include_context 'basic entity with stubbed OC api'
+    include_context 'basic entity with one owner'
 
     let!(:relationships) do
       FactoryGirl.create_list(
