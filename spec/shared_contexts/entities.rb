@@ -8,7 +8,7 @@ RSpec.shared_context 'basic entity with stubbed OC api' do
       :relationship,
       source: person,
       target: company,
-      interests: ['ownership-of-shares-25-to-50-percent'],
+      interests: ['ownership-of-shares-75-to-100-percent'],
     )
   end
   let(:oc_url) { "https://api.opencorporates.com/#{OpencorporatesClient::API_VERSION}/companies/#{company.jurisdiction_code}/#{company.company_number}" }
