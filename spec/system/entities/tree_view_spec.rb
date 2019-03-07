@@ -13,7 +13,7 @@ RSpec.describe 'Tree view' do
       expect(page).to have_link person.name
     end
 
-    expect(page).to have_css('.tree-node__relationship', text: ownership_summary(relationship))
+    expect(page).to have_css('.tree-node__relationship', text: interests_summary(relationship))
 
     expect(page).to have_css('.tree-node--root', text: company.name)
     within('.tree-node--root') do

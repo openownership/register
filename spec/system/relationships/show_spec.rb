@@ -17,7 +17,7 @@ RSpec.describe 'Viewing a relationship' do
     expect(page).to have_text 'British'
     expect(page).to have_text "Born #{birth_month_year(person)}"
 
-    expect(page).to have_text ownership_summary(relationship)
+    expect(page).to have_text interests_summary(relationship)
 
     expect(page).to have_link relationship.provenance.source_name, href: relationship.provenance.source_url
     expect(page).to have_text "Retrieved: #{relationship_retrieved}"
