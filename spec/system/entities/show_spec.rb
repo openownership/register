@@ -132,4 +132,31 @@ RSpec.describe 'Entity pages' do
       expect(page).to have_text(ended_company_2.name)
     end
   end
+
+  context 'for a company with multiple owners' do
+    include_context 'entity with two owners'
+
+    it 'shows both owners of the company' do
+      visit entity_path(company)
+      expect(page).to have_text "Beneficial owners of #{company.name}"
+      expect(page).to have_text interests_summary(relationship_1)
+      expect_beneficial_owner_section_for relationship_1
+      expect(page).to have_text interests_summary(relationship_2)
+      expect_beneficial_owner_section_for relationship_2
+
+      expect(page).to have_text "No companies are known to be controlled by #{company.name}"
+    end
+
+    it 'shows the company for each owner' do
+      visit entity_path(person_1)
+
+      expect(page).to have_text "Companies controlled by #{person_1.name}"
+      expect_controlled_company_section_for relationship_1
+
+      visit entity_path(person_2)
+
+      expect(page).to have_text "Companies controlled by #{person_2.name}"
+      expect_controlled_company_section_for relationship_2
+    end
+  end
 end
