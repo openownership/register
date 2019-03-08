@@ -232,4 +232,38 @@ RSpec.describe 'Entity pages' do
       expect_controlled_company_section_for start_to_intermediate_relationship
     end
   end
+
+  context 'for an ownership chain with no owner at the end' do
+    include_context 'entity with no ultimate ownership'
+
+    it 'shows ownership info for all the companies in the chain' do
+      visit entity_path(start_company)
+
+      expect(page).to have_text "Beneficial owners of #{start_company.name}"
+      # Non-ownerships are displayed a bit different to other chains
+      within '.ultimate-source-relationships' do
+        expect(page).to have_selector '.entity-link', text: 'No person'
+        expect(page).not_to have_link 'No person'
+        expect(page).to have_link "", href: relationship_href(start_to_no_owner_relationship)
+        expect(page).to have_text "Owned via #{intermediate_company.name} → #{start_company.name}"
+      end
+
+      expect(page).to have_text "No companies are known to be controlled by #{start_company.name}"
+
+      visit entity_path(intermediate_company)
+
+      expect(page).to have_text "Beneficial owners of #{intermediate_company.name}"
+      # Non-ownerships are displayed a bit different to other chains
+      within '.ultimate-source-relationships' do
+        expect(page).to have_selector '.entity-link', text: 'No person'
+        expect(page).not_to have_link 'No person'
+        expect(page).to have_link "", href: relationship_href(intermediate_to_no_owner_relationship)
+        expect(page).to have_text 'Interests unknown'
+      end
+
+      expect(page).to have_text "Companies controlled by #{intermediate_company.name}"
+      expect(page).to have_text interests_summary(start_to_intermediate_relationship)
+      expect_controlled_company_section_for start_to_intermediate_relationship
+    end
+  end
 end
