@@ -188,3 +188,38 @@ RSpec.shared_context 'entity with no ultimate ownership' do
     stub_oc_company_api_for(intermediate_company)
   end
 end
+
+RSpec.shared_context 'entity with unknown ultimate ownership' do
+  let!(:start_company) { create(:legal_entity, name: 'Start company') }
+  let!(:intermediate_company) { create(:legal_entity, name: 'Intermediate company') }
+  let!(:start_to_intermediate_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: intermediate_company,
+      target: start_company,
+      interests: ['ownership-of-shares-75-to-100-percent'],
+    )
+  end
+  let!(:unknown_owner) do
+    UnknownPersonsEntity.new(
+      id: "#{intermediate_company.id}-unknown",
+      name: "unknown",
+    )
+  end
+  let!(:intermediate_to_unknown_owner_relationship) do
+    Relationship.new(source: unknown_owner, target: intermediate_company)
+  end
+  let!(:start_to_unknown_owner_relationship) do
+    InferredRelationship.new(
+      source: unknown_owner,
+      target: start_company,
+      sourced_relationships: [start_to_intermediate_relationship],
+    )
+  end
+
+  before do
+    Entity.import(force: true, refresh: true)
+    stub_oc_company_api_for(start_company)
+    stub_oc_company_api_for(intermediate_company)
+  end
+end
