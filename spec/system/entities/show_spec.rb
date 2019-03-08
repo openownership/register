@@ -159,4 +159,49 @@ RSpec.describe 'Entity pages' do
       expect_controlled_company_section_for relationship_2
     end
   end
+
+  context 'for an ownership chain with intermediary companies' do
+    include_context 'entity with intermediate ownership'
+
+    it 'shows useful info for a company at the start of the chain' do
+      visit entity_path(start_company)
+
+      expect(page).to have_text "Beneficial owners of #{start_company.name}"
+      expect(page).to have_text "Owned via #{intermediate_company_2.name}  → #{intermediate_company_1.name} → #{start_company.name}"
+      expect_beneficial_owner_section_for start_to_owner_relationship
+
+      expect(page).to have_text "No companies are known to be controlled by #{start_company.name}"
+    end
+
+    it 'shows useful info for companies in the middle of the chain' do
+      visit entity_path(intermediate_company_1)
+
+      expect(page).to have_text "Beneficial owners of #{intermediate_company_1.name}"
+      expect(page).to have_text "Owned via #{intermediate_company_2.name}  → #{intermediate_company_1.name}"
+      expect_beneficial_owner_section_for intermediate_1_to_owner_relationship
+
+      expect(page).to have_text "Companies controlled by #{intermediate_company_1.name}"
+      expect_controlled_company_section_for start_to_intermediate_1_relationship
+
+      visit entity_path(intermediate_company_2)
+
+      expect(page).to have_text "Beneficial owners of #{intermediate_company_2.name}"
+      expect(page).to have_text interests_summary(intermediate_2_to_owner_relationship)
+      expect_beneficial_owner_section_for intermediate_2_to_owner_relationship
+
+      expect(page).to have_text "Companies controlled by #{intermediate_company_2.name}"
+      expect_controlled_company_section_for intermediate_1_to_intermediate_2_relationship
+    end
+
+    it 'shows useful info for the person at the end of the chain' do
+      visit entity_path(ultimate_owner)
+
+      expect(page).to have_text "Companies controlled by #{ultimate_owner.name}"
+      expect(page).to have_text interests_summary(intermediate_2_to_owner_relationship)
+      expect_controlled_company_section_for intermediate_2_to_owner_relationship
+      # We only show directly controlled companies
+      expect(page).not_to have_text start_company.name
+      expect(page).not_to have_text intermediate_company_1.name
+    end
+  end
 end
