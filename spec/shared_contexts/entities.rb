@@ -223,3 +223,74 @@ RSpec.shared_context 'entity with unknown ultimate ownership' do
     stub_oc_company_api_for(intermediate_company)
   end
 end
+
+RSpec.shared_context 'entity with circular ownership' do
+  let!(:company_1) { create(:legal_entity, name: 'First company') }
+  let!(:company_2) { create(:legal_entity, name: 'Second company') }
+
+  let!(:company_1_to_company_2_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: company_2,
+      target: company_1,
+      interests: ['ownership-of-shares-75-to-100-percent'],
+    )
+  end
+  let!(:company_2_to_company_1_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: company_1,
+      target: company_2,
+      interests: ['ownership-of-shares-75-to-100-percent'],
+    )
+  end
+
+  before do
+    Entity.import(force: true, refresh: true)
+    stub_oc_company_api_for(company_1)
+    stub_oc_company_api_for(company_2)
+  end
+end
+
+RSpec.shared_context 'entity with circular ownership and an ultimate owner' do
+  let!(:start_company) { create(:legal_entity, name: 'Start company') }
+  let!(:intermediate_company) { create(:legal_entity, name: 'Intermediate company') }
+  let!(:ultimate_owner) { create(:natural_person, name: 'Ultimate owner') }
+
+  let!(:start_to_intermediate_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: intermediate_company,
+      target: start_company,
+      interests: ['ownership-of-shares-75-to-100-percent'],
+    )
+  end
+  let!(:intermediate_to_start_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: start_company,
+      target: intermediate_company,
+      interests: ['ownership-of-shares-75-to-100-percent'],
+    )
+  end
+  let!(:intermediate_to_ultimate_owner_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: ultimate_owner,
+      target: intermediate_company,
+      interests: ['ownership-of-shares-75-to-100-percent'],
+    )
+  end
+  let!(:start_to_ultimate_owner_relationship) do
+    InferredRelationship.new(
+      source: ultimate_owner,
+      target: start_company,
+      sourced_relationships: [start_to_intermediate_relationship],
+    )
+  end
+  before do
+    Entity.import(force: true, refresh: true)
+    stub_oc_company_api_for(start_company)
+    stub_oc_company_api_for(intermediate_company)
+  end
+end

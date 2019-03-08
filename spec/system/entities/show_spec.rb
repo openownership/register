@@ -300,4 +300,62 @@ RSpec.describe 'Entity pages' do
       expect_controlled_company_section_for start_to_intermediate_relationship
     end
   end
+
+  context 'for an entity with circular ownership' do
+    include_context 'entity with circular ownership'
+
+    it 'shows an unknown ultimate owner for both companies' do
+      visit entity_path(company_1)
+      expect(page).to have_text "#{company_1.name} has no beneficial owners"
+
+      visit entity_path(company_2)
+      expect(page).to have_text "#{company_2.name} has no beneficial owners"
+    end
+
+    it 'shows the controlled companies for both companies' do
+      visit entity_path(company_1)
+
+      expect(page).to have_text "Companies controlled by #{company_1.name}"
+      expect(page).to have_text interests_summary(company_2_to_company_1_relationship)
+      expect_controlled_company_section_for company_2_to_company_1_relationship
+
+      visit entity_path(company_2)
+
+      expect(page).to have_text "Companies controlled by #{company_2.name}"
+      expect(page).to have_text interests_summary(company_1_to_company_2_relationship)
+      expect_controlled_company_section_for company_1_to_company_2_relationship
+    end
+  end
+
+  context 'for an entity with circular ownership and an ultimate owner' do
+    include_context 'entity with circular ownership and an ultimate owner'
+
+    it 'shows the ultimate ownership for each company' do
+      visit entity_path(start_company)
+
+      expect(page).to have_text "Beneficial owners of #{start_company.name}"
+      expect_beneficial_owner_section_for start_to_ultimate_owner_relationship
+      expect(page).to have_text "Owned via #{intermediate_company.name} → #{start_company.name}"
+
+      visit entity_path(intermediate_company)
+
+      expect(page).to have_text "Beneficial owners of #{intermediate_company.name}"
+      expect_beneficial_owner_section_for intermediate_to_ultimate_owner_relationship
+      expect(page).to have_text interests_summary(intermediate_to_ultimate_owner_relationship)
+    end
+
+    it 'shows the controlled companies for both companies' do
+      visit entity_path(start_company)
+
+      expect(page).to have_text "Companies controlled by #{start_company.name}"
+      expect(page).to have_text interests_summary(intermediate_to_start_relationship)
+      expect_controlled_company_section_for intermediate_to_start_relationship
+
+      visit entity_path(intermediate_company)
+
+      expect(page).to have_text "Companies controlled by #{intermediate_company.name}"
+      expect(page).to have_text interests_summary(start_to_intermediate_relationship)
+      expect_controlled_company_section_for start_to_intermediate_relationship
+    end
+  end
 end
