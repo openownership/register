@@ -294,3 +294,71 @@ RSpec.shared_context 'entity with circular ownership and an ultimate owner' do
     stub_oc_company_api_for(intermediate_company)
   end
 end
+
+RSpec.shared_context 'entity with diamond ownership' do
+  # An ownership structure like:
+  # start_company
+  #    /  \
+  #   1    2
+  #    \  /
+  # ultimate_owner
+
+  let!(:start_company) { create(:legal_entity, name: 'Start company') }
+  let!(:intermediate_company_1) { create(:legal_entity, name: 'Intermediate company 1') }
+  let!(:intermediate_company_2) { create(:legal_entity, name: 'Intermediate company 2') }
+  let!(:ultimate_owner) { create(:natural_person, name: 'Ultimate owner') }
+
+  let!(:start_to_intermediate_1_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: intermediate_company_1,
+      target: start_company,
+      interests: ['ownership-of-shares-25-to-50-percent'],
+    )
+  end
+  let!(:start_to_intermediate_2_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: intermediate_company_2,
+      target: start_company,
+      interests: ['ownership-of-shares-25-to-50-percent'],
+    )
+  end
+  let!(:intermediate_1_to_owner_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: ultimate_owner,
+      target: intermediate_company_1,
+      interests: ['ownership-of-shares-25-to-50-percent'],
+    )
+  end
+  let!(:intermediate_2_to_owner_relationship) do
+    FactoryGirl.create(
+      :relationship,
+      source: ultimate_owner,
+      target: intermediate_company_2,
+      interests: ['ownership-of-shares-25-to-50-percent'],
+    )
+  end
+  let(:start_to_owner_relationship_via_intermediate_1) do
+    InferredRelationship.new(
+      source: ultimate_owner,
+      target: start_company,
+      sourced_relationships: [start_to_intermediate_1_relationship],
+    )
+  end
+  let(:start_to_owner_relationship_via_intermediate_2) do
+    InferredRelationship.new(
+      source: ultimate_owner,
+      target: start_company,
+      sourced_relationships: [start_to_intermediate_2_relationship],
+    )
+  end
+
+  before do
+    Entity.import(force: true, refresh: true)
+    stub_oc_company_api_for(start_company)
+    stub_oc_company_api_for(intermediate_company_1)
+    stub_oc_company_api_for(intermediate_company_2)
+  end
+end
