@@ -10,6 +10,17 @@ class Entity
   has_many :_relationships_as_target, class_name: "Relationship", inverse_of: :target
   has_many :statements
 
+  has_many :merged_entities, class_name: "Entity", inverse_of: :master_entity
+  field :merged_entities_count, type: Integer, default: 0
+  belongs_to(
+    :master_entity,
+    class_name: "Entity",
+    inverse_of: :merged_entities,
+    optional: true,
+    index: true,
+    counter_cache: :merged_entities_count,
+  )
+
   index({ identifiers: 1 }, unique: true, sparse: true)
   index(type: 1)
 
