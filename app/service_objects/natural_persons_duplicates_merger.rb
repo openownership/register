@@ -8,8 +8,6 @@ class NaturalPersonsDuplicatesMerger
   def run
     stats = {}
 
-    stats[:total_before] = query.count
-
     processed, candidates = build_candidates
 
     stats[:processed] = processed
@@ -21,8 +19,6 @@ class NaturalPersonsDuplicatesMerger
     merges = merge_candidates candidates
 
     stats[:merges] = merges
-
-    stats[:total_after] = query.count
 
     Rails.logger.info "[#{self.class.name}] Run finished with stats: #{stats.to_json}"
 
@@ -85,9 +81,10 @@ class NaturalPersonsDuplicatesMerger
   end
 
   def merge_entities(entities)
-    entities.drop(1).reduce(entities.first) do |entity, merged_entity|
-      to_remove, to_keep = EntityMergeDecider.new(merged_entity, entity).call
-      EntityMerger.new(to_remove, to_keep).call
+    to_keep = entities.first
+    entities.drop(1).each do |to_merge|
+      NonDestructivePeopleMerger.new(to_merge, to_keep).call
     end
+    to_keep
   end
 end
