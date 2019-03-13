@@ -1,14 +1,13 @@
 class EntitiesController < ApplicationController
   def show
     entity = Entity.find(params[:id])
+    redirect_to_master_entity(:show, entity)
 
     # It's annoying that we're going to paginate this straight after and so
     # throw away a lot of the relationships we find, but it's the only way to
     # sort them by target name and date, because MongoDB can't do that directly.
     source_relationships = decorate(
-      RelationshipsSorter.new(
-        Relationship.includes(:target, :source).where(source_id: entity.id),
-      ).call,
+      RelationshipsSorter.new(entity.relationships_as_source).call,
     )
     @source_relationships = Kaminari
       .paginate_array(source_relationships)
@@ -47,6 +46,7 @@ class EntitiesController < ApplicationController
 
   def tree
     entity = Entity.find(params[:id])
+    redirect_to_master_entity(:show, entity)
     @node = decorate_with(TreeNode.new(entity), TreeNodeDecorator)
     @entity = decorate(entity)
   end
@@ -62,6 +62,10 @@ class EntitiesController < ApplicationController
   end
 
   private
+
+  def redirect_to_master_entity(action, entity)
+    redirect_to(action: action, id: entity.master_entity.id.to_s) if entity.master_entity.present?
+  end
 
   def ultimate_source_relationship_groups(entity)
     label_for = ->(r) { r.source.id.to_s.include?('statement') ? rand : r.source.name }
