@@ -16,7 +16,7 @@ class Entity
 
   field :identifiers, type: Array, default: []
 
-  has_many :relationships_as_source, class_name: "Relationship", inverse_of: :source
+  has_many :_relationships_as_source, class_name: "Relationship", inverse_of: :source
   has_many :_relationships_as_target, class_name: "Relationship", inverse_of: :target
   has_many :statements
 
@@ -63,6 +63,15 @@ class Entity
       []
     else
       _relationships_as_target.entries.presence || CreateRelationshipsForStatements.call(self)
+    end
+  end
+
+  def relationships_as_source
+    if merged_entities.empty?
+      Relationship.includes(:target, :source).where(source_id: id)
+    else
+      self_and_merged_entity_ids = [id] + merged_entities.only(:_id)
+      Relationship.includes(:target, :source).in(source_id: self_and_merged_entity_ids)
     end
   end
 
