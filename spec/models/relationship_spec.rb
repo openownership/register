@@ -44,4 +44,33 @@ RSpec.describe Relationship do
       )
     end
   end
+
+  describe '#source' do
+    context 'when the source entity has a master_entity' do
+      let(:master_person) { create(:natural_person) }
+      let(:person) { create(:natural_person, master_entity: master_person) }
+      let(:company) { create(:legal_entity) }
+
+      subject do
+        create(:relationship, source: person, target: company)
+      end
+
+      it 'returns the master_entity' do
+        expect(subject.source).to eq master_person
+      end
+    end
+
+    context 'when the source entity has no master_entity' do
+      let(:person) { create(:natural_person) }
+      let(:company) { create(:legal_entity) }
+
+      subject do
+        create(:relationship, source: person, target: company)
+      end
+
+      it 'returns the source' do
+        expect(subject.source).to eq person
+      end
+    end
+  end
 end

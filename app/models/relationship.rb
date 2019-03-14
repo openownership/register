@@ -1,6 +1,13 @@
+module SourceWithMasterEntity
+  def source
+    super.master_entity.presence || super
+  end
+end
+
 class Relationship
   include Mongoid::Document
   include Timestamps::UpdatedEvenOnUpsert
+  prepend SourceWithMasterEntity
 
   field :_id, type: Hash
 
