@@ -1,6 +1,16 @@
+module ElasticsearchImportingWithoutMergedPeople
+  def import(options = {}, &block)
+    unless options[:scope].present? || options[:query].present?
+      options[:query] = -> { where(master_entity: nil) }
+    end
+    super(options, &block)
+  end
+end
+
 class Entity
   include ActsAsEntity
   include Elasticsearch::Model
+  singleton_class.prepend ElasticsearchImportingWithoutMergedPeople
 
   UNKNOWN_ID_MODIFIER = "-unknown".freeze
 
