@@ -408,4 +408,97 @@ RSpec.describe 'Entity pages' do
       expect(page).not_to have_text start_company.name
     end
   end
+
+  context 'for two people owning the same company merged into one' do
+    include_context 'two people owning the same company merged into one'
+
+    context 'when both people have the same interests' do
+      before do
+        person_1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person_1_relationship.save!
+        person_2_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person_2_relationship.save!
+      end
+
+      it 'shows a single person as the ultimate owner of the company' do
+        visit entity_path(company)
+
+        expect(page).to have_text "Beneficial owners of #{company.name}"
+        expect_beneficial_owner_section_for person_1_relationship
+        expect(page).to have_text interests_summary(person_1_relationship)
+
+        expect(page).not_to have_text person_2.name
+
+        visit entity_path(person_1)
+
+        expect(page).to have_text "Companies controlled by #{person_1.name}"
+        expect(page).to have_text interests_summary(person_1_relationship)
+        expect_controlled_company_section_for person_1_relationship
+      end
+    end
+
+    context "when the people have different interests" do
+      before do
+        person_1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person_1_relationship.save!
+        person_2_relationship.interests << 'voting-rights-75-to-100-percent'
+        person_2_relationship.save!
+      end
+
+      it 'shows two people grouped together by name with separate interests' do
+        visit entity_path(company)
+
+        expect(page).to have_text "Beneficial owners of #{company.name}"
+        expect_beneficial_owner_section_for person_1_relationship
+        expect_beneficial_owner_section_for person_2_relationship
+        expect(page).to have_text interests_summary(person_1_relationship)
+        expect(page).to have_text interests_summary(person_2_relationship)
+        expect(page).to have_text 'These persons have been grouped together'
+
+        expect(page).not_to have_text person_2.name
+      end
+    end
+
+    it 'redirects from the merged person to the master person' do
+      visit entity_path(person_2)
+
+      expect(current_path).to eq(entity_path(person_1))
+    end
+  end
+
+  context 'for two people owning the two different companies merged into one' do
+    include_context 'two people owning the two different companies merged into one'
+
+    it 'shows a single person as the ultimate owner of both companies' do
+      visit entity_path(company_1)
+
+      expect(page).to have_text "Beneficial owners of #{company_1.name}"
+      expect_beneficial_owner_section_for person_1_relationship
+      expect(page).to have_text interests_summary(person_1_relationship)
+
+      expect(page).not_to have_text person_2.name
+
+      visit entity_path(company_2)
+
+      expect(page).to have_text "Beneficial owners of #{company_2.name}"
+      within '.ultimate-source-relationships' do
+        expect(page).to have_selector '.entity-link', text: person_1.name
+        expect(page).to have_link person_1.name
+        expect(page).to have_selector '.entity-link', text: "Born #{birth_month_year(person_1)}"
+      end
+      expect(page).to have_text interests_summary(person_2_relationship)
+
+      expect(page).not_to have_text person_2.name
+
+      visit entity_path(person_1)
+
+      expect(page).to have_text "Companies controlled by #{person_1.name}"
+      expect(page).to have_selector '.entity-link', text: company_1.name
+      expect(page).to have_link company_1.name
+      expect(page).to have_selector '.entity-link', text: company_1.incorporation_date.iso8601
+      expect(page).to have_selector '.entity-link', text: company_2.name
+      expect(page).to have_link company_2.name
+      expect(page).to have_selector '.entity-link', text: company_2.incorporation_date.iso8601
+    end
+  end
 end

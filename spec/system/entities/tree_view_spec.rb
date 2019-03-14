@@ -192,4 +192,78 @@ RSpec.describe 'Tree view' do
       expect_root_node_for(start_company)
     end
   end
+
+  context "for two people owning the same company merged into one" do
+    include_context 'two people owning the same company merged into one'
+
+    context 'when both people have the same interests' do
+      before do
+        person_1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person_1_relationship.save!
+        person_2_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person_2_relationship.save!
+      end
+
+      it 'shows a single person as the ultimate owner of the company' do
+        visit entity_path(company)
+        click_link 'View as tree'
+
+        expect_person_node_for(person_1)
+        expect(page).not_to have_css(
+          ".tree-node--natural-person[data-node='#{person_2.name}']",
+        )
+        expect_relationship_link_for(person_1_relationship)
+        expect_root_node_for(company)
+      end
+    end
+
+    context "when the people have different interests" do
+      before do
+        person_1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person_1_relationship.save!
+        person_2_relationship.interests << 'voting-rights-75-to-100-percent'
+        person_2_relationship.save!
+      end
+
+      it 'shows the same person twice, once for each interest' do
+        visit entity_path(company)
+        click_link 'View as tree'
+
+        nodes = all(".tree-node--natural-person[data-node='#{person_1.name}']")
+        expect(nodes.length).to eq(2)
+        expect(page).not_to have_css(
+          ".tree-node--natural-person[data-node='#{person_2.name}']",
+        )
+        expect_relationship_link_for(person_1_relationship)
+        expect_relationship_link_for(person_2_relationship)
+        expect_root_node_for(company)
+      end
+    end
+  end
+
+  context "two people owning the two different companies merged into one" do
+    include_context 'two people owning the two different companies merged into one'
+
+    it 'shows the same person as the ultimate owner of both companies' do
+      visit entity_path(company_1)
+      click_link 'View as tree'
+
+      expect_person_node_for(person_1)
+      expect(page).not_to have_css(
+        ".tree-node--natural-person[data-node='#{person_2.name}']",
+      )
+      expect_relationship_link_for(person_1_relationship)
+      expect_root_node_for(company_1)
+
+      visit entity_path(company_2)
+      click_link 'View as tree'
+
+      expect_person_node_for(person_1)
+      expect(page).not_to have_css(
+        ".tree-node--natural-person[data-node='#{person_2.name}']",
+      )
+      expect_relationship_link_for(person_2_relationship)
+      expect_root_node_for(company_2)
+    end
+  end
 end

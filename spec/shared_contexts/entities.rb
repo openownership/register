@@ -362,3 +362,45 @@ RSpec.shared_context 'entity with diamond ownership' do
     stub_oc_company_api_for(intermediate_company_2)
   end
 end
+
+RSpec.shared_context 'two people owning the same company merged into one' do
+  let!(:person_1) { create(:natural_person) }
+  let!(:person_2) { create(:natural_person) }
+  let!(:company) { create(:legal_entity) }
+
+  let!(:person_1_relationship) do
+    create(:relationship, source: person_1, target: company)
+  end
+
+  let!(:person_2_relationship) do
+    create(:relationship, source: person_2, target: company)
+  end
+
+  before do
+    Entity.import(force: true, refresh: true)
+    NonDestructivePeopleMerger.new(person_2, person_1).call
+    stub_oc_company_api_for(company)
+  end
+end
+
+RSpec.shared_context 'two people owning the two different companies merged into one' do
+  let!(:person_1) { create(:natural_person) }
+  let!(:person_2) { create(:natural_person) }
+  let!(:company_1) { create(:legal_entity) }
+  let!(:company_2) { create(:legal_entity) }
+
+  let!(:person_1_relationship) do
+    create(:relationship, source: person_1, target: company_1)
+  end
+
+  let!(:person_2_relationship) do
+    create(:relationship, source: person_2, target: company_2)
+  end
+
+  before do
+    Entity.import(force: true, refresh: true)
+    NonDestructivePeopleMerger.new(person_2, person_1).call
+    stub_oc_company_api_for(company_1)
+    stub_oc_company_api_for(company_2)
+  end
+end
