@@ -34,4 +34,16 @@ class Relationship
       json.provenance provenance.to_builder
     end
   end
+
+  def keys_for_uniq_grouping
+    interest_types = interests.map do |i|
+      case i
+      when Hash
+        i.fetch('type', '')
+      when String
+        i
+      end
+    end
+    [source.id.to_s, target.id.to_s] + interest_types.sort
+  end
 end

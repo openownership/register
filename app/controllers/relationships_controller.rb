@@ -9,7 +9,9 @@ class RelationshipsController < ApplicationController
     relationships = RelationshipGraph
       .new(target_entity)
       .relationships_to(source_entity)
-    relationships = RelationshipsSorter.new(relationships).call
+    relationships = RelationshipsSorter.new(relationships)
+      .call
+      .uniq { |r| r.sourced_relationships.first.keys_for_uniq_grouping }
 
     raise Mongoid::Errors::DocumentNotFound.new(Relationship, [target_entity.id, source_entity.id]) if relationships.empty?
 

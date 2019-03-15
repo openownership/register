@@ -73,6 +73,7 @@ class EntitiesController < ApplicationController
     relationships = RelationshipGraph.new(entity).ultimate_source_relationships
 
     RelationshipsSorter.new(relationships).call
+      .uniq { |r| r.sourced_relationships.first.keys_for_uniq_grouping }
       .group_by(&label_for)
       .map do |label, rels|
         {

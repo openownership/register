@@ -73,4 +73,65 @@ RSpec.describe Relationship do
       end
     end
   end
+
+  describe '#keys_for_uniq_grouping' do
+    let(:relationship) do
+      create(
+        :relationship,
+        interests: [
+          'right-to-appoint-and-remove-directors',
+          'ownership-of-shares-25-to-50-percent',
+        ],
+      )
+    end
+
+    let(:source_id) { relationship.source.id.to_s }
+    let(:target_id) { relationship.target.id.to_s }
+
+    it 'returns an array of source_id, target_id and alphabetically sorted interests' do
+      expected = [
+        source_id,
+        target_id,
+        'ownership-of-shares-25-to-50-percent',
+        'right-to-appoint-and-remove-directors',
+      ]
+      expect(relationship.keys_for_uniq_grouping).to eq(expected)
+    end
+
+    context 'when there are interest objects' do
+      before do
+        relationship.interests << { type: 'voting-rights-range', share_min: 10, share_max: 20 }
+        relationship.save!
+        # Mongo will convert keys in hashes, but rather than guessing what it
+        # will do when we put data in, just round-trip it through the db
+        relationship.reload
+      end
+
+      it 'extracts the types from the interests' do
+        expected = [
+          source_id,
+          target_id,
+          'ownership-of-shares-25-to-50-percent',
+          'right-to-appoint-and-remove-directors',
+          'voting-rights-range',
+        ]
+        expect(relationship.keys_for_uniq_grouping).to eq(expected)
+      end
+
+      it 'deals with interests with missing types' do
+        relationship.interests << { share_min: 10, share_max: 20 }
+        relationship.save!
+        relationship.reload
+        expected = [
+          source_id,
+          target_id,
+          '',
+          'ownership-of-shares-25-to-50-percent',
+          'right-to-appoint-and-remove-directors',
+          'voting-rights-range',
+        ]
+        expect(relationship.keys_for_uniq_grouping).to eq(expected)
+      end
+    end
+  end
 end
