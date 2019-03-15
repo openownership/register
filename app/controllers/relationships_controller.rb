@@ -1,8 +1,7 @@
 class RelationshipsController < ApplicationController
   def show
     target_entity = Entity.find(params[:entity_id])
-
-    source_entity = Entity.find_or_unknown(params[:id])
+    source_entity = resolve_master_entity(Entity.find_or_unknown(params[:id]))
 
     CreateRelationshipsForStatements.call(source_entity)
 
@@ -26,5 +25,9 @@ class RelationshipsController < ApplicationController
     @target_entity = decorate(target_entity)
     @source_entity = decorate(source_entity)
     @relationships = decorate_with(relationships, InferredRelationshipDecorator)
+  end
+
+  def resolve_master_entity(source_entity)
+    source_entity.master_entity.presence || source_entity
   end
 end
