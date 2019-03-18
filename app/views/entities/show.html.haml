@@ -153,20 +153,22 @@
         .col-lg-8
           .frame
             .frame-wrap
-              %h5 People with similar names
-              %ul.list-unstyled.list-entities
-                - @similar_people.each do |record|
-                  - next if record == @entity
-                  %li
-                    .item
-                      = render "shared/entity_title", entity: record
-                      - if record.natural_person?
-                        .result-controls
-                          :ruby
-                            controls = record.relationships_as_source
-                              .select { |relationship| relationship.ended_date.blank? }
-                              .sort_by { |relationship| relationship.target.name }
-                              .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
-                          - if controls.present?
-                            Controls:
-                            = safe_join controls, ', '
+              .similar-people
+                %h5
+                  = t('.similar_people')
+                %ul.list-unstyled.list-entities
+                  - @similar_people.each do |record|
+                    - next if record == @entity
+                    %li
+                      .item
+                        = render "shared/entity_title", entity: record
+                        - if record.natural_person?
+                          .result-controls
+                            :ruby
+                              controls = record.relationships_as_source
+                                .select { |relationship| relationship.ended_date.blank? }
+                                .sort_by { |relationship| relationship.target.name }
+                                .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
+                            - if controls.present?
+                              Controls:
+                              = safe_join controls, ', '
