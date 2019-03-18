@@ -46,6 +46,7 @@ en:
       grouping_note_html: "<span class='grouping-note-label'>Note:</span> These persons have been grouped together because our system found similarities in their identifying information."
       view_as_tree: View as tree
       company_name_missing: ‹Company name missing›
+      merged_people: Merged people
       similar_people: People with similar names
     ultimate_source_relationship:
       controls_via: Owned via

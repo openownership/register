@@ -148,6 +148,22 @@
               %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank'
         = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, class: 'feedback-button', target: '_blank'
 
+    - unless @entity.merged_entities.empty?
+      .row
+        .col-lg-8
+          .frame
+            .frame-wrap
+              .merged-people
+                %h5
+                  = t(".merged_people")
+                .grouping
+                  .grouping-note
+                    = t(".grouping_note_html")
+                %ul.list-unstyled.list-entities
+                  - @entity.merged_entities.each do |merged_entity|
+                    %li.item
+                      = render partial: 'shared/entity_title', locals: { entity: merged_entity }
+
     - if @similar_people && @similar_people.length > 1
       .row
         .col-lg-8

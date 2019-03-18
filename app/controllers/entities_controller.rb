@@ -1,6 +1,6 @@
 class EntitiesController < ApplicationController
   def show
-    entity = Entity.find(params[:id])
+    entity = Entity.includes(:master_entity, :merged_entities).find(params[:id])
     redirect_to_master_entity(:show, entity)
 
     # It's annoying that we're going to paginate this straight after and so

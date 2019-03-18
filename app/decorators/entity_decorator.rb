@@ -3,6 +3,9 @@ class EntityDecorator < ApplicationDecorator
 
   decorates_finders
 
+  decorates_association :master_entity
+  decorates_association :merged_entities
+
   transliterated_attrs :name, :address, :company_type
 
   alias transliterated_name name

@@ -412,6 +412,22 @@ RSpec.describe 'Entity pages' do
   context 'for two people owning the same company merged into one' do
     include_context 'two people owning the same company merged into one'
 
+    it 'redirects from the merged person to the master person' do
+      visit entity_path(person_2)
+
+      expect(current_path).to eq(entity_path(person_1))
+    end
+
+    it 'shows the details of people who are merged into the master person' do
+      visit entity_path(person_1)
+
+      expect(page).to have_text 'Merged people'
+      within '.merged-people' do
+        expect(page).to have_text person_2.name
+        expect(page).to have_text("Controls: #{company.name}")
+      end
+    end
+
     context 'when both people have the same interests' do
       before do
         person_1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
@@ -426,8 +442,9 @@ RSpec.describe 'Entity pages' do
         expect(page).to have_text "Beneficial owners of #{company.name}"
         expect_beneficial_owner_section_for person_1_relationship
         expect(page).to have_text interests_summary(person_1_relationship)
-
-        expect(page).not_to have_text person_2.name
+        within '.ultimate-source-relationships' do
+          expect(page).not_to have_text person_2.name
+        end
 
         visit entity_path(person_1)
 
@@ -455,14 +472,10 @@ RSpec.describe 'Entity pages' do
         expect(page).to have_text interests_summary(person_2_relationship)
         expect(page).to have_text 'These persons have been grouped together'
 
-        expect(page).not_to have_text person_2.name
+        within '.ultimate-source-relationships' do
+          expect(page).not_to have_text person_2.name
+        end
       end
-    end
-
-    it 'redirects from the merged person to the master person' do
-      visit entity_path(person_2)
-
-      expect(current_path).to eq(entity_path(person_1))
     end
   end
 

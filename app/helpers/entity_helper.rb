@@ -6,6 +6,7 @@ module EntityHelper
   def entity_link(entity, &block)
     (entity.is_a?(CircularOwnershipEntity) && capture(&block)) ||
       unknown_entity_tooltip(entity) ||
+      entity.master_entity.present? && capture(&block) ||
       link_to(entity_path(entity), &block)
   end
 
