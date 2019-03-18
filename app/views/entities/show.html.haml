@@ -164,11 +164,4 @@
                         = render "shared/entity_title", entity: record
                         - if record.natural_person?
                           .result-controls
-                            :ruby
-                              controls = record.relationships_as_source
-                                .select { |relationship| relationship.ended_date.blank? }
-                                .sort_by { |relationship| relationship.target.name }
-                                .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
-                            - if controls.present?
-                              Controls:
-                              = safe_join controls, ', '
+                            = render partial: 'shared/entity_controlled_companies', locals: { entity: record }

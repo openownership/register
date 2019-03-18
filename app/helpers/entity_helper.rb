@@ -56,4 +56,11 @@ module EntityHelper
   def from_denmark_cvr?(entity)
     entity.identifiers.any? { |e| e['document_id'].present? && e['document_id'] == 'Denmark CVR' }
   end
+
+  def controlled_company_links(entity)
+    entity.relationships_as_source
+      .select { |relationship| relationship.ended_date.blank? }
+      .sort_by { |relationship| relationship.target.name }
+      .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
+  end
 end
