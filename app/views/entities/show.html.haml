@@ -75,8 +75,8 @@
                       = group.label
                       %small.grouping-size.pull-right
                         = t(".instances", count: group.relationships.size)
-                    .note
-                      = t(".note")
+                    .grouping-note
+                      = t(".grouping_note_html")
                     .collapse{ id: group.label.parameterize }
                       = render partial: 'ultimate_source_relationship', collection: group.relationships, as: :relationship
                 - else

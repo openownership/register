@@ -42,7 +42,8 @@ en:
       instances:
         one: 1 Match
         other: "%{count} Matches"
-      note: These persons have been grouped together because our system found similarities in their identifying information. This does not constitute a factual determination that these people are one and the same.
+      grouping_note: "These persons have been grouped together because our system found similarities in their identifying information."
+      grouping_note_html: "<span class='grouping-note-label'>Note:</span> These persons have been grouped together because our system found similarities in their identifying information."
       view_as_tree: View as tree
       company_name_missing: ‹Company name missing›
       similar_people: People with similar names
