@@ -12,7 +12,7 @@ en:
         draft_submissions: Your draft submissions
         submitted_submissions: Your previous submissions
       edit:
-        grouped: These persons (indicated by a colored border) have been grouped together because they the same
+        grouped: These persons (indicated by a colored border) have been grouped together because they have the same name
       instructions_header:
         started_title_html: 'You are submitting ownership information for %{entity}'
         unstarted_title: Choose a company you want to submit ownership information for
@@ -45,7 +45,7 @@ en:
         heading: You submitted control information for
         submitted_at: "Submitted at %{date}"
         back: Back to your submissions
-        grouped: These persons (indicated by a colored border) have been grouped together because they the same
+        grouped: These persons (indicated by a colored border) have been grouped together because they have the same name
       submit:
         success: "You have successfully submitted control information for %{entity} for approval. You will receive a notification when the information is added to the Register."
       tree_node:
