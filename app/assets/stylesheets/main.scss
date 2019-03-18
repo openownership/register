@@ -889,7 +889,7 @@ span.tooltip-helper {
     }
   }
 
-  .result-controls {
+  .result-controls, .result-merged-people {
     border-top: 1px solid $border-color;
     padding-top: 7px;
     margin-top: 1px;
@@ -900,6 +900,10 @@ span.tooltip-helper {
       font-size: .75rem;
       text-decoration: underline;
     }
+  }
+
+  .result-merged-people {
+    margin-top: 7px;
   }
 
   .view-as-tree {

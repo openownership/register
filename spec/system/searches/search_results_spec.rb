@@ -46,4 +46,22 @@ RSpec.describe 'Search results' do
     expect(page).to have_link person.name
     expect(page).to have_selector '.type-icon.natural-person'
   end
+
+  context "when search results have merged people" do
+    let(:merged_people) { create_list(:natural_person, 3) }
+
+    before do
+      person.merged_entities << merged_people
+    end
+
+    it "shows how many people have been merged together for each result" do
+      visit '/'
+      within '.search-content' do
+        fill_in 'q', with: 'Example' # Matches all people and companies
+        click_button 'Search'
+      end
+
+      expect(page).to have_text 'Includes details of 3 other merged records'
+    end
+  end
 end

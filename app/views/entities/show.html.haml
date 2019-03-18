@@ -163,6 +163,8 @@
                   - @entity.merged_entities.each do |merged_entity|
                     %li.item
                       = render partial: 'shared/entity_title', locals: { entity: merged_entity }
+                      .result-controls
+                        = render partial: 'shared/entity_controlled_companies', locals: { entity: merged_entity }
 
     - if @similar_people && @similar_people.length > 1
       .row

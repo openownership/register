@@ -155,6 +155,9 @@ en:
       no_results: No results to show
       search: Search
       fallback: "No results containing all your search terms were found. Matches on some of your search terms:"
+      merged_people:
+        one: "Includes details of 1 other merged record"
+        other: "Includes details of %{count} other merged records"
     filter:
       filter_by: "Filter by %{key}"
       filtered_by: "Filtered by %{key}"
