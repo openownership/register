@@ -132,6 +132,28 @@ heroku run:detached -s performance-l --app openownership-register time bin/rails
 
 Check the log for results and stats.
 
+### Un-merging people
+
+It's possible to remove one or more people from a 'merged' group by following
+these steps:
+
+1. Identify the entity(ies) you want to un-merge. The easiest way to find their
+   mongodb ids is by finding a Relationship they're in and looking at the
+   `source_id` field, or finding them by their source identifiers.
+2. Open a rails console on the heroku app:
+   `heroku run --app openownership-register bin/rails c`
+3. Find the entity to split, e.g. `splitter = Entity.find('id-of-splitter')`
+4. Find the master entity e.g. `master = Entity.find('id-of-master')`
+5. Clear the `master_entity` on the entity you want to split:
+   ```ruby
+   splitter.master_entity = nil
+   splitter.save!
+   ```
+6. Re-index the split entity with Elasticsearch:
+  `IndexEntityService.new(splitter).index`
+7. Due to a bug in Mongoid, we have to update the cached count manually:
+   `master.reset_counters(:merged_entities)`
+
 ## Setting up a review app to mimic production (e.g. to review data imports)
 
 Create a review app in the usual way through the Heroku admin and then after the
