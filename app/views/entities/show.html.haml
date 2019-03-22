@@ -158,7 +158,7 @@
                   = t(".merged_people")
                 .grouping
                   .grouping-note
-                    = t(".grouping_note_html")
+                    = t(".merged_note_html", count: @entity.merged_entities.size)
                 %ul.list-unstyled.list-entities
                   - @entity.merged_entities.each do |merged_entity|
                     %li.item

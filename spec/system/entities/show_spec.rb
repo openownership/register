@@ -422,6 +422,7 @@ RSpec.describe 'Entity pages' do
       visit entity_path(person_1)
 
       expect(page).to have_text 'Merged people'
+      expect(page).to have_text 'This person has been merged together'
       within '.merged-people' do
         expect(page).to have_text person_2.name
         expect(page).to have_text("Controls: #{company.name}")
@@ -470,7 +471,7 @@ RSpec.describe 'Entity pages' do
         expect_beneficial_owner_section_for person_2_relationship
         expect(page).to have_text interests_summary(person_1_relationship)
         expect(page).to have_text interests_summary(person_2_relationship)
-        expect(page).to have_text 'These persons have been grouped together'
+        expect(page).to have_text 'These owners have been grouped together'
 
         within '.ultimate-source-relationships' do
           expect(page).not_to have_text person_2.name

@@ -42,11 +42,14 @@ en:
       instances:
         one: 1 Match
         other: "%{count} Matches"
-      grouping_note: "These persons have been grouped together because our system found similarities in their identifying information."
-      grouping_note_html: "<span class='grouping-note-label'>Note:</span> These persons have been grouped together because our system found similarities in their identifying information."
+      grouping_note: "These owners have been grouped together because they have exactly the same name."
+      grouping_note_html: "<span class='grouping-note-label'>Note:</span> These owners have been grouped together because they have exactly the same name."
       view_as_tree: View as tree
       company_name_missing: ‹Company name missing›
       merged_people: Merged people
+      merged_note_html:
+        one: "<span class='grouping-note-label'>Note:</span> This person has been merged together because they have exactly the same name, date of birth and address."
+        other: "<span class='grouping-note-label'>Note:</span> These people have been merged together because they have exactly the same name, date of birth and address."
       similar_people: People with similar names
     ultimate_source_relationship:
       controls_via: Owned via
