@@ -76,7 +76,7 @@
                       %small.grouping-size.pull-right
                         = t(".instances", count: group.relationships.size)
                     .grouping-note
-                      = t(".grouping_note_html")
+                      = t(".grouping_note_html", report_incorrect_data_url: report_incorrect_data_url)
                     .collapse{ id: group.label.parameterize }
                       = render partial: 'ultimate_source_relationship', collection: group.relationships, as: :relationship
                 - else
@@ -158,7 +158,7 @@
                   = t(".merged_people")
                 .grouping
                   .grouping-note
-                    = t(".merged_note_html", count: @entity.merged_entities.size)
+                    = t(".merged_note_html", count: @entity.merged_entities.size, report_incorrect_data_url: report_incorrect_data_url)
                 %ul.list-unstyled.list-entities
                   - @entity.merged_entities.each do |merged_entity|
                     %li.item

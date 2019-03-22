@@ -422,7 +422,7 @@ RSpec.describe 'Entity pages' do
       visit entity_path(person_1)
 
       expect(page).to have_text 'Merged people'
-      expect(page).to have_text 'This person has been merged together'
+      expect(page).to have_text 'This person has been merged because'
       within '.merged-people' do
         expect(page).to have_text person_2.name
         expect(page).to have_text("Controls: #{company.name}")
