@@ -962,6 +962,9 @@ span.tooltip-helper {
     font-weight: bold;
     color: $text-default;
   }
+  a:hover {
+    color: $electricBlue;
+  }
 }
 .grouping-header {
   display: block;
