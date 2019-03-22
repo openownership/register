@@ -189,6 +189,7 @@ en:
       dont_transliterate: "Don't transliterate"
     javascript_required: (Javascript is required to view this content)
     controlled_companies_html: "Controls: %{company_links}"
+    no_controlled_companies: "Does not currently control any companies"
   entity_types:
     default: entity
     legal-entity: legal entity
