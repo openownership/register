@@ -111,9 +111,8 @@ class PscStatsCalculator
   # the ownerships there too.
   def current_uk_legal_entities
     Entity
-      .includes(:relationships_as_source, :_relationships_as_target)
+      .legal_entities
       .where(
-        :type => Entity::Types::LEGAL_ENTITY,
         'identifiers.document_id' => PSC_DOCUMENT_ID,
         :jurisdiction_code => Jurisdictions::UK.downcase,
         :dissolution_date => nil,
