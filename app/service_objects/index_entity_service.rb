@@ -4,6 +4,7 @@ class IndexEntityService
   end
 
   def index
+    return if @entity.master_entity.present?
     @entity.__elasticsearch__.index_document
   end
 

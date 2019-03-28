@@ -1,6 +1,13 @@
+module SourceWithMasterEntity
+  def source
+    super.master_entity.presence || super
+  end
+end
+
 class Relationship
   include Mongoid::Document
   include Timestamps::UpdatedEvenOnUpsert
+  prepend SourceWithMasterEntity
 
   field :_id, type: Hash
 
@@ -9,7 +16,7 @@ class Relationship
   field :started_date, type: ISO8601::Date
   field :ended_date, type: ISO8601::Date
 
-  belongs_to :source, class_name: 'Entity', inverse_of: :relationships_as_source
+  belongs_to :source, class_name: 'Entity', inverse_of: :_relationships_as_source
   belongs_to :target, class_name: 'Entity', inverse_of: :_relationships_as_target
 
   embeds_one :provenance
@@ -26,5 +33,17 @@ class Relationship
 
       json.provenance provenance.to_builder
     end
+  end
+
+  def keys_for_uniq_grouping
+    interest_types = interests.map do |i|
+      case i
+      when Hash
+        i.fetch('type', '')
+      when String
+        i
+      end
+    end
+    [source.id.to_s, target.id.to_s] + interest_types.sort
   end
 end

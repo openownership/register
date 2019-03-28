@@ -75,8 +75,8 @@
                       = group.label
                       %small.grouping-size.pull-right
                         = t(".instances", count: group.relationships.size)
-                    .note
-                      = t(".note")
+                    .grouping-note
+                      = t(".grouping_note_html", report_incorrect_data_url: report_incorrect_data_url)
                     .collapse{ id: group.label.parameterize }
                       = render partial: 'ultimate_source_relationship', collection: group.relationships, as: :relationship
                 - else
@@ -148,25 +148,38 @@
               %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank'
         = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, class: 'feedback-button', target: '_blank'
 
+    - unless @entity.merged_entities.empty?
+      .row
+        .col-lg-8
+          .frame
+            .frame-wrap
+              .merged-people
+                %h5
+                  = t(".merged_people")
+                .grouping
+                  .grouping-note
+                    = t(".merged_note_html", count: @entity.merged_entities.size, report_incorrect_data_url: report_incorrect_data_url)
+                %ul.list-unstyled.list-entities
+                  - @entity.merged_entities.each do |merged_entity|
+                    %li.item
+                      = render partial: 'shared/entity_title', locals: { entity: merged_entity }
+                      .result-controls
+                        = render partial: 'shared/entity_controlled_companies', locals: { entity: merged_entity }
+
     - if @similar_people && @similar_people.length > 1
       .row
         .col-lg-8
           .frame
             .frame-wrap
-              %h5 People with similar names
-              %ul.list-unstyled.list-entities
-                - @similar_people.each do |record|
-                  - next if record == @entity
-                  %li
-                    .item
-                      = render "shared/entity_title", entity: record
-                      - if record.natural_person?
-                        .result-controls
-                          :ruby
-                            controls = record.relationships_as_source
-                              .select { |relationship| relationship.ended_date.blank? }
-                              .sort_by { |relationship| relationship.target.name }
-                              .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
-                          - if controls.present?
-                            Controls:
-                            = safe_join controls, ', '
+              .similar-people
+                %h5
+                  = t('.similar_people')
+                %ul.list-unstyled.list-entities
+                  - @similar_people.each do |record|
+                    - next if record == @entity
+                    %li
+                      .item
+                        = render "shared/entity_title", entity: record
+                        - if record.natural_person?
+                          .result-controls
+                            = render partial: 'shared/entity_controlled_companies', locals: { entity: record }

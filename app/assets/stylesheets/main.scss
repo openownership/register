@@ -829,20 +829,11 @@ span.tooltip-helper {
     text-decoration: none;
     color: inherit;
   }
-  .item, .grouping {
+  .item {
     padding: 15px;
     margin-top: 10px;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
     border-radius: $border-radius;
-    .note {
-      font-size: 12px;
-      color: #A9A9A9;
-      &:before {
-        content: 'Note: ';
-        font-weight: bold;
-        color: $text-default;
-      }
-    }
   }
   .item {
     background-color: $white;
@@ -898,7 +889,7 @@ span.tooltip-helper {
     }
   }
 
-  .result-controls {
+  .result-controls, .result-merged-people {
     border-top: 1px solid $border-color;
     padding-top: 7px;
     margin-top: 1px;
@@ -909,6 +900,10 @@ span.tooltip-helper {
       font-size: .75rem;
       text-decoration: underline;
     }
+  }
+
+  .result-merged-people {
+    margin-top: 7px;
   }
 
   .view-as-tree {
@@ -947,33 +942,50 @@ span.tooltip-helper {
       padding-right: 130px;
     }
   }
-  .grouping {
-    background-color: $white;
-    .item {
-      box-shadow: none;
-      border: 1px solid $border-color;
-    }
-  }
-  .grouping-header {
-    display: block;
-    background: asset-url("chevron-down.svg") right 7px no-repeat;
-    text-transform: uppercase;
-    padding-bottom: 7px;
-    &:hover {
-      .grouping-size {
-        color: $electricBlue;
-      }
-    }
-  }
-  .grouping-size {
-    font-size: 0.8125rem;
-    color: #999999;
-    margin-right: 20px;
-    line-height: 1.75em;
-    text-transform: none;
-    transition: color .25s ease;
+}
+
+.grouping {
+  padding: 15px;
+  margin-top: 10px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, .05);
+  border-radius: $border-radius;
+  background-color: $white;
+  .item {
+    box-shadow: none;
+    border: 1px solid $border-color;
   }
 }
+.grouping-note {
+  font-size: 12px;
+  color: #A9A9A9;
+  .grouping-note-label {
+    font-weight: bold;
+    color: $text-default;
+  }
+  a:hover {
+    color: $electricBlue;
+  }
+}
+.grouping-header {
+  display: block;
+  background: asset-url("chevron-down.svg") right 7px no-repeat;
+  text-transform: uppercase;
+  padding-bottom: 7px;
+  &:hover {
+    .grouping-size {
+      color: $electricBlue;
+    }
+  }
+}
+.grouping-size {
+  font-size: 0.8125rem;
+  color: #999999;
+  margin-right: 20px;
+  line-height: 1.75em;
+  text-transform: none;
+  transition: color .25s ease;
+}
+
 .source-relationships {
   .item {
     .relationship-interests {
@@ -981,6 +993,7 @@ span.tooltip-helper {
     }
   }
 }
+
 .relationship-details {
   padding: 20px;
   margin-bottom: 60px;

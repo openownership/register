@@ -8,11 +8,9 @@ RSpec.describe NaturalPersonsDuplicatesMerger do
   context 'with no entities' do
     let :expected_stats do
       {
-        total_before: 0,
         processed: 0,
         candidates: 0,
         merges: 0,
-        total_after: 0,
       }
     end
 
@@ -36,26 +34,25 @@ RSpec.describe NaturalPersonsDuplicatesMerger do
         # Create some legal entities to make sure we skip these
         create_list :legal_entity, 2
 
-        expect(EntityMerger).to receive(:new).never
+        expect(IndexEntityService).to receive(:new).never
       end
 
       let :expected_stats do
         {
-          total_before: entities.size,
           processed: entities.size,
           candidates: 0,
           merges: 0,
-          total_after: entities.size,
         }
       end
 
       it 'processes the entities but does not find any merge candidates' do
         expect(subject.run).to eq expected_stats
-        expect(Entity.natural_persons.entries).to match_array entities
+        expect(Entity.natural_persons.where(master_entity: nil)).to match_array entities
       end
     end
 
     context 'with some groups of duplicates' do
+      let(:index_entity_service) { instance_double('IndexEntityService') }
       let(:dup_name_1) { 'name 1' }
       let(:dup_name_2) { 'name 2' }
       let(:dup_address_1) { 'address 1' }
@@ -99,27 +96,28 @@ RSpec.describe NaturalPersonsDuplicatesMerger do
       before do
         # Create some legal entities to make sure we skip these
         create_list :legal_entity, 2
+
+        allow(IndexEntityService).to receive(:new).and_return index_entity_service
       end
 
       let :expected_stats do
         size = dup_entities_1.size + dup_entities_2.size + similar_but_not_quite_dup_entities.size + non_dup_entities.size
 
         {
-          total_before: size,
           processed: size,
           candidates: 1 + 1,
           merges: (dup_entities_1.size + dup_entities_2.size) - 2,
-          total_after: 1 + 1 + similar_but_not_quite_dup_entities.size + non_dup_entities.size,
         }
       end
 
-      let :expected_entities do
-        [dup_entities_1.last] + [dup_entities_2.last] + similar_but_not_quite_dup_entities + non_dup_entities
-      end
+      let(:expected_dup_1_merged) { [dup_entities_1[1], dup_entities_1[2]] }
+      let(:expected_dup_2_merged) { [dup_entities_2[1]] }
 
-      it 'processes the entities, finds merge candidates and merges thems' do
+      it 'processes the entities, finds merge candidates and merges them' do
+        expect(index_entity_service).to receive(:delete).exactly(expected_stats[:merges]).times
         expect(subject.run).to eq expected_stats
-        expect(Entity.natural_persons.entries).to match_array expected_entities
+        expect(dup_entities_1[0].merged_entities).to match_array(expected_dup_1_merged)
+        expect(dup_entities_2[0].merged_entities).to match_array(expected_dup_2_merged)
       end
     end
   end

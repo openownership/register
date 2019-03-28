@@ -42,9 +42,15 @@ en:
       instances:
         one: 1 Match
         other: "%{count} Matches"
-      note: These persons have been grouped together because our system found similarities in their identifying information. This does not constitute a factual determination that these people are one and the same.
+      grouping_note: "These owners have been grouped together because they have exactly the same name."
+      grouping_note_html: "<span class='grouping-note-label'>Note:</span> These owners have been grouped together because they have exactly the same name. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
       view_as_tree: View as tree
       company_name_missing: ‹Company name missing›
+      merged_people: Merged people
+      merged_note_html:
+        one: "<span class='grouping-note-label'>Note:</span> This person has been merged because they have exactly the same name, date of birth and address. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
+        other: "<span class='grouping-note-label'>Note:</span> These people have been merged because they have exactly the same name, date of birth and address. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
+      similar_people: People with similar names
     ultimate_source_relationship:
       controls_via: Owned via
       details: Details ›
@@ -152,6 +158,9 @@ en:
       no_results: No results to show
       search: Search
       fallback: "No results containing all your search terms were found. Matches on some of your search terms:"
+      merged_people:
+        one: "Includes details of 1 other merged record"
+        other: "Includes details of %{count} other merged records"
     filter:
       filter_by: "Filter by %{key}"
       filtered_by: "Filtered by %{key}"
@@ -179,7 +188,8 @@ en:
       transliterate: Transliterate
       dont_transliterate: "Don't transliterate"
     javascript_required: (Javascript is required to view this content)
-
+    controlled_companies_html: "Controls: %{company_links}"
+    no_controlled_companies: "Does not currently control any companies"
   entity_types:
     default: entity
     legal-entity: legal entity

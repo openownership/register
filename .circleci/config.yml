@@ -51,7 +51,7 @@ jobs:
           command: dockerize -wait tcp://localhost:9200 -timeout 1m
 
       - run:
-          command: bundle exec rspec --color --require spec_helper --format progress spec
+          command: bundle exec rspec --color --require spec_helper --format documentation spec
           environment:
             RAILS_ENV: test
             RACK_ENV: test

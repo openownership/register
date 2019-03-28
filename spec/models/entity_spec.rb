@@ -474,4 +474,35 @@ RSpec.describe Entity do
       end
     end
   end
+
+  describe '.import' do
+    let!(:person) { create(:natural_person, name: 'John Smith') }
+    let!(:merged_person) do
+      create(:natural_person, master_entity: person, name: 'Jane Jones')
+    end
+
+    it 'indexes records with elasticsearch' do
+      Entity.import force: true, refresh: true
+      expect(Entity.search(person.name).records.first).to eq(person)
+    end
+
+    it 'excludes merged people by default' do
+      Entity.import force: true, refresh: true
+      expect(Entity.search(merged_person.name)).to be_empty
+    end
+
+    it "doesn't override if the :scope option is passed" do
+      Entity.import force: true, refresh: true, scope: :unscoped
+      expect(Entity.search(merged_person.name).records.first).to eq(merged_person)
+    end
+
+    it "doesn't override if the :query option is passed" do
+      Entity.import(
+        force: true,
+        refresh: true,
+        query: -> { where('master_entity.ne' => nil) },
+      )
+      expect(Entity.search(merged_person.name).records.first).to eq(merged_person)
+    end
+  end
 end

@@ -1,5 +1,5 @@
 module EntityHelpers
-  def ownership_summary(relationship)
+  def interests_summary(relationship)
     if relationship.interests.empty?
       I18n.t("shared.relationship_interests.unknown")
     else
@@ -9,10 +9,6 @@ module EntityHelpers
 
   def birth_month_year(person)
     "#{Date::MONTHNAMES[person.dob.month]} #{person.dob.year}"
-  end
-
-  def relationship_link(relationship)
-    "#{ownership_summary(relationship)} Details ›"
   end
 
   def relationship_href(relationship)

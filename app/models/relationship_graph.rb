@@ -17,40 +17,51 @@ class RelationshipGraph
 
   private
 
-  def select_relationships(&block)
+  def select_relationships(&stop_condition)
     relationships = []
 
-    select_relationships_recursive(@entity, relationships, [], [], block)
+    select_relationships_recursive(
+      entity: @entity,
+      inferred_relationships: relationships,
+      stop_condition: stop_condition,
+    )
 
     relationships
   end
 
-  def select_relationships_recursive(entity, state, entities, relationships, block)
+  def select_relationships_recursive(
+                                     entity:,
+                                     inferred_relationships:,
+                                     seen_entities: [],
+                                     seen_relationships: [],
+                                     stop_condition:
+                                   )
     immediate_relationships = entity.relationships_as_target
 
-    if block.call(entity, immediate_relationships) && !entities.empty?
-      if relationships.size == 1
-        state << InferredRelationship.new(
-          source: entity,
-          target: @entity,
-          interests: relationships.first.interests,
-          sourced_relationships: relationships,
-        )
-      else
-        attributes = {
-          source: entity,
-          target: @entity,
-          sourced_relationships: relationships,
-        }
+    if stop_condition.call(entity, immediate_relationships) \
+       && !seen_relationships.empty?
 
-        state << InferredRelationship.new(attributes)
+      inferred_relationship = InferredRelationship.new(
+        source: entity,
+        target: @entity,
+        sourced_relationships: seen_relationships,
+      )
+      if seen_relationships.size == 1
+        inferred_relationship.interests = seen_relationships.first.interests
       end
+      inferred_relationships << inferred_relationship
     end
 
-    return if entities.include?(entity) # prevent infinite loops
+    return if seen_entities.include?(entity) # prevent infinite loops
 
     immediate_relationships.each do |relationship|
-      select_relationships_recursive(relationship.source, state, [entity] + entities, [relationship] + relationships, block)
+      select_relationships_recursive(
+        entity: relationship.source,
+        inferred_relationships: inferred_relationships,
+        seen_entities: [entity] + seen_entities,
+        seen_relationships: [relationship] + seen_relationships,
+        stop_condition: stop_condition,
+      )
     end
   end
 end

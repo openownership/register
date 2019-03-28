@@ -1,15 +1,16 @@
 class RelationshipsController < ApplicationController
   def show
     target_entity = Entity.find(params[:entity_id])
-
-    source_entity = Entity.find_or_unknown(params[:id])
+    source_entity = resolve_master_entity(Entity.find_or_unknown(params[:id]))
 
     CreateRelationshipsForStatements.call(source_entity)
 
     relationships = RelationshipGraph
       .new(target_entity)
       .relationships_to(source_entity)
-    relationships = RelationshipsSorter.new(relationships).call
+    relationships = RelationshipsSorter.new(relationships)
+      .call
+      .uniq { |r| r.sourced_relationships.first.keys_for_uniq_grouping }
 
     raise Mongoid::Errors::DocumentNotFound.new(Relationship, [target_entity.id, source_entity.id]) if relationships.empty?
 
@@ -24,5 +25,9 @@ class RelationshipsController < ApplicationController
     @target_entity = decorate(target_entity)
     @source_entity = decorate(source_entity)
     @relationships = decorate_with(relationships, InferredRelationshipDecorator)
+  end
+
+  def resolve_master_entity(source_entity)
+    source_entity.master_entity.presence || source_entity
   end
 end

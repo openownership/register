@@ -13,7 +13,7 @@ en:
         submitted_at: "Submitted at %{date}"
         approved_at: "Approved at %{date}"
         back: Back to all submissions
-        grouped: These persons (indicated by a colored border) have been grouped together because they the same
+        grouped: These persons (indicated by a colored border) have been grouped together because they have the same name
         approve: Approve
         confirm: Are you sure?
       approve:

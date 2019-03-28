@@ -31,7 +31,10 @@ class TreeNode
     if relationships.any? { |relationship| seen_ids.include?(relationship.id) }
       [TreeNode.new(CircularOwnershipEntity.new(id: "#{relationship.id}-circular-ownership"), nil, seen_ids)]
     else
-      RelationshipsSorter.new(relationships).call.map do |relationship|
+      unique_source_relationships = RelationshipsSorter.new(relationships)
+        .call
+        .uniq(&:keys_for_uniq_grouping)
+      unique_source_relationships.map do |relationship|
         TreeNode.new(relationship.source, relationship, seen_ids += [relationship.id])
       end
     end
