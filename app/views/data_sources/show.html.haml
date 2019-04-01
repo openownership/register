@@ -30,12 +30,12 @@
                   %th{ scope: 'col' }
                     = t('.statistics.percentage')
                 - @statistics.each do |statistic|
-                  %tr
+                  %tr{ class: "statistic-#{statistic.type.dasherize}" }
                     %th{ scope: 'row' }
                       = sanitize statistic.title(@footnote_indices[statistic.id])
-                    %td
+                    %td.statistic-count
                       = number_with_delimiter statistic.value
-                    %td
+                    %td.statistic-percentage
                       = number_to_percentage statistic.percentage(@total), precision: 1
               %h3
                 = t('.statistics.footnotes')
