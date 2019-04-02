@@ -21,10 +21,17 @@ docker-compose up -d
 
 Alternatively, you can use your own local method for running these services. See the `docker-compose.yml` file for the required services and versions, and the `.env` file for expected config.
 
-Run the setup command, which will create, seed and add indexes to the DB and elasticsearch
+Run the setup command, which will check dependencies and set up the DB
 
 ```bash
 bin/setup
+```
+
+Import a subset of real data that's useful for local development and get it into
+ElasticSearch:
+
+```bash
+rake postdeploy
 ```
 
 Then you're ready to use the usual `rails` commands (like `rails serve`) to run / work with the app.
@@ -33,14 +40,6 @@ To run tests:
 
 ```bash
 bundle exec rspec
-```
-
-## Import more data
-
-The above will create a few example records, but you can import a subset of real data, by running:
-
-```bash
-rake postdeploy
 ```
 
 ## Writing an importer
