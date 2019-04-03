@@ -405,3 +405,40 @@ going though, and you can check on it with the `_tasks` api:
 
 When the response is `nodes:{}` (i.e. an empty list of tasks) the reindex is
 done
+
+# Adding new data source pages
+
+The DataSource model provides the content and statistics collection for the PSC
+data source 'dashboard' on the site. To add new pages for other sources, you can
+just create new data source instances:
+
+```Ruby
+DataSource.create(
+  name: 'My new data source'
+  url: 'Link to the original source'
+  overview: 'Markdown content for the first overview/intro section'
+  data_availalability: 'Markdown content for the data availability/license'
+  timeline_url: 'Twitter timeline url for embedded tweet timeline'
+)
+```
+
+I've stored the markdown for the PSC register in /db so that it's easier to diff
+and edit, then made a data migration to load it in.
+
+If you want statistics for that page also, you'll need to implement a
+'calculator' like the `PscStatsCalculator` to create some
+`DataSourceStatistics`. This interface is still a work in progress, but the
+current code and views assume that you'll have a total count stat, and then some
+other `types` you'll define in `DataSourceStatistic::Types` for whatever your
+other stats are. At the moment, it's assumed that every stat is a count of
+companies that meet some criteria, which can also be expressed as a percentage
+of the total.
+
+# Running the PscStatsCalculator
+
+You can run the `PscStatsCalculator` at any point and it will create a new set
+of `DataSourceStatistics` for the PSC register, as well as a total.
+
+```shell
+heroku run --app openownership-register bin/rails runner "PscStatsCalculator.new/call"
+```

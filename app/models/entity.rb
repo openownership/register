@@ -32,7 +32,10 @@ class Entity
   )
 
   index({ identifiers: 1 }, unique: true, sparse: true)
+  index('identifiers.document_id' => 1)
   index(type: 1)
+  index(jurisdiction_code: 1)
+  index(dissolution_date: 1)
 
   index_name "#{Rails.application.class.parent_name.underscore}_entities_#{Rails.env}"
 

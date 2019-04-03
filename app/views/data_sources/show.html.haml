@@ -1,0 +1,64 @@
+- content_for(:title, @data_source.name)
+
+.content.page-content
+  .container-fluid
+    .row
+      .col-lg-8
+        .page-header
+          %h1
+            = @data_source.name
+        .page-text
+          - if @overview_html.present?
+            .data-source-content
+              %h2
+                = t('.overview_title')
+              = sanitize @overview_html
+          - if @data_availability_html.present?
+            .data-source-content
+              %h2
+                = t('.data_availability_title')
+              = sanitize @data_availability_html
+          - if @statistics.present?
+            .data-source-statistics
+              %h2
+                = t('.statistics_title')
+              %table.table.table-hover
+                %tr
+                  %th{ scope: 'col' }
+                  %th{ scope: 'col' }
+                    = t('.statistics.companies')
+                  %th{ scope: 'col' }
+                    = t('.statistics.percentage')
+                - @statistics.each do |statistic|
+                  %tr{ class: "statistic-#{statistic.type.dasherize}" }
+                    %th{ scope: 'row' }
+                      = sanitize statistic.title(@footnote_indices[statistic.id])
+                    %td.statistic-count
+                      = number_with_delimiter statistic.value
+                    %td.statistic-percentage
+                      = number_to_percentage statistic.percentage(@total), precision: 1
+              %h3
+                = t('.statistics.footnotes')
+              - @statistics.each do |statistic|
+                - if statistic.footnote?
+                  %p
+                    %small
+                      = sanitize statistic.footnote(@footnote_indices[statistic.id])
+
+      .col-lg-4
+        - if @data_source.url.present?
+          .frame-light.meta
+            .frame-wrap
+              %h6
+                = t('.links_title')
+              %p
+                = link_to(t('.source_url_link'), @data_source.url, class: 'external', target: '_blank')
+        - if @data_source.timeline_url.present?
+          .frame-light.meta
+            .frame-wrap
+              - if @data_source.timeline_url.present?
+                %h6
+                  = t('.news_title')
+                = link_to(@data_source.timeline_url, 'class' => "twitter-timeline", 'data-dnt' => 'true', 'data-link-color' => '#3C31D4', 'data-chrome' => 'transparent noheader nofooter noborders', 'data-height' => '600') do
+                  = t('.news_fallback_text')
+                  %script{ src: "https://platform.twitter.com/widgets.js", async: true, charset: "utf-8" }

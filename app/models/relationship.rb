@@ -23,6 +23,9 @@ class Relationship
 
   index source_id: 1
   index target_id: 1
+  index type: 1
+  index '_id.document_id' => 1
+  index ended_date: 1
 
   def to_builder
     Jbuilder.new do |json|

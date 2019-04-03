@@ -46,5 +46,6 @@ Rails.application.routes.draw do
 
     root to: redirect('admin/submissions')
   end
+  resources :data_sources, only: :show
   root "searches#show"
 end

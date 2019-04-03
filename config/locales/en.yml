@@ -54,6 +54,36 @@ en:
     ultimate_source_relationship:
       controls_via: Owned via
       details: Details ›
+  data_sources:
+    show:
+      data_availability_title: Data availability and license
+      links_title: Links
+      news_title: News
+      news_fallback_text: Tweets curated by OpenOwnership
+      overview_title: Overview, definitions, thresholds
+      source_url_link: 'Original source data'
+      statistics_title: Ownership transparency performance monitoring
+      statistics:
+        companies: Number of companies
+        percentage: Percentage of companies
+        footnotes: Footnotes
+  data_source_statistics:
+    total:
+      title: Total companies from this source in the OpenOwnership register
+    psc_no_owner:
+      title: Companies with missing UBO declaration
+      footnote_html: UK companies mentioned in the PSC data (e.g. as an RLE). Other non-declaring UK companies may exist but not be mentioned at all.
+    psc_unknown_owner:
+      title: Companies with 'No UBO' declaration
+      footnote_html: <a href="https://github.com/companieshouse/api-enumerations/blob/master/psc_descriptions.yml#L126">Enumeration of reasons for declarations with no UBO</a>
+    psc_offshore_rle:
+      title: Companies with RLE outside of the UK
+    psc_non_legit_rle:
+      title: Companies with RLE not in a regulated market country
+      footnote_html: UK, EEA state, USA, Japan, Switzerland or Israel
+    psc_secrecy_rle:
+      title: Companies with RLE in a secrecy jurisdiction
+      footnote_html: Countries scoring 60 or above on the <a href="https://www.financialsecrecyindex.com/introduction/fsi-2018-results">Financial Secrecy Index 2018</a>
   devise:
     confirmations:
       new:
