@@ -25,10 +25,7 @@
             .data-sources-info
               %p= t(".data_sources_preface", count: number_with_delimiter(@legal_entity_count))
               %ul.list-unstyled
-                - if @psc_data_source.present?
-                  %li= link_to(@psc_data_source.name, data_source_path(@psc_data_source))
-                - else
-                  %li= link_to('UK PSC Register', 'http://download.companieshouse.gov.uk/en_pscdata.html', target: '_blank')
+                %li= link_to('UK PSC Register', 'http://download.companieshouse.gov.uk/en_pscdata.html', target: '_blank')
                 %li= link_to('Denmark Central Business Register (CVR)', 'https://cvr.dk', target: '_blank')
                 %li= link_to('Slovakia Public Sector Partners Register', 'https://rpvs.gov.sk/', target: '_blank')
                 %li= link_to('Ukraine Unified States Register (EDR)', 'https://data.gov.ua/dataset/1c7f3815-3259-45e0-bdf1-64dca07ddc10', target: '_blank')

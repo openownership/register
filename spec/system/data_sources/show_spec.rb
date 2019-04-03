@@ -108,8 +108,7 @@ RSpec.describe 'Data Source pages' do
     end
 
     it 'Shows a full page with content and statistics' do
-      visit '/'
-      click_link psc_data_source.name
+      visit data_source_url(psc_data_source)
       expect(page).to have_text(psc_data_source.name)
       expect(page).to have_text(I18n.t('data_sources.show.links_title'))
       expect(page).to have_link(
