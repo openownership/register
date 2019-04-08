@@ -12,6 +12,7 @@ module Submissions
     belongs_to :user, class_name: "User", inverse_of: :submissions
 
     has_many :entities, class_name: 'Submissions::Entity'
+    field :entities_count, type: Integer, default: 0
     has_many :relationships, class_name: 'Submissions::Relationship'
 
     field :submitted_at, type: Time
