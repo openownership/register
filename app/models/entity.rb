@@ -100,7 +100,8 @@ class Entity
     )
 
     self.id = document.fetch('_id')
-    self.identifiers = document.fetch('identifiers')
+
+    reload
   rescue Mongo::Error::OperationFailure => exception
     raise unless exception.message.start_with?('E11000')
 
