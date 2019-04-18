@@ -58,9 +58,6 @@ class PscStatsCalculator
       STAT_TYPES::PSC_SECRECY_RLE => 0,
     }
 
-    # How many companies make some kind of statement about not having a
-    # beneficial owner?
-    stats[STAT_TYPES::PSC_UNKNOWN_OWNER] = current_owner_statements.size
     current_uk_legal_entities.no_timeout.each do |entity|
       stats[STAT_TYPES::TOTAL] += 1
       # How many have no declared owner at all?
@@ -69,6 +66,9 @@ class PscStatsCalculator
         # None of the more detailed questions about RLEs are relevant
         next
       end
+      # How many companies make some kind of statement about not having a
+      # beneficial owner?
+      stats[STAT_TYPES::PSC_UNKNOWN_OWNER] += 1 if current_suspicious_statements(entity).any?
       # How many have a company as an owner, where that company doesn't meet the
       # requirements for being a Relevant Legal Owner (RLE) or looks suspicious?
       non_uk_rles = current_non_uk_rles(entity)
@@ -91,18 +91,6 @@ class PscStatsCalculator
     stats.map do |type, value|
       psc_data_source.statistics.create!(type: type, value: value)
     end
-  end
-
-  def current_owner_statements
-    # At the moment Statements only come from the PSC register, but we add a
-    # condition on that as well, just in case.
-    Statement
-      .where(
-        '_id.document_id' => PSC_DOCUMENT_ID,
-        :type => { '$in' => SUSPICIOUS_STATEMENT_TYPES },
-        :ended_date => nil,
-      )
-      .distinct(:entity_id)
   end
 
   # All the current companies from the PSC register which are based in the UK.
@@ -134,15 +122,25 @@ class PscStatsCalculator
       )
     return false if current_psc_ownerships.any?
 
-    current_statements = Statement
+    current_statements = current_statements(entity)
+    return false if current_statements.any?
+
+    true
+  end
+
+  def current_statements(entity)
+    Statement
       .where(
         '_id.document_id' => PSC_DOCUMENT_ID,
         :ended_date => nil,
         :entity => entity,
       )
-    return false if current_statements.any?
+  end
 
-    true
+  def current_suspicious_statements(entity)
+    current_statements(entity).where(
+      type: { '$in' => SUSPICIOUS_STATEMENT_TYPES },
+    )
   end
 
   # Direct parent companies which are not in the UK, current relationships only

@@ -108,6 +108,17 @@ RSpec.describe PscStatsCalculator do
       # Then it still only counts one company
       expect(stats.first.value).to eq 1
     end
+
+    it "doesn't count statements for dissolved companies" do
+      # Given a company with a Statement about its ownership being unknown
+      # And a dissolved company with a statement
+      dissolved_company = uk_psc_company
+      dissolved_company.update_attributes!(dissolution_date: '2019-03-25')
+      uk_psc_statement(dissolved_company)
+      # When we ask for the stats
+      # Then it still only counts one company
+      expect(stats.first.value).to eq 1
+    end
   end
 
   describe 'calculating the number of missing owners' do
