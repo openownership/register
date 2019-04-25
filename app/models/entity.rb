@@ -21,7 +21,7 @@ class Entity
   has_many :statements
 
   has_many :merged_entities, class_name: "Entity", inverse_of: :master_entity
-  field :merged_entities_count, type: Integer, default: 0
+  field :merged_entities_count, type: Integer
   belongs_to(
     :master_entity,
     class_name: "Entity",

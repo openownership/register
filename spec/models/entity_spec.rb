@@ -334,7 +334,24 @@ RSpec.describe Entity do
         end
 
         it "doesn't change the master entity's merged_entities_count" do
-          expect { subject.upsert }.not_to change { person.merged_entities_count }
+          expect(person.merged_entities_count).to eq(1)
+          subject.upsert
+          expect(person.reload.merged_entities_count).to eq(1)
+        end
+      end
+
+      context "when the existing document is a master_entity" do
+        let!(:person) { create(:natural_person) }
+        let!(:merged_person) { create(:natural_person, master_entity: person) }
+
+        subject do
+          Entity.new(identifiers: person.identifiers, name: 'Upserted Person')
+        end
+
+        it "doesn't change the entity's merged_entities_count" do
+          expect(person.merged_entities_count).to eq(1)
+          subject.upsert
+          expect(person.reload.merged_entities_count).to eq(1)
         end
       end
     end

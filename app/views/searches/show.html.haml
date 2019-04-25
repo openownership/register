@@ -68,7 +68,7 @@
                     - if record.natural_person?
                       .result-controls
                         = render partial: 'shared/entity_controlled_companies', locals: { entity: record }
-                    - if record.merged_entities_count.positive?
+                    - if record.merged_entities_count&.positive?
                       .result-merged-people
                         = t('.merged_people', count: record.merged_entities_count)
               = paginate @response.results
