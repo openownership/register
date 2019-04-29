@@ -262,8 +262,9 @@ RSpec.describe Entity do
         expect { subject.upsert }.to change { @entity.reload.name }.to(name)
       end
 
-      it 'updates the id of the subject to match the existing document' do
-        expect { subject.upsert }.to change { subject.id }.to(@entity.id)
+      it 'reloads the subject so it has all the fields of the existing document' do
+        subject.upsert
+        expect(subject).to eq @entity.reload
       end
 
       it 'does not create a new document' do
@@ -317,6 +318,40 @@ RSpec.describe Entity do
             identifier,
             other_identifier,
           ])
+        end
+      end
+
+      context "when the existing document is a merged person" do
+        let!(:person) { create(:natural_person) }
+        let!(:merged_person) { create(:natural_person, master_entity: person) }
+
+        subject do
+          Entity.new(identifiers: merged_person.identifiers, name: 'Upserted Person')
+        end
+
+        it "doesn't overwrite the master entity in the merged person" do
+          expect { subject.upsert }.not_to change { merged_person.master_entity_id }
+        end
+
+        it "doesn't change the master entity's merged_entities_count" do
+          expect(person.merged_entities_count).to eq(1)
+          subject.upsert
+          expect(person.reload.merged_entities_count).to eq(1)
+        end
+      end
+
+      context "when the existing document is a master_entity" do
+        let!(:person) { create(:natural_person) }
+        let!(:merged_person) { create(:natural_person, master_entity: person) }
+
+        subject do
+          Entity.new(identifiers: person.identifiers, name: 'Upserted Person')
+        end
+
+        it "doesn't change the entity's merged_entities_count" do
+          expect(person.merged_entities_count).to eq(1)
+          subject.upsert
+          expect(person.reload.merged_entities_count).to eq(1)
         end
       end
     end
