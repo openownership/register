@@ -103,6 +103,16 @@ Once all jobs have been processed in the Sidekiq admin panel (/admin/sidekiq)
 1. Run the [`EntityIntegrityChecker`](#the-entityintegritychecker) – and then note down the final results from the logs.
 1. Update [the tracking spreadsheet](https://docs.google.com/spreadsheets/d/1OWABqrHis4fznLZwTGu9TEpZjtRrD4Ko7T0kC7mFcCw/edit#gid=0) with the stats from the integrity checking
 
+## Running a BODS import
+
+The BODS importer is currently just an example, since we have no live data in
+BODS format. Therefore it loads data from our data examples on Github.
+
+You run it like any other importer: `heroku run:detached --app openownership-register bin/rails bods:trigger` and then spin up a worker.
+
+The example data is so small, this shouldn't need any upgrades to dyno sizes or
+redis caches.
+
 ## The `EntityIntegrityChecker`
 
 … is used to detect various potential issues with entities in the database.
