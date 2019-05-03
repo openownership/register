@@ -61,9 +61,9 @@ class PscImporter
     new_or_updated_child_entity = -> do
       entity = Entity.new(attributes)
       @entity_resolver.resolve!(entity)
+      entity.upsert_and_merge_duplicates!
+      index_entity(entity)
       entity
-        .tap(&method(:upsert_entity_and_handle_dups))
-        .tap(&method(:index_entity))
     end
 
     entity = Entity.with_identifiers(attributes[:identifiers]).first
@@ -127,9 +127,9 @@ class PscImporter
       )
     end
 
+    entity.upsert_and_merge_duplicates!
+    index_entity(entity)
     entity
-      .tap(&method(:upsert_entity_and_handle_dups))
-      .tap(&method(:index_entity))
   end
 
   def relationship!(child_entity, parent_entity, data)
@@ -219,22 +219,5 @@ class PscImporter
 
   def index_entity(entity)
     IndexEntityService.new(entity).index
-  end
-
-  def upsert_entity_and_handle_dups(entity)
-    entity.upsert
-  rescue DuplicateEntitiesDetected => ex
-    handle_duplicate_entities!(ex.criteria)
-    retry
-  end
-
-  def handle_duplicate_entities!(criteria)
-    entities = criteria.entries
-
-    to_remove, to_keep = EntityMergeDecider.new(*entities).call
-
-    Rails.logger.info "[PSC import] Duplicate entities detected for selector: #{criteria.selector} - attempting to merge entity A into entity B. A = ID: #{to_remove._id}, name: #{to_remove.name}, identifiers: #{to_remove.identifiers}; B = ID: #{to_keep._id}, name: #{to_keep.name}, identifiers: #{to_keep.identifiers};"
-
-    EntityMerger.new(to_remove, to_keep).call
   end
 end
