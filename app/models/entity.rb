@@ -31,6 +31,9 @@ class Entity
     counter_cache: :merged_entities_count,
   )
 
+  field :oc_updated_at, type: Time
+  field :last_resolved_at, type: Time
+
   index({ identifiers: 1 }, unique: true, sparse: true)
   index('identifiers.document_id' => 1)
   index(type: 1)
