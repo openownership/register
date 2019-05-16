@@ -39,6 +39,7 @@ class Entity
   index(type: 1)
   index(jurisdiction_code: 1)
   index(dissolution_date: 1)
+  index(last_resolved_at: 1)
 
   index_name "#{Rails.application.class.parent_name.underscore}_entities_#{Rails.env}"
 
