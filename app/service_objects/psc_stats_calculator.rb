@@ -1,9 +1,4 @@
 class PscStatsCalculator
-  # TODO: Store identifier in the DataSource
-  # TODO: Get importers to look in the DataSource for these kinds of details
-  # TODO: Give DataSource's a slug so we can pass that around
-  # TODO: Add an index on Entity.identifiers.document_id
-
   PSC_DOCUMENT_ID = 'GB PSC Snapshot'.freeze
   PSC_SOURCE_SLUG = 'uk-psc-register'.freeze
   # What kinds of 'Statement' about not having an owner are cause for suspicion?
