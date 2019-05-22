@@ -35,8 +35,9 @@
                       = sanitize statistic.title(@footnote_indices[statistic.id])
                     %td.statistic-count
                       = number_with_delimiter statistic.value
-                    %td.statistic-percentage
-                      = number_to_percentage statistic.percentage(@total), precision: 1
+                    - if statistic.show_as_percentage?
+                      %td.statistic-percentage
+                        = number_to_percentage statistic.percentage(@total), precision: 1
               %h3
                 = t('.statistics.footnotes')
               - @statistics.each do |statistic|

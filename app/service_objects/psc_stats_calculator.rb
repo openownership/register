@@ -45,6 +45,7 @@ class PscStatsCalculator
 
   def call
     stats = {
+      STAT_TYPES::DISSOLVED => 0,
       STAT_TYPES::TOTAL => 0,
       STAT_TYPES::PSC_UNKNOWN_OWNER => 0,
       STAT_TYPES::PSC_NO_OWNER => 0,
@@ -53,7 +54,12 @@ class PscStatsCalculator
       STAT_TYPES::PSC_SECRECY_RLE => 0,
     }
 
-    current_uk_legal_entities.no_timeout.each do |entity|
+    psc_uk_legal_entities.no_timeout.each do |entity|
+      if entity.dissolution_date.present?
+        stats[STAT_TYPES::DISSOLVED] += 1
+        # We don't count these towards the total
+        next
+      end
       stats[STAT_TYPES::TOTAL] += 1
       # How many have no declared owner at all?
       if no_declared_owner?(entity)
@@ -88,17 +94,16 @@ class PscStatsCalculator
     end
   end
 
-  # All the current companies from the PSC register which are based in the UK.
+  # All the companies from the PSC register which are based in the UK.
   # We're only concerned with UK companies, which isn't the same as companies
   # that are in the PSC data, because we get told about offshore companies via
   # the ownerships there too.
-  def current_uk_legal_entities
+  def psc_uk_legal_entities
     Entity
       .legal_entities
       .where(
         'identifiers.document_id' => PSC_DOCUMENT_ID,
         :jurisdiction_code => Jurisdictions::UK.downcase,
-        :dissolution_date => nil,
       )
   end
 

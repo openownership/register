@@ -84,6 +84,8 @@ en:
     psc_secrecy_rle:
       title: Companies with RLE in a secrecy jurisdiction
       footnote_html: Countries scoring 60 or above on the <a href="https://www.financialsecrecyindex.com/introduction/fsi-2018-results">Financial Secrecy Index 2018</a>
+    dissolved:
+      title: Total dissolved companies from the national UBO Register in the OpenOwnership register
   devise:
     confirmations:
       new:

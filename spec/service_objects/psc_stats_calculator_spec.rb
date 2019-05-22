@@ -15,7 +15,7 @@ RSpec.describe PscStatsCalculator do
       data_source.statistics.where(type: STAT_TYPES::TOTAL)
     end
 
-    it 'creates a DataSourceStatistic for the total number of companies' do
+    it 'creates a DataSourceStatistic for the total' do
       # Given a company that meets the criteria
       # When we ask for the stats
       # Then it creates one DataSourceStatistic of the right type
@@ -41,6 +41,41 @@ RSpec.describe PscStatsCalculator do
       company.update_attributes!(dissolution_date: '2019-03-25')
       # Then it stops counting that company
       expect(stats.first.value).to eq 0
+    end
+  end
+
+  describe 'calculating the number of dissolved companies' do
+    let!(:company) { uk_psc_company }
+    let!(:dissolved_company) { uk_psc_company }
+
+    before do
+      dissolved_company.update_attributes!(dissolution_date: '2019-03-25')
+    end
+
+    subject(:stats) do
+      PscStatsCalculator.new.call
+      data_source.reload
+      data_source.statistics.where(type: STAT_TYPES::DISSOLVED)
+    end
+
+    it 'creates a DataSourceStatistic for the total number of dissolved companies' do
+      # Given a company that meets the criteria
+      # When we ask for the stats
+      # Then it creates one DataSourceStatistic of the right type
+      expect(stats.count).to eq 1
+      # And it counts the company for that stat
+      expect(stats.first.value).to eq 1
+    end
+
+    it 'ignores companies from other sources, even UK ones' do
+      # Given a company that meets the criteria
+      # And a company that's from the UK, but not from the PSC data
+      create(:legal_entity, jurisdiction_code: 'gb', dissolution_date: '2019-03-25')
+      # And a company that's from elsewhere entirely
+      create(:legal_entity, jurisdiction_code: 'sk', dissolution_date: '2019-03-25')
+      # When we ask for the stats
+      # Then it only counts the one company
+      expect(stats.first.value).to eq 1
     end
   end
 

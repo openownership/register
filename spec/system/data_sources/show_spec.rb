@@ -31,6 +31,7 @@ RSpec.describe 'Data Source pages' do
           DataSourceStatistic::Types::PSC_OFFSHORE_RLE,
           DataSourceStatistic::Types::PSC_NON_LEGIT_RLE,
           DataSourceStatistic::Types::PSC_SECRECY_RLE,
+          DataSourceStatistic::Types::DISSOLVED,
         ],
       )
     end
@@ -44,9 +45,12 @@ RSpec.describe 'Data Source pages' do
         DataSourceStatistic::Types::PSC_SECRECY_RLE => 1,
         # The 12 above + two we added in with normal ownerships
         DataSourceStatistic::Types::TOTAL => 14,
+        DataSourceStatistic::Types::DISSOLVED => 1,
       }
     end
 
+    # Note that we don't expect a dissolved stat, dissolved companues are not
+    # included in the total so they don't get percentages calculated
     let(:expected_stats_percentages) do
       {
         DataSourceStatistic::Types::PSC_NO_OWNER => 28.6,
@@ -78,6 +82,9 @@ RSpec.describe 'Data Source pages' do
       # 1 Secrecy jurisdiction (also counts towards non-legit)
       uk_psc_company_with_rle_in('ky')
 
+      # 1 ended company (should only count towards dissolved companies)
+      uk_psc_company.update_attributes!(dissolution_date: '2019-03-29')
+
       # Things we shouldn't count
 
       # UK Companies from other sources
@@ -85,9 +92,6 @@ RSpec.describe 'Data Source pages' do
 
       # Foreign companies from other sources
       create(:legal_entity, jurisdiction_code: 'us')
-
-      # Ended companies
-      uk_psc_company.update_attributes!(dissolution_date: '2019-03-29')
 
       # Ended statements (counts towards total but not statement count)
       company_with_ended_statement = uk_psc_company
@@ -136,6 +140,7 @@ RSpec.describe 'Data Source pages' do
       expect(page.html).to include(I18n.t('data_source_statistics.psc_non_legit_rle.footnote_html'))
       expect(page).to have_text(I18n.t('data_source_statistics.psc_secrecy_rle.title'))
       expect(page.html).to include(I18n.t('data_source_statistics.psc_secrecy_rle.footnote_html'))
+      expect(page).to have_text(I18n.t('data_source_statistics.dissolved.title'))
 
       expected_stats.each do |type, value|
         within(".statistic-#{type.dasherize}") do

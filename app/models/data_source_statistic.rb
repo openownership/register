@@ -9,6 +9,7 @@ class DataSourceStatistic
 
   module Types
     TOTAL = 'total'.freeze
+    DISSOLVED = 'dissolved'.freeze
     PSC_UNKNOWN_OWNER = 'psc_unknown_owner'.freeze
     PSC_NO_OWNER = 'psc_no_owner'.freeze
     PSC_OFFSHORE_RLE = 'psc_offshore_rle'.freeze
@@ -18,5 +19,9 @@ class DataSourceStatistic
 
   def total?
     type == Types::TOTAL
+  end
+
+  def show_as_percentage?
+    type != Types::DISSOLVED
   end
 end
