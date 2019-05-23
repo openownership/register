@@ -141,6 +141,29 @@ heroku run:detached -s performance-l --app openownership-register time bin/rails
 
 Check the log for results and stats.
 
+## The `OpenCorporatesUpdater`
+
+… is used to update company data on a regular basis, by re-resolving each
+company with OpenCorporates.
+
+It's best to run this after an import, so that it only touches companies which
+were left untouched by that import.
+
+Note:this runs the actual resolutions as asynchronous jobs, so you need to
+ensure you have a redis instance available with enough memory to store all of
+the outdated legal entity ids (worst case around 250MB at the moment, with ~6
+million companies in the db). The redis also needs to be able to handle a lot of
+simultaneous connections (however many sidekiq is configured to make) so Heroku's
+default Redis probably won't cut it.
+
+Resolutions can be monitored via the sidekiq admin as with an import.
+
+To run the updater in production:
+
+```bash
+heroku run:detached -s performance-l --app openownership-register bin/rails runner "OpenCorporatesUpdater.new.call"
+```
+
 ### Un-merging people
 
 It's possible to remove one or more people from a 'merged' group by following

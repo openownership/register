@@ -380,6 +380,26 @@ RSpec.describe Entity do
     end
   end
 
+  describe '#upsert_and_merge_duplicates!' do
+    let(:oc_identifier) { { jurisdiction_code: 'gb', company_number: '12345' } }
+    let(:new_entity) { build(:legal_entity, identifiers: [oc_identifier]) }
+
+    context 'when there are no duplicates' do
+      it 'does a normal upsert' do
+        expect { new_entity.upsert }.to change { Entity.count }.by(1)
+      end
+    end
+
+    context 'when a duplicate Entity exists in the db already' do
+      let!(:existing_entity) { create(:legal_entity, identifiers: [oc_identifier]) }
+
+      it 'merges the two entities together and upserts the existing entity' do
+        expect { new_entity.upsert }.not_to change { Entity.count }
+        expect(new_entity.reload).to eq existing_entity.reload
+      end
+    end
+  end
+
   describe '#to_builder' do
     subject do
       described_class.new(

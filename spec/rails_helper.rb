@@ -32,4 +32,8 @@ RSpec.configure do |config|
     Mongoid::Tasks::Database.remove_undefined_indexes
     Mongoid::Tasks::Database.create_indexes
   end
+
+  config.before(:each) do
+    Sidekiq::Worker.clear_all
+  end
 end

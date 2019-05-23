@@ -31,11 +31,15 @@ class Entity
     counter_cache: :merged_entities_count,
   )
 
+  field :oc_updated_at, type: Time
+  field :last_resolved_at, type: Time
+
   index({ identifiers: 1 }, unique: true, sparse: true)
   index('identifiers.document_id' => 1)
   index(type: 1)
   index(jurisdiction_code: 1)
   index(dissolution_date: 1)
+  index(last_resolved_at: 1)
 
   index_name "#{Rails.application.class.parent_name.underscore}_entities_#{Rails.env}"
 
@@ -114,6 +118,29 @@ class Entity
     end
 
     retry
+  end
+
+  def upsert_and_merge_duplicates!
+    upsert
+  rescue DuplicateEntitiesDetected => ex
+    handle_duplicates!(ex.criteria)
+    retry
+  end
+
+  def handle_duplicates!(criteria)
+    entities = criteria.entries
+
+    to_remove, to_keep = EntityMergeDecider.new(*entities).call
+
+    log_message = "Duplicate entities detected for selector: " \
+                  "#{criteria.selector} - attempting to merge entity A into " \
+                  "entity B. A = ID: #{to_remove._id}, name: " \
+                  "#{to_remove.name}, identifiers: #{to_remove.identifiers}; " \
+                  "B = ID: #{to_keep._id}, name: #{to_keep.name}, " \
+                  "identifiers: #{to_keep.identifiers};"
+    Rails.logger.info log_message
+
+    EntityMerger.new(to_remove, to_keep).call
   end
 
   def as_indexed_json(_options = {})
