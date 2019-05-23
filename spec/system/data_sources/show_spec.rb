@@ -148,7 +148,6 @@ RSpec.describe 'Data Source pages' do
       expect(page).to have_text(I18n.t('data_source_statistics.register_total.title'))
       expect(page.html).to include(I18n.t('data_source_statistics.register_total.footnote_html'))
       expect(page).to have_text(I18n.t('data_source_statistics.psc_no_owner.title'))
-      expect(page.html).to include(I18n.t('data_source_statistics.psc_no_owner.footnote_html'))
       expect(page).to have_text(I18n.t('data_source_statistics.psc_unknown_owner.title'))
       expect(page.html).to include(I18n.t('data_source_statistics.psc_unknown_owner.footnote_html'))
       expect(page).to have_text(I18n.t('data_source_statistics.psc_offshore_rle.title'))

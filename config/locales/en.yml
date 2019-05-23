@@ -76,10 +76,9 @@ en:
       footnote_html: The OpenOwnership Register only contains data on companies that are registered on the PSC Register.
     psc_no_owner:
       title: Companies with missing UBO declaration
-      footnote_html: UK companies mentioned in the PSC data (e.g. as an RLE). Other non-declaring UK companies may exist but not be mentioned at all.
     psc_unknown_owner:
       title: Companies with 'No UBO' declaration
-      footnote_html: <a href="https://github.com/companieshouse/api-enumerations/blob/master/psc_descriptions.yml#L126">Enumeration of reasons for declarations with no UBO</a>
+      footnote_html: <a href="https://github.com/companieshouse/api-enumerations/blob/master/psc_descriptions.yml#L126">Enumeration of reasons for declarations with no UBO</a>.
     psc_offshore_rle:
       title: Companies with RLE outside of the UK
     psc_non_legit_rle:
