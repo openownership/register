@@ -9,6 +9,7 @@ class DataSourceStatistic
 
   module Types
     TOTAL = 'total'.freeze
+    REGISTER_TOTAL = 'register_total'.freeze
     DISSOLVED = 'dissolved'.freeze
     PSC_UNKNOWN_OWNER = 'psc_unknown_owner'.freeze
     PSC_NO_OWNER = 'psc_no_owner'.freeze

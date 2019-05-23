@@ -69,7 +69,11 @@ en:
         footnotes: Footnotes
   data_source_statistics:
     total:
-      title: Total companies from this source in the OpenOwnership register
+      title: Total non-dissolved companies on the national commerce register
+      footnote_html: '<a href="https://www.gov.uk/government/publications/incorporated-companies-in-the-uk-january-to-march-2019/incorporated-companies-in-the-uk-january-to-march-2019">Companies House statistics, March 2019</a>: The total number includes active and dormant companies (‘effective’), as well as those in the process of dissolution (non-effective). It excludes dissolved companies.'
+    register_total:
+      title: Total non-dissolved companies from the national UBO Register in the OpenOwnership register
+      footnote_html: The OpenOwnership Register only contains data on companies that are registered on the PSC Register.
     psc_no_owner:
       title: Companies with missing UBO declaration
       footnote_html: UK companies mentioned in the PSC data (e.g. as an RLE). Other non-declaring UK companies may exist but not be mentioned at all.

@@ -46,7 +46,7 @@ class PscStatsCalculator
   def call
     stats = {
       STAT_TYPES::DISSOLVED => 0,
-      STAT_TYPES::TOTAL => 0,
+      STAT_TYPES::REGISTER_TOTAL => 0,
       STAT_TYPES::PSC_UNKNOWN_OWNER => 0,
       STAT_TYPES::PSC_NO_OWNER => 0,
       STAT_TYPES::PSC_OFFSHORE_RLE => 0,
@@ -60,7 +60,7 @@ class PscStatsCalculator
         # We don't count these towards the total
         next
       end
-      stats[STAT_TYPES::TOTAL] += 1
+      stats[STAT_TYPES::REGISTER_TOTAL] += 1
       # How many have no declared owner at all?
       if no_declared_owner?(entity)
         stats[STAT_TYPES::PSC_NO_OWNER] += 1

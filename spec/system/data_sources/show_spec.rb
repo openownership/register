@@ -26,6 +26,8 @@ RSpec.describe 'Data Source pages' do
         data_availability: 'test [markdown](http://example.com/availability)',
         timeline_url: 'http://example.com/twitter',
         current_statistic_types: [
+          DataSourceStatistic::Types::TOTAL,
+          DataSourceStatistic::Types::REGISTER_TOTAL,
           DataSourceStatistic::Types::PSC_NO_OWNER,
           DataSourceStatistic::Types::PSC_UNKNOWN_OWNER,
           DataSourceStatistic::Types::PSC_OFFSHORE_RLE,
@@ -38,13 +40,14 @@ RSpec.describe 'Data Source pages' do
 
     let(:expected_stats) do
       {
+        DataSourceStatistic::Types::TOTAL => 15,
+        # The 12 non-dissolved below + two we added in with normal ownerships
+        DataSourceStatistic::Types::REGISTER_TOTAL => 14,
         DataSourceStatistic::Types::PSC_NO_OWNER => 4,
         DataSourceStatistic::Types::PSC_UNKNOWN_OWNER => 5,
         DataSourceStatistic::Types::PSC_OFFSHORE_RLE => 3,
         DataSourceStatistic::Types::PSC_NON_LEGIT_RLE => 2,
         DataSourceStatistic::Types::PSC_SECRECY_RLE => 1,
-        # The 12 above + two we added in with normal ownerships
-        DataSourceStatistic::Types::TOTAL => 14,
         DataSourceStatistic::Types::DISSOLVED => 1,
       }
     end
@@ -53,16 +56,26 @@ RSpec.describe 'Data Source pages' do
     # included in the total so they don't get percentages calculated
     let(:expected_stats_percentages) do
       {
-        DataSourceStatistic::Types::PSC_NO_OWNER => 28.6,
-        DataSourceStatistic::Types::PSC_UNKNOWN_OWNER => 35.7,
-        DataSourceStatistic::Types::PSC_OFFSHORE_RLE => 21.4,
-        DataSourceStatistic::Types::PSC_NON_LEGIT_RLE => 14.3,
-        DataSourceStatistic::Types::PSC_SECRECY_RLE => 7.1,
         DataSourceStatistic::Types::TOTAL => 100.0,
+        DataSourceStatistic::Types::REGISTER_TOTAL => 93.3,
+        DataSourceStatistic::Types::PSC_NO_OWNER => 26.7,
+        DataSourceStatistic::Types::PSC_UNKNOWN_OWNER => 33.3,
+        DataSourceStatistic::Types::PSC_OFFSHORE_RLE => 20.0,
+        DataSourceStatistic::Types::PSC_NON_LEGIT_RLE => 13.3,
+        DataSourceStatistic::Types::PSC_SECRECY_RLE => 6.7,
       }
     end
 
     before do
+      # How many companies are there in the real world, outside of those who are
+      # reporting PSCs? One more than the total we have in the register.
+      create(
+        :data_source_statistic,
+        type: DataSourceStatistic::Types::TOTAL,
+        value: 15,
+        data_source: psc_data_source,
+      )
+
       # Things we should count
 
       # 5 Statements
@@ -131,6 +144,9 @@ RSpec.describe 'Data Source pages' do
       # Statistics
       expect(page).to have_text(I18n.t('data_sources.show.statistics_title'))
       expect(page).to have_text(I18n.t('data_source_statistics.total.title'))
+      expect(page.html).to include(I18n.t('data_source_statistics.total.footnote_html'))
+      expect(page).to have_text(I18n.t('data_source_statistics.register_total.title'))
+      expect(page.html).to include(I18n.t('data_source_statistics.register_total.footnote_html'))
       expect(page).to have_text(I18n.t('data_source_statistics.psc_no_owner.title'))
       expect(page.html).to include(I18n.t('data_source_statistics.psc_no_owner.footnote_html'))
       expect(page).to have_text(I18n.t('data_source_statistics.psc_unknown_owner.title'))

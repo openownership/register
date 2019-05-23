@@ -21,16 +21,11 @@ class DataSource
 
   def current_statistics
     # Pull out the latest stat for each type we want, preserving the
-    # order of current_statistic_types, but putting the total first
+    # order of current_statistic_types
     stats_by_type = statistics_by_type
     return [] if stats_by_type.empty?
-    stats = current_statistic_types
+    current_statistic_types
       .map { |type| stats_by_type[type]&.max_by(&:created_at) }
       .compact
-    total_type = DataSourceStatistic::Types::TOTAL
-    if stats_by_type[total_type].present?
-      stats.prepend(stats_by_type[total_type].max_by(&:created_at))
-    end
-    stats
   end
 end

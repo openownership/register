@@ -6,13 +6,13 @@ RSpec.describe PscStatsCalculator do
 
   STAT_TYPES = DataSourceStatistic::Types
 
-  describe 'calculating the total number of companies' do
+  describe 'calculating the total companies in the register' do
     let!(:company) { uk_psc_company }
 
     subject(:stats) do
       PscStatsCalculator.new.call
       data_source.reload
-      data_source.statistics.where(type: STAT_TYPES::TOTAL)
+      data_source.statistics.where(type: STAT_TYPES::REGISTER_TOTAL)
     end
 
     it 'creates a DataSourceStatistic for the total' do
