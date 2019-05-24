@@ -69,13 +69,16 @@ en:
         footnotes: Footnotes
   data_source_statistics:
     total:
-      title: Total companies from this source in the OpenOwnership register
+      title: Total non-dissolved companies on the national commerce register
+      footnote_html: '<a href="https://www.gov.uk/government/publications/incorporated-companies-in-the-uk-january-to-march-2019/incorporated-companies-in-the-uk-january-to-march-2019">Companies House statistics, March 2019</a>: The total number includes active and dormant companies (‘effective’), as well as those in the process of dissolution (non-effective). It excludes dissolved companies.'
+    register_total:
+      title: Total non-dissolved companies from the national UBO Register in the OpenOwnership register
+      footnote_html: The OpenOwnership Register only contains data on companies that are registered on the PSC Register.
     psc_no_owner:
       title: Companies with missing UBO declaration
-      footnote_html: UK companies mentioned in the PSC data (e.g. as an RLE). Other non-declaring UK companies may exist but not be mentioned at all.
     psc_unknown_owner:
       title: Companies with 'No UBO' declaration
-      footnote_html: <a href="https://github.com/companieshouse/api-enumerations/blob/master/psc_descriptions.yml#L126">Enumeration of reasons for declarations with no UBO</a>
+      footnote_html: <a href="https://github.com/companieshouse/api-enumerations/blob/master/psc_descriptions.yml#L126">Enumeration of reasons for declarations with no UBO</a>.
     psc_offshore_rle:
       title: Companies with RLE outside of the UK
     psc_non_legit_rle:
@@ -84,6 +87,8 @@ en:
     psc_secrecy_rle:
       title: Companies with RLE in a secrecy jurisdiction
       footnote_html: Countries scoring 60 or above on the <a href="https://www.financialsecrecyindex.com/introduction/fsi-2018-results">Financial Secrecy Index 2018</a>
+    dissolved:
+      title: Total dissolved companies from the national UBO Register in the OpenOwnership register
   devise:
     confirmations:
       new:
