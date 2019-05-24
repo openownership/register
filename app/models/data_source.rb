@@ -16,7 +16,7 @@ class DataSource
   index({ name: 1 }, unique: true)
 
   def statistics_by_type
-    statistics.to_a.group_by(&:type)
+    statistics.published.to_a.group_by(&:type)
   end
 
   def current_statistics

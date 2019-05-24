@@ -10,12 +10,14 @@ RSpec.describe PscStatsCalculator do
     let!(:company) { uk_psc_company }
 
     subject(:stats) do
-      PscStatsCalculator.new.call
+      Sidekiq::Testing.inline! do
+        PscStatsCalculator.new.call
+      end
       data_source.reload
-      data_source.statistics.where(type: STAT_TYPES::REGISTER_TOTAL)
+      data_source.statistics.draft.where(type: STAT_TYPES::REGISTER_TOTAL)
     end
 
-    it 'creates a DataSourceStatistic for the total' do
+    it 'creates a draft DataSourceStatistic for the total' do
       # Given a company that meets the criteria
       # When we ask for the stats
       # Then it creates one DataSourceStatistic of the right type
@@ -53,9 +55,11 @@ RSpec.describe PscStatsCalculator do
     end
 
     subject(:stats) do
-      PscStatsCalculator.new.call
+      Sidekiq::Testing.inline! do
+        PscStatsCalculator.new.call
+      end
       data_source.reload
-      data_source.statistics.where(type: STAT_TYPES::DISSOLVED)
+      data_source.statistics.draft.where(type: STAT_TYPES::DISSOLVED)
     end
 
     it 'creates a DataSourceStatistic for the total number of dissolved companies' do
@@ -83,9 +87,11 @@ RSpec.describe PscStatsCalculator do
     let!(:statement) { uk_psc_statement(uk_psc_company) }
 
     subject(:stats) do
-      PscStatsCalculator.new.call
+      Sidekiq::Testing.inline! do
+        PscStatsCalculator.new.call
+      end
       data_source.reload
-      data_source.statistics.where(type: STAT_TYPES::PSC_UNKNOWN_OWNER)
+      data_source.statistics.draft.where(type: STAT_TYPES::PSC_UNKNOWN_OWNER)
     end
 
     it 'creates a DataSourceStatistic for the number of unknown owners' do
@@ -160,9 +166,11 @@ RSpec.describe PscStatsCalculator do
     let!(:missing_owner_company) { uk_psc_company }
 
     subject(:stats) do
-      PscStatsCalculator.new.call
+      Sidekiq::Testing.inline! do
+        PscStatsCalculator.new.call
+      end
       data_source.reload
-      data_source.statistics.where(type: STAT_TYPES::PSC_NO_OWNER)
+      data_source.statistics.draft.where(type: STAT_TYPES::PSC_NO_OWNER)
     end
 
     it 'creates a DataSourceStatistic for the number of missing owners' do
@@ -226,9 +234,11 @@ RSpec.describe PscStatsCalculator do
     let!(:company_with_rle) { uk_psc_company_with_rle_in('us') }
 
     subject(:stats) do
-      PscStatsCalculator.new.call
+      Sidekiq::Testing.inline! do
+        PscStatsCalculator.new.call
+      end
       data_source.reload
-      data_source.statistics.where(type: STAT_TYPES::PSC_OFFSHORE_RLE)
+      data_source.statistics.draft.where(type: STAT_TYPES::PSC_OFFSHORE_RLE)
     end
 
     it 'creates a DataSourceStatistic for the number of non-UK RLEs' do
@@ -305,11 +315,11 @@ RSpec.describe PscStatsCalculator do
     let!(:company_with_rle) { uk_psc_company_with_rle_in('mx') }
 
     subject(:stats) do
-      PscStatsCalculator.new.call
+      Sidekiq::Testing.inline! do
+        PscStatsCalculator.new.call
+      end
       data_source.reload
-      data_source.statistics.where(
-        type: STAT_TYPES::PSC_NON_LEGIT_RLE,
-      )
+      data_source.statistics.draft.where(type: STAT_TYPES::PSC_NON_LEGIT_RLE)
     end
 
     it 'creates a DataSourceStatistic for the number of non-legit RLEs' do
@@ -338,9 +348,11 @@ RSpec.describe PscStatsCalculator do
     let!(:company_with_rle) { uk_psc_company_with_rle_in('ky') }
 
     subject(:stats) do
-      PscStatsCalculator.new.call
+      Sidekiq::Testing.inline! do
+        PscStatsCalculator.new.call
+      end
       data_source.reload
-      data_source.statistics.where(type: STAT_TYPES::PSC_SECRECY_RLE)
+      data_source.statistics.draft.where(type: STAT_TYPES::PSC_SECRECY_RLE)
     end
 
     it 'creates a DataSourceStatistic for the number of secrecy RLEs' do
@@ -372,9 +384,11 @@ RSpec.describe PscStatsCalculator do
     uk_psc_company_with_rle_in('ky')
 
     # When we ask for the stats for all three types of RLE
-    PscStatsCalculator.new.call
+    Sidekiq::Testing.inline! do
+      PscStatsCalculator.new.call
+    end
     data_source.reload
-    stats = data_source.statistics.where(
+    stats = data_source.statistics.draft.where(
       type: {
         "$in" => [
           STAT_TYPES::PSC_OFFSHORE_RLE,

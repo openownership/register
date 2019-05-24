@@ -4,8 +4,12 @@ class DataSourceStatistic
 
   field :type, type: String
   field :value, type: Integer
+  field :published, type: Boolean
 
   embedded_in :data_source
+
+  scope :published, -> { where(published: true) }
+  scope :draft, -> { where(published: false) }
 
   module Types
     TOTAL = 'total'.freeze

@@ -73,6 +73,7 @@ RSpec.describe 'Data Source pages' do
         :data_source_statistic,
         type: DataSourceStatistic::Types::TOTAL,
         value: 15,
+        published: true,
         data_source: psc_data_source,
       )
 
@@ -121,7 +122,13 @@ RSpec.describe 'Data Source pages' do
       # UK PSC sourced companies without a jurisdiction_code
       uk_psc_company.update_attributes!(jurisdiction_code: '')
 
-      PscStatsCalculator.new.call
+      # Calculate the draft stats
+      Sidekiq::Testing.inline! do
+        PscStatsCalculator.new.call
+      end
+
+      # Publish the draft stats
+      psc_data_source.reload.statistics.each { |s| s.update_attribute(:published, true) }
     end
 
     it 'Shows a full page with content and statistics' do
@@ -167,6 +174,19 @@ RSpec.describe 'Data Source pages' do
         within(".statistic-#{type.dasherize}") do
           expect(page).to have_css('.statistic-percentage', text: "#{value}%")
         end
+      end
+    end
+
+    it "Doesn't show draft statistics" do
+      psc_data_source.statistics.create!(
+        type: DataSourceStatistic::Types::TOTAL,
+        value: 1000,
+        published: false,
+      )
+      visit data_source_url(psc_data_source)
+      expected_total = expected_stats[DataSourceStatistic::Types::TOTAL]
+      within(".statistic-#{DataSourceStatistic::Types::TOTAL.dasherize}") do
+        expect(page).to have_css('.statistic-count', text: expected_total)
       end
     end
   end

@@ -431,17 +431,36 @@ and edit, then made a data migration to load it in.
 If you want statistics for that page also, you'll need to implement a
 'calculator' like the `PscStatsCalculator` to create some
 `DataSourceStatistics`. This interface is still a work in progress, but the
-current code and views assume that you'll have a total count stat, and then some
-other `types` you'll define in `DataSourceStatistic::Types` for whatever your
-other stats are. At the moment, it's assumed that every stat is a count of
-companies that meet some criteria, which can also be expressed as a percentage
-of the total.
+current code and views assume that you'll have a total count stat, which
+represents the total number of companies in the real world, a register total
+stat representing how many of those companies the register has data for and then
+some other `types` you'll define in `DataSourceStatistic::Types` for whatever your
+other stats are. At the moment, it's assumed that stats are a count of companies
+that meet some criteria. If this cannot be expressed as a percentage of the
+total you should update the method `show_as_percentage?` to exclude it.
 
 # Running the PscStatsCalculator
 
 You can run the `PscStatsCalculator` at any point and it will create a new set
-of `DataSourceStatistics` for the PSC register, as well as a total.
+of draft `DataSourceStatistics` for the PSC register. The real world totals are
+not calculated by this process (they can't be), so they should be updated
+manually through a data migration. Once you're happy with the draft calculations
+you have to publish them manually (through the rails console) to make them
+appear on the site.
 
-```shell
-heroku run --app openownership-register bin/rails runner "PscStatsCalculator.new/call"
-```
+1. Upgrade the Redis instance to 'Large' to store all the calculation jobs
+2. Trigger the jobs which create new draft statistics
+   ```shell
+   heroku run --app openownership-register bin/rails runner "PscStatsCalculator.new.call"
+   ```
+3. Start a new `performance-l` worker dyno to run the calculations
+4. Monitor the jobs in sidekiq until they're all completed
+5. When finished, you can check the draft numbers in the shell
+   ```shell
+   heroku run --app openownership-register bin/rails c
+   psc_data_source = DataSource.find('uk-psc-register')
+   psc_data_source.statistics.draft.pluck(:type, :value)
+   ```
+6. If these look right, you can publish those numbers by setting `published` to
+   true on them all:
+   `psc_data_source.statistics.draft.update_all(published: true)`
