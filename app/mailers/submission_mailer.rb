@@ -15,4 +15,9 @@ class SubmissionMailer < ApplicationMailer
     )
     mail(to: @submission.user.email, subject: I18n.t('submission_mailer.submission_approved.subject'))
   end
+
+  def submission_approval_requested(submission)
+    @submission = submission
+    mail(to: admin_emails, subject: I18n.t('submission_mailer.submission_approval_requested.subject'))
+  end
 end

@@ -7,6 +7,9 @@
     "ADMIN_BASIC_AUTH": {
       "required": true
     },
+    "ADMIN_EMAILS": {
+      "required": true
+    },
     "BASIC_AUTH": {
       "required": true
     },

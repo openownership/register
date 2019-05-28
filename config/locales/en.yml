@@ -245,6 +245,10 @@ en:
       subject: Your submission was approved
       approval: "Thank you for submitting your information to the OpenOwnership Register. We're pleased to notify you that your submission has been approved and is now available on the Register."
       view: View your data here
+    submission_approval_requested:
+      subject: A user has requested approval for their submission
+      approval: "A user on the OpenOwnership Register has requested that you approve their submission."
+      view: View the submission here
 
   # From https://github.com/companieshouse/api-enumerations/blob/develop/psc_descriptions.yml
   statement-descriptions:
