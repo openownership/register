@@ -1,8 +1,8 @@
 Devise.setup do |config|
   config.mailer_sender = if ENV.key?('HEROKU_APP_NAME')
-    format '"OpenOwnership Register (%{app_name})" <account+%{app_name}@openownership.org>', app_name: ENV['HEROKU_APP_NAME']
+    format '"OpenOwnership Register (%{app_name})" <register+%{app_name}@openownership.org>', app_name: ENV['HEROKU_APP_NAME']
   else
-    '"OpenOwnership Register" <account@openownership.org>'
+    '"OpenOwnership Register" <register@openownership.org>'
   end
 
   config.parent_mailer = 'ApplicationMailer'

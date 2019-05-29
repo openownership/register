@@ -1,8 +1,8 @@
 class SubmissionMailer < ApplicationMailer
   default from: if ENV.key?('HEROKU_APP_NAME')
-                  format 'OpenOwnership Register (%{app_name}) <system+%{app_name}@openownership.org>', app_name: ENV['HEROKU_APP_NAME']
+                  format 'OpenOwnership Register (%{app_name}) <register+%{app_name}@openownership.org>', app_name: ENV['HEROKU_APP_NAME']
                 else
-                  'OpenOwnership Register <system@openownership.org>'
+                  'OpenOwnership Register <register@openownership.org>'
                 end
 
   def submission_approved(submission)
@@ -14,5 +14,10 @@ class SubmissionMailer < ApplicationMailer
       },
     )
     mail(to: @submission.user.email, subject: I18n.t('submission_mailer.submission_approved.subject'))
+  end
+
+  def submission_approval_requested(submission)
+    @submission = submission
+    mail(to: admin_emails, subject: I18n.t('submission_mailer.submission_approval_requested.subject'))
   end
 end

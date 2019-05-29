@@ -14,6 +14,7 @@ module Submissions
     def submit
       submission = current_user.submissions.find(params[:id])
       submission.update_attribute(:submitted_at, Time.now.utc)
+      SubmissionMailer.submission_approval_requested(submission).deliver_now
       redirect_to submissions_path, notice: I18n.t('submissions.submissions.submit.success', entity: submission.entity.name)
     end
 
