@@ -37,8 +37,7 @@ RSpec.describe 'Tree view' do
     include_context 'basic entity with one owner'
 
     it 'shows the owner relationship as a tree' do
-      visit entity_path(company)
-      click_link 'View as tree'
+      visit tree_entity_path(company)
 
       expect_person_node_for(person)
       expect_relationship_link_for(relationship)
@@ -50,8 +49,7 @@ RSpec.describe 'Tree view' do
     include_context 'entity with two owners'
 
     it 'shows both owners' do
-      visit entity_path(company)
-      click_link 'View as tree'
+      visit tree_entity_path(company)
 
       expect_person_node_for(person_1)
       expect_person_node_for(person_2)
@@ -65,8 +63,7 @@ RSpec.describe 'Tree view' do
     include_context 'entity with intermediate ownership'
 
     it 'shows the whole chain for the start company' do
-      visit entity_path(start_company)
-      click_link 'View as tree'
+      visit tree_entity_path(start_company)
 
       expect_person_node_for(ultimate_owner)
 
@@ -85,8 +82,7 @@ RSpec.describe 'Tree view' do
     include_context 'entity with ownership at different levels'
 
     it 'shows the whole network' do
-      visit entity_path(start_company)
-      click_link 'View as tree'
+      visit tree_entity_path(start_company)
 
       expect_person_node_for(ultimate_owner)
       expect_person_node_for(direct_owner)
@@ -105,8 +101,7 @@ RSpec.describe 'Tree view' do
     include_context 'entity with no ultimate ownership'
 
     it 'shows a tree with an unknown owner at the top' do
-      visit entity_path(start_company)
-      click_link 'View as tree'
+      visit tree_entity_path(start_company)
 
       expect(page).to have_css('.tree-node--natural-person', text: 'No person')
 
@@ -122,8 +117,7 @@ RSpec.describe 'Tree view' do
     include_context 'entity with unknown ultimate ownership'
 
     it 'shows a tree with no person at the top' do
-      visit entity_path(start_company)
-      click_link 'View as tree'
+      visit tree_entity_path(start_company)
 
       expect(page).to have_css('.tree-node--natural-person', text: 'Unknown')
 
@@ -138,10 +132,17 @@ RSpec.describe 'Tree view' do
   context 'for an entity with circular ownership' do
     include_context 'entity with circular ownership'
 
-    it "doesn't show a link to the tree view" do
-      visit entity_path(company_1)
-      expect(page).to have_text("#{company_1.name} has no beneficial owners")
-      expect(page).not_to have_link('View as tree')
+    it 'shows the circular ownership' do
+      visit tree_entity_path(company_1)
+
+      expect_company_node_for(company_2)
+
+      expect_relationship_link_for(company_1_to_company_2_relationship)
+      expect_relationship_link_for(company_2_to_company_1_relationship)
+
+      expect(page).to have_css('.tree-node--circular-ownership')
+
+      expect_root_node_for(company_1)
     end
   end
 
@@ -149,8 +150,7 @@ RSpec.describe 'Tree view' do
     include_context 'entity with circular ownership and an ultimate owner'
 
     it 'shows the circular ownership and the ultimate owner' do
-      visit entity_path(start_company)
-      click_link 'View as tree'
+      visit tree_entity_path(start_company)
 
       expect_person_node_for(ultimate_owner)
 
@@ -170,8 +170,7 @@ RSpec.describe 'Tree view' do
     include_context 'entity with diamond ownership'
 
     it 'shows the diamond as two separate ownerships' do
-      visit entity_path(start_company)
-      click_link 'View as tree'
+      visit tree_entity_path(start_company)
 
       nodes = all(".tree-node--natural-person[data-node='#{ultimate_owner.name}']")
       expect(nodes.length).to eq(2)
@@ -205,8 +204,7 @@ RSpec.describe 'Tree view' do
       end
 
       it 'shows a single person as the ultimate owner of the company' do
-        visit entity_path(company)
-        click_link 'View as tree'
+        visit tree_entity_path(company)
 
         expect_person_node_for(person_1)
         expect(page).not_to have_css(
@@ -226,8 +224,7 @@ RSpec.describe 'Tree view' do
       end
 
       it 'shows the same person twice, once for each interest' do
-        visit entity_path(company)
-        click_link 'View as tree'
+        visit tree_entity_path(company)
 
         nodes = all(".tree-node--natural-person[data-node='#{person_1.name}']")
         expect(nodes.length).to eq(2)
@@ -245,8 +242,7 @@ RSpec.describe 'Tree view' do
     include_context 'two people owning the two different companies merged into one'
 
     it 'shows the same person as the ultimate owner of both companies' do
-      visit entity_path(company_1)
-      click_link 'View as tree'
+      visit tree_entity_path(company_1)
 
       expect_person_node_for(person_1)
       expect(page).not_to have_css(
@@ -255,8 +251,7 @@ RSpec.describe 'Tree view' do
       expect_relationship_link_for(person_1_relationship)
       expect_root_node_for(company_1)
 
-      visit entity_path(company_2)
-      click_link 'View as tree'
+      visit tree_entity_path(company_2)
 
       expect_person_node_for(person_1)
       expect(page).not_to have_css(
