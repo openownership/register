@@ -5,7 +5,7 @@ class RelationshipsController < ApplicationController
 
     CreateRelationshipsForStatements.call(source_entity)
 
-    relationships = RelationshipGraph
+    relationships = InferredRelationshipGraph
       .new(target_entity)
       .relationships_to(source_entity)
     relationships = RelationshipsSorter.new(relationships)

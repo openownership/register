@@ -70,7 +70,7 @@ class EntitiesController < ApplicationController
   def ultimate_source_relationship_groups(entity)
     label_for = ->(r) { r.source.id.to_s.include?('statement') ? rand : r.source.name }
 
-    relationships = RelationshipGraph.new(entity).ultimate_source_relationships
+    relationships = InferredRelationshipGraph.new(entity).ultimate_source_relationships
 
     RelationshipsSorter.new(relationships).call
       .uniq { |r| r.sourced_relationships.first.keys_for_uniq_grouping }
