@@ -51,6 +51,13 @@ class EntitiesController < ApplicationController
     @entity = decorate(entity)
   end
 
+  def graph
+    entity = Entity.find(params[:id])
+    redirect_to_master_entity(:show, entity)
+    @graph = decorate(EntityGraph.new(entity))
+    @entity = decorate(entity)
+  end
+
   def opencorporates_additional_info
     entity = Entity.find(params[:id])
     begin
