@@ -50,6 +50,14 @@ RSpec.describe EntityGraphDecorator do
       expect(subject['data']['source']).to eq person.id.to_s
       expect(subject['data']['target']).to eq entity.id.to_s
     end
+
+    context "when there's a circular relationship" do
+      let(:relationship) { create(:relationship, source: entity, target: entity) }
+
+      it 'adds the circular class if its a circular relationship' do
+        expect(subject['classes']).to include 'circular'
+      end
+    end
   end
 
   describe 'generating labels' do

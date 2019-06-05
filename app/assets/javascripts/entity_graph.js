@@ -4,6 +4,7 @@
 $(function() {
   var elements, selected, cy;
   var $container = $('.cytoscape-container');
+  var nodeTextMaxWidth = 300;
   var nodeStyles = [
     {
       selector: 'node',
@@ -23,7 +24,7 @@ $(function() {
         'text-halign': 'center',
         'font-size': '16px',
         'text-wrap': 'wrap',
-        'text-max-width': '300px'
+        'text-max-width': nodeTextMaxWidth + 'px'
       }
     },
     {
@@ -75,6 +76,12 @@ $(function() {
         'target-arrow-color': '#CCC',
         'width': 1,
         'line-style': 'dashed'
+      }
+    },
+    {
+      selector: 'edge.circular',
+      style: {
+        'control-point-step-size': (nodeTextMaxWidth / 2) + 'px'
       }
     }
   ];

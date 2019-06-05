@@ -52,7 +52,11 @@ class EntityGraphDecorator < ApplicationDecorator
   end
 
   def cytoscape_relationship_edge(edge)
-    { data: { source: edge.source_id, target: edge.target_id } }
+    classes = edge.source_id == edge.target_id ? ['circular'] : []
+    {
+      data: { id: edge.id, source: edge.source_id, target: edge.target_id },
+      classes: classes,
+    }
   end
 
   def cytoscape_label_edge(edge)
