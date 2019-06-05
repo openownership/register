@@ -42,6 +42,7 @@ class EntityGraphDecorator < ApplicationDecorator
     path = entity_node_path(node)
     entity = node.entity.decorate(context: context)
     classes = path.present? ? ['linkable'] : []
+    classes << 'dissolved' if entity.dissolution_date
     { data: { label: entity.name, id: node.id, path: path }, classes: classes }
   end
 
@@ -53,6 +54,7 @@ class EntityGraphDecorator < ApplicationDecorator
 
   def cytoscape_relationship_edge(edge)
     classes = edge.source_id == edge.target_id ? ['circular'] : []
+    classes << 'ended' if edge.relationship.ended_date
     {
       data: { id: edge.id, source: edge.source_id, target: edge.target_id },
       classes: classes,

@@ -55,6 +55,12 @@ $(function() {
       style: {
         'color': '#3C31D4'
       }
+    },
+    {
+      selector: 'node.dissolved',
+      style: {
+        'background-color': '#CCC'
+      }
     }
   ];
   var edgeStyles = [
@@ -82,6 +88,13 @@ $(function() {
       selector: 'edge.circular',
       style: {
         'control-point-step-size': (nodeTextMaxWidth / 2) + 'px'
+      }
+    },
+    {
+      selector: 'edge.ended',
+      style: {
+        'line-color': '#CCC',
+        'target-arrow-color': '#CCC'
       }
     }
   ];

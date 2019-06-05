@@ -38,6 +38,14 @@ RSpec.describe EntityGraphDecorator do
         expect(subject.first['data']['label']).to eq 'test company'
       end
     end
+
+    context 'when the entity is dissolved' do
+      let(:entity) { create(:legal_entity, dissolution_date: Time.zone.today) }
+
+      it 'adds the dissolved class if the entity is dissolved' do
+        expect(subject.first['classes']).to include 'dissolved'
+      end
+    end
   end
 
   describe 'generating relationship edges' do
@@ -56,6 +64,21 @@ RSpec.describe EntityGraphDecorator do
 
       it 'adds the circular class if its a circular relationship' do
         expect(subject['classes']).to include 'circular'
+      end
+    end
+
+    context "when there's an ended relationship" do
+      let(:relationship) do
+        create(
+          :relationship,
+          source: person,
+          target: entity,
+          ended_date: '2019-06-10',
+        )
+      end
+
+      it 'adds the ended class if its an ended relationship' do
+        expect(subject['classes']).to include 'ended'
       end
     end
   end
