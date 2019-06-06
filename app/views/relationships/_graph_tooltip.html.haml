@@ -1,0 +1,8 @@
+.graph-tooltip.graph-tooltip--relationship
+  = render(partial: 'entities/graph_tooltip_title', locals: { entity: relationship.source })
+  = render(partial: "shared/relationship_interests", locals: { relationship: relationship })
+  = render(partial: 'entities/graph_tooltip_title', locals: { entity: relationship.target })
+  .graph-tooltip__links
+    = link_to entity_relationship_path(relationship.target, relationship.source), class: 'btn btn-sm btn-primary view-page' do
+      %i.fa.fa-file
+      %span= t("entity_graph.relationship_page_link")

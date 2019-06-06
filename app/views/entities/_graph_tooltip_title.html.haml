@@ -1,0 +1,11 @@
+%h5.graph-tooltip__entity-title
+  %span.country-flag
+    = country_flag(entity.country)
+  %span.entity-name
+    = entity_name_or_unknown(entity)
+  - if entity.natural_person?
+    %span.type-icon.natural-person
+      = image_tag "icon-natural-person.svg"
+  - else
+    %span.type-icon.legal-entity
+      = image_tag "icon-legal-entity.svg"

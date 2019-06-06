@@ -37,6 +37,10 @@ RSpec.describe EntityGraphDecorator do
       it 'transliterates the entity name on the label' do
         expect(subject.first['data']['label']).to eq 'test company'
       end
+
+      it 'transliterates the entity name in the tooltip' do
+        expect(subject.first['data']['tooltip']).to have_text 'test company'
+      end
     end
 
     context 'when the entity is dissolved' do
@@ -45,6 +49,11 @@ RSpec.describe EntityGraphDecorator do
       it 'adds the dissolved class if the entity is dissolved' do
         expect(subject.first['classes']).to include 'dissolved'
       end
+    end
+
+    it 'renders a tooltip unless the entity is unknown' do
+      expect(subject.first['data']['tooltip']).not_to be_blank
+      expect(subject.last['data']['tooltip']).to be_blank
     end
   end
 
@@ -81,6 +90,21 @@ RSpec.describe EntityGraphDecorator do
         expect(subject['classes']).to include 'ended'
       end
     end
+
+    it 'renders a tooltip' do
+      expect(subject['data']['tooltip']).not_to be_blank
+    end
+
+    context 'when asked for transliterated version' do
+      let(:entity) { create(:legal_entity, name: 'тест company', lang_code: 'uk') }
+      let(:context) { { should_transliterate: true } }
+
+      subject { JSON.parse(decorated.cytoscape_data[:elements])['edges'].first }
+
+      it 'transliterates the entity names in the tooltip' do
+        expect(subject['data']['tooltip']).to have_text 'test company'
+      end
+    end
   end
 
   describe 'generating labels' do
@@ -106,6 +130,36 @@ RSpec.describe EntityGraphDecorator do
 
       it 'adds the label class' do
         expect(subject['classes']).to include 'label'
+      end
+
+      it 'renders a tooltip' do
+        expect(subject['data']['tooltip']).not_to be_blank
+      end
+
+      context "when it's a label for reaching MAX_LEVELS" do
+        it 'shows a graph link' do
+          link_text = I18n.t('entity_graph.entity_graph_link')
+          expect(subject['data']['tooltip']).to have_link link_text
+        end
+
+        it 'shows a page link' do
+          link_text = I18n.t('entity_graph.entity_page_link')
+          expect(subject['data']['tooltip']).to have_link link_text
+        end
+      end
+
+      context "when it's a label for MAX_RELATIONSHIPS" do
+        let(:label_key) { 'max_relationships_relationships_as_source' }
+
+        it "doesn't show a graph link" do
+          link_text = I18n.t('entity_graph.entity_graph_link')
+          expect(subject['data']['tooltip']).not_to have_link link_text
+        end
+
+        it 'shows a page link' do
+          link_text = I18n.t('entity_graph.entity_page_link')
+          expect(subject['data']['tooltip']).to have_link link_text
+        end
       end
     end
 

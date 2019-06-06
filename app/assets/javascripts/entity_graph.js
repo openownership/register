@@ -1,6 +1,9 @@
 //= require cytoscape.js
 //= require dagre.js
+//= require popper.js
+//= require tippy.js
 //= require cytoscape-dagre.js
+//= require cytoscape-popper.js
 $(function() {
   var elements, selected, cy;
   var $container = $('.cytoscape-container');
@@ -48,12 +51,17 @@ $(function() {
         'shape': 'round-rectangle',
         'border-style': 'dashed'
       }
-    }
-    ,
+    },
     {
       selector: 'node.hover',
       style: {
         'color': '#3C31D4'
+      }
+    },
+    {
+      selector: 'node.current.hover',
+      style: {
+        'color': 'white'
       }
     },
     {
@@ -103,34 +111,55 @@ $(function() {
 
   function centerOnSelected() {
     selectedNode = cy.getElementById(selected);
-    selectedNode
-      .addClass('current')
-      .removeData('path')
-      .select();
+    selectedNode.addClass('current').select();
     cy.fit(selectedNode.neighbourhood());
   }
 
-  function nodeClick(evt) {
-    var node = evt.target;
-    if(node.data('path')) {
-      window.location = node.data('path');
+  function toggleTooltip(event) {
+    var tooltip = event.target.tooltip;
+    if(typeof tooltip != 'undefined') {
+      if(tooltip.state.isVisible) {
+        tooltip.hide();
+      } else {
+        tooltip.show();
+      }
     }
+    return false
   }
 
-  function nodeMouseOver(e) {
-    var node = e.target;
-    if(node.data('path')) {
-      node.addClass('hover');
+  function elementMouseOver(e) {
+    var element = e.target;
+    if(element.data('tooltip')) {
+      element.addClass('hover');
       $container.css('cursor', 'pointer');
     }
   }
 
-  function nodeMouseOut(e) {
-    var node = e.target;
-    if(node.data('path')) {
-      node.removeClass('hover');
+  function elementMouseOut(e) {
+    var element = e.target;
+    if(element.data('tooltip')) {
+      element.removeClass('hover');
       $container.css('cursor', 'default');
     }
+  }
+
+  function tooltip(element) {
+    return tippy(element.popperRef(), {
+      content: function() { return element.data('tooltip') },
+      hideOnClick: false,
+      trigger: 'manual',
+      arrow: true,
+      distance: 20,
+      theme: 'light',
+      interactive: true,
+      onShow: function(instance) {
+        tippy.hideAll({ exclude: instance })
+        cy.on('vclick', instance.hide);
+      },
+      onHide: function(instance) {
+        cy.off('vclick', instance.hide);
+      }
+    });
   }
 
   if($container.length > 0) {
@@ -145,9 +174,14 @@ $(function() {
       minZoom: 0.5,
       boxSelectionEnabled: false
     });
+    cy.elements().forEach(function (element) {
+      if(element.data('tooltip')) {
+        element.tooltip = tooltip(element);
+      }
+    });
     cy.ready(centerOnSelected);
-    cy.on('vclick', 'node', nodeClick);
-    cy.on('mouseover', 'node', nodeMouseOver);
-    cy.on('mouseout', 'node', nodeMouseOut);
+    cy.on('vclick', '*', toggleTooltip);
+    cy.on('mouseover', '*', elementMouseOver);
+    cy.on('mouseout', '*', elementMouseOut);
   }
 });
