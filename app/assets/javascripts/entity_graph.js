@@ -7,6 +7,9 @@
 $(function() {
   var elements, selected, cy;
   var $container = $('.cytoscape-container');
+  var $zoom = $('.graph-zoom');
+  var $zoomPlus = $('.graph-controls .fa-search-plus');
+  var $zoomMinus = $('.graph-controls .fa-search-minus')
   var nodeTextMaxWidth = 300;
   var nodeStyles = [
     {
@@ -162,6 +165,22 @@ $(function() {
     });
   }
 
+  function initZoomControls() {
+    $zoom
+      .attr('min', cy.minZoom())
+      .attr('max', cy.maxZoom())
+      .attr('step', 0.1)
+      .val(roundZoom(cy.zoom()))
+      .on('change', function() {
+        console.log($zoom.val());
+        cy.zoom(parseFloat($zoom.val()));
+      });
+  }
+
+  function roundZoom(zoom) {
+    return Math.round(zoom * 10) / 10;
+  }
+
   if($container.length > 0) {
     elements = $container.data('elements');
     selected = $container.data('selected');
@@ -180,8 +199,31 @@ $(function() {
       }
     });
     cy.ready(centerOnSelected);
+    cy.ready(initZoomControls);
     cy.on('vclick', '*', toggleTooltip);
     cy.on('mouseover', '*', elementMouseOver);
     cy.on('mouseout', '*', elementMouseOut);
+    cy.on('zoom', function() {
+      var zoom = roundZoom(cy.zoom());
+      $zoom.val(zoom);
+    });
+
+    tippy('.graph-zoom', {arrow: true, placement: 'bottom'});
+
+    $zoomMinus.click(function() {
+      var step = parseFloat($zoom.attr('step'));
+      var zoom = Math.max(cy.minZoom(), cy.zoom() - step);
+      zoom = roundZoom(zoom);
+      cy.zoom(zoom);
+      $zoom.val(zoom);
+    });
+
+    $zoomPlus.click(function() {
+      var step = parseFloat($zoom.attr('step'));
+      var zoom = Math.min(cy.maxZoom(), cy.zoom() + step);
+      zoom = roundZoom(zoom);
+      cy.zoom(zoom);
+      $zoom.val(zoom);
+    });
   }
 });

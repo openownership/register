@@ -1,3 +1,29 @@
+.graph-controls {
+  @include clearfix;
+  margin: 1rem;
+  .graph-help {
+    float: left;
+    font-size: 0.8125rem;
+    @include media-breakpoint-down(md) {
+      float: none;
+    }
+  }
+  .graph-zoom-control {
+    float: right;
+    margin-left: 2rem;
+    @include media-breakpoint-down(md) {
+      margin-top: 1rem;
+    }
+  }
+  .options {
+    float: right;
+    margin-left: 2rem;
+    @include media-breakpoint-down(md) {
+      margin-top: 1rem;
+    }
+  }
+}
+
 .cytoscape-container {
   width: 100%;
   height: 100%;

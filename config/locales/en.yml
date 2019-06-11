@@ -365,3 +365,5 @@ en:
     entity_page_link: "View page"
     relationship_page_link: "View page"
     entity_graph_link: "View graph"
+    zoom: "Zoom in or out"
+    help: Click and drag anywhere to change the view. Click entities or relationships to see more detail.
