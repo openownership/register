@@ -1,4 +1,4 @@
-class RelationshipGraph
+class InferredRelationshipGraph
   def initialize(entity)
     @entity = entity
   end
@@ -18,15 +18,15 @@ class RelationshipGraph
   private
 
   def select_relationships(&stop_condition)
-    relationships = []
+    inferred_relationships = []
 
     select_relationships_recursive(
       entity: @entity,
-      inferred_relationships: relationships,
+      inferred_relationships: inferred_relationships,
       stop_condition: stop_condition,
     )
 
-    relationships
+    inferred_relationships
   end
 
   def select_relationships_recursive(

@@ -65,7 +65,7 @@
             - else
               %h2
                 = t(".controlling_entities.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
-              = link_to tree_entity_path(@entity), class: 'btn btn-sm btn-primary view-as-tree' do
+              = link_to graph_entity_path(@entity), class: 'btn btn-sm btn-primary view-as-tree' do
                 %i.fa.fa-sitemap
                 %span= t(".view_as_tree")
               - @ultimate_source_relationship_groups.each do |group|
@@ -89,6 +89,9 @@
           - else
             %h2
               = t(".controlled_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
+            = link_to graph_entity_path(@entity), class: 'btn btn-sm btn-primary view-as-tree' do
+              %i.fa.fa-sitemap
+              %span= t(".view_as_tree")
             = page_entries_info @source_relationships, entry_name: 'company'
             - @source_relationships.each do |relationship|
               .item{ class: ('ended' if relationship.ended_date) }

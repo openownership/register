@@ -51,6 +51,13 @@ class EntitiesController < ApplicationController
     @entity = decorate(entity)
   end
 
+  def graph
+    entity = Entity.find(params[:id])
+    redirect_to_master_entity(:show, entity)
+    @graph = decorate(EntityGraph.new(entity))
+    @entity = decorate(entity)
+  end
+
   def opencorporates_additional_info
     entity = Entity.find(params[:id])
     begin
@@ -70,7 +77,7 @@ class EntitiesController < ApplicationController
   def ultimate_source_relationship_groups(entity)
     label_for = ->(r) { r.source.id.to_s.include?('statement') ? rand : r.source.name }
 
-    relationships = RelationshipGraph.new(entity).ultimate_source_relationships
+    relationships = InferredRelationshipGraph.new(entity).ultimate_source_relationships
 
     RelationshipsSorter.new(relationships).call
       .uniq { |r| r.sourced_relationships.first.keys_for_uniq_grouping }

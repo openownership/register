@@ -3,6 +3,10 @@ module EntityHelper
     unknown_entity_tooltip(entity, position) || entity.name
   end
 
+  def entity_name_or_unknown(entity)
+    unknown_entity_name(entity) || entity.name
+  end
+
   def entity_link(entity, &block)
     (entity.is_a?(CircularOwnershipEntity) && capture(&block)) ||
       unknown_entity_tooltip(entity) ||
@@ -13,12 +17,21 @@ module EntityHelper
   def unknown_entity_tooltip(entity, position = :top)
     return unless entity.is_a?(UnknownPersonsEntity)
 
-    name = entity.id.to_s.include?('no-individual-or-entity-with-signficant-control') ? 'No person' : 'Unknown'
+    name = unknown_entity_name(entity)
     tooltip(
       content_tag(:span, name, class: 'unknown'),
       entity.name || t('glossary.unknown_person'),
       position,
     )
+  end
+
+  def unknown_entity_name(entity)
+    return unless entity.is_a?(UnknownPersonsEntity)
+
+    if entity.id.to_s.include?('no-individual-or-entity-with-signficant-control')
+      return 'No person'
+    end
+    'Unknown'
   end
 
   def entity_jurisdiction(entity, short: false)

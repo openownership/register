@@ -30,5 +30,7 @@ class DevelopmentDataCreator
     Rake::Task['eiti:import'].invoke(eiti_data)
 
     Entity.import(force: true)
+
+    NaturalPersonsDuplicatesMerger.new.run
   end
 end

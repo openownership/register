@@ -44,7 +44,7 @@ en:
         other: "%{count} Matches"
       grouping_note: "These owners have been grouped together because they have exactly the same name."
       grouping_note_html: "<span class='grouping-note-label'>Note:</span> These owners have been grouped together because they have exactly the same name. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
-      view_as_tree: View as tree
+      view_as_tree: View as graph
       company_name_missing: ‹Company name missing›
       merged_people: Merged people
       merged_note_html:
@@ -351,3 +351,19 @@ en:
     right-to-appoint-and-remove-members-as-trust-limited-liability-partnership: "Right to appoint and remove members as a trustee of a trust"
     right-to-appoint-and-remove-members-as-firm-limited-liability-partnership: "Right to appoint and remove members as a member of a firm"
     significant-influence-or-control: "Other significant influence or control"
+
+  entity_graph:
+    labels:
+      max_levels_relationships_as_source:
+        one: "Max depth reached. 1 more directly owned company."
+        other: "Max depth reached. %{count} more directly owned companies."
+      max_levels_relationships_as_target:
+        one: "Max depth reached. {count} more direct owner."
+        other: "Max depth reached. %{count} more direct owners."
+      max_relationships_relationships_as_source: "Too many owned companies to display (%{count})."
+      max_relationships_relationships_as_target: "Too many owners to display (%{count})."
+    entity_page_link: "View page"
+    relationship_page_link: "View page"
+    entity_graph_link: "View graph"
+    zoom: "Zoom in or out"
+    help: Click and drag anywhere to change the view. Click entities or relationships to see more detail.

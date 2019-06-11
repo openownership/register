@@ -34,7 +34,7 @@ RSpec.describe 'Entity pages' do
 
       expect(page).to have_link 'Google'
       expect(page).to have_link 'Report incorrect data'
-      expect(page).to have_link 'View as tree'
+      expect(page).to have_link 'View as graph'
 
       expect(page).to have_text "Beneficial owners of #{company.name}"
       expect(page).to have_text interests_summary(relationship)
@@ -53,7 +53,7 @@ RSpec.describe 'Entity pages' do
 
       expect(page).to have_link 'Google'
       expect(page).to have_link 'Report incorrect data'
-      expect(page).not_to have_link 'View as tree'
+      expect(page).to have_link 'View as graph'
 
       expect(page).not_to have_text "Beneficial owners of #{person.name}"
 

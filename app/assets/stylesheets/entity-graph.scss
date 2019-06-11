@@ -1,0 +1,97 @@
+.graph-controls {
+  @include clearfix;
+  margin: 1rem;
+  .graph-help {
+    float: left;
+    font-size: 0.8125rem;
+    @include media-breakpoint-down(md) {
+      float: none;
+    }
+  }
+  .graph-zoom-control {
+    float: right;
+    margin-left: 2rem;
+    @include media-breakpoint-down(md) {
+      margin-top: 1rem;
+    }
+  }
+  .options {
+    float: right;
+    margin-left: 2rem;
+    @include media-breakpoint-down(md) {
+      margin-top: 1rem;
+    }
+  }
+}
+
+.cytoscape-container {
+  width: 100%;
+  height: 100%;
+}
+
+.graph-tooltip__entity-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  .country-flag {
+    flex: 0 0 auto;
+    padding-right: 6px; // Same as type-icon padding-left
+  }
+  .entity-name {
+    // Fill all the central space
+    flex: 1 1 auto;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  .type-icon {
+    flex: 0 0 auto;
+    // Undo things from the normal absolutely positioned icon
+    position: relative;
+    top: auto;
+    right: auto;
+    padding-top: 3px; // Halved, to align better with text
+  }
+}
+.graph-tooltip__body {
+  display: flex;
+  .graph-tooltip__body__fact {
+    flex: 1;
+  }
+}
+
+.graph-tooltip--relationship {
+  .graph-tooltip__entity-title:first-of-type {
+    margin-bottom: 0px;
+  }
+}
+
+.graph-tooltip .relationship-interests {
+  margin: 0 0 0 14px;
+  font-size: 0.9375rem;
+  font-weight: bold;
+  margin-left: 30px;
+  ul {
+    position: relative;
+    margin-bottom: 0;
+    padding: 18px 20px 20px 44px;
+    background: asset-url("circle-arrow-down.svg") left center no-repeat;
+    position: relative;
+    left: -16px;
+  }
+  li {
+    font-size: .8125rem;
+    font-weight: normal;
+    color: $text-default;
+  }
+}
+
+.graph-tooltip__links {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 0.5rem;
+  align-items: center;
+
+  a {
+    margin: 0 0.5rem 0 0.5rem;
+  }
+}

@@ -1,0 +1,14 @@
+.graph-tooltip
+  = render(partial: 'entities/graph_tooltip_title', locals: { entity: entity })
+  .graph-tooltip__body
+    %p
+      = error_message
+  .graph-tooltip__links
+    = link_to entity_path(entity), class: 'btn btn-sm btn-primary view-page' do
+      %i.fa.fa-file
+      %span= t("entity_graph.entity_page_link")
+    - if show_graph_link
+      = link_to graph_entity_path(entity), class: 'btn btn-sm btn-primary view-graph' do
+        %i.fa.fa-sitemap
+        %span= t("entity_graph.entity_graph_link")
+

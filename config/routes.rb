@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :entities, only: :show do
     member do
       get 'tree'
+      get 'graph'
       get 'opencorporates-additional-info'
     end
     resources :relationships, only: :show, path: ''
