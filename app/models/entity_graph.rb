@@ -2,7 +2,7 @@ class EntityGraph
   include Draper::Decoratable
 
   MAX_LEVELS = 7
-  MAX_RELATIONSHIPS = 15
+  MAX_RELATIONSHIPS = 25
   attr_accessor :entity, :nodes, :edges
 
   def initialize(entity)

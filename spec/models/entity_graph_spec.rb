@@ -89,7 +89,7 @@ RSpec.describe EntityGraph do
 
   it 'stops at any node with MAX_RELATIONSHIPS owners' do
     entity = create(:legal_entity)
-    owners = create_list(:natural_person, 16)
+    owners = create_list(:natural_person, 26)
     owners.map { |o| create(:relationship, source: o, target: entity) }
 
     label_node = EntityGraph::LabelNode.new(entity, :max_relationships_relationships_as_target, count: 15)
@@ -103,7 +103,7 @@ RSpec.describe EntityGraph do
 
   it 'stops at any node with MAX_RELATIONSHIPS owned companies' do
     owner = create(:natural_person)
-    entities = create_list(:legal_entity, 16)
+    entities = create_list(:legal_entity, 26)
     entities.map { |e| create(:relationship, source: owner, target: e) }
 
     label_node = EntityGraph::LabelNode.new(owner, :max_relationships_relationships_as_source, count: 15)
