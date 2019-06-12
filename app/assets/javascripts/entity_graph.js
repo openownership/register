@@ -115,7 +115,7 @@ $(function() {
   function centerOnSelected() {
     selectedNode = cy.getElementById(selected);
     selectedNode.addClass('current').select();
-    cy.fit(selectedNode.neighbourhood());
+    cy.fit(selectedNode);
   }
 
   function toggleTooltip(event) {
