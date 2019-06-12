@@ -191,7 +191,8 @@ $(function() {
       layout: layout,
       maxZoom: 1,
       minZoom: 0.5,
-      boxSelectionEnabled: false
+      boxSelectionEnabled: false,
+      userZoomingEnabled: false
     });
     cy.elements().forEach(function (element) {
       if(element.data('tooltip')) {
