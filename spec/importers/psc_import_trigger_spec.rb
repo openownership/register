@@ -18,6 +18,12 @@ RSpec.describe PscImportTrigger do
 
     subject { PscImportTrigger.new.call(data_source, 100) }
 
+    it 'creates an Import for the given DataSource' do
+      expect do
+        subject
+      end.to change { Import.where(data_source: data_source).count }.by(1)
+    end
+
     it 'enqueues a PscFileProcessorWorker for every snapshot link' do
       expect do
         subject

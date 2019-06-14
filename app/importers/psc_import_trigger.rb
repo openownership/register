@@ -4,6 +4,7 @@ class PscImportTrigger
   FILENAME_REGEX = /^psc-snapshot-\d{4}-\d{2}-\d{2}_\d+of\d+.zip$/
 
   def call(data_source, chunk_size)
+    import = Import.create! data_source: data_source
     data_source_uri = URI.parse(data_source.url)
     base_url = "#{data_source_uri.scheme}://#{data_source_uri.host}"
     snapshot_links = parse_snapshot_links(data_source.url, base_url)
@@ -13,7 +14,7 @@ class PscImportTrigger
     Rails.logger.info "Scheduling PSC import jobs for the following snapshot links: #{snapshot_links}"
 
     snapshot_links.each do |link|
-      PscFileProcessorWorker.perform_async(link, chunk_size)
+      PscFileProcessorWorker.perform_async(link, chunk_size, import.id.to_s)
     end
   end
 
