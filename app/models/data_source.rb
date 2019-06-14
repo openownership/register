@@ -6,6 +6,7 @@ class DataSource
   field :url, type: String
   field :name, type: String
   slug :name
+  field :document_id, type: String
   field :overview, type: String, localize: true
   field :data_availability, type: String, localize: true
   field :timeline_url, type: String
