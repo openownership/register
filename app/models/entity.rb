@@ -30,6 +30,7 @@ class Entity
     index: true,
     counter_cache: :merged_entities_count,
   )
+  has_many :raw_data_provenances, as: :entity_or_relationship
 
   field :oc_updated_at, type: Time
   field :last_resolved_at, type: Time

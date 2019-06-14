@@ -20,6 +20,7 @@ class Relationship
   belongs_to :target, class_name: 'Entity', inverse_of: :_relationships_as_target
 
   embeds_one :provenance
+  has_many :raw_data_provenances, as: :entity_or_relationship
 
   index source_id: 1
   index target_id: 1

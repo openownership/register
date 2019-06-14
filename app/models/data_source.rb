@@ -12,6 +12,8 @@ class DataSource
   field :current_statistic_types, type: Array, default: []
 
   embeds_many :statistics, class_name: 'DataSourceStatistic'
+  has_many :raw_data_records
+  has_many :imports
 
   index({ name: 1 }, unique: true)
 
