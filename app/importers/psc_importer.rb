@@ -21,14 +21,18 @@ class PscImporter
     when 'persons-with-significant-control-statement', 'super-secure-person-with-significant-control', 'exemptions'
       child_entity = child_entity!(record['company_number'])
 
-      statement!(child_entity, record['data'])
+      statement = statement!(child_entity, record['data'])
+
+      save_provenance!([child_entity, statement], raw_record)
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
       begin
         child_entity = child_entity!(record['company_number'])
 
         parent_entity = parent_entity!(record['data'])
 
-        relationship!(child_entity, parent_entity, record['data'])
+        relationship = relationship!(child_entity, parent_entity, record['data'])
+
+        save_provenance!([child_entity, parent_entity, relationship], raw_record)
       rescue PotentiallyBadEntityMergeDetectedAndStopped => ex
         msg = "[#{self.class.name}] Failed to handle a required entity merge " \
               "as a potentially bad merge has been detected and stopped: " \
@@ -157,7 +161,9 @@ class PscImporter
       },
     }
 
-    Relationship.new(attributes).upsert
+    relationship = Relationship.new(attributes)
+    relationship.upsert
+    relationship
   end
 
   def statement!(entity, data)
@@ -172,7 +178,9 @@ class PscImporter
 
     attributes.merge!(statement_attributes(data))
 
-    Statement.new(attributes).upsert
+    statement = Statement.new(attributes)
+    statement.upsert
+    statement
   end
 
   def statement_attributes(data)
@@ -225,5 +233,12 @@ class PscImporter
 
   def index_entity(entity)
     IndexEntityService.new(entity).index
+  end
+
+  def save_provenance!(entities_and_relationships, raw_record)
+    entities_and_relationships.map do |er|
+      provenance = er.raw_data_provenances.find_or_create_by!(import: import)
+      provenance.raw_data_records << raw_record
+    end
   end
 end
