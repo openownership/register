@@ -20,9 +20,7 @@ class DevelopmentDataCreator
     Rake.application['ua:import'].invoke(ua_data, Date.current.to_s)
 
     uk_data = Rails.root.join('db', 'data', 'gb-persons-with-significant-control-snapshot-sample-1k.txt')
-    records = open(uk_data).readlines.map do |line|
-      JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
-    end
+    records = open(uk_data).readlines.map { |line| JSON.parse line }
     retrieved_at = Time.zone.parse('2016-12-06 06:15:37')
     PscImportTask.new(records, retrieved_at).call
 

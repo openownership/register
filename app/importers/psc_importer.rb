@@ -14,25 +14,25 @@ class PscImporter
   end
 
   def process(record)
-    case record.data.kind
+    case record['data']['kind']
     when 'totals#persons-of-significant-control-snapshot'
       :ignore
     when 'persons-with-significant-control-statement', 'super-secure-person-with-significant-control', 'exemptions'
-      child_entity = child_entity!(record.company_number)
+      child_entity = child_entity!(record['company_number'])
 
-      statement!(child_entity, record.data)
+      statement!(child_entity, record['data'])
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
       begin
-        child_entity = child_entity!(record.company_number)
+        child_entity = child_entity!(record['company_number'])
 
-        parent_entity = parent_entity!(record.data)
+        parent_entity = parent_entity!(record['data'])
 
-        relationship!(child_entity, parent_entity, record.data)
+        relationship!(child_entity, parent_entity, record['data'])
       rescue PotentiallyBadEntityMergeDetectedAndStopped => ex
         Rails.logger.warn "[PSC import] Failed to handle a required entity merge as a potentially bad merge has been detected and stopped: #{ex.message} - will not complete the import of this line: #{line}"
       end
     else
-      raise "unexpected kind: #{record.data.kind}"
+      raise "unexpected kind: #{record['data']['kind']}"
     end
   end
 
@@ -79,20 +79,20 @@ class PscImporter
       identifiers: [
         {
           'document_id' => document_id,
-          'link' => data.links.self,
+          'link' => data['links']['self'],
         },
       ],
-      address: data.address.presence && address_string(data.address),
+      address: data['address'].presence && address_string(data['address']),
     )
 
-    case data.kind
+    case data['kind']
     when 'corporate-entity-person-with-significant-control'
       entity.assign_attributes(
         type: Entity::Types::LEGAL_ENTITY,
-        name: data.name,
+        name: data['name'],
       )
 
-      country = data.identification.country_registered
+      country = data['identification']['country_registered']
 
       unless country.nil?
         jurisdiction_code = @opencorporates_client.get_jurisdiction_code(country)
@@ -102,12 +102,12 @@ class PscImporter
             identifiers: [
               {
                 'document_id' => document_id,
-                'link' => data.links.self,
-                'company_number' => data.identification.registration_number,
+                'link' => data['links']['self'],
+                'company_number' => data['identification']['registration_number'],
               },
             ],
             jurisdiction_code: jurisdiction_code,
-            company_number: data.identification.registration_number,
+            company_number: data['identification']['registration_number'],
           )
           @entity_resolver.resolve!(entity)
         end
@@ -115,15 +115,15 @@ class PscImporter
     when 'individual-person-with-significant-control'
       entity.assign_attributes(
         type: Entity::Types::NATURAL_PERSON,
-        name: data.name_elements.presence && name_string(data.name_elements) || data.name,
-        nationality: country_from_nationality(data.nationality).try(:alpha2),
-        country_of_residence: data.country_of_residence.presence,
-        dob: entity_dob(data.date_of_birth),
+        name: data['name_elements'].presence && name_string(data['name_elements']) || data['name'],
+        nationality: country_from_nationality(data['nationality']).try(:alpha2),
+        country_of_residence: data['country_of_residence'].presence,
+        dob: entity_dob(data['date_of_birth']),
       )
     when 'legal-person-person-with-significant-control'
       entity.assign_attributes(
         type: Entity::Types::LEGAL_ENTITY,
-        name: data.name,
+        name: data['name'],
       )
     end
 
@@ -136,14 +136,14 @@ class PscImporter
     attributes = {
       _id: {
         'document_id' => document_id,
-        'link' => data.links.self,
+        'link' => data['links']['self'],
       },
       source: parent_entity,
       target: child_entity,
-      interests: data.natures_of_control,
-      sample_date: data.notified_on.presence,
-      started_date: data.notified_on.presence,
-      ended_date: data.ceased_on.presence,
+      interests: data['natures_of_control'],
+      sample_date: data['notified_on'].presence,
+      started_date: data['notified_on'].presence,
+      ended_date: data['ceased_on'].presence,
       provenance: {
         source_url: source_url,
         source_name: source_name,
@@ -159,10 +159,10 @@ class PscImporter
     attributes = {
       _id: {
         document_id: document_id,
-        link: data.links.self,
+        link: data['links']['self'],
       },
       entity: entity,
-      ended_date: data.ceased_on.presence,
+      ended_date: data['ceased_on'].presence,
     }
 
     attributes.merge!(statement_attributes(data))
@@ -171,36 +171,37 @@ class PscImporter
   end
 
   def statement_attributes(data)
-    case data.kind
+    case data['kind']
     when 'persons-with-significant-control-statement'
       {
-        type: data.statement,
-        date: Date.parse(data.notified_on),
+        type: data['statement'],
+        date: Date.parse(data['notified_on']),
       }
     when 'super-secure-person-with-significant-control'
       {
-        type: data.kind,
+        type: data['kind'],
       }
     when 'exemptions'
-      exemption = data.exemptions.to_h.values.first
+      exemption = data['exemptions'].values.first
+      exempt_from_dates = exemption['items'].map { |item| item['exempt_from'] }
 
       {
-        type: exemption.exemption_type,
-        date: Date.parse(exemption.items.map(&:exempt_from).max),
+        type: exemption['exemption_type'],
+        date: Date.parse(exempt_from_dates.max),
       }
     end
   end
 
-  ADDRESS_KEYS = %i[premises address_line_1 address_line_2 locality region postal_code].freeze
+  ADDRESS_KEYS = %w[premises address_line_1 address_line_2 locality region postal_code].freeze
 
   def address_string(address)
-    address.to_h.values_at(*ADDRESS_KEYS).map(&:presence).compact.join(', ')
+    address.values_at(*ADDRESS_KEYS).map(&:presence).compact.join(', ')
   end
 
-  NAME_KEYS = %i[forename middle_name surname].freeze
+  NAME_KEYS = %w[forename middle_name surname].freeze
 
   def name_string(name_elements)
-    name_elements.to_h.values_at(*NAME_KEYS).map(&:presence).compact.join(' ')
+    name_elements.values_at(*NAME_KEYS).map(&:presence).compact.join(' ')
   end
 
   def country_from_nationality(nationality)
@@ -211,9 +212,9 @@ class PscImporter
 
   def entity_dob(elements)
     return unless elements
-    parts = [elements.year]
-    parts << format('%02d', elements.month) if elements.month
-    parts << format('%02d', elements.day) if elements.month && elements.day
+    parts = [elements['year']]
+    parts << format('%02d', elements['month']) if elements['month']
+    parts << format('%02d', elements['day']) if elements['month'] && elements['day']
     ISO8601::Date.new(parts.join('-'))
   end
 
