@@ -360,6 +360,13 @@ RSpec.describe Entity do
       it 'creates a new document' do
         expect { subject.upsert }.to change { Entity.count }.from(0).to(1)
       end
+
+      it 'sets #new_record to false' do
+        entity = subject
+        expect(entity.new_record?).to eq(true)
+        entity.upsert
+        expect(entity.new_record?).to eq(false)
+      end
     end
 
     it 'retries on duplicate key error exceptions' do

@@ -104,6 +104,7 @@ class Entity
     )
 
     self.id = document.fetch('_id')
+    self.new_record = false
 
     reload
   rescue Mongo::Error::OperationFailure => exception
