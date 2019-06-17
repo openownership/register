@@ -1,7 +1,7 @@
 require 'json'
 
 class PscImporter
-  attr_accessor :source_url, :source_name, :document_id, :retrieved_at
+  attr_accessor :import, :retrieved_at
 
   def initialize(opencorporates_client: OpencorporatesClient.new_for_imports, entity_resolver: EntityResolver.new)
     @opencorporates_client = opencorporates_client
@@ -42,7 +42,7 @@ class PscImporter
     attributes = {
       identifiers: [
         {
-          'document_id' => document_id,
+          'document_id' => import.data_source.document_id,
           'company_number' => company_number,
         },
       ],
@@ -78,7 +78,7 @@ class PscImporter
     entity = Entity.new(
       identifiers: [
         {
-          'document_id' => document_id,
+          'document_id' => import.data_source.document_id,
           'link' => data['links']['self'],
         },
       ],
@@ -101,7 +101,7 @@ class PscImporter
           entity.assign_attributes(
             identifiers: [
               {
-                'document_id' => document_id,
+                'document_id' => import.data_source.document_id,
                 'link' => data['links']['self'],
                 'company_number' => data['identification']['registration_number'],
               },
@@ -135,7 +135,7 @@ class PscImporter
   def relationship!(child_entity, parent_entity, data)
     attributes = {
       _id: {
-        'document_id' => document_id,
+        'document_id' => import.data_source.document_id,
         'link' => data['links']['self'],
       },
       source: parent_entity,
@@ -145,8 +145,8 @@ class PscImporter
       started_date: data['notified_on'].presence,
       ended_date: data['ceased_on'].presence,
       provenance: {
-        source_url: source_url,
-        source_name: source_name,
+        source_url: import.data_source.url,
+        source_name: import.data_source.name,
         retrieved_at: retrieved_at,
         imported_at: Time.now.utc,
       },
@@ -158,7 +158,7 @@ class PscImporter
   def statement!(entity, data)
     attributes = {
       _id: {
-        document_id: document_id,
+        document_id: import.data_source.document_id,
         link: data['links']['self'],
       },
       entity: entity,

@@ -15,7 +15,7 @@ class PscFileProcessorWorker
       file.lazy.each_slice(chunk_size) do |lines|
         lines.each.map { |line| save_raw_data(line, import) }
         chunk = ChunkHelper.to_chunk lines
-        PscChunkImportWorker.perform_async(chunk, retrieved_at)
+        PscChunkImportWorker.perform_async(chunk, retrieved_at, import.id.to_s)
       end
     end
   end
