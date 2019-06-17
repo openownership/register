@@ -13,9 +13,9 @@ class PscFileProcessorWorker
 
     with_file(source_url) do |file|
       file.lazy.each_slice(chunk_size) do |lines|
-        lines.each.map { |line| save_raw_data(line, import) }
-        chunk = ChunkHelper.to_chunk lines
-        PscChunkImportWorker.perform_async(chunk, retrieved_at, import.id.to_s)
+        records = lines.each.map { |line| save_raw_data(line, import) }
+        record_ids = records.map { |r| r.id.to_s }
+        PscChunkImportWorker.perform_async(record_ids, retrieved_at, import.id.to_s)
       end
     end
   end
@@ -46,6 +46,7 @@ class PscFileProcessorWorker
       record.data = data if record.new_record?
       record.imports << import
       record.save!
+      record
     rescue Mongo::Error::OperationFailure => exception
       # Make sure it's a duplicate key error "E11000 duplicate key error collection"
       raise unless exception.message.start_with?('E11000')

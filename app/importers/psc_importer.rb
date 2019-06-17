@@ -9,11 +9,12 @@ class PscImporter
     @entity_resolver = entity_resolver
   end
 
-  def process_records(records)
-    records.each { |r| process(r) }
+  def process_records(raw_records)
+    raw_records.each { |r| process(r) }
   end
 
-  def process(record)
+  def process(raw_record)
+    record = raw_record['data']
     case record['data']['kind']
     when 'totals#persons-of-significant-control-snapshot'
       :ignore
@@ -29,7 +30,11 @@ class PscImporter
 
         relationship!(child_entity, parent_entity, record['data'])
       rescue PotentiallyBadEntityMergeDetectedAndStopped => ex
-        Rails.logger.warn "[PSC import] Failed to handle a required entity merge as a potentially bad merge has been detected and stopped: #{ex.message} - will not complete the import of this line: #{line}"
+        msg = "[#{self.class.name}] Failed to handle a required entity merge " \
+              "as a potentially bad merge has been detected and stopped: " \
+              "#{ex.message} - will not complete the import of this raw " \
+              "record: #{raw_record.id}"
+        Rails.logger.warn msg
       end
     else
       raise "unexpected kind: #{record['data']['kind']}"
