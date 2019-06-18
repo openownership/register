@@ -29,6 +29,46 @@ RSpec.describe EntitiesController do
       actual_order = assigns('source_relationships').map(&:id)
       expect(actual_order).to eq(expected_order)
     end
+
+    context 'when the entity is a merged entity' do
+      let!(:master_entity) { create(:natural_person) }
+      let!(:merged_entity) do
+        create(:natural_person, master_entity: master_entity)
+      end
+
+      it 'redirects to the master entity' do
+        get :show, params: { id: merged_entity.id }
+        expect(response).to redirect_to(entity_path(master_entity))
+      end
+    end
+  end
+
+  describe 'GET #tree' do
+    context 'when the entity is a merged entity' do
+      let!(:master_entity) { create(:natural_person) }
+      let!(:merged_entity) do
+        create(:natural_person, master_entity: master_entity)
+      end
+
+      it 'redirects to the master entity' do
+        get :tree, params: { id: merged_entity.id }
+        expect(response).to redirect_to(tree_entity_path(master_entity))
+      end
+    end
+  end
+
+  describe 'GET #graph' do
+    context 'when the entity is a merged entity' do
+      let!(:master_entity) { create(:natural_person) }
+      let!(:merged_entity) do
+        create(:natural_person, master_entity: master_entity)
+      end
+
+      it 'redirects to the master entity' do
+        get :graph, params: { id: merged_entity.id }
+        expect(response).to redirect_to(graph_entity_path(master_entity))
+      end
+    end
   end
 
   describe 'GET #opencorporates_additional_info' do
