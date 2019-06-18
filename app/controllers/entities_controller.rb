@@ -58,6 +58,28 @@ class EntitiesController < ApplicationController
     @entity = decorate(entity)
   end
 
+  def raw
+    entity = Entity.find(params[:id])
+    redirect_to_master_entity(:raw, entity)
+    @entity = decorate(entity)
+    entity_ids = [@entity.id]
+    entity_ids += @entity.merged_entity_ids if @entity.merged_entities.size.positive?
+    raw_record_ids = RawDataProvenance
+      .where(
+        'entity_or_relationship_id' => { '$in' => entity_ids },
+        'entity_or_relationship_type' => 'Entity',
+      )
+      .pluck(:raw_data_record_ids)
+      .flatten
+      .compact
+    @raw_data_records = RawDataRecord
+      .includes(:imports)
+      .where('id' => { '$in' => raw_record_ids })
+      .order_by(%i[created_at desc])
+      .page(params[:page])
+      .per(10)
+  end
+
   def opencorporates_additional_info
     entity = Entity.find(params[:id])
     begin
