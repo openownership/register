@@ -25,7 +25,7 @@ class PscFileProcessorWorker
       when ".gz"
         file = Zlib::GzipReader.new(file)
       when ".zip"
-        zip = Zip::File.new(file)
+        zip = Zip::File.open_buffer(file)
         raise if zip.count > 1
 
         file = zip.first.get_input_stream
