@@ -218,6 +218,12 @@ have relevant data.
 - Leave security options at the defaults
 - Enter a useful name for the 'display name' e.g. the branch name you're testing
 
+Once this has spun up the instance there are a couple more steps to get an
+accesible instance:
+
+- Add a database user through the Users tab (click the database name first)
+- Enable all public IP traffic through the networking tab
+
 We also need to clone the production elastic search instance.
 
 - Go to https://cloud.elastic.co/deployments (login details in 1Password)
