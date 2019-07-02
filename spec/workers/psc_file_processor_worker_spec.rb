@@ -23,6 +23,13 @@ RSpec.describe PscFileProcessorWorker do
   describe 'Saving RawDataRecords' do
     it 'saves each line in the file as a RawDataRecord' do
       expect { subject }.to change { RawDataRecord.count }.by(2)
+      first_record = RawDataRecord.find_by(etag: corporate_etag)
+      expect(first_record.data).to eq(JSON.parse(corporate_record))
+      expect(first_record.imports).to eq([import])
+
+      second_record = RawDataRecord.find_by(etag: individual_etag)
+      expect(second_record.data).to eq(JSON.parse(individual_record))
+      expect(second_record.imports).to eq([import])
     end
 
     context 'when etags are present in the data' do
@@ -52,17 +59,7 @@ RSpec.describe PscFileProcessorWorker do
       expect(RawDataRecord.last.etag).to eq individual_etag
     end
 
-    it "updates existing RawDataRecords if the etag hasn't changed" do
-      record = RawDataRecord.create!(
-        imports: create_list(:import, 2),
-        data: JSON.parse(corporate_record),
-        etag: corporate_etag,
-      )
-      subject
-      expect(record.reload.imports.count).to eq(3)
-    end
-
-    context "when there's a race condition finding existing RawDataRecords" do
+    context "when there's an existing record with the same etag" do
       let!(:existing_record) do
         RawDataRecord.create!(
           imports: create_list(:import, 2),
@@ -71,23 +68,13 @@ RSpec.describe PscFileProcessorWorker do
         )
       end
 
-      before do
-        allow(RawDataRecord)
-          .to(receive(:find_or_initialize_by))
-          .with(etag: individual_etag)
-          .and_call_original
-
-        # Simulate a race condition by denying the existence of the existing
-        # record on the first call to find_or_initialize_by
-        allow(RawDataRecord)
-          .to(receive(:find_or_initialize_by))
-          .with(etag: corporate_etag)
-          .and_return(RawDataRecord.new(etag: corporate_etag), existing_record)
+      it "updates the existing record" do
+        subject
+        expect(existing_record.reload.imports.count).to eq(3)
       end
 
-      it 'retries saving and adds the import to the existing record' do
-        expect { subject }.to change { RawDataRecord.count }.from(1).to(2)
-        expect(existing_record.reload.imports.count).to eq(3)
+      it "still queues up a PscChunkImportWorker for the record" do
+        expect { subject }.to change(PscChunkImportWorker.jobs, :size).by(2)
       end
     end
   end

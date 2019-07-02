@@ -13,8 +13,7 @@ class PscFileProcessorWorker
 
     with_file(source_url) do |file|
       file.lazy.each_slice(chunk_size) do |lines|
-        records = lines.each.map { |line| save_raw_data(line, import) }
-        record_ids = records.map { |r| r.id.to_s }
+        record_ids = save_raw_data(lines, import).map(&:to_s)
         PscChunkImportWorker.perform_async(record_ids, retrieved_at, import.id.to_s)
       end
     end
@@ -38,22 +37,22 @@ class PscFileProcessorWorker
     end
   end
 
-  def save_raw_data(line, import)
-    data = JSON.parse(line)
-    etag = data.dig('data', 'etag').presence || XXhash.xxh64(line).to_s
-    begin
-      record = RawDataRecord.find_or_initialize_by(etag: etag)
-      record.data = data if record.new_record?
-      record.imports << import
-      record.save!
-      record
-    rescue Mongo::Error::OperationFailure => exception
-      # Make sure it's a duplicate key error "E11000 duplicate key error collection"
-      raise unless exception.message.start_with?('E11000')
-      # Make sure it's the etag that is duplicated
-      raise unless RawDataRecord.where(etag: etag).exists?
-      # Retry, because we should be able to find the record and update it now
-      retry
+  def save_raw_data(lines, import)
+    bulk_operations = lines.map do |line|
+      data = JSON.parse(line)
+      etag = data.dig('data', 'etag').presence || XXhash.xxh64(line).to_s
+      {
+        update_one: {
+          upsert: true,
+          filter: { etag: etag },
+          update: {
+            '$setOnInsert' => { etag: etag, data: data },
+            '$addToSet' => { import_ids: import.id },
+          },
+        },
+      }
     end
+
+    RawDataRecord.collection.bulk_write(bulk_operations, ordered: false).upserted_ids
   end
 end
