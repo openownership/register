@@ -225,6 +225,7 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
+    oj (3.7.12)
     orm_adapter (0.5.0)
     parallel (1.10.0)
     parser (2.5.1.0)
@@ -431,6 +432,7 @@ DEPENDENCIES
   mongoid
   mongoid-slug
   net-http-persistent (~> 2.0)
+  oj
   parallel
   pry-byebug
   puma (~> 3.0)

@@ -40,6 +40,7 @@ gem 'skylight'
 gem 'redcarpet'
 gem 'mongoid-slug'
 gem 'xxhash'
+gem 'oj'
 
 group :development, :test do
   gem 'byebug'

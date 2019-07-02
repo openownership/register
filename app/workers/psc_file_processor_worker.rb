@@ -2,6 +2,7 @@ require 'open-uri'
 require 'zip'
 require 'zlib'
 require 'xxhash'
+require 'oj'
 
 class PscFileProcessorWorker
   include Sidekiq::Worker
@@ -39,7 +40,7 @@ class PscFileProcessorWorker
 
   def save_raw_data(lines, import)
     bulk_operations = lines.map do |line|
-      data = JSON.parse(line)
+      data = Oj.load(line, mode: :rails)
       etag = data.dig('data', 'etag').presence || XXhash.xxh64(line).to_s
       {
         update_one: {
