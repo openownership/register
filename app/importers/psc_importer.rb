@@ -10,7 +10,8 @@ class PscImporter
   end
 
   def process_records(raw_records)
-    raw_records.each { |r| process(r) }
+    provenances = raw_records.map { |r| [r.id, process(r)] }.to_h
+    save_provenances!(provenances)
   end
 
   def process(raw_record)
@@ -23,7 +24,7 @@ class PscImporter
 
       statement = statement!(child_entity, record['data'])
 
-      save_provenance!([child_entity, statement], raw_record)
+      return [child_entity, statement]
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
       begin
         child_entity = child_entity!(record['company_number'])
@@ -32,7 +33,7 @@ class PscImporter
 
         relationship = relationship!(child_entity, parent_entity, record['data'])
 
-        save_provenance!([child_entity, parent_entity, relationship], raw_record)
+        return [child_entity, parent_entity, relationship]
       rescue PotentiallyBadEntityMergeDetectedAndStopped => ex
         msg = "[#{self.class.name}] Failed to handle a required entity merge " \
               "as a potentially bad merge has been detected and stopped: " \
@@ -235,10 +236,31 @@ class PscImporter
     IndexEntityService.new(entity).index
   end
 
-  def save_provenance!(entities_and_relationships, raw_record)
-    entities_and_relationships.map do |er|
-      provenance = er.raw_data_provenances.find_or_create_by!(import: import)
-      provenance.raw_data_records << raw_record
-    end
+  def save_provenances!(provenances)
+    bulk_operations = provenances.map do |raw_record_id, entities_and_relationships|
+      next unless entities_and_relationships.is_a? Array
+      entities_and_relationships.map do |entity_or_relationship|
+        {
+          update_one: {
+            upsert: true,
+            filter: {
+              entity_or_relationship_id: entity_or_relationship.id,
+              entity_or_relationship_type: entity_or_relationship.class.name,
+              import_id: import.id,
+            },
+            update: {
+              '$setOnInsert' => {
+                entity_or_relationship_id: entity_or_relationship.id,
+                entity_or_relationship_type: entity_or_relationship.class.name,
+                import_id: import.id,
+              },
+              '$addToSet' => { raw_data_record_ids: raw_record_id },
+            },
+          },
+        }
+      end
+    end.flatten.compact
+
+    RawDataProvenance.collection.bulk_write(bulk_operations, ordered: false)
   end
 end
