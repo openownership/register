@@ -61,6 +61,7 @@ class EntityMerger
     Relationship.where(source: @to_remove).update_all(source_id: @to_keep._id)
     Relationship.where(target: @to_remove).update_all(target_id: @to_keep._id)
     Statement.where(entity: @to_remove).update_all(entity_id: @to_keep._id)
+    RawDataProvenance.where(entity_or_relationship: @to_remove).update_all(entity_or_relationship: @to_keep._id)
   end
 
   def delete_entity_to_remove_from_search
