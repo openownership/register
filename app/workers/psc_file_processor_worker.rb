@@ -39,6 +39,7 @@ class PscFileProcessorWorker
   end
 
   def save_raw_data(lines, import)
+    now = Time.zone.now
     bulk_operations = lines.map do |line|
       data = Oj.load(line, mode: :rails)
       etag = data.dig('data', 'etag').presence || XXhash.xxh64(line).to_s
@@ -47,7 +48,8 @@ class PscFileProcessorWorker
           upsert: true,
           filter: { etag: etag },
           update: {
-            '$setOnInsert' => { etag: etag, data: data },
+            '$setOnInsert' => { etag: etag, data: data, created_at: now },
+            '$set' => { updated_at: now },
             '$addToSet' => { import_ids: import.id },
           },
         },

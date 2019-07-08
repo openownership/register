@@ -26,10 +26,14 @@ RSpec.describe PscFileProcessorWorker do
       first_record = RawDataRecord.find_by(etag: corporate_etag)
       expect(first_record.data).to eq(JSON.parse(corporate_record))
       expect(first_record.imports).to eq([import])
+      expect(first_record.created_at).to be_within(1.second).of(Time.zone.now)
+      expect(first_record.updated_at).to be_within(1.second).of(Time.zone.now)
 
       second_record = RawDataRecord.find_by(etag: individual_etag)
       expect(second_record.data).to eq(JSON.parse(individual_record))
       expect(second_record.imports).to eq([import])
+      expect(second_record.created_at).to be_within(1.second).of(Time.zone.now)
+      expect(second_record.updated_at).to be_within(1.second).of(Time.zone.now)
     end
 
     context 'when etags are present in the data' do
@@ -71,6 +75,7 @@ RSpec.describe PscFileProcessorWorker do
       it "updates the existing record" do
         subject
         expect(existing_record.reload.imports.count).to eq(3)
+        expect(existing_record.updated_at).to be_within(1.second).of(Time.zone.now)
       end
 
       it "still queues up a PscChunkImportWorker for the record" do
