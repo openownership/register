@@ -1,0 +1,14 @@
+.row
+  .col-lg-8
+    .raw-data-records
+      %pre.pre-scrollable= JSON.pretty_generate(raw_record.data)
+  .col-lg-4
+    .frame-light.meta
+      .frame-wrap
+        %h6= t("raw_data_records.show.data_sources")
+        %p= raw_record.imports.map { |i| i.data_source.name }.join(", ")
+        %h6= t("raw_data_records.show.imports")
+        %p= raw_record.imports.map(&:created_at).join(", ")
+        %h6= t("raw_data_records.show.fields.etag")
+        %p
+          %code= raw_record.etag

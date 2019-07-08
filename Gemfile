@@ -39,6 +39,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'skylight'
 gem 'redcarpet'
 gem 'mongoid-slug'
+gem 'xxhash'
+gem 'oj'
 
 group :development, :test do
   gem 'byebug'

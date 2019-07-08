@@ -1,5 +1,5 @@
 def psc_json_fixture(filepath)
-  json = file_fixture(filepath).read
-  records = JSON.parse(json, symbolize_names: true, object_class: OpenStruct)
-  Array(records)
+  data = JSON.parse file_fixture(filepath).read
+  record = create(:raw_data_record, data: data)
+  [record]
 end

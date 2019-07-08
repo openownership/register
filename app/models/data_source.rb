@@ -6,12 +6,15 @@ class DataSource
   field :url, type: String
   field :name, type: String
   slug :name
+  field :document_id, type: String
   field :overview, type: String, localize: true
   field :data_availability, type: String, localize: true
   field :timeline_url, type: String
   field :current_statistic_types, type: Array, default: []
 
   embeds_many :statistics, class_name: 'DataSourceStatistic'
+  has_many :raw_data_records
+  has_many :imports
 
   index({ name: 1 }, unique: true)
 

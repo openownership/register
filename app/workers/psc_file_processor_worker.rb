@@ -1,18 +1,21 @@
 require 'open-uri'
 require 'zip'
 require 'zlib'
-require 'base64'
+require 'xxhash'
+require 'oj'
 
 class PscFileProcessorWorker
   include Sidekiq::Worker
   sidekiq_options retry: false
 
-  def perform(source_url, chunk_size)
+  def perform(source_url, chunk_size, import_id)
+    import = Import.find import_id
     retrieved_at = Time.zone.now.to_s
 
     with_file(source_url) do |file|
-      with_chunks(file, chunk_size) do |chunk|
-        PscChunkImportWorker.perform_async(chunk, retrieved_at)
+      file.lazy.each_slice(chunk_size) do |lines|
+        record_ids = save_raw_data(lines, import).map(&:to_s)
+        PscChunkImportWorker.perform_async(record_ids, retrieved_at, import.id.to_s)
       end
     end
   end
@@ -25,7 +28,7 @@ class PscFileProcessorWorker
       when ".gz"
         file = Zlib::GzipReader.new(file)
       when ".zip"
-        zip = Zip::File.new(file)
+        zip = Zip::File.open_buffer(file)
         raise if zip.count > 1
 
         file = zip.first.get_input_stream
@@ -35,10 +38,24 @@ class PscFileProcessorWorker
     end
   end
 
-  def with_chunks(file, chunk_size)
-    file.lazy.each_slice(chunk_size) do |lines|
-      chunk = ChunkHelper.to_chunk lines
-      yield chunk
+  def save_raw_data(lines, import)
+    now = Time.zone.now
+    bulk_operations = lines.map do |line|
+      data = Oj.load(line, mode: :rails)
+      etag = data.dig('data', 'etag').presence || XXhash.xxh64(line).to_s
+      {
+        update_one: {
+          upsert: true,
+          filter: { etag: etag },
+          update: {
+            '$setOnInsert' => { etag: etag, data: data, created_at: now },
+            '$set' => { updated_at: now },
+            '$addToSet' => { import_ids: import.id },
+          },
+        },
+      }
     end
+
+    RawDataRecord.collection.bulk_write(bulk_operations, ordered: false).upserted_ids
   end
 end

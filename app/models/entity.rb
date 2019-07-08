@@ -30,6 +30,7 @@ class Entity
     index: true,
     counter_cache: :merged_entities_count,
   )
+  has_many :raw_data_provenances, as: :entity_or_relationship
 
   field :oc_updated_at, type: Time
   field :last_resolved_at, type: Time
@@ -104,6 +105,7 @@ class Entity
     )
 
     self.id = document.fetch('_id')
+    self.new_record = false
 
     reload
   rescue Mongo::Error::OperationFailure => exception

@@ -367,3 +367,16 @@ en:
     entity_graph_link: "View graph"
     zoom: "Zoom in or out"
     help: Click and drag anywhere to change the view. Click entities or relationships to see more detail.
+  raw_data_provenances:
+    show:
+      data_source: Data source
+      import_date: Import date
+      fields:
+        created_at: Record imported at
+        entity_or_relationship: Record
+  raw_data_records:
+    show:
+      data_sources: Data source(s)
+      imports: Seen in import(s)
+      fields:
+        etag: Etag

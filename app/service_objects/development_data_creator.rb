@@ -19,12 +19,19 @@ class DevelopmentDataCreator
     ua_data = Rails.root.join('db', 'data', 'ua_seed_data.jsonl')
     Rake.application['ua:import'].invoke(ua_data, Date.current.to_s)
 
+    psc_data_source = FactoryGirl.create(:psc_data_source)
+    uk_import = Import.create!(data_source: psc_data_source)
     uk_data = Rails.root.join('db', 'data', 'gb-persons-with-significant-control-snapshot-sample-1k.txt')
     records = open(uk_data).readlines.map do |line|
-      JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
+      data = JSON.parse(line)
+      etag = data['data']['etag']
+      FactoryGirl.create(:raw_data_record, data: data, etag: etag, imports: [uk_import])
     end
     retrieved_at = Time.zone.parse('2016-12-06 06:15:37')
-    PscImportTask.new(records, retrieved_at).call
+    importer = PscImporter.new
+    importer.import = uk_import
+    importer.retrieved_at = retrieved_at
+    importer.process_records(records)
 
     eiti_data = Rails.root.join('db', 'data', 'eiti-data.txt')
     Rake::Task['eiti:import'].invoke(eiti_data)

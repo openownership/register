@@ -5,13 +5,15 @@ class PscChunkImportWorker
   include Sidekiq::Worker
   sidekiq_options retry: false
 
-  def perform(chunk, retrieved_at_s)
-    lines = ChunkHelper.from_chunk chunk
-    records = lines.map do |line|
-      JSON.parse(line, symbolize_names: true, object_class: OpenStruct)
-    end
+  def perform(record_ids, retrieved_at_s, import_id)
+    records = RawDataRecord.find(record_ids)
+    records = [records] unless records.is_a? Array
     retrieved_at = Time.zone.parse(retrieved_at_s)
+    import = Import.find import_id
 
-    PscImportTask.new(records, retrieved_at).call
+    importer = PscImporter.new
+    importer.import = import
+    importer.retrieved_at = retrieved_at
+    importer.process_records records
   end
 end

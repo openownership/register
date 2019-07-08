@@ -1,10 +1,6 @@
 class DevelopmentDataLoader
-  def initialize(dumped_models)
-    @dumped_models = dumped_models
-  end
-
   def call
-    @dumped_models.each do |klass|
+    DevelopmentDataHelper::MODELS.each do |klass|
       file = klass.name.tableize
       data = File.read(Rails.root.join('db', 'data', 'generated', "#{file}.json"))
       JSON.parse(data).each do |instance_data|

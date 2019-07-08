@@ -8,11 +8,13 @@ RSpec.describe EntityMerger do
   let!(:relationship_1) { create :relationship, source: to_remove }
   let!(:relationship_2) { create :relationship, target: to_remove }
   let!(:statement) { create :statement, entity: to_remove }
+  let!(:raw_provenance) { create :raw_data_provenance, entity_or_relationship: to_remove }
 
   let!(:other_entity) { create :legal_entity }
   let!(:other_relationship_1) { create :relationship, source: other_entity }
   let!(:other_relationship_2) { create :relationship, target: other_entity }
   let!(:other_statement) { create :statement, entity: other_entity }
+  let!(:other_raw_provenance) { create :raw_data_provenance, entity_or_relationship: other_entity }
 
   before do
     allow(IndexEntityService).to receive(:new).with(to_remove).and_return(index_entity_service)
@@ -26,6 +28,7 @@ RSpec.describe EntityMerger do
     expect(Relationship.find(relationship_1._id).source).to eq to_remove
     expect(Relationship.find(relationship_2._id).target).to eq to_remove
     expect(Statement.find(statement._id).entity).to eq to_remove
+    expect(RawDataProvenance.find(raw_provenance._id).entity_or_relationship).to eq to_remove
 
     expect_others_not_changed
   end
@@ -43,6 +46,7 @@ RSpec.describe EntityMerger do
     expect(Relationship.find(relationship_1._id).source).to eq to_keep
     expect(Relationship.find(relationship_2._id).target).to eq to_keep
     expect(Statement.find(statement._id).entity).to eq to_keep
+    expect(RawDataProvenance.find(raw_provenance._id).entity_or_relationship).to eq to_keep
 
     expect_others_not_changed
   end
@@ -53,6 +57,7 @@ RSpec.describe EntityMerger do
     expect(Relationship.find(other_relationship_1._id).source).to eq other_entity
     expect(Relationship.find(other_relationship_2._id).target).to eq other_entity
     expect(Statement.find(other_statement._id).entity).to eq other_entity
+    expect(RawDataProvenance.find(other_raw_provenance._id).entity_or_relationship).to eq other_entity
   end
 
   def set_up_search_index_not_updated_expectations
