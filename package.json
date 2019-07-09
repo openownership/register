@@ -4,9 +4,7 @@
     "cytoscape": "^3.8.1",
     "cytoscape-dagre": "^2.2.2",
     "cytoscape-popper": "^1.0.4",
-    "dagre": "^0.8.4",
-    "popper": "^1.0.1",
-    "tippy": "^0.0.0"
+    "tippy.js": "^4.3.4"
   },
   "devDependencies": {
     "webpack-dev-server": "^3.7.2"
