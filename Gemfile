@@ -14,6 +14,8 @@ gem 'jbuilder'
 
 gem 'jquery-rails'
 
+gem 'webpacker'
+
 gem 'mongoid'
 gem 'kaminari-mongoid'
 gem 'elasticsearch-model', '~> 6.0'
