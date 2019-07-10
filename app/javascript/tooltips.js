@@ -1,8 +1,12 @@
 class Tooltips {
+  $ = null;
+
   constructor($) {
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    });
+    this.$ = $;
+  }
+
+  init() {
+    $('[data-toggle="tooltip"]').tooltip();
   }
 }
 

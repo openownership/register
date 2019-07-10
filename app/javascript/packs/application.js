@@ -21,8 +21,27 @@ import Submissions from 'submissions';
 import Tree from 'tree';
 import Tooltips from 'tooltips';
 
-new EntityGraph(window.jQuery);
-new OCAdditionalInfo(window.jQuery);
-new Submissions(window.jQuery);
-new Tree(window.jQuery);
-new Tooltips(window.jQuery);
+function ready(callback){
+  // in case the document is already rendered
+  if (document.readyState!='loading') callback();
+  // modern browsers
+  else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
+  // IE <= 8
+  else document.attachEvent('onreadystatechange', function(){
+      if (document.readyState=='complete') callback();
+  });
+}
+
+const entityGraph = new EntityGraph(window.jQuery);
+const ocAdditionalInfo = new OCAdditionalInfo(window.jQuery);
+const submissions = new Submissions(window.jQuery);
+const tree = new Tree(window.jQuery);
+const tooltips = new Tooltips(window.jQuery);
+
+ready(() => {
+  entityGraph.init();
+  ocAdditionalInfo.init();
+  submissions.init();
+  tree.init();
+  tooltips.init();
+});
