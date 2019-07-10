@@ -69,10 +69,6 @@ module ApplicationHelper
     PARTIAL_DATE_FORMATS[iso8601_date.atoms.size] % iso8601_date.atoms
   end
 
-  def show_referral_message?
-    params[:referrer] == 'WhoControlsIt'
-  end
-
   REPORT_INCORRECT_DATA_URL = 'https://docs.google.com/forms/d/18-kex64GHUc_EIRBYOl1oedSthU0UOlllKDZrtarCOk'.freeze
 
   def report_incorrect_data_url
