@@ -176,7 +176,6 @@ class EntityGraph {
           .attr('step', 0.1)
           .val(roundZoom(cy.zoom()))
           .on('change', function() {
-            console.log($zoom.val());
             cy.zoom(parseFloat($zoom.val()));
           });
       }

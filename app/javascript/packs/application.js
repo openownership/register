@@ -16,4 +16,13 @@
 // const imagePath = (name) => images(name, true)
 
 import EntityGraph from 'entity-graph';
+import OCAdditionalInfo from 'oc-additional-info';
+import Submissions from 'submissions';
+import Tree from 'tree';
+import Tooltips from 'tooltips';
+
 new EntityGraph(window.jQuery);
+new OCAdditionalInfo(window.jQuery);
+new Submissions(window.jQuery);
+new Tree(window.jQuery);
+new Tooltips(window.jQuery);

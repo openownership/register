@@ -1,5 +1,5 @@
 .tree-wrapper
-  .tree-window{ 'data-tree': @submission.entity.id }
+  .tree-window{ data: { tree: @submission.entity.id, grouped_tooltip: t('.grouped') } }
     .tree-canvas.tree-canvas--show-submission
       .tree-group
         = render 'tree_node', node: @node
@@ -22,6 +22,3 @@
   .tree-help
     .fa.fa-info-circle
     %small= t('tree.help')
-
-:javascript
-  var GROUPED_NODES_TOOLTIP_TITLE = '#{t('.grouped')}';
