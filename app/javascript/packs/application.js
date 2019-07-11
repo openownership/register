@@ -34,7 +34,7 @@ function ready(callback){
 
 const entityGraph = new EntityGraph(window.jQuery);
 const ocAdditionalInfo = new OCAdditionalInfo(window.document);
-const submissions = new Submissions(window.jQuery);
+const submissions = new Submissions(window.document);
 const tree = new Tree(window.document);
 const tooltips = new Tooltips(window.jQuery);
 

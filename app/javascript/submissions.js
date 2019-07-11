@@ -1,35 +1,46 @@
-class Submissions {
-  signpostTemplate = '<div class="tooltip tooltip--signpost" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
-  $ = null;
+import tippy from 'tippy.js';
 
-  constructor($) {
-    this.$ = $;
+class Submissions {
+  document = null;
+  searchInput = null;
+  searchForm = null;
+
+  constructor(document) {
+    this.document = document;
+    this.showEmptySearchTooltip = this.showEmptySearchTooltip.bind(this);
+    this.showSpinner = this.showSpinner.bind(this);
+  }
+
+  showEmptySearchTooltip() {
+    tippy(this.searchInput, {
+      content: this.searchInput.dataset.tooltip,
+      placement: 'top',
+      trigger: 'manual',
+      offset: '5, 0'
+    }).show();
+  }
+
+  showSpinner() {
+    var overlay = this.document.createElement('div')
+    overlay.classList.add('submission-overlay');
+    var spinner = this.document.createElement('div');
+    spinner.classList.add('submission-overlay__spinner');
+    overlay.appendChild(spinner);
+    this.document.querySelector('body').appendChild(overlay);
   }
 
   init() {
-    var $search = $('.submission-search-field .form-control');
-    if($search.val() === '') {
-      $search
-        .tooltip({
-          title: $search.data('tooltip'),
-          placement: 'top',
-          trigger: 'manual',
-          offset: '5 0',
-          template: this.signpostTemplate
-        })
-        .tooltip('show');
+    this.searchInput = this.document.querySelector('.submission-search-field .form-control');
+    if(this.searchInput === null) {
+      return;
+    }
+    this.searchForm = this.document.querySelector('.submission-search-form');
+
+    if(this.searchInput.value === '') {
+      this.showEmptySearchTooltip();
     }
 
-    $(document).on('submit', '.submission-search-form', function() {
-      var overlay = $('<div class="submission-overlay" />');
-      var spinner = $('<div class="submission-overlay__spinner" />');
-
-      overlay
-        .append(spinner)
-        .hide()
-        .appendTo('body')
-        .fadeIn('fast');
-    });
+    this.searchForm.addEventListener('submit', this.showSpinner);
   }
 }
 
