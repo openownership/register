@@ -15,33 +15,39 @@
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
+import Rails from 'rails-ujs';
+Rails.start();
+import 'bootstrap.native';
+
 import EntityGraph from 'entity-graph';
 import OCAdditionalInfo from 'oc-additional-info';
 import Submissions from 'submissions';
 import Tree from 'tree';
 import Tooltips from 'tooltips';
 
-function ready(callback){
-  // in case the document is already rendered
-  if (document.readyState!='loading') callback();
-  // modern browsers
-  else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
-  // IE <= 8
-  else document.attachEvent('onreadystatechange', function(){
-      if (document.readyState=='complete') callback();
+(() => {
+  function ready(callback){
+    // in case the document is already rendered
+    if (document.readyState!='loading') callback();
+    // modern browsers
+    else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
+    // IE <= 8
+    else document.attachEvent('onreadystatechange', function(){
+        if (document.readyState=='complete') callback();
+    });
+  }
+
+  const entityGraph = new EntityGraph(document);
+  const ocAdditionalInfo = new OCAdditionalInfo(window.document);
+  const submissions = new Submissions(window.document);
+  const tree = new Tree(window.document);
+  const tooltips = new Tooltips();
+
+  ready(() => {
+    entityGraph.init();
+    ocAdditionalInfo.init();
+    submissions.init();
+    tree.init();
+    tooltips.init();
   });
-}
-
-const entityGraph = new EntityGraph(window.jQuery);
-const ocAdditionalInfo = new OCAdditionalInfo(window.document);
-const submissions = new Submissions(window.document);
-const tree = new Tree(window.document);
-const tooltips = new Tooltips();
-
-ready(() => {
-  entityGraph.init();
-  ocAdditionalInfo.init();
-  submissions.init();
-  tree.init();
-  tooltips.init();
-});
+})();
