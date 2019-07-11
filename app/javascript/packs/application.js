@@ -36,7 +36,7 @@ const entityGraph = new EntityGraph(window.jQuery);
 const ocAdditionalInfo = new OCAdditionalInfo(window.document);
 const submissions = new Submissions(window.document);
 const tree = new Tree(window.document);
-const tooltips = new Tooltips(window.jQuery);
+const tooltips = new Tooltips();
 
 ready(() => {
   entityGraph.init();

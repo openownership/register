@@ -38,9 +38,7 @@ module ApplicationHelper
     content_tag(
       :span,
       label,
-      "data-toggle" => "tooltip",
-      "data-placement" => position,
-      title: title,
+      data: { 'tippy-content' => title, 'tippy-placement' => position },
       class: "tooltip-helper",
     )
   end

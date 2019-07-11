@@ -16,7 +16,7 @@
 
   .tree-controls
     %span.fa.fa-search-minus
-    %input.tree-zoom{ type: "range", data: { toggle: 'tooltip', title: t('tree.zoom'), placement: 'bottom' } }
+    %input.tree-zoom{ type: "range", data: { 'tippy-content' => t('tree.zoom'), 'tippy-placement' => 'bottom' } }
     %span.fa.fa-search-plus
 
   .tree-help

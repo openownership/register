@@ -1,12 +1,8 @@
+import tippy from 'tippy.js';
+
 class Tooltips {
-  $ = null;
-
-  constructor($) {
-    this.$ = $;
-  }
-
   init() {
-    $('[data-toggle="tooltip"]').tooltip();
+    tippy('[data-tippy-content]');
   }
 }
 
