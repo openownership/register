@@ -10,17 +10,21 @@
     "tippy.js": "^4.3.4"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0",
     "jest": "^24.8.0",
     "webpack-dev-server": "^3.7.2"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "yarn run eslint --ext .js app/javascript"
   },
   "jest": {
     "roots": [
       "spec/javascript"
     ],
-    "moduleDirectories" : [
+    "moduleDirectories": [
       "node_modules",
       "app/javascript"
     ]

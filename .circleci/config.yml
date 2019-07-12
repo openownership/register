@@ -74,3 +74,4 @@ jobs:
       - run: yarn test
       - run: bundle exec rubocop
       - run: bundle exec haml-lint .
+      - run: yarn lint
