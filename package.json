@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@rails/webpacker": "^4.0.7",
-    "bootstrap.native": "^2.0.26",
     "cytoscape": "^3.8.1",
     "cytoscape-dagre": "^2.2.2",
     "cytoscape-popper": "^1.0.4",
@@ -10,6 +9,7 @@
     "tippy.js": "^4.3.4"
   },
   "devDependencies": {
+    "bootstrap.native": "^2.0.26",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.0",
