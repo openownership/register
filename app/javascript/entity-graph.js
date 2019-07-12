@@ -195,7 +195,7 @@ class EntityGraph {
 
   zoomIn() {
     const step = parseFloat(this.zoom.getAttribute('step'));
-    let zoom = Math.max(this.cy.minZoom(), this.cy.zoom() + step);
+    let zoom = Math.min(this.cy.maxZoom(), this.cy.zoom() + step);
     zoom = this.constructor.roundZoom(zoom);
     this.cy.zoom(zoom);
     this.zoom.value = zoom;
