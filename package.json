@@ -1,15 +1,28 @@
 {
   "dependencies": {
-    "rails-ujs": "^5.2.2-1",
     "@rails/webpacker": "^4.0.7",
     "bootstrap.native": "^2.0.26",
     "cytoscape": "^3.8.1",
     "cytoscape-dagre": "^2.2.2",
     "cytoscape-popper": "^1.0.4",
+    "rails-ujs": "^5.2.2-1",
     "string-to-color": "^2.1.1",
     "tippy.js": "^4.3.4"
   },
   "devDependencies": {
+    "jest": "^24.8.0",
     "webpack-dev-server": "^3.7.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "roots": [
+      "spec/javascript"
+    ],
+    "moduleDirectories" : [
+      "node_modules",
+      "app/javascript"
+    ]
   }
 }

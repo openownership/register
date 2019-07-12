@@ -71,5 +71,6 @@ jobs:
           environment:
             RAILS_ENV: test
             RACK_ENV: test
+      - run: yarn test
       - run: bundle exec rubocop
       - run: bundle exec haml-lint .
