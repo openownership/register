@@ -69,26 +69,25 @@ class EntityGraph
     def id
       "#{super}_#{label_key}"
     end
+
+    delegate :hash, to: :id
   end
 
   class Edge
-    attr_accessor :relationship, :source_id, :target_id
+    attr_accessor :relationship, :source_id, :target_id, :id
 
     def initialize(relationship)
       @relationship = relationship
       @source_id = relationship.source.id.to_s
       @target_id = relationship.target.id.to_s
-    end
-
-    def id
-      "#{source_id}_#{target_id}"
+      @id = SecureRandom.uuid
     end
 
     def eql?(other)
-      id == other.id
+      relationship == other.relationship
     end
 
-    delegate :hash, to: :id
+    delegate :hash, to: :relationship
   end
 
   class LabelEdge < Edge
@@ -104,7 +103,15 @@ class EntityGraph
         @source_id = node.id
         @target_id = entity.id.to_s
       end
+
+      @id = "#{@source_id}_#{@target_id}"
     end
+
+    def eql?(other)
+      id == other.id
+    end
+
+    delegate :hash, to: :id
   end
 
   private
