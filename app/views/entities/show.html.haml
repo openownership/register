@@ -100,7 +100,7 @@
                   = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
                   %span.details
                     = t(".details")
-            = paginate @source_relationships
+            = paginate @source_relationships, param_name: :source_page
 
       - content_for(:meta) do
         - if @entity.natural_person?
@@ -151,7 +151,7 @@
               %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank'
         = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, class: 'feedback-button', target: '_blank'
 
-    - unless @entity.merged_entities.empty?
+    - unless @merged_entities.empty?
       .row
         .col-lg-8
           .frame
@@ -159,15 +159,17 @@
               .merged-people
                 %h5
                   = t(".merged_people")
+                = page_entries_info @merged_entities, entry_name: 'merged people'
                 .grouping
                   .grouping-note
-                    = t(".merged_note_html", count: @entity.merged_entities.size, report_incorrect_data_url: report_incorrect_data_url)
+                    = t(".merged_note_html", count: @entity.merged_entities_count, report_incorrect_data_url: report_incorrect_data_url)
                 %ul.list-unstyled.list-entities
-                  - @entity.merged_entities.each do |merged_entity|
+                  - @merged_entities.each do |merged_entity|
                     %li.item
                       = render partial: 'shared/entity_title', locals: { entity: merged_entity }
                       .result-controls
                         = render partial: 'shared/entity_controlled_companies', locals: { entity: merged_entity }
+                = paginate @merged_entities, param_name: :merged_page
 
     - if @similar_people && @similar_people.length > 1
       .row

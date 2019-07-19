@@ -66,12 +66,15 @@ RSpec.describe 'Entity pages' do
     include_context 'basic entity with one owner'
 
     let!(:relationships) do
-      FactoryGirl.create_list(
+      relationships = FactoryGirl.create_list(
         :relationship,
-        10,
+        12,
         source: company,
         interests: ['ownership-of-shares-75-to-100-percent'],
       )
+      # Need to sort them the same way as the view to test what is/isn't on
+      # each page
+      RelationshipsSorter.new(relationships).call
     end
 
     let!(:ended_relationship_1) do
@@ -97,9 +100,12 @@ RSpec.describe 'Entity pages' do
 
     it 'paginates the list of owned companies' do
       visit entity_path(company)
-      expect(page).to have_text 'Displaying companies 1 - 10 of 12 in total'
+      expect(page).to have_text 'Displaying companies 1 - 10 of 14 in total'
 
-      within '.pagination' do
+      expect(page).not_to have_text relationships.last.target.name
+      expect(page).not_to have_text relationships[-2].target.name
+
+      within '.source-relationships .pagination' do
         within '.current' do
           expect(page).to have_text('1')
         end
@@ -109,7 +115,13 @@ RSpec.describe 'Entity pages' do
         click_link '2'
       end
 
-      within '.pagination' do
+      expect(page).to have_text relationships.last.target.name
+      expect(page).to have_text relationships[-2].target.name
+
+      expect(page).not_to have_text relationships.first.target.name
+      expect(page).not_to have_text relationships.second.target.name
+
+      within '.source-relationships .pagination' do
         expect(page).to have_link '« First'
         expect(page).to have_link '‹ Prev'
         expect(page).to have_link '1'
@@ -513,6 +525,92 @@ RSpec.describe 'Entity pages' do
       expect(page).to have_selector '.entity-link', text: company_2.name
       expect(page).to have_link company_2.name
       expect(page).to have_selector '.entity-link', text: company_2.incorporation_date.iso8601
+    end
+  end
+
+  context 'for a person that has lots of merged people' do
+    include_context 'basic entity with one owner'
+
+    let!(:merged_people) { create_list(:natural_person, 12, master_entity: person) }
+
+    it 'paginates the merged people list' do
+      visit entity_path(person)
+      expect(page).to have_text 'Displaying merged people 1 - 10 of 12 in total'
+
+      expect(page).not_to have_text merged_people.last.name
+      expect(page).not_to have_text merged_people[-2].name
+
+      within '.merged-people .pagination' do
+        within '.current' do
+          expect(page).to have_text('1')
+        end
+        expect(page).to have_link '2'
+        expect(page).to have_link 'Next ›'
+        expect(page).to have_link 'Last »'
+        click_link '2'
+      end
+
+      expect(page).to have_text merged_people.last.name
+      expect(page).to have_text merged_people[-2].name
+
+      expect(page).not_to have_text merged_people.first.name
+      expect(page).not_to have_text merged_people.second.name
+
+      within '.merged-people .pagination' do
+        expect(page).to have_link '« First'
+        expect(page).to have_link '‹ Prev'
+        expect(page).to have_link '1'
+        within '.current' do
+          expect(page).to have_text('2')
+        end
+      end
+    end
+  end
+
+  context 'for a person that owns lots of companies and has lots of merged people' do
+    include_context 'basic entity with one owner'
+
+    let!(:relationships) do
+      relationships = FactoryGirl.create_list(
+        :relationship,
+        12,
+        source: person,
+        interests: ['ownership-of-shares-75-to-100-percent'],
+      )
+      # Need to sort them the same way as the view to test what is/isn't on
+      # each page
+      RelationshipsSorter.new(relationships).call
+    end
+
+    let!(:merged_people) { create_list(:natural_person, 12, master_entity: person) }
+
+    it 'paginates the merged people and companies lists separately' do
+      visit entity_path(person)
+      expect(page).to have_text 'Displaying merged people 1 - 10 of 12 in total'
+      expect(page).to have_text 'Displaying companies 1 - 10 of 13 in total'
+
+      expect(page).not_to have_text merged_people.last.name
+      expect(page).not_to have_text merged_people[-2].name
+      expect(page).not_to have_text relationships.last.target.name
+      expect(page).not_to have_text relationships[-2].target.name
+
+      within '.merged-people .pagination' do
+        click_link '2'
+      end
+
+      expect(page).to have_text merged_people.last.name
+      expect(page).to have_text merged_people[-2].name
+      expect(page).not_to have_text relationships.last.target.name
+      expect(page).not_to have_text relationships[-2].target.name
+
+      within '.source-relationships .pagination' do
+        click_link '2'
+      end
+
+      expect(page).to have_text merged_people.last.name
+      expect(page).to have_text merged_people[-2].name
+      expect(page).to have_text relationships.last.target.name
+      expect(page).to have_text relationships[-2].target.name
     end
   end
 end

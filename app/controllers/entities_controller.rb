@@ -1,7 +1,9 @@
 class EntitiesController < ApplicationController
   def show
-    entity = Entity.includes(:master_entity, :merged_entities).find(params[:id])
+    entity = Entity.includes(:master_entity).find(params[:id])
     redirect_to_master_entity(:show, entity)
+
+    @merged_entities = entity.merged_entities.page(params[:merged_page]).per(10)
 
     # It's annoying that we're going to paginate this straight after and so
     # throw away a lot of the relationships we find, but it's the only way to
@@ -11,7 +13,7 @@ class EntitiesController < ApplicationController
     )
     @source_relationships = Kaminari
       .paginate_array(source_relationships)
-      .page(params[:page]).per(10)
+      .page(params[:source_page]).per(10)
 
     @ultimate_source_relationship_groups = decorate_with(
       ultimate_source_relationship_groups(entity),
