@@ -3,8 +3,6 @@ class RelationshipsController < ApplicationController
     target_entity = Entity.find(params[:entity_id])
     source_entity = resolve_master_entity(Entity.find_or_unknown(params[:id]))
 
-    CreateRelationshipsForStatements.call(source_entity)
-
     relationships = InferredRelationshipGraph
       .new(target_entity)
       .relationships_to(source_entity)
