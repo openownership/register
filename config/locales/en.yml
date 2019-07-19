@@ -196,6 +196,7 @@ en:
       merged_people:
         one: "Includes details of 1 other merged record"
         other: "Includes details of %{count} other merged records"
+      additional_owned_companies: "%{count} more"
     filter:
       filter_by: "Filter by %{key}"
       filtered_by: "Filtered by %{key}"

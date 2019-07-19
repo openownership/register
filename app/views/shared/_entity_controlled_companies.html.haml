@@ -1,6 +1,6 @@
 :ruby
   controls = controlled_company_links(entity)
 - if controls.present?
-  = t('shared.controlled_companies_html', company_links: safe_join(controls, ', '))
+  = t('shared.controlled_companies_html', company_links: to_sentence(controls))
 - else
   = t('shared.no_controlled_companies')
