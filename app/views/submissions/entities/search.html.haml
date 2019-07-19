@@ -20,7 +20,7 @@
             = render 'continue_params'
             .form-group
               .submission-search-field
-                = f.text_field :q, value: params[:q], autofocus: true, id: 'search_q', class: 'form-control form-control-lg'
+                = f.text_field :q, value: params[:q], autofocus: true, id: 'search_q', class: 'form-control form-control-lg', data: { tooltip: t('.search_tooltip') }
                 = f.button t('.submit'), name: nil, class: 'btn btn-primary'
 
           - if params[:q].present?
@@ -40,7 +40,3 @@
             %hr
             %p= t('.choose_from_submission')
             = render partial: 'submissions/entities/search_result', collection: @companies_from_submission, as: :entity
-
-- if params[:q].blank?
-  :javascript
-    $('.submission-search-field .form-control').tooltip({ title: '#{t('.search_tooltip')}', placement: 'top', trigger: 'manual', offset: '5 0', template: SIGNPOST_TEMPLATE }).tooltip('show');

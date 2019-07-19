@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "@rails/webpacker": "^4.0.7",
+    "cytoscape": "^3.8.1",
+    "cytoscape-dagre": "^2.2.2",
+    "cytoscape-popper": "^1.0.4",
+    "rails-ujs": "^5.2.2-1",
+    "string-to-color": "^2.1.1",
+    "tippy.js": "^4.3.4"
+  },
+  "devDependencies": {
+    "bootstrap.native": "^2.0.26",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0",
+    "jest": "^24.8.0",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "yarn run eslint --ext .js app/javascript"
+  },
+  "jest": {
+    "roots": [
+      "spec/javascript"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "app/javascript"
+    ]
+  }
+}

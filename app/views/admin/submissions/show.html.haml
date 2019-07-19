@@ -2,7 +2,7 @@
   = stylesheet_link_tag 'admin'
 
 .tree-wrapper
-  .tree-window{ 'data-tree': @submission.entity.id }
+  .tree-window{ data: { tree: @submission.entity.id, grouped_tooltip: t('.grouped') } }
     .tree-canvas.tree-canvas--show-submission
       .tree-group
         = render 'tree_node', node: @node
@@ -33,7 +33,7 @@
 
   .tree-controls
     %span.fa.fa-search-minus
-    %input.tree-zoom{ type: "range", data: { toggle: 'tooltip', title: t('tree.zoom'), placement: 'bottom' } }
+    %input.tree-zoom{ type: "range", data: { 'tippy-content' => t('tree.zoom'), 'tippy-placement' => 'bottom' } }
     %span.fa.fa-search-plus
 
   .tree-help
@@ -45,6 +45,3 @@
     .row
       .col-lg-6
         = render partial: 'entity', collection: @entities
-
-:javascript
-  var GROUPED_NODES_TOOLTIP_TITLE = '#{t('.grouped')}';

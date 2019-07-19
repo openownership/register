@@ -4,15 +4,14 @@ ruby File.read(".ruby-version").strip
 gem 'addressable'
 gem 'rails', '~> 5.2.0', '>= 5.2.2.1'
 gem 'puma', '~> 3.0'
+
 gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
 gem 'haml-rails', '~> 1.0'
 gem 'bootstrap', '~> 4.0.0.alpha5'
 gem 'font-awesome-sass', '~> 4.7.0'
-gem 'tether-rails'
 gem 'jbuilder'
 
-gem 'jquery-rails'
+gem 'webpacker'
 
 gem 'mongoid'
 gem 'kaminari-mongoid'

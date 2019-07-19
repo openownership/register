@@ -42,6 +42,22 @@ jobs:
           paths:
             - vendor/bundle
 
+      # Restore yarn cache
+      - restore_cache:
+          keys:
+            - app-yarn-v1-{{ checksum "yarn.lock" }}
+            - app-yarn-v1-
+
+      - run:
+          name: Yarn Install
+          command: yarn install --cache-folder ~/.cache/yarn
+
+      # Store yarn / webpacker cache
+      - save_cache:
+          key: app-yarn-v1-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
       - run:
           name: Wait for MongoDB
           command: dockerize -wait tcp://localhost:27017 -timeout 1m
@@ -55,5 +71,7 @@ jobs:
           environment:
             RAILS_ENV: test
             RACK_ENV: test
+      - run: yarn test
       - run: bundle exec rubocop
       - run: bundle exec haml-lint .
+      - run: yarn lint

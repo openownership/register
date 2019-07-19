@@ -11,7 +11,7 @@
     = google_analytics
     = csrf_meta_tags
     = stylesheet_link_tag 'application', media: 'all'
-    = javascript_include_tag 'application'
+    = javascript_pack_tag 'application'
     %link{ href: "/apple-touch-icon.png", rel: "apple-touch-icon", sizes: "180x180" }/
     %link{ href: "/favicon-32x32.png", rel: "icon", sizes: "32x32", type: "image/png" }/
     %link{ href: "/favicon-16x16.png", rel: "icon", sizes: "16x16", type: "image/png" }/
@@ -72,7 +72,6 @@
 
     .content-wrapper
       = render 'shared/messages'
-      = render 'shared/referral_message' if show_referral_message?
       = yield
 
     %footer.site-footer

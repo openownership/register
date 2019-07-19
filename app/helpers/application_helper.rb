@@ -38,9 +38,7 @@ module ApplicationHelper
     content_tag(
       :span,
       label,
-      "data-toggle" => "tooltip",
-      "data-placement" => position,
-      title: title,
+      data: { 'tippy-content' => title, 'tippy-placement' => position },
       class: "tooltip-helper",
     )
   end
@@ -67,10 +65,6 @@ module ApplicationHelper
     return if iso8601_date.nil?
 
     PARTIAL_DATE_FORMATS[iso8601_date.atoms.size] % iso8601_date.atoms
-  end
-
-  def show_referral_message?
-    params[:referrer] == 'WhoControlsIt'
   end
 
   REPORT_INCORRECT_DATA_URL = 'https://docs.google.com/forms/d/18-kex64GHUc_EIRBYOl1oedSthU0UOlllKDZrtarCOk'.freeze
