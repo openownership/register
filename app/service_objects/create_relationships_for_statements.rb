@@ -5,6 +5,10 @@ class CreateRelationshipsForStatements
     else
       [
         Relationship.new(
+          id: {
+            'document_id' => 'OpenOwnership Register',
+            'identifier' => "#{source.id}#{Entity::UNKNOWN_ID_MODIFIER}-relationship",
+          },
           source: UnknownPersonsEntity.new(
             id: "#{source.id}#{Entity::UNKNOWN_ID_MODIFIER}",
           ),
@@ -17,6 +21,10 @@ class CreateRelationshipsForStatements
   def self.when_statements(source)
     source.statements.map do |statement|
       Relationship.new(
+        id: {
+          'document_id' => 'OpenOwnership Register',
+          'statement_id' => statement.id,
+        },
         source: UnknownPersonsEntity.new(
           id: "statement-descriptions-#{statement.type}",
           name: I18n.t("statement-descriptions.#{statement.type}"),
