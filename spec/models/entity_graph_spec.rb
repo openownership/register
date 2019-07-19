@@ -119,7 +119,7 @@ RSpec.describe EntityGraph do
     expect(graph.edges.map(&:relationship)).to match_array [ownership, circular_ownership]
   end
 
-  it 'allows multiple different relationships between the same nodes' do
+  it 'allows multiple relationship edges between the same nodes' do
     company = create(:legal_entity)
     person = create(:natural_person)
     ownership_one = create(:relationship, source: person, target: company, interests: ['shares-50%'])
@@ -131,7 +131,7 @@ RSpec.describe EntityGraph do
     expect(graph.edges.map(&:relationship)).to match_array [ownership_one, ownership_two]
   end
 
-  it 'de-dupes relationships on the same node' do
+  it 'de-dupes identical relationship edges on the same node' do
     company = create(:legal_entity)
     person = create(:natural_person)
     ownership = create(:relationship, source: person, target: company)
@@ -141,6 +141,20 @@ RSpec.describe EntityGraph do
 
     expect(graph.edges.length).to eq 1
     expect(graph.edges.map(&:relationship)).to match_array [ownership]
+  end
+
+  it 'de-dupes relationships between nodes' do
+    company = create(:legal_entity)
+    person = create(:natural_person)
+    ownership_one = create(:relationship, source: person, target: company, interests: ['shares-50%'])
+    ownership_two = create(:relationship, source: person, target: company, interests: ['other-control'])
+    # Dupe of the second relationship
+    create(:relationship, source: person, target: company, interests: ['other-control'])
+    graph = EntityGraph.new(company)
+
+    expect(graph.nodes.length).to eq 2
+    expect(graph.edges.length).to eq 2
+    expect(graph.edges.map(&:relationship)).to match_array [ownership_one, ownership_two]
   end
 
   it 'allows multiple different labels on the same node' do

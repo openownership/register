@@ -23,7 +23,9 @@ class EntityGraph
     return if seen.include?(entity.id.to_s)
     seen.add entity.id.to_s
     @nodes.add Node.new(entity)
-    relationships = entity.send(frontier)
+    relationships = RelationshipsSorter.new(entity.send(frontier))
+      .call
+      .uniq(&:keys_for_uniq_grouping)
     relationships_size = relationships.size
     if level > MAX_LEVELS && relationships_size.positive?
       label_node(entity, "max_levels", frontier, count: relationships_size)
