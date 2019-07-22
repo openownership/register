@@ -347,7 +347,7 @@ en:
         one: "Max depth reached. 1 more directly owned company."
         other: "Max depth reached. %{count} more directly owned companies."
       max_levels_relationships_as_target:
-        one: "Max depth reached. {count} more direct owner."
+        one: "Max depth reached. %{count} more direct owner."
         other: "Max depth reached. %{count} more direct owners."
       max_relationships_relationships_as_source: "Too many owned companies to display (%{count})."
       max_relationships_relationships_as_target: "Too many owners to display (%{count})."
