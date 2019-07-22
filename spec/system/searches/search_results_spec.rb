@@ -47,6 +47,26 @@ RSpec.describe 'Search results' do
     expect(page).to have_selector '.type-icon.natural-person'
   end
 
+  it "limits the number of companies listed under a result to 10" do
+    relationships = create_list(:relationship, 10, source: person)
+
+    visit '/'
+    within '.search-content' do
+      fill_in 'q', with: person.name
+      click_button 'Search'
+    end
+
+    relationships.first(8).each do |relationship|
+      within '.result-controls' do
+        expect(page).to have_link relationship.target.name
+      end
+    end
+
+    within '.result-controls' do
+      expect(page).to have_link '1 more'
+    end
+  end
+
   context "when search results have merged people" do
     let(:merged_people) { create_list(:natural_person, 3) }
 
