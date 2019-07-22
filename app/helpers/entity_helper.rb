@@ -73,12 +73,13 @@ module EntityHelper
 
   def controlled_company_links(entity)
     links = entity.relationships_as_source
+      .where(ended_date: nil)
       .limit(10)
-      .select { |relationship| relationship.ended_date.blank? }
       .sort_by { |relationship| relationship.target.name }
       .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
-    if entity.relationships_as_source.size > 10
-      remaining = entity.relationships_as_source.count - 10
+    controlled_count = entity.relationships_as_source.where(ended_date: nil).size
+    if controlled_count > 10
+      remaining = controlled_count - 10
       links << link_to(I18n.t('searches.show.additional_owned_companies', count: remaining), entity_path(entity))
     end
     links

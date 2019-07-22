@@ -47,8 +47,10 @@ RSpec.describe 'Search results' do
     expect(page).to have_selector '.type-icon.natural-person'
   end
 
-  it "limits the number of companies listed under a result to 10" do
+  it "limits the number of companies listed under a result to 10 current relationships" do
     relationships = create_list(:relationship, 10, source: person)
+    # Ended relationships that shouldn't be counted
+    create_list(:relationship, 10, source: person, started_date: '2019-07-01', ended_date: '2019-07-21')
 
     visit '/'
     within '.search-content' do
