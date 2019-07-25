@@ -32,7 +32,7 @@ describe('EntityGraph', () => {
     edges: [
       {
         data: {
-          id: 'abc123-def456',
+          id: 'hij789',
           source: 'abc123',
           target: 'def456',
           tooltip: '<div class="tooltip">Test Relationship Tooltip</div>',
@@ -86,7 +86,7 @@ describe('EntityGraph', () => {
 
       expect(edges.length).toBe(1);
 
-      expect(edges[0].id()).toBe('abc123-def456');
+      expect(edges[0].id()).toBe('hij789');
       expect(edges[0].data('source')).toBe('abc123');
       expect(edges[0].data('target')).toBe('def456');
       expect(edges[0].data('classes')).toEqual([]);
@@ -166,13 +166,13 @@ describe('EntityGraph', () => {
     });
 
     it('shows a tooltip when you click on an edge', () => {
-      graph.cy.getElementById('abc123-def456').emit('vclick');
+      graph.cy.getElementById('hij789').emit('vclick');
       const tooltip = document.querySelector('.tooltip');
       expect(tooltip.innerHTML).toEqual('Test Relationship Tooltip');
     });
 
     it('hides other tooltips when you click on something else', () => {
-      graph.cy.getElementById('abc123-def456').emit('click');
+      graph.cy.getElementById('hij789').emit('click');
       graph.cy.getElementById('def456').emit('vclick');
       const tooltip = document.querySelector('.tooltip');
       expect(tooltip.innerHTML).toEqual('Test Company Tooltip');

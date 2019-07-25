@@ -11,18 +11,14 @@ RSpec.describe EntityGraph do
       create(:relationship, source: e, target: entities[i - 1])
     end
   end
-  let(:expected_node_ids) { entities.map { |e| e.id.to_s } }
-  let(:expected_edge_ids) do
-    relationships.map { |r| "#{r.source_id}_#{r.target_id}" }
-  end
 
   it 'visits all the owners of an entity and everything they own' do
     entities.each do |entity|
       graph = EntityGraph.new(entity)
       expect(graph.nodes.length).to eq 5
-      expect(graph.nodes.map(&:id)).to match_array(expected_node_ids)
+      expect(graph.nodes.map(&:entity)).to match_array(entities)
       expect(graph.edges.length).to eq 4
-      expect(graph.edges.map(&:id)).to match_array expected_edge_ids
+      expect(graph.edges.map(&:relationship)).to match_array relationships
     end
   end
 
@@ -30,9 +26,10 @@ RSpec.describe EntityGraph do
     entity = create(:legal_entity)
     graph = EntityGraph.new(entity)
     expect(graph.nodes.length).to eq 2
-    expect(graph.nodes.map(&:id)).to match_array [entity.id.to_s, "#{entity.id}-unknown"]
+    expect(graph.nodes.map { |n| n.entity.id.to_s }).to match_array [entity.id.to_s, "#{entity.id}-unknown"]
     expect(graph.edges.length).to eq 1
-    expect(graph.edges.first.id).to eq "#{entity.id}-unknown_#{entity.id}"
+    expect(graph.edges.first.source_id).to eq "#{entity.id}-unknown"
+    expect(graph.edges.first.target_id).to eq entity.id.to_s
   end
 
   context 'when there are more than MAX_LEVELS nodes in the chain' do
@@ -45,45 +42,35 @@ RSpec.describe EntityGraph do
       relationships << create(:relationship, source: entities.first, target: extra_entities.last)
     end
 
-    before do
-      expected_node_ids.concat extra_entities.map { |e| e.id.to_s }
-      expected_edge_ids.concat extra_relationships.map { |r| "#{r.source_id}_#{r.target_id}" }
-    end
-
     it 'stops at MAX_LEVELS owners' do
       last_entity = entities[3]
       label_node = EntityGraph::LabelNode.new(last_entity, :max_levels_relationships_as_target, count: 1)
       label_edge = EntityGraph::LabelEdge.new(last_entity, label_node, :to)
-      expected_node_ids << label_node.id
-      expected_edge_ids << label_edge.id
-      excluded_node_id = entities.last.id.to_s
-      expected_node_ids.reject! { |id| id == excluded_node_id }
-      excluded_edge_id = "#{excluded_node_id}_#{last_entity.id}"
-      expected_edge_ids.reject! { |id| id == excluded_edge_id }
 
       graph = EntityGraph.new(extra_entities.first)
       expect(graph.nodes.length).to eq 9
-      expect(graph.nodes.map(&:id)).to match_array expected_node_ids
+      expect(graph.nodes.map(&:entity).uniq).to match_array entities.first(4) + extra_entities
+      expect(graph.nodes).to include(label_node)
+
       expect(graph.edges.length).to eq 8
-      expect(graph.edges.map(&:id)).to match_array expected_edge_ids
+      expect(graph.edges.map(&:relationship).compact).to match_array relationships.first(3) + extra_relationships
+      expect(graph.edges).to include(label_edge)
     end
 
     it 'stops at MAX_LEVELS owned companies' do
       last_entity = extra_entities[1]
       label_node = EntityGraph::LabelNode.new(last_entity, :max_levels_relationships_as_source, count: 1)
       label_edge = EntityGraph::LabelEdge.new(last_entity, label_node, :from)
-      expected_node_ids << label_node.id
-      expected_edge_ids << label_edge.id
-      excluded_node_id = extra_entities.first.id.to_s
-      expected_node_ids.reject! { |id| id == excluded_node_id }
-      excluded_edge_id = "#{last_entity.id}_#{excluded_node_id}"
-      expected_edge_ids.reject! { |id| id == excluded_edge_id }
 
       graph = EntityGraph.new(entities.last)
+
       expect(graph.nodes.length).to eq 9
-      expect(graph.nodes.map(&:id)).to match_array expected_node_ids
+      expect(graph.nodes.map(&:entity).uniq).to match_array entities + extra_entities.drop(1)
+      expect(graph.nodes).to include(label_node)
+
       expect(graph.edges.length).to eq 8
-      expect(graph.edges.map(&:id)).to match_array expected_edge_ids
+      expect(graph.edges.map(&:relationship).compact).to match_array relationships + extra_relationships.drop(1)
+      expect(graph.edges).to include(label_edge)
     end
   end
 
@@ -97,7 +84,10 @@ RSpec.describe EntityGraph do
 
     graph = EntityGraph.new(entity)
 
-    expect(graph.nodes.map(&:id)).to match_array [entity.id.to_s, label_node.id]
+    expect(graph.nodes.length).to eq 2
+    expect(graph.nodes.map(&:entity).uniq).to match_array [entity]
+    expect(graph.nodes).to include(label_node)
+
     expect(graph.edges.map(&:id)).to match_array [label_edge.id]
   end
 
@@ -111,23 +101,89 @@ RSpec.describe EntityGraph do
 
     graph = EntityGraph.new(owner)
 
-    expect(graph.nodes.map(&:id)).to match_array [owner.id.to_s, label_node.id]
+    expect(graph.nodes.length).to eq 2
+    expect(graph.nodes.map(&:entity).uniq).to match_array [owner]
+    expect(graph.nodes).to include(label_node)
     expect(graph.edges.map(&:id)).to match_array [label_edge.id]
   end
 
   it 'stops at a circular ownership' do
     company = create(:legal_entity)
     person = create(:natural_person)
-    create(:relationship, source: person, target: company)
-    create(:relationship, source: company, target: company)
-    expected_edge_ids = [
-      "#{person.id}_#{company.id}",
-      "#{company.id}_#{company.id}",
-    ]
+    ownership = create(:relationship, source: person, target: company)
+    circular_ownership = create(:relationship, source: company, target: company)
     graph = EntityGraph.new(company)
     expect(graph.nodes.length).to eq 2
-    expect(graph.nodes.map(&:id)).to match_array [person.id.to_s, company.id.to_s]
+    expect(graph.nodes.map(&:entity)).to match_array [person, company]
     expect(graph.edges.length).to eq 2
-    expect(graph.edges.map(&:id)).to match_array expected_edge_ids
+    expect(graph.edges.map(&:relationship)).to match_array [ownership, circular_ownership]
+  end
+
+  it 'allows multiple relationship edges between the same nodes' do
+    company = create(:legal_entity)
+    person = create(:natural_person)
+    ownership_one = create(:relationship, source: person, target: company, interests: ['shares-50%'])
+    ownership_two = create(:relationship, source: person, target: company, interests: ['other-control'])
+    graph = EntityGraph.new(company)
+
+    expect(graph.nodes.length).to eq 2
+    expect(graph.edges.length).to eq 2
+    expect(graph.edges.map(&:relationship)).to match_array [ownership_one, ownership_two]
+  end
+
+  it 'de-dupes identical relationship edges on the same node' do
+    company = create(:legal_entity)
+    person = create(:natural_person)
+    ownership = create(:relationship, source: person, target: company)
+    graph = EntityGraph.new(company)
+
+    graph.edges.add EntityGraph::Edge.new(ownership)
+
+    expect(graph.edges.length).to eq 1
+    expect(graph.edges.map(&:relationship)).to match_array [ownership]
+  end
+
+  it 'de-dupes relationships between nodes' do
+    company = create(:legal_entity)
+    person = create(:natural_person)
+    ownership_one = create(:relationship, source: person, target: company, interests: ['shares-50%'])
+    ownership_two = create(:relationship, source: person, target: company, interests: ['other-control'])
+    # Dupe of the second relationship
+    create(:relationship, source: person, target: company, interests: ['other-control'])
+    graph = EntityGraph.new(company)
+
+    expect(graph.nodes.length).to eq 2
+    expect(graph.edges.length).to eq 2
+    expect(graph.edges.map(&:relationship)).to match_array [ownership_one, ownership_two]
+  end
+
+  it 'allows multiple different labels on the same node' do
+    entity = create(:legal_entity)
+    graph = EntityGraph.new(entity)
+
+    label_one = EntityGraph::LabelNode.new(entity, 'key_1', {})
+    label_two = EntityGraph::LabelNode.new(entity, 'key_2', {})
+    graph.nodes.add(label_one)
+    graph.nodes.add(label_two)
+    graph.edges.add EntityGraph::LabelEdge.new(entity, label_one, :to)
+    graph.edges.add EntityGraph::LabelEdge.new(entity, label_two, :to)
+
+    expect(graph.nodes.length).to eq 4 # Entity, unknown owner and two labels
+    expect(graph.edges.length).to eq 3 # Unknown ownership and two labels
+  end
+
+  it 'de-dupes labels of exactly the same message on the same node' do
+    entity = create(:legal_entity)
+    graph = EntityGraph.new(entity)
+
+    label_one = EntityGraph::LabelNode.new(entity, 'key_1', {})
+    graph.nodes.add(label_one)
+    graph.edges.add EntityGraph::LabelEdge.new(entity, label_one, :to)
+
+    graph.nodes.add(label_one)
+    graph.edges.add EntityGraph::LabelEdge.new(entity, label_one, :to)
+
+    expect(graph.nodes.length).to eq 3 # Entity, unknown owner and one label
+    expect(graph.edges.length).to eq 2 # Unknown ownership and one label
   end
 end
