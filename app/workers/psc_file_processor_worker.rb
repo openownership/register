@@ -1,7 +1,6 @@
 require 'open-uri'
 require 'zip'
 require 'zlib'
-require 'xxhash'
 require 'oj'
 
 class PscFileProcessorWorker
@@ -14,7 +13,14 @@ class PscFileProcessorWorker
 
     with_file(source_url) do |file|
       file.lazy.each_slice(chunk_size) do |lines|
-        record_ids = save_raw_data(lines, import).map(&:to_s)
+        raw_records = lines.map do |line|
+          data = Oj.load(line, mode: :rails)
+          {
+            data: data,
+            etag: data.dig('data', 'etag'),
+          }
+        end
+        record_ids = RawDataRecord.bulk_save_for_import(raw_records, import).map(&:to_s)
         PscChunkImportWorker.perform_async(record_ids, retrieved_at, import.id.to_s)
       end
     end
@@ -36,26 +42,5 @@ class PscFileProcessorWorker
 
       yield file
     end
-  end
-
-  def save_raw_data(lines, import)
-    now = Time.zone.now
-    bulk_operations = lines.map do |line|
-      data = Oj.load(line, mode: :rails)
-      etag = data.dig('data', 'etag').presence || XXhash.xxh64(line).to_s
-      {
-        update_one: {
-          upsert: true,
-          filter: { etag: etag },
-          update: {
-            '$setOnInsert' => { etag: etag, data: data, created_at: now },
-            '$set' => { updated_at: now },
-            '$addToSet' => { import_ids: import.id },
-          },
-        },
-      }
-    end
-
-    RawDataRecord.collection.bulk_write(bulk_operations, ordered: false).upserted_ids
   end
 end

@@ -12,4 +12,25 @@ class RawDataRecord
   validates :etag, presence: true
 
   index({ etag: 1 }, unique: true)
+
+  def self.bulk_save_for_import(records, import)
+    now = Time.zone.now
+    bulk_operations = records.map do |record|
+      data = record[:data]
+      etag = record[:etag].presence || XXhash.xxh64(data).to_s
+      {
+        update_one: {
+          upsert: true,
+          filter: { etag: etag },
+          update: {
+            '$setOnInsert' => { etag: etag, data: data, created_at: now },
+            '$set' => { updated_at: now },
+            '$addToSet' => { import_ids: import.id },
+          },
+        },
+      }
+    end
+
+    collection.bulk_write(bulk_operations, ordered: false).upserted_ids
+  end
 end
