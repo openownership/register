@@ -1,15 +1,17 @@
 require 'open-uri'
 
 class SkImportTrigger
-  def call(chunk_size)
+  def call(data_source, chunk_size)
+    import = Import.create! data_source: data_source
     client = SkClient.new
     retreived_at = Time.zone.now.to_s
+
     client.all_records.lazy.each_slice(chunk_size) do |records|
-      # records is an array of hashes, but our ChunkHelper works with
-      # arrays of strings
-      strings = records.map(&:to_json)
-      chunk = ChunkHelper.to_chunk strings
-      SkChunkImportWorker.perform_async(chunk, retreived_at)
+      # There's nothing in the SK data which can function as an etag
+      raw_records = records.map { |r| { data: r, etag: nil } }
+      record_ids = RawDataRecord.bulk_save_for_import(raw_records, import).map(&:to_s)
+      next if record_ids.empty?
+      SkChunkImportWorker.perform_async(record_ids, retreived_at, import.id.to_s)
     end
   end
 end

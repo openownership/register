@@ -1,5 +1,5 @@
 class SkImporter
-  attr_accessor :source_url, :source_name, :document_id, :retrieved_at
+  attr_accessor :import, :retrieved_at
 
   def initialize(entity_resolver: EntityResolver.new, client: SkClient.new)
     @entity_resolver = entity_resolver
@@ -7,7 +7,7 @@ class SkImporter
   end
 
   def process_records(records)
-    records.each { |r| process(r) }
+    records.each { |r| process(r.data) }
   end
 
   def process(record)
@@ -53,7 +53,7 @@ class SkImporter
     entity = Entity.new(
       identifiers: [
         {
-          'document_id' => document_id,
+          'document_id' => import.data_source.document_id,
           'company_number' => item['Ico'],
         },
       ],
@@ -74,7 +74,7 @@ class SkImporter
     attributes = {
       identifiers: [
         {
-          'document_id' => document_id,
+          'document_id' => import.data_source.document_id,
           'beneficial_owner_id' => item['Id'],
         },
       ],
@@ -94,7 +94,7 @@ class SkImporter
   def relationship!(child_entity, parent_entity, item)
     attributes = {
       _id: {
-        'document_id' => document_id,
+        'document_id' => import.data_source.document_id,
         'beneficial_owner_id' => item['Id'],
       },
       source: parent_entity,
@@ -103,8 +103,8 @@ class SkImporter
       started_date: Date.parse(item['PlatnostOd']).to_s,
       ended_date: item['PlatnostDo'].presence && Date.parse(item['PlatnostDo']).to_s,
       provenance: {
-        source_url: source_url,
-        source_name: source_name,
+        source_url: import.data_source.url,
+        source_name: import.data_source.name,
         retrieved_at: retrieved_at,
         imported_at: Time.now.utc,
       },

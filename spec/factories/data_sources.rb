@@ -9,5 +9,11 @@ FactoryGirl.define do
       name 'UK PSC Register'
       document_id 'GB PSC Snapshot'
     end
+
+    factory :sk_data_source do
+      url 'https://rpvs.gov.sk/'
+      name 'Slovakia Public Sector Partners Register (Register partnerov verejného sektora)'
+      document_id 'Slovakia PSP Register'
+    end
   end
 end
