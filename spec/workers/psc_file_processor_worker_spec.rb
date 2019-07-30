@@ -1,12 +1,11 @@
 require 'rails_helper'
-require 'xxhash'
 
 RSpec.describe PscFileProcessorWorker do
   let(:import) { create(:import) }
   let(:corporate_record) { file_fixture('psc_corporate.json').read }
-  let(:corporate_etag) { XXhash.xxh64(corporate_record).to_s }
+  let(:corporate_etag) { RawDataRecord.etag(JSON.parse(corporate_record)) }
   let(:individual_record) { file_fixture('psc_individual.json').read }
-  let(:individual_etag) { XXhash.xxh64(individual_record).to_s }
+  let(:individual_etag) { RawDataRecord.etag(JSON.parse(individual_record)) }
   let(:file) do
     file = corporate_record
     file += individual_record

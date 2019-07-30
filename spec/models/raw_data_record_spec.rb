@@ -56,4 +56,17 @@ RSpec.describe RawDataRecord do
       expect(record.etag).to eq(RawDataRecord.etag("test"))
     end
   end
+
+  describe '.etag' do
+    it 'generates a reliable etag for the same piece of data' do
+      etag = RawDataRecord.etag("test")
+      5.times do
+        expect(etag).to eq(RawDataRecord.etag("test"))
+      end
+    end
+
+    it 'generates different etags for different data' do
+      expect(RawDataRecord.etag("test1")).not_to eq(RawDataRecord.etag("test"))
+    end
+  end
 end

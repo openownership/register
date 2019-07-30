@@ -1,3 +1,5 @@
+require 'xxhash'
+
 class RawDataRecord
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -17,7 +19,7 @@ class RawDataRecord
     now = Time.zone.now
     bulk_operations = records.map do |record|
       data = record[:data]
-      etag = record[:etag].presence || XXhash.xxh64(data).to_s
+      etag = record[:etag].presence || etag(data)
       {
         update_one: {
           upsert: true,
@@ -32,5 +34,9 @@ class RawDataRecord
     end
 
     collection.bulk_write(bulk_operations, ordered: false).upserted_ids
+  end
+
+  def self.etag(data)
+    XXhash.xxh64(data).to_s
   end
 end
