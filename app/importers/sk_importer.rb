@@ -6,11 +6,13 @@ class SkImporter
     @client = client
   end
 
-  def process_records(records)
-    records.each { |r| process(r.data) }
+  def process_records(raw_records)
+    provenances = raw_records.map { |r| [r.id, process(r)] }.to_h
+    RawDataProvenance.bulk_upsert_for_import(import, provenances)
   end
 
-  def process(record)
+  def process(raw_record)
+    record = raw_record['data']
     # Pre-emptive check for pagination in child entities. We've never seen it,
     # but we think it's theoretically possible and we want to know asap if it
     # appears because it will mean we miss data
@@ -20,18 +22,23 @@ class SkImporter
     child_entity = child_entity!(record)
     return if child_entity.nil?
 
-    parent_entities = record['KonecniUzivateliaVyhod']
+    parent_records = record['KonecniUzivateliaVyhod']
     # Some parent entity lists are paginated but the pagination links don't
     # work, so we have to request the data from elsewhere
     if record['KonecniUzivateliaVyhod@odata.nextLink']
       Rails.logger.info("[#{self.class.name}] record Id: #{record['Id']} has paginated parent entities (KonecniUzivateliaVyhod)")
-      parent_entities = all_parent_entities(record)
+      parent_records = all_parent_records(record)
     end
 
-    parent_entities.each do |item|
-      parent_entity = parent_entity!(item)
-      relationship!(child_entity, parent_entity, item)
+    parent_entities = []
+    relationships = []
+    parent_records.each do |parent_record|
+      parent_entity = parent_entity!(parent_record)
+      parent_entities << parent_entity
+      relationships << relationship!(child_entity, parent_entity, parent_record)
     end
+
+    [child_entity] + parent_entities + relationships
   end
 
   private
@@ -65,9 +72,9 @@ class SkImporter
     )
     @entity_resolver.resolve!(entity)
 
+    entity.upsert
+    index_entity(entity)
     entity
-      .tap(&:upsert)
-      .tap(&method(:index_entity))
   end
 
   def parent_entity!(item)
@@ -85,10 +92,10 @@ class SkImporter
       dob: entity_dob(item['DatumNarodenia']),
     }
 
-    Entity
-      .new(attributes)
-      .tap(&:upsert)
-      .tap(&method(:index_entity))
+    entity = Entity.new(attributes)
+    entity.upsert
+    index_entity(entity)
+    entity
   end
 
   def relationship!(child_entity, parent_entity, item)
@@ -110,7 +117,9 @@ class SkImporter
       },
     }
 
-    Relationship.new(attributes).upsert
+    relationship = Relationship.new(attributes)
+    relationship.upsert
+    relationship
   end
 
   def slovakian_address?(address)
@@ -136,7 +145,7 @@ class SkImporter
     ISO8601::Date.new(timestamp.split('T')[0])
   end
 
-  def all_parent_entities(record)
+  def all_parent_records(record)
     company_record = @client.company_record(record['Id'])
     return [] if company_record.nil?
     company_record['KonecniUzivateliaVyhod']
