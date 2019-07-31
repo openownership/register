@@ -1,7 +1,7 @@
 .row
   .col-lg-8
     .raw-data-records
-      %pre.pre-scrollable= JSON.pretty_generate(raw_record.data)
+      %pre.pre-scrollable= JSON.pretty_generate(JSON.parse(raw_record.raw_data))
   .col-lg-4
     .frame-light.meta
       .frame-wrap

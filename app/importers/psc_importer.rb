@@ -1,4 +1,4 @@
-require 'json'
+require 'oj'
 
 class PscImporter
   attr_accessor :import, :retrieved_at
@@ -15,7 +15,7 @@ class PscImporter
   end
 
   def process(raw_record)
-    record = raw_record['data']
+    record = Oj.load(raw_record.raw_data, mode: :rails)
     case record['data']['kind']
     when 'totals#persons-of-significant-control-snapshot'
       :ignore

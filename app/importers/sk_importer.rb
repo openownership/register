@@ -12,7 +12,7 @@ class SkImporter
   end
 
   def process(raw_record)
-    record = raw_record['data']
+    record = Oj.load(raw_record.raw_data, mode: :rails)
     # Pre-emptive check for pagination in child entities. We've never seen it,
     # but we think it's theoretically possible and we want to know asap if it
     # appears because it will mean we miss data

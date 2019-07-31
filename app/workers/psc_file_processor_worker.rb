@@ -16,7 +16,7 @@ class PscFileProcessorWorker
         raw_records = lines.map do |line|
           data = Oj.load(line, mode: :rails)
           {
-            data: data,
+            raw_data: line,
             etag: data.dig('data', 'etag'),
           }
         end

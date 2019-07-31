@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe PscFileProcessorWorker do
   let(:import) { create(:import) }
   let(:corporate_record) { file_fixture('psc_corporate.json').read }
-  let(:corporate_etag) { RawDataRecord.etag(JSON.parse(corporate_record)) }
+  let(:corporate_etag) { RawDataRecord.etag(corporate_record) }
   let(:individual_record) { file_fixture('psc_individual.json').read }
-  let(:individual_etag) { RawDataRecord.etag(JSON.parse(individual_record)) }
+  let(:individual_etag) { RawDataRecord.etag(individual_record) }
   let(:file) do
     file = corporate_record
     file += individual_record
@@ -23,13 +23,13 @@ RSpec.describe PscFileProcessorWorker do
     it 'saves each line in the file as a RawDataRecord' do
       expect { subject }.to change { RawDataRecord.count }.by(2)
       first_record = RawDataRecord.find_by(etag: corporate_etag)
-      expect(first_record.data).to eq(JSON.parse(corporate_record))
+      expect(first_record.raw_data).to eq(corporate_record)
       expect(first_record.imports).to eq([import])
       expect(first_record.created_at).to be_within(1.second).of(Time.zone.now)
       expect(first_record.updated_at).to be_within(1.second).of(Time.zone.now)
 
       second_record = RawDataRecord.find_by(etag: individual_etag)
-      expect(second_record.data).to eq(JSON.parse(individual_record))
+      expect(second_record.raw_data).to eq(individual_record)
       expect(second_record.imports).to eq([import])
       expect(second_record.created_at).to be_within(1.second).of(Time.zone.now)
       expect(second_record.updated_at).to be_within(1.second).of(Time.zone.now)
@@ -66,7 +66,7 @@ RSpec.describe PscFileProcessorWorker do
       let!(:existing_record) do
         RawDataRecord.create!(
           imports: create_list(:import, 2),
-          data: JSON.parse(corporate_record),
+          raw_data: corporate_record,
           etag: corporate_etag,
         )
       end

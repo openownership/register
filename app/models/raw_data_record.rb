@@ -6,11 +6,12 @@ class RawDataRecord
 
   field :data, type: Hash
   field :etag, type: String
+  field :raw_data, type: String
   has_and_belongs_to_many :imports, index: true, inverse_of: nil # rubocop:disable Rails/HasAndBelongsToMany
 
-  attr_readonly :data, :etag
+  attr_readonly :raw_data, :etag
 
-  validates :data, presence: true
+  validates :raw_data, presence: true
   validates :etag, presence: true
 
   index({ etag: 1 }, unique: true)
@@ -18,14 +19,14 @@ class RawDataRecord
   def self.bulk_save_for_import(records, import)
     now = Time.zone.now
     bulk_operations = records.map do |record|
-      data = record[:data]
-      etag = record[:etag].presence || etag(data)
+      raw_data = record[:raw_data]
+      etag = record[:etag].presence || etag(raw_data)
       {
         update_one: {
           upsert: true,
           filter: { etag: etag },
           update: {
-            '$setOnInsert' => { etag: etag, data: data, created_at: now },
+            '$setOnInsert' => { etag: etag, raw_data: raw_data, created_at: now },
             '$set' => { updated_at: now },
             '$addToSet' => { import_ids: import.id },
           },

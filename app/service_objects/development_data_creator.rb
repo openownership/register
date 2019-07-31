@@ -25,7 +25,7 @@ class DevelopmentDataCreator
     records = open(uk_data).readlines.map do |line|
       data = JSON.parse(line)
       etag = data['data']['etag']
-      FactoryGirl.create(:raw_data_record, data: data, etag: etag, imports: [uk_import])
+      FactoryGirl.create(:raw_data_record, raw_data: line, etag: etag, imports: [uk_import])
     end
     retrieved_at = Time.zone.parse('2016-12-06 06:15:37')
     importer = PscImporter.new
