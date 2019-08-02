@@ -11,3 +11,7 @@ def sk_json_fixture(filepath)
     create(:raw_data_record, raw_data: data.to_json)
   end
 end
+
+def dk_json_fixture(filepath)
+  create(:raw_data_record, raw_data: file_fixture(filepath).read)
+end

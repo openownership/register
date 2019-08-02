@@ -6,15 +6,13 @@ RSpec.describe RawDataProvenance do
     let(:raw_data_record) { create(:raw_data_record, imports: [import]) }
     let(:relationship) { create(:relationship) }
     let(:provenance_data) do
-      [
-        {
-          raw_data_record.id.to_s => [
-            relationship,
-            relationship.source,
-            relationship.target,
-          ],
-        },
-      ]
+      {
+        raw_data_record.id.to_s => [
+          relationship,
+          relationship.source,
+          relationship.target,
+        ],
+      }
     end
 
     it 'inserts new records for all the entities or relationships' do
@@ -34,15 +32,13 @@ RSpec.describe RawDataProvenance do
     context 'when given a new raw record for the same record in the same import' do
       let(:new_raw_record) { create(:raw_data_record, imports: [import]) }
       let(:new_provenance_data) do
-        [
-          {
-            new_raw_record.id.to_s => [
-              relationship,
-              relationship.source,
-              relationship.target,
-            ],
-          },
-        ]
+        {
+          new_raw_record.id.to_s => [
+            relationship,
+            relationship.source,
+            relationship.target,
+          ],
+        }
       end
 
       it 'upserts the raw_data_record id and updated_at' do

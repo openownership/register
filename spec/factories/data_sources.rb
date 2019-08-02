@@ -15,5 +15,11 @@ FactoryGirl.define do
       name 'Slovakia Public Sector Partners Register (Register partnerov verejného sektora)'
       document_id 'Slovakia PSP Register'
     end
+
+    factory :dk_data_source do
+      url 'https://cvr.dk'
+      name 'Denmark Central Business Register (Centrale Virksomhedsregister [CVR])'
+      document_id 'Denmark CVR'
+    end
   end
 end
