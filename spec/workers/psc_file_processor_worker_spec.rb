@@ -62,6 +62,23 @@ RSpec.describe PscFileProcessorWorker do
       expect(RawDataRecord.last.etag).to eq individual_etag
     end
 
+    it 'queues up PscChunkImportWorkers for each chunk' do
+      now = Time.zone.now
+      expect { subject }.to change(PscChunkImportWorker.jobs, :size).by(2)
+
+      jobs = PscChunkImportWorker.jobs
+      corporate_raw_record = RawDataRecord.find_by(etag: corporate_etag)
+      individual_raw_record = RawDataRecord.find_by(etag: individual_etag)
+
+      expect(jobs[0]['args'][0]).to eq [corporate_raw_record.id.to_s]
+      expect(Time.zone.parse(jobs[0]['args'][1])).to be_within(1.second).of(now)
+      expect(jobs[0]['args'][2]).to eq import.id.to_s
+
+      expect(jobs[1]['args'][0]).to eq [individual_raw_record.id.to_s]
+      expect(Time.zone.parse(jobs[1]['args'][1])).to be_within(1.second).of(now)
+      expect(jobs[1]['args'][2]).to eq import.id.to_s
+    end
+
     context "when there's an existing record with the same etag" do
       let!(:existing_record) do
         RawDataRecord.create!(
@@ -71,19 +88,23 @@ RSpec.describe PscFileProcessorWorker do
         )
       end
 
-      it "updates the existing record" do
+      it "updates the existing record's import" do
         subject
         expect(existing_record.reload.imports.count).to eq(3)
         expect(existing_record.updated_at).to be_within(1.second).of(Time.zone.now)
       end
 
-      it "still queues up a PscChunkImportWorker for the record" do
-        expect { subject }.to change(PscChunkImportWorker.jobs, :size).by(2)
+      it "doesn't queue up a PscChunkImportWorker for the record" do
+        now = Time.zone.now
+        expect { subject }.to change(PscChunkImportWorker.jobs, :size).by(1)
+
+        jobs = PscChunkImportWorker.jobs
+        individual_raw_record = RawDataRecord.find_by(etag: individual_etag)
+
+        expect(jobs[0]['args'][0]).to eq [individual_raw_record.id.to_s]
+        expect(Time.zone.parse(jobs[0]['args'][1])).to be_within(1.second).of(now)
+        expect(jobs[0]['args'][2]).to eq import.id.to_s
       end
     end
-  end
-
-  it 'queues up PscChunkImportWorkers for each chunk' do
-    expect { subject }.to change(PscChunkImportWorker.jobs, :size).by(2)
   end
 end

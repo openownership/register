@@ -21,6 +21,7 @@ class PscFileProcessorWorker
           }
         end
         record_ids = RawDataRecord.bulk_save_for_import(raw_records, import).map(&:to_s)
+        next if record_ids.length.zero?
         PscChunkImportWorker.perform_async(record_ids, retrieved_at, import.id.to_s)
       end
     end
