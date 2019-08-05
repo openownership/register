@@ -9,8 +9,6 @@ class RawDataRecord
   field :raw_data, type: String
   has_and_belongs_to_many :imports, index: true, inverse_of: nil # rubocop:disable Rails/HasAndBelongsToMany
 
-  attr_readonly :raw_data, :etag
-
   validates :raw_data, presence: true
   validates :etag, presence: true
 
