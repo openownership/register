@@ -55,6 +55,37 @@ RSpec.describe RawDataRecord do
       record = RawDataRecord.find(upserted.first)
       expect(record.etag).to eq(RawDataRecord.etag("test"))
     end
+
+    it "compresses raw_data when it's over the size limit" do
+      really_long_string = "a" * (RawDataRecord::RAW_DATA_COMPRESSION_LIMIT + 1)
+      records = [
+        {
+          raw_data: really_long_string,
+          etag: '1',
+        },
+      ]
+      upserted = RawDataRecord.bulk_save_for_import(records, import)
+      record = RawDataRecord.find(upserted.first)
+      expect(record.compressed).to be true
+      expect(record[:raw_data]).to eq Base64.encode64(Zlib::Deflate.deflate(really_long_string))
+    end
+
+    it "skips and raises an error for raw_data which can't be compressed small enough" do
+      # I can't think of a performant way to test this without stubbing the
+      # constant or otherwise changing the limit
+      stub_const "RawDataRecord::MONGODB_MAX_DOC_SIZE", 1
+      really_long_string = "a" * (RawDataRecord::RAW_DATA_COMPRESSION_LIMIT + 1)
+      records = [
+        {
+          raw_data: really_long_string,
+          etag: '1',
+        },
+      ]
+      expect(Rollbar).to receive(:error)
+      expect do
+        RawDataRecord.bulk_save_for_import(records, import)
+      end.not_to change { RawDataRecord.count }
+    end
   end
 
   describe '.etag' do
@@ -67,6 +98,21 @@ RSpec.describe RawDataRecord do
 
     it 'generates different etags for different data' do
       expect(RawDataRecord.etag("test1")).not_to eq(RawDataRecord.etag("test"))
+    end
+  end
+
+  describe '#raw_data' do
+    it 'transparently decompresses compressed raw data' do
+      data = { "test": "test" }.to_json
+      compressed_data = Base64.encode64 Zlib::Deflate.deflate(data)
+      raw_record = create(:raw_data_record, raw_data: compressed_data, compressed: true)
+      expect(raw_record.raw_data).to eq data
+    end
+
+    it 'returns uncompressed raw data as-is' do
+      data = { "test": "test" }.to_json
+      raw_record = create(:raw_data_record, raw_data: data)
+      expect(raw_record.raw_data).to eq data
     end
   end
 end
