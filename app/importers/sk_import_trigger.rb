@@ -12,7 +12,7 @@ class SkImportTrigger
       result = RawDataRecord.bulk_upsert_for_import(raw_records, import)
       next if result.upserted_ids.empty?
       record_ids = result.upserted_ids.map(&:to_s)
-      SkChunkImportWorker.perform_async(record_ids, retreived_at, import.id.to_s)
+      RawDataRecordsImportWorker.perform_async(record_ids, retreived_at, import.id.to_s, 'SkImporter')
     end
   end
 end

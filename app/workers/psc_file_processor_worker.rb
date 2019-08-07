@@ -23,7 +23,7 @@ class PscFileProcessorWorker
         result = RawDataRecord.bulk_upsert_for_import(raw_records, import)
         next if result.upserted_ids.empty?
         record_ids = result.upserted_ids.map(&:to_s)
-        PscChunkImportWorker.perform_async(record_ids, retrieved_at, import.id.to_s)
+        RawDataRecordsImportWorker.perform_async(record_ids, retrieved_at, import.id.to_s, 'PscImporter')
       end
     end
   end

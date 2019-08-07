@@ -62,11 +62,11 @@ RSpec.describe PscFileProcessorWorker do
       expect(RawDataRecord.last.etag).to eq individual_etag
     end
 
-    it 'queues up PscChunkImportWorkers for each chunk' do
+    it 'queues up RawDataRecordsImportWorkers for each chunk' do
       now = Time.zone.now
-      expect { subject }.to change(PscChunkImportWorker.jobs, :size).by(2)
+      expect { subject }.to change(RawDataRecordsImportWorker.jobs, :size).by(2)
 
-      jobs = PscChunkImportWorker.jobs
+      jobs = RawDataRecordsImportWorker.jobs
       corporate_raw_record = RawDataRecord.find_by(etag: corporate_etag)
       individual_raw_record = RawDataRecord.find_by(etag: individual_etag)
 
@@ -94,11 +94,11 @@ RSpec.describe PscFileProcessorWorker do
         expect(existing_record.updated_at).to be_within(1.second).of(Time.zone.now)
       end
 
-      it "doesn't queue up a PscChunkImportWorker for the record" do
+      it "doesn't queue up a RawDataRecordsImportWorker for the record" do
         now = Time.zone.now
-        expect { subject }.to change(PscChunkImportWorker.jobs, :size).by(1)
+        expect { subject }.to change(RawDataRecordsImportWorker.jobs, :size).by(1)
 
-        jobs = PscChunkImportWorker.jobs
+        jobs = RawDataRecordsImportWorker.jobs
         individual_raw_record = RawDataRecord.find_by(etag: individual_etag)
 
         expect(jobs[0]['args'][0]).to eq [individual_raw_record.id.to_s]

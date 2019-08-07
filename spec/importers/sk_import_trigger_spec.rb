@@ -32,20 +32,20 @@ RSpec.describe SkImportTrigger do
       expect { subject }.to change { RawDataRecord.count }.by(3)
     end
 
-    it 'queues up SkChunkImportWorkers for each chunk of results' do
-      expect { subject }.to change(SkChunkImportWorker.jobs, :size).by(3)
+    it 'queues up RawDataRecordsImportWorkers for each chunk of results' do
+      expect { subject }.to change(RawDataRecordsImportWorker.jobs, :size).by(3)
     end
 
-    it 'only queues up SkChunkImportWorkers for new or changed records' do
+    it 'only queues up RawDataRecordsImportWorkers for new or changed records' do
       subject
       updated_dummy_data = dummy_data
       updated_dummy_data << { "test": "test4" }
       allow(sk_client).to receive(:all_records).and_return(updated_dummy_data)
-      SkChunkImportWorker.jobs.clear
+      RawDataRecordsImportWorker.jobs.clear
       expect do
         SkImportTrigger.new.call(data_source, 1)
-      end.to change(SkChunkImportWorker.jobs, :size).by(1)
-      record_id = SkChunkImportWorker.jobs.first['args'].first.first
+      end.to change(RawDataRecordsImportWorker.jobs, :size).by(1)
+      record_id = RawDataRecordsImportWorker.jobs.first['args'].first.first
       raw_record = RawDataRecord.find(record_id)
       expect(raw_record.raw_data).to eq({ "test": "test4" }.to_json)
     end

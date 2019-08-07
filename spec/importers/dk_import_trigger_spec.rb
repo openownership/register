@@ -41,11 +41,11 @@ RSpec.describe DkImportTrigger do
       expect { subject }.to change { RawDataRecord.count }.from(0).to(3)
     end
 
-    it 'queues up DkChunkImportWorkers for each chunk of results' do
-      expect { subject }.to change(DkChunkImportWorker.jobs, :size).by(3)
+    it 'queues up RawDataRecordsImportWorkers for each chunk of results' do
+      expect { subject }.to change(RawDataRecordsImportWorker.jobs, :size).by(3)
     end
 
-    it 'only queues up DkChunkImportWorkers for new or changed records' do
+    it 'only queues up RawDataRecordsImportWorkers for new or changed records' do
       # Given
       # We've loaded the initial set of data
       subject
@@ -61,11 +61,11 @@ RSpec.describe DkImportTrigger do
       allow(dk_client).to receive(:all_records).and_return(updated_dummy_data)
       # And we process that new data
       # Then we enqueue two new jobs to import those changed records
-      DkChunkImportWorker.jobs.clear
+      RawDataRecordsImportWorker.jobs.clear
       expect do
         DkImportTrigger.new.call(data_source, 1)
-      end.to change(DkChunkImportWorker.jobs, :size).by(2)
-      record_ids = DkChunkImportWorker.jobs.map { |job| job['args'].first }
+      end.to change(RawDataRecordsImportWorker.jobs, :size).by(2)
+      record_ids = RawDataRecordsImportWorker.jobs.map { |job| job['args'].first }
       raw_records = RawDataRecord.find(record_ids)
       expect(raw_records.first.raw_data).to eq(updated_dummy_data.second.to_json)
       expect(raw_records.last.raw_data).to eq(updated_dummy_data.last.to_json)
@@ -74,7 +74,7 @@ RSpec.describe DkImportTrigger do
     context 'when a result has an enhedsNummer and sidtsOpdateret' do
       it 'uses that as the etag' do
         subject
-        record_ids = DkChunkImportWorker.jobs.map { |job| job['args'].first }
+        record_ids = RawDataRecordsImportWorker.jobs.map { |job| job['args'].first }
         etags = RawDataRecord.find(record_ids).pluck(:etag)
         expected_etags = dummy_data.map do |datum|
           RawDataRecord.etag "#{datum['sidstOpdateret']}_#{datum['enhedsNummer']}"
@@ -100,7 +100,7 @@ RSpec.describe DkImportTrigger do
 
       it 'leaves the etag blank, so that one is calculated from the data' do
         subject
-        record_ids = DkChunkImportWorker.jobs.map { |job| job['args'].first }
+        record_ids = RawDataRecordsImportWorker.jobs.map { |job| job['args'].first }
         etags = RawDataRecord.find(record_ids).pluck(:etag)
         expected_etags = dummy_data.map do |datum|
           RawDataRecord.etag datum.to_json
