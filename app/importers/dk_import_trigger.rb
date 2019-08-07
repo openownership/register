@@ -14,8 +14,9 @@ class DkImportTrigger
           etag: etag(record),
         }
       end
-      record_ids = RawDataRecord.bulk_save_for_import(raw_records, import).map(&:to_s)
-      next if record_ids.empty?
+      result = RawDataRecord.bulk_upsert_for_import(raw_records, import)
+      next if result.upserted_ids.empty?
+      record_ids = result.upserted_ids.map(&:to_s)
       DkChunkImportWorker.perform_async(record_ids, retreived_at, import.id.to_s)
     end
   end

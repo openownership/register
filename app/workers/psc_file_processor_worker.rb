@@ -20,8 +20,9 @@ class PscFileProcessorWorker
             etag: data.dig('data', 'etag'),
           }
         end
-        record_ids = RawDataRecord.bulk_save_for_import(raw_records, import).map(&:to_s)
-        next if record_ids.length.zero?
+        result = RawDataRecord.bulk_upsert_for_import(raw_records, import)
+        next if result.upserted_ids.empty?
+        record_ids = result.upserted_ids.map(&:to_s)
         PscChunkImportWorker.perform_async(record_ids, retrieved_at, import.id.to_s)
       end
     end

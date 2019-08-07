@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe RawDataRecord do
-  describe '.bulk_save_for_import' do
+  describe '.bulk_upsert_for_import' do
     let(:import) { create(:import) }
 
     it 'inserts new records' do
@@ -12,7 +12,7 @@ RSpec.describe RawDataRecord do
           etag: '2',
         },
       ]
-      upserted = RawDataRecord.bulk_save_for_import(records, import)
+      upserted = RawDataRecord.bulk_upsert_for_import(records, import).upserted_ids
       expect(upserted.length).to eq(1)
       record = RawDataRecord.find(upserted.first)
       expect(record.raw_data).to eq('test')
@@ -31,7 +31,7 @@ RSpec.describe RawDataRecord do
           etag: existing_record.etag,
         },
       ]
-      upserted = RawDataRecord.bulk_save_for_import(records, second_import)
+      upserted = RawDataRecord.bulk_upsert_for_import(records, second_import).upserted_ids
 
       expect(upserted.length).to eq(0)
       upserted_record = RawDataRecord.find(existing_record.id)
@@ -51,7 +51,7 @@ RSpec.describe RawDataRecord do
           etag: nil,
         },
       ]
-      upserted = RawDataRecord.bulk_save_for_import(records, import)
+      upserted = RawDataRecord.bulk_upsert_for_import(records, import).upserted_ids
       record = RawDataRecord.find(upserted.first)
       expect(record.etag).to eq(RawDataRecord.etag("test"))
     end
@@ -64,7 +64,7 @@ RSpec.describe RawDataRecord do
           etag: '1',
         },
       ]
-      upserted = RawDataRecord.bulk_save_for_import(records, import)
+      upserted = RawDataRecord.bulk_upsert_for_import(records, import).upserted_ids
       record = RawDataRecord.find(upserted.first)
       expect(record.compressed).to be true
       expect(record[:raw_data]).to eq Base64.encode64(Zlib::Deflate.deflate(really_long_string))
@@ -83,7 +83,7 @@ RSpec.describe RawDataRecord do
       ]
       expect(Rollbar).to receive(:error)
       expect do
-        RawDataRecord.bulk_save_for_import(records, import)
+        RawDataRecord.bulk_upsert_for_import(records, import).upserted_ids
       end.not_to change { RawDataRecord.count }
     end
   end

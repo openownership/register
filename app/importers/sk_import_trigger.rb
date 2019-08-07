@@ -9,8 +9,9 @@ class SkImportTrigger
     client.all_records.lazy.each_slice(chunk_size) do |records|
       # There's nothing in the SK data which can function as an etag
       raw_records = records.map { |r| { raw_data: Oj.dump(r, mode: :rails), etag: nil } }
-      record_ids = RawDataRecord.bulk_save_for_import(raw_records, import).map(&:to_s)
-      next if record_ids.empty?
+      result = RawDataRecord.bulk_upsert_for_import(raw_records, import)
+      next if result.upserted_ids.empty?
+      record_ids = result.upserted_ids.map(&:to_s)
       SkChunkImportWorker.perform_async(record_ids, retreived_at, import.id.to_s)
     end
   end

@@ -18,7 +18,7 @@ class RawDataRecord
 
   index({ etag: 1 }, unique: true)
 
-  def self.bulk_save_for_import(records, import)
+  def self.bulk_upsert_for_import(records, import)
     now = Time.zone.now
     bulk_operations = records.map do |record|
       raw_data, compressed = compress_if_needed record[:raw_data]
@@ -45,7 +45,7 @@ class RawDataRecord
       }
     end.compact
 
-    collection.bulk_write(bulk_operations, ordered: false).upserted_ids
+    collection.bulk_write(bulk_operations, ordered: false)
   end
 
   def self.etag(data)
