@@ -2,17 +2,20 @@
 # https://gist.github.com/skenaja/cf843d127e8937b5f79fa6d0e81d1543
 
 class DkImporter
-  attr_accessor :source_url, :source_name, :document_id, :retrieved_at
+  attr_accessor :import, :retrieved_at
 
   def initialize(entity_resolver: EntityResolver.new)
     @entity_resolver = entity_resolver
   end
 
-  def process_records(records)
-    records.each { |r| process(r) }
+  def process_records(raw_records)
+    provenances = raw_records.map { |r| [r.id, process(r)] }.to_h
+    RawDataProvenance.bulk_upsert_for_import(import, provenances)
   end
 
-  def process(record)
+  def process(raw_record)
+    record = Oj.load(raw_record.raw_data, mode: :rails)
+
     # A record here conforms to the `Vrdeltagerperson` data type from the DK data source
 
     return if record['fejlRegistreret'] # ignore if errors discovered
@@ -25,11 +28,15 @@ class DkImporter
 
     parent_entity = parent_entity!(record)
 
+    child_entities = []
+    relationships = []
     relations.each do |relation|
       child_entity = child_entity!(relation)
-
-      relationship!(child_entity, parent_entity, record, relation)
+      child_entities << child_entity
+      relationships << relationship!(child_entity, parent_entity, record, relation)
     end
+
+    [parent_entity] + child_entities + relationships
   end
 
   private
@@ -40,7 +47,7 @@ class DkImporter
     entity = Entity.new(
       identifiers: [
         {
-          'document_id' => document_id,
+          'document_id' => import.data_source.document_id,
           'beneficial_owner_id' => record['enhedsNummer'].to_s,
         },
       ],
@@ -50,9 +57,9 @@ class DkImporter
       address: build_address(most_recent(record['beliggenhedsadresse'])),
     )
 
+    entity.upsert
+    index_entity(entity)
     entity
-      .tap(&:upsert)
-      .tap(&method(:index_entity))
   end
 
   def child_entity!(relation)
@@ -61,7 +68,7 @@ class DkImporter
     entity = Entity.new(
       identifiers: [
         {
-          'document_id' => document_id,
+          'document_id' => import.data_source.document_id,
           'company_number' => company_data['cvrNummer'].to_s,
         },
       ],
@@ -72,15 +79,15 @@ class DkImporter
     )
     @entity_resolver.resolve!(entity)
 
+    entity.upsert
+    index_entity(entity)
     entity
-      .tap(&:upsert)
-      .tap(&method(:index_entity))
   end
 
   def relationship!(child_entity, parent_entity, record, relation)
     attributes = {
       _id: {
-        'document_id' => document_id,
+        'document_id' => import.data_source.document_id,
         'beneficial_owner_id' => record['enhedsNummer'].to_s,
         'company_number' => relation[:company]['cvrNummer'].to_s,
       },
@@ -91,14 +98,16 @@ class DkImporter
       ended_date: relation[:end_date].presence,
       sample_date: relation[:last_updated].present? ? Date.parse(relation[:last_updated]).to_s : nil,
       provenance: {
-        source_url: source_url,
-        source_name: source_name,
+        source_url: import.data_source.url,
+        source_name: import.data_source.name,
         retrieved_at: retrieved_at,
         imported_at: Time.now.utc,
       },
     }.compact
 
-    Relationship.new(attributes).upsert
+    relationship = Relationship.new(attributes)
+    relationship.upsert
+    relationship
   end
 
   def index_entity(entity)

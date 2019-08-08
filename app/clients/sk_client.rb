@@ -1,5 +1,5 @@
 require 'net/http/persistent'
-require 'json'
+require 'oj'
 
 class SkClient
   def initialize
@@ -30,7 +30,7 @@ class SkClient
     uri = "#{@api_url}(#{company_id})?#{@record_expansion_param}"
     response = fetch(uri)
     return if response.nil?
-    JSON.parse(response.body)
+    Oj.load(response.body, mode: :rails)
   end
 
   private
@@ -48,7 +48,7 @@ class SkClient
 
   def yield_response(response, yielder)
     return if response.nil?
-    JSON.parse(response.body).tap do |object|
+    Oj.load(response.body, mode: :rails).tap do |object|
       object['value'].each { |record| yielder << record }
     end
   end

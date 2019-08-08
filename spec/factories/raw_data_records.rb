@@ -1,9 +1,10 @@
 FactoryGirl.define do
   factory :raw_data_record do
-    sequence(:data) { |n| { "test" => n } }
+    sequence(:raw_data) { |n| { "test" => n }.to_json }
+    compressed false
 
     after(:build) do |record|
-      record.etag = XXhash.xxh64(record.data).to_s if record.etag.blank?
+      record.etag = RawDataRecord.etag(record.raw_data) if record.etag.blank?
     end
   end
 end

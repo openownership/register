@@ -1,4 +1,4 @@
-require 'json'
+require 'oj'
 
 class PscImporter
   attr_accessor :import, :retrieved_at
@@ -11,11 +11,11 @@ class PscImporter
 
   def process_records(raw_records)
     provenances = raw_records.map { |r| [r.id, process(r)] }.to_h
-    save_provenances!(provenances)
+    RawDataProvenance.bulk_upsert_for_import(import, provenances)
   end
 
   def process(raw_record)
-    record = raw_record['data']
+    record = Oj.load(raw_record.raw_data, mode: :rails)
     case record['data']['kind']
     when 'totals#persons-of-significant-control-snapshot'
       :ignore
@@ -234,36 +234,5 @@ class PscImporter
 
   def index_entity(entity)
     IndexEntityService.new(entity).index
-  end
-
-  def save_provenances!(provenances)
-    bulk_operations = provenances.map do |raw_record_id, entities_and_relationships|
-      next unless entities_and_relationships.is_a? Array
-      now = Time.zone.now
-      entities_and_relationships.map do |entity_or_relationship|
-        {
-          update_one: {
-            upsert: true,
-            filter: {
-              entity_or_relationship_id: entity_or_relationship.id,
-              entity_or_relationship_type: entity_or_relationship.class.name,
-              import_id: import.id,
-            },
-            update: {
-              '$setOnInsert' => {
-                entity_or_relationship_id: entity_or_relationship.id,
-                entity_or_relationship_type: entity_or_relationship.class.name,
-                import_id: import.id,
-                created_at: now,
-              },
-              '$set' => { updated_at: now },
-              '$addToSet' => { raw_data_record_ids: raw_record_id },
-            },
-          },
-        }
-      end
-    end.flatten.compact
-
-    RawDataProvenance.collection.bulk_write(bulk_operations, ordered: false)
   end
 end

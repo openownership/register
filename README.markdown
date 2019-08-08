@@ -64,8 +64,10 @@ process.
 1. Open the Papertrail console (via the Heroku console) to monitor logs.
 1. Open the [sidekiq admin panel](https://register.openownership.org/admin/sidekiq) to monitor the background jobs.
    - The login details for this can be found via the Config Vars for the production app, in the Heroku console.
-1. Upgrade openredis to the 'Extra large' instance type so that it has enough
-   room to store all of the downloaded data.
+1. Upgrade openredis to an instance type that has enough room to store all of
+   the import jobs. This is probably a 'small' for most imports, but whenever
+   we add a new source the initial import may require more (test on a review app
+   first).
 
 ### Import
 
@@ -75,22 +77,20 @@ process.
    - `heroku run:detached --app openownership-register -s performance-l bin/rails dk:trigger`
 1. Now turn on **1** worker dyno, making sure it's a `performance-l`.
 1. Note down the time the worker was started.
-1. Monitor the status of the import via the Sidekiq admin panel, you should see
-   a spike in 'Enqueued' jobs as we download the PSC dump, a gradual increase as
-   the DK/SK triggers download data faster than we can process it, then the
-   number gradually decreasing as we work our way through the queue.
+1. Monitor the status of the import via the Sidekiq admin panel and papertrail.
+   Note that although no jobs may show as active or enqueued, the triggers can
+   still be running (if they're downloading data we've already seen, we don't
+   have to enqueue anything). Use `heroku ps` to be sure everything's done.
 
-Note: The full import takes roughly 36 hours, so don't need to constantly monitor things!
+Note: The full import from scratch takes roughly 30 hours, but the incremental
+import in each sprint should complete in 2-3 hours.
 
-Note: The DK import trigger needs a lot of memory to run, hence the
-performance-m dyno.
+Note: The DK and SK import triggers need a lot of memory to run, because they're
+iterating over all of the data, hence the performance-l dynos.
 
-Note when evaluating errors that 'failed' in the sidekiq web admin
-doesn't mean the job wasn't successful later. Jobs that fail are automatically
-retried up to 25 times so if e.g. an api timed out, they might succeed on a
-retry. 'Dead' jobs are the main concern, as these are jobs which failed every
-retry and so weren't run. See: https://github.com/mperham/sidekiq/wiki/API#dead
-for docs on how to access those jobs.
+Note: Currently all of our import jobs are set to not retry, so if they fail
+they have genuinely failed. We can't currently retry them because of the way we
+batch up the data, so we just accept that this process is a best-effort.
 
 ### Post-import
 

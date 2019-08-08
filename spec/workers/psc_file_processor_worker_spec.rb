@@ -1,12 +1,11 @@
 require 'rails_helper'
-require 'xxhash'
 
 RSpec.describe PscFileProcessorWorker do
   let(:import) { create(:import) }
   let(:corporate_record) { file_fixture('psc_corporate.json').read }
-  let(:corporate_etag) { XXhash.xxh64(corporate_record).to_s }
+  let(:corporate_etag) { RawDataRecord.etag(corporate_record) }
   let(:individual_record) { file_fixture('psc_individual.json').read }
-  let(:individual_etag) { XXhash.xxh64(individual_record).to_s }
+  let(:individual_etag) { RawDataRecord.etag(individual_record) }
   let(:file) do
     file = corporate_record
     file += individual_record
@@ -24,13 +23,13 @@ RSpec.describe PscFileProcessorWorker do
     it 'saves each line in the file as a RawDataRecord' do
       expect { subject }.to change { RawDataRecord.count }.by(2)
       first_record = RawDataRecord.find_by(etag: corporate_etag)
-      expect(first_record.data).to eq(JSON.parse(corporate_record))
+      expect(first_record.raw_data).to eq(corporate_record)
       expect(first_record.imports).to eq([import])
       expect(first_record.created_at).to be_within(1.second).of(Time.zone.now)
       expect(first_record.updated_at).to be_within(1.second).of(Time.zone.now)
 
       second_record = RawDataRecord.find_by(etag: individual_etag)
-      expect(second_record.data).to eq(JSON.parse(individual_record))
+      expect(second_record.raw_data).to eq(individual_record)
       expect(second_record.imports).to eq([import])
       expect(second_record.created_at).to be_within(1.second).of(Time.zone.now)
       expect(second_record.updated_at).to be_within(1.second).of(Time.zone.now)
@@ -63,28 +62,49 @@ RSpec.describe PscFileProcessorWorker do
       expect(RawDataRecord.last.etag).to eq individual_etag
     end
 
+    it 'queues up RawDataRecordsImportWorkers for each chunk' do
+      now = Time.zone.now
+      expect { subject }.to change(RawDataRecordsImportWorker.jobs, :size).by(2)
+
+      jobs = RawDataRecordsImportWorker.jobs
+      corporate_raw_record = RawDataRecord.find_by(etag: corporate_etag)
+      individual_raw_record = RawDataRecord.find_by(etag: individual_etag)
+
+      expect(jobs[0]['args'][0]).to eq [corporate_raw_record.id.to_s]
+      expect(Time.zone.parse(jobs[0]['args'][1])).to be_within(1.second).of(now)
+      expect(jobs[0]['args'][2]).to eq import.id.to_s
+
+      expect(jobs[1]['args'][0]).to eq [individual_raw_record.id.to_s]
+      expect(Time.zone.parse(jobs[1]['args'][1])).to be_within(1.second).of(now)
+      expect(jobs[1]['args'][2]).to eq import.id.to_s
+    end
+
     context "when there's an existing record with the same etag" do
       let!(:existing_record) do
         RawDataRecord.create!(
           imports: create_list(:import, 2),
-          data: JSON.parse(corporate_record),
+          raw_data: corporate_record,
           etag: corporate_etag,
         )
       end
 
-      it "updates the existing record" do
+      it "updates the existing record's import" do
         subject
         expect(existing_record.reload.imports.count).to eq(3)
         expect(existing_record.updated_at).to be_within(1.second).of(Time.zone.now)
       end
 
-      it "still queues up a PscChunkImportWorker for the record" do
-        expect { subject }.to change(PscChunkImportWorker.jobs, :size).by(2)
+      it "doesn't queue up a RawDataRecordsImportWorker for the record" do
+        now = Time.zone.now
+        expect { subject }.to change(RawDataRecordsImportWorker.jobs, :size).by(1)
+
+        jobs = RawDataRecordsImportWorker.jobs
+        individual_raw_record = RawDataRecord.find_by(etag: individual_etag)
+
+        expect(jobs[0]['args'][0]).to eq [individual_raw_record.id.to_s]
+        expect(Time.zone.parse(jobs[0]['args'][1])).to be_within(1.second).of(now)
+        expect(jobs[0]['args'][2]).to eq import.id.to_s
       end
     end
-  end
-
-  it 'queues up PscChunkImportWorkers for each chunk' do
-    expect { subject }.to change(PscChunkImportWorker.jobs, :size).by(2)
   end
 end
