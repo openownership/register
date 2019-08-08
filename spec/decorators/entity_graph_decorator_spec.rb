@@ -25,9 +25,13 @@ RSpec.describe EntityGraphDecorator do
   describe 'generating entity nodes' do
     subject { JSON.parse(decorated.cytoscape_data[:elements])['nodes'] }
 
-    it 'prints a nice entity name for the label' do
+    it 'creates a nice entity name for the label' do
       expect(subject.first['data']['label']).to eq entity.name
       expect(subject.last['data']['label']).to eq 'Unknown'
+    end
+
+    it "adds a flag for the entity's country", type: :helper do
+      expect(subject.first['data']['flag']).to eq h.country_flag_path(ISO3166::Country[:GB])
     end
 
     context 'when asked for transliterated version' do
@@ -120,7 +124,7 @@ RSpec.describe EntityGraphDecorator do
       graph.edges << edge
     end
 
-    describe 'generating nodes' do
+    describe 'generating label nodes' do
       subject { JSON.parse(decorated.cytoscape_data[:elements])['nodes'].last }
 
       it 'uses the right translation string for the label' do
@@ -163,7 +167,7 @@ RSpec.describe EntityGraphDecorator do
       end
     end
 
-    describe 'generating edges' do
+    describe 'generating label edges' do
       subject { JSON.parse(decorated.cytoscape_data[:elements])['edges'].last }
 
       it 'sets source and target' do
