@@ -53,6 +53,7 @@ class EntityGraphDecorator < ApplicationDecorator
         label: h.entity_name_or_unknown(entity),
         id: node.id,
         tooltip: tooltip,
+        flag: h.country_flag_path(entity.country),
       },
       classes: classes,
     }

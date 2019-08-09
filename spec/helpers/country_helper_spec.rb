@@ -23,4 +23,20 @@ RSpec.describe CountryHelper do
       end
     end
   end
+
+  describe "#country_flag_path" do
+    subject { helper.country_flag_path(country) }
+
+    it 'returns the corresponding country flag image path' do
+      expect(subject).to match(%r{/assets/GB-.+\.svg})
+    end
+
+    context 'when the country is nil' do
+      let(:country) { nil }
+
+      it 'returns a glossary tooltip with unknown flag image' do
+        expect(subject).to match(%r{/assets/flag-unknown-.+\.svg})
+      end
+    end
+  end
 end

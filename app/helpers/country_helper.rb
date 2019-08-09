@@ -9,6 +9,13 @@ module CountryHelper
     image_tag(basename, size: '32x16', alt: country.name, class: 'flag')
   end
 
+  def country_flag_path(country)
+    return path_to_image("flag-unknown.svg") unless country
+    basename = "#{country.alpha2.upcase}.svg"
+    return path_to_image("flag-unknown.svg") unless asset_present?(basename)
+    path_to_image(basename)
+  end
+
   private
 
   def unknown_country_flag

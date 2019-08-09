@@ -22,42 +22,34 @@ class EntityGraph {
         style: {
           // Node properties
           'shape': 'rectangle',
-          'background-color': 'white',
-          'width': 'label',
-          'height': 'label',
-          'padding': '8px 12px 8px 12px',
-          'border-width': '1px',
-          'border-color': 'black',
-          'border-opacity': '0.05',
+          'padding': '0px',
+          'background-opacity': 0,
+          'width': '24px',
+          'height': '16px',
           // Label properties
           'label': 'data(label)',
-          'text-valign': 'center',
           'text-halign': 'center',
+          'text-valign': 'top',
           'font-size': '16px',
           'text-wrap': 'wrap',
           'text-max-width': `${this.nodeTextMaxWidth}px`,
-        },
-      },
-      {
-        selector: 'node:selected',
-        style: {
-          'border-color': '#3C31D4',
-          'border-opacity': '1',
+          'text-margin-y': '-4px',
+          'text-background-color': '#F4F6F8',
+          'text-background-opacity': 1,
+          'text-events': 'yes',
+          // Flag image properties
+          'background-image': 'data(flag)',
+          'background-height': '100%',
+          'background-width': '100%',
+          'background-repeat': 'no-repeat',
+          'background-fit': 'cover',
+          'background-clip': 'none',
         },
       },
       {
         selector: 'node.current',
         style: {
-          'background-color': '#3C31D4',
-          'color': 'white',
-        },
-      },
-      {
-        selector: 'node.label',
-        style: {
-          'background-color': '#EEE',
-          'shape': 'round-rectangle',
-          'border-style': 'dashed',
+          'font-weight': 'bold',
         },
       },
       {
@@ -67,15 +59,9 @@ class EntityGraph {
         },
       },
       {
-        selector: 'node.current.hover',
-        style: {
-          color: 'white',
-        },
-      },
-      {
         selector: 'node.dissolved',
         style: {
-          'background-color': '#CCC',
+          color: '#DDD',
         },
       },
     ];
@@ -89,6 +75,9 @@ class EntityGraph {
           'target-arrow-shape': 'triangle',
           'target-arrow-color': '#3C31D4',
           'target-endpoint': 'outside-to-line-or-label',
+          'source-endpoint': 'outside-to-line-or-label',
+          'target-distance-from-node': '16px',
+          'source-distance-from-node': '8px',
         },
       },
       {
@@ -115,7 +104,10 @@ class EntityGraph {
       },
     ];
     this.styles = this.nodeStyles.concat(this.edgeStyles);
-    this.layout = { name: 'dagre' };
+    this.layout = {
+      name: 'dagre',
+      nodeDimensionsIncludeLabels: true,
+    };
 
     this.centerOnSelected = this.centerOnSelected.bind(this);
     this.elementMouseOver = this.elementMouseOver.bind(this);
