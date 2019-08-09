@@ -61,7 +61,7 @@ class EntityGraph {
       {
         selector: 'node.dissolved',
         style: {
-          color: '#DDD',
+          color: '#888',
         },
       },
     ];
