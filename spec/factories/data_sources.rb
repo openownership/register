@@ -3,6 +3,7 @@ FactoryGirl.define do
     url "http://www.example.com"
     sequence(:name) { |n| "Example Source #{n}" }
     sequence(:document_id) { |n| "Source #{n}" }
+    types ['officialRegister']
 
     factory :psc_data_source do
       url 'http://download.companieshouse.gov.uk/en_pscdata.html'

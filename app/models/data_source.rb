@@ -3,6 +3,14 @@ class DataSource
   include Mongoid::Timestamps
   include Mongoid::Slug
 
+  TYPES = %w[
+    selfDeclaration
+    officialRegister
+    thirdParty
+    primaryResearch
+    verified
+  ].freeze
+
   field :url, type: String
   field :name, type: String
   slug :name
@@ -11,10 +19,13 @@ class DataSource
   field :data_availability, type: String, localize: true
   field :timeline_url, type: String
   field :current_statistic_types, type: Array, default: []
+  field :types, type: Array, default: []
 
   embeds_many :statistics, class_name: 'DataSourceStatistic'
   has_many :raw_data_records
   has_many :imports
+
+  validate :validate_types
 
   index({ name: 1 }, unique: true)
 
@@ -30,5 +41,13 @@ class DataSource
     current_statistic_types
       .map { |type| stats_by_type[type]&.max_by(&:created_at) }
       .compact
+  end
+
+  def validate_types
+    types.each do |type|
+      unless TYPES.include? type
+        errors.add :types, "#{type} is not a valid DataSource type"
+      end
+    end
   end
 end

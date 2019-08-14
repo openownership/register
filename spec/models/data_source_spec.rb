@@ -12,6 +12,21 @@ RSpec.describe DataSource do
     end
   end
 
+  describe 'validating types' do
+    it 'only allows types from the allowed TYPES list' do
+      expect(source).to be_valid
+      source.types << 'badType'
+      source.validate
+      expect(source).not_to be_valid
+      expect(source.errors[:types]).not_to be_blank
+    end
+
+    it 'skips data sources with no types' do
+      source.types = []
+      expect(source).to be_valid
+    end
+  end
+
   describe '#statistics_by_type' do
     subject { source.statistics_by_type }
 
