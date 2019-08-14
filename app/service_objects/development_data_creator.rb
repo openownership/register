@@ -17,6 +17,7 @@ class DevelopmentDataCreator
     end
 
     ua_data = Rails.root.join('db', 'data', 'ua_seed_data.jsonl')
+    FactoryGirl.create(:ua_data_source)
     Rake.application['ua:import'].invoke(ua_data, Date.current.to_s)
 
     psc_data_source = FactoryGirl.create(:psc_data_source)
@@ -34,6 +35,16 @@ class DevelopmentDataCreator
     importer.process_records(records)
 
     eiti_data = Rails.root.join('db', 'data', 'eiti-data.txt')
+    File.readlines(eiti_data).each do |line|
+      data = JSON.parse(line)
+      country_name = data['document_id'].gsub('EITI Structured Data - ', '')
+      FactoryGirl.create(
+        :eiti_data_source,
+        name: "EITI pilot data - #{country_name}",
+        url: data['url'],
+        document_id: data['document_id'],
+      )
+    end
     Rake::Task['eiti:import'].invoke(eiti_data)
 
     Entity.import(force: true)
