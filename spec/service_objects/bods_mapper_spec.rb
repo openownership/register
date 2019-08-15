@@ -3,17 +3,43 @@ require 'rails_helper'
 RSpec.describe BodsMapper do
   describe "#statement_id" do
     context "for Entities" do
-      it "returns a stable digest of their id and a namespace"
+      let(:entity) { create(:entity) }
+
+      it "returns a stable id" do
+        id = BodsMapper.new.statement_id(entity)
+        second_id = BodsMapper.new.statement_id(entity)
+        expect(id).to eq second_id
+      end
+
+      it "returns different ids for different entities" do
+        other_entity = create(:entity)
+        id = BodsMapper.new.statement_id(entity)
+        other_id = BodsMapper.new.statement_id(other_entity)
+        expect(id).not_to eq other_id
+      end
     end
 
     context "for Relationships" do
-      it "returns a stable digest of their id"
+      let(:relationship) { create(:relationship) }
+
+      it "returns a stable id" do
+        id = BodsMapper.new.statement_id(relationship)
+        second_id = BodsMapper.new.statement_id(relationship)
+        expect(id).to eq second_id
+      end
+
+      it "returns different ids for different entities" do
+        other_relationship = create(:relationship)
+        id = BodsMapper.new.statement_id(relationship)
+        other_id = BodsMapper.new.statement_id(other_relationship)
+        expect(id).not_to eq other_id
+      end
     end
 
     context "for Statements" do
       let(:statement) { create(:statement) }
 
-      it "returns a stable digest of their id" do
+      it "returns a stable id" do
         id = BodsMapper.new.statement_id(statement)
         second_id = BodsMapper.new.statement_id(statement)
         expect(id).to eq second_id
@@ -27,7 +53,10 @@ RSpec.describe BodsMapper do
       end
     end
 
-    it "raises an error for other classes"
+    it "raises an error for other classes" do
+      obj = Object.new
+      expect { BodsMapper.new.statement_id(obj) }.to raise_error
+    end
   end
 
   describe "#entity_statement" do
