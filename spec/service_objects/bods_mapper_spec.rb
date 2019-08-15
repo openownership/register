@@ -10,6 +10,23 @@ RSpec.describe BodsMapper do
       it "returns a stable digest of their id"
     end
 
+    context "for Statements" do
+      let(:statement) { create(:statement) }
+
+      it "returns a stable digest of their id" do
+        id = BodsMapper.new.statement_id(statement)
+        second_id = BodsMapper.new.statement_id(statement)
+        expect(id).to eq second_id
+      end
+
+      it "returns different ids for different statements" do
+        other_statement = create(:statement)
+        id = BodsMapper.new.statement_id(statement)
+        other_id = BodsMapper.new.statement_id(other_statement)
+        expect(id).not_to eq other_id
+      end
+    end
+
     it "raises an error for other classes"
   end
 

@@ -16,7 +16,7 @@ class BodsMapper
     case obj
     when Entity
       Digest::SHA256.hexdigest("openownership-register/entity/#{obj.id}")
-    when Relationship
+    when Relationship, Statement
       Digest::SHA256.hexdigest(obj.id.to_json)
     else
       raise "Unexpected object for statement_id - class: #{obj.class.name}, obj: #{obj.inspect}"
