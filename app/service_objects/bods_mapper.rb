@@ -12,6 +12,20 @@ class BodsMapper
     'Ukraine Consolidated State Registry (Edinyy Derzhavnyj Reestr [EDR])' => %w[officialRegister],
   }.freeze
 
+  REASONS_FOR_UNKNOWN_PERSON_STATEMENT = %w[
+    psc-contacted-but-no-response
+    psc-contacted-but-no-response-partnership
+    restrictions-notice-issued-to-psc
+    restrictions-notice-issued-to-psc-partnership
+    psc-exists-but-not-identified
+    psc-exists-but-not-identified-partnership
+    psc-details-not-confirmed
+    psc-has-failed-to-confirm-changed-details
+    psc-details-not-confirmed-partnership
+    psc-has-failed-to-confirm-changed-details-partnership
+    super-secure-person-with-significant-control
+  ].freeze
+
   def statement_id(obj)
     case obj
     when Entity
@@ -21,6 +35,11 @@ class BodsMapper
     else
       raise "Unexpected object for statement_id - class: #{obj.class.name}, obj: #{obj.inspect}"
     end
+  end
+
+  def generates_statement?(entity)
+    return true unless entity.respond_to? :unknown_reason
+    REASONS_FOR_UNKNOWN_PERSON_STATEMENT.include?(entity.unknown_reason)
   end
 
   def entity_statement(legal_entity)
@@ -45,6 +64,8 @@ class BodsMapper
   end
 
   def person_statement(natural_person)
+    return unknown_person_statement(natural_person) if natural_person.is_a? UnknownPersonsEntity
+
     {
       statementID: statement_id(natural_person),
       statementType: 'personStatement',
@@ -81,6 +102,28 @@ class BodsMapper
   end
 
   private
+
+  def unknown_person_statement(unknown_person)
+    {
+      statementID: statement_id(unknown_person),
+      statementType: 'personStatement',
+      statementDate: nil,
+      personType: unknown_ps_person_type(unknown_person),
+      missingInfoReason: unknown_person.name,
+      names: [],
+      identifiers: [],
+      nationalities: [],
+      placeOfBirth: nil,
+      birthDate: nil,
+      deathDate: nil,
+      placeOfResidence: nil,
+      addresses: [],
+      pepStatus: nil,
+      source: nil,
+      annotations: nil,
+      replacesStatements: nil,
+    }.compact
+  end
 
   def map_identifiers(entity)
     entity.identifiers.map do |i|
@@ -183,6 +226,15 @@ class BodsMapper
     ]
   end
 
+  def unknown_ps_person_type(unknown_person)
+    case unknown_person.unknown_reason
+    when 'super-secure-person-with-significant-control'
+      'anonymousPerson'
+    else
+      'unknownPerson'
+    end
+  end
+
   def ocs_subject(relationship)
     {
       describedByEntityStatement: statement_id(relationship.target),
@@ -190,10 +242,26 @@ class BodsMapper
   end
 
   def ocs_interested_party(relationship)
-    {
-      describedByEntityStatement: relationship.source.legal_entity? ? statement_id(relationship.source) : nil,
-      describedByPersonStatement: relationship.source.natural_person? ? statement_id(relationship.source) : nil,
-    }.compact
+    case relationship.source
+    when UnknownPersonsEntity
+      if ocs_unspecified_reason(relationship.source).present?
+        {
+          unspecified: {
+            reason: ocs_unspecified_reason(relationship.source),
+            description: relationship.source.name,
+          },
+        }
+      else
+        {
+          describedByPersonStatement: statement_id(relationship.source),
+        }
+      end
+    when Entity
+      {
+        describedByEntityStatement: relationship.source.legal_entity? ? statement_id(relationship.source) : nil,
+        describedByPersonStatement: relationship.source.natural_person? ? statement_id(relationship.source) : nil,
+      }.compact
+    end
   end
 
   def ocs_interests(relationship)
@@ -229,6 +297,8 @@ class BodsMapper
   end
 
   def ocs_source(relationship)
+    return ocs_source_from_raw_data(relationship) if relationship.raw_data_provenances.any?
+
     return nil if relationship.provenance.blank?
 
     provenance = relationship.provenance
@@ -240,6 +310,25 @@ class BodsMapper
       description: provenance.source_name,
       url: provenance.source_url.presence,
       retrievedAt: provenance.retrieved_at.iso8601,
+    }.compact
+  end
+
+  def ocs_source_from_raw_data(relationship)
+    return nil if relationship.raw_data_provenances.empty?
+
+    provenances = relationship.raw_data_provenances
+    imports = provenances.map(&:import).uniq
+    if imports.map(&:data_source).uniq.length > 1
+      raise "[#{self.class.name}] Relationship: #{relationship.id} comes from multiple data sources, can't produce a single Source for it"
+    end
+    most_recent_import = imports.max_by(&:created_at)
+    data_source = most_recent_import.data_source
+
+    {
+      type: data_source.types,
+      description: data_source.name,
+      url: data_source.url,
+      retrievedAt: most_recent_import.created_at.iso8601,
     }.compact
   end
 
@@ -381,6 +470,25 @@ class BodsMapper
         type: 'influence-or-control',
         details: interest,
       }
+    end
+  end
+
+  def ocs_unspecified_reason(unknown_person)
+    return if generates_statement?(unknown_person)
+
+    case unknown_person.unknown_reason
+    when 'no-individual-or-entity-with-signficant-control',
+         'no-individual-or-entity-with-signficant-control-partnership'
+      'no-beneficial-owners'
+    when 'disclosure-transparency-rules-chapter-five-applies',
+         'psc-exempt-as-trading-on-regulated-market',
+         'psc-exempt-as-shares-admitted-on-market'
+      'subject-exempt-from-disclosure'
+    when 'steps-to-find-psc-not-yet-completed',
+         'steps-to-find-psc-not-yet-completed-partnership'
+      'unknown'
+    else
+      'unknown'
     end
   end
 end
