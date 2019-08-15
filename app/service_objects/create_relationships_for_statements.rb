@@ -30,7 +30,9 @@ class CreateRelationshipsForStatements
           name: I18n.t("statement-descriptions.#{statement.type}"),
         ),
         target: source,
+        sample_date: statement.date.present? ? ISO8601::Date.new(statement.date.iso8601) : nil,
         ended_date: statement.ended_date,
+        raw_data_provenances: statement.raw_data_provenances,
       )
     end
   end
