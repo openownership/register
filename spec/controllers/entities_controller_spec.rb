@@ -43,6 +43,29 @@ RSpec.describe EntitiesController do
     end
   end
 
+  describe 'GET #show, format: :json' do
+    # See spec/system/entities for further tests of this, it doesn't really
+    # warrant direct controller specs
+
+    let!(:person) { create(:natural_person) }
+    let!(:owned_companies) { create_list(:legal_entity, 11) }
+    let!(:relationships) do
+      owned_companies.map { |c| create(:relationship, source: person, target: c) }
+    end
+
+    it "doesn't paginate owned companies" do
+      get :show, params: { id: person.id, format: :json }
+      statements = JSON.parse(response.body)
+      person_statements = statements.select { |s| s['statementType'] == 'personStatement' }
+      entity_statements = statements.select { |s| s['statementType'] == 'entityStatement' }
+      oc_statements = statements.select { |s| s['statementType'] == 'ownershipOrControlStatement' }
+
+      expect(person_statements.length).to eq 1
+      expect(entity_statements.length).to eq 11
+      expect(oc_statements.length).to eq 11
+    end
+  end
+
   describe 'GET #tree' do
     context 'when the entity is a merged entity' do
       let!(:master_entity) { create(:natural_person) }
