@@ -31,6 +31,15 @@ RSpec.describe BodsSerializer do
     end
 
     it 'should return a list of BODS statements for the whole chain' do
+      expect(mapper).to receive(:generates_statement?)
+        .with(legal_entity_2)
+        .and_return(true)
+        .once
+      expect(mapper).to receive(:generates_statement?)
+        .with(natural_person)
+        .and_return(true)
+        .once
+
       expect(mapper).to receive(:statement_id)
         .with(legal_entity_1)
         .and_return(:legal_entity_1)
@@ -83,13 +92,85 @@ RSpec.describe BodsSerializer do
     end
   end
 
-  context 'when a relationship with an UnknownPersonsEntity is passed' do
-    let :relationships do
-      [create(:relationship, source: UnknownPersonsEntity.new)]
+  context 'when a relationship with a totally unknown owner is passed' do
+    let(:entity) { create(:legal_entity) }
+    let(:relationships) do
+      CreateRelationshipsForStatements.call(entity)
     end
 
-    it 'should ignore the relationship and not return any statements' do
-      expect(subject.statements).to eq []
+    it "should return BODS statements for the entity and an unspecified ownership" do
+      expect(mapper).to receive(:generates_statement?)
+        .with(relationships.first.source)
+        .and_return(false)
+        .once
+
+      expect(mapper).to receive(:statement_id)
+        .with(entity)
+        .and_return(:legal_entity_1)
+        .once
+      expect(mapper).to receive(:statement_id)
+        .with(relationships.first)
+        .and_return(:relationship_1)
+        .once
+
+      expect(mapper).to receive(:entity_statement)
+        .with(entity)
+        .and_return(statementID: :legal_entity_1)
+      expect(mapper).to receive(:ownership_or_control_statement)
+        .with(relationships.first)
+        .and_return(statementID: :relationship_1)
+
+      expected_statements = [
+        { statementID: :legal_entity_1 },
+        { statementID: :relationship_1 },
+      ]
+
+      expect(subject.statements).to match_array expected_statements
+    end
+  end
+
+  context "when a relationship with a declared 'no owner' is passed" do
+    let :relationships do
+      statement = create(:statement, type: 'psc-exists-but-not-identified')
+      CreateRelationshipsForStatements.call(statement.entity)
+    end
+
+    it "should return BODS statements for the entity and it's unknown ownership" do
+      expect(mapper).to receive(:generates_statement?)
+        .with(relationships.first.source)
+        .and_return(true)
+        .once
+
+      expect(mapper).to receive(:statement_id)
+        .with(relationships.first.target)
+        .and_return(:legal_entity_1)
+        .once
+      expect(mapper).to receive(:statement_id)
+        .with(relationships.first.source)
+        .and_return(:natural_person_1)
+        .once
+      expect(mapper).to receive(:statement_id)
+        .with(relationships.first)
+        .and_return(:relationship_1)
+        .once
+
+      expect(mapper).to receive(:entity_statement)
+        .with(relationships.first.target)
+        .and_return(statementID: :legal_entity_1)
+      expect(mapper).to receive(:person_statement)
+        .with(relationships.first.source)
+        .and_return(statementID: :natural_person_1)
+      expect(mapper).to receive(:ownership_or_control_statement)
+        .with(relationships.first)
+        .and_return(statementID: :relationship_1)
+
+      expected_statements = [
+        { statementID: :legal_entity_1 },
+        { statementID: :natural_person_1 },
+        { statementID: :relationship_1 },
+      ]
+
+      expect(subject.statements).to match_array expected_statements
     end
   end
 end

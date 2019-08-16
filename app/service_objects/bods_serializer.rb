@@ -9,15 +9,9 @@ class BodsSerializer
     seen = Set.new
 
     @relationships.reduce([]) do |acc, relationship|
-      if relationship.target.blank? ||
-         relationship.source.blank? ||
-         relationship.source.is_a?(UnknownPersonsEntity)
-        acc
-      else
-        statements = statements_for(relationship, seen.dup)
-        seen.merge(statements.map { |s| s[:statementID] })
-        acc + statements
-      end
+      statements = statements_for(relationship, seen.dup)
+      seen.merge(statements.map { |s| s[:statementID] })
+      acc + statements
     end
   end
 
@@ -40,6 +34,8 @@ class BodsSerializer
   end
 
   def statement_for_source(entity, seen)
+    return nil unless @mapper.generates_statement?(entity)
+
     statement_id = @mapper.statement_id(entity)
 
     return nil if seen.include? statement_id
