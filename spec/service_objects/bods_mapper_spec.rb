@@ -17,6 +17,25 @@ RSpec.describe BodsMapper do
         other_id = BodsMapper.new.statement_id(other_entity)
         expect(id).not_to eq other_id
       end
+
+      context 'for UnknownPersonsEntities' do
+        let(:unknown_entity) do
+          UnknownPersonsEntity.new(id: '12345-unknown')
+        end
+
+        it "returns a stable id" do
+          id = BodsMapper.new.statement_id(unknown_entity)
+          second_id = BodsMapper.new.statement_id(unknown_entity)
+          expect(id).to eq second_id
+        end
+
+        it "returns different ids for different entities" do
+          other_unknown_entity = UnknownPersonsEntity.new(id: '56789-unknown')
+          id = BodsMapper.new.statement_id(unknown_entity)
+          other_id = BodsMapper.new.statement_id(other_unknown_entity)
+          expect(id).not_to eq other_id
+        end
+      end
     end
 
     context "for Relationships" do
