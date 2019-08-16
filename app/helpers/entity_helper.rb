@@ -28,7 +28,7 @@ module EntityHelper
   def unknown_entity_name(entity)
     return unless entity.is_a?(UnknownPersonsEntity)
 
-    if entity.id.to_s.include?('no-individual-or-entity-with-signficant-control')
+    if entity.unknown_reason == 'no-individual-or-entity-with-signficant-control'
       return 'No person'
     end
     'Unknown'

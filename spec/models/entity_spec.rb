@@ -60,7 +60,7 @@ RSpec.describe Entity do
 
         it "returns an array containing a relationship to an unknown persons entity" do
           expect(subject.count).to eq(1)
-          expect(subject[0].source).to eq(UnknownPersonsEntity.new(id: "#{entity.id}#{Entity::UNKNOWN_ID_MODIFIER}"))
+          expect(subject[0].source).to eq(UnknownPersonsEntity.new_for_entity(entity))
           expect(subject[0].target).to eq(entity)
         end
       end

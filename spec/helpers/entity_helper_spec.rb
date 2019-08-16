@@ -15,7 +15,8 @@ RSpec.describe EntityHelper do
     end
 
     context "when entity is a unknown persons entity" do
-      let(:entity) { UnknownPersonsEntity.new }
+      let(:company) { create(:legal_entity) }
+      let(:entity) { UnknownPersonsEntity.new_for_entity(company) }
 
       it "returns a tooltip" do
         expect(helper).to receive(:tooltip).with(
@@ -53,26 +54,31 @@ RSpec.describe EntityHelper do
     end
 
     context 'when entity is a unknown persons entity' do
-      let(:statement) { nil }
-      let(:entity) { UnknownPersonsEntity.new(id: id, name: statement) }
       let(:tooltip) { content_tag(:span, label, class: 'unknown') }
 
       before { allow(helper).to receive(:tooltip) }
 
       context 'when no PSC' do
-        let(:id) { 'no-individual-or-entity-with-signficant-control' }
+        let(:statement) do
+          create(
+            :statement,
+            type: 'no-individual-or-entity-with-signficant-control',
+          )
+        end
         let(:label) { 'No person' }
-        let(:statement) { 'statement' }
+        let(:entity) { UnknownPersonsEntity.new_for_statement(statement) }
 
         it 'returns "No person" with tooltip' do
           subject
-          expect(helper).to have_received(:tooltip).with(tooltip, statement, :top)
+          expect(helper).to have_received(:tooltip).with(tooltip, entity.name, :top)
         end
       end
 
       context 'when unknown PSC' do
         let(:id) { 1234 }
         let(:label) { 'Unknown' }
+        let(:company) { create(:legal_entity) }
+        let(:entity) { UnknownPersonsEntity.new_for_entity(company) }
 
         it 'returns "Unknown" with tooltip' do
           subject

@@ -22,19 +22,8 @@ RSpec.describe CreateRelationshipsForStatements do
         expect(subject.first.id).to eq expected
       end
 
-      describe 'setting the relationship source' do
-        it 'sets the source to an UnknownPersonsEntity' do
-          expect(subject.first.source).to be_a UnknownPersonsEntity
-        end
-
-        it 'gives it an id from the Statement type' do
-          expect(subject.first.source.id).to eq('statement-descriptions-no-individual-or-entity-with-signficant-control')
-        end
-
-        it 'gives it a name from the translated description of the Statement type' do
-          expected = "The company knows or has reasonable cause to believe that there is no registrable person or registrable relevant legal entity in relation to the company"
-          expect(subject.first.source.name).to eq(expected)
-        end
+      it 'sets the relationship source to an UnknownPersonsEntity' do
+        expect(subject.first.source).to be_a UnknownPersonsEntity
       end
 
       it 'sets the source entity as the relationship target' do
@@ -103,14 +92,8 @@ RSpec.describe CreateRelationshipsForStatements do
         expect(subject.first.id).to eq(expected)
       end
 
-      describe 'setting the relationship source' do
-        it 'sets the source to an UnknownPersonsEntity' do
-          expect(subject.first.source).to be_a UnknownPersonsEntity
-        end
-
-        it 'gives it an id from the entity id' do
-          expect(subject.first.source.id).to eq '123456-unknown'
-        end
+      it 'sets the relationship source to an UnknownPersonsEntity' do
+        expect(subject.first.source).to be_a UnknownPersonsEntity
       end
 
       it 'sets the source entity as the relationship target' do
