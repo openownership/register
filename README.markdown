@@ -38,6 +38,15 @@ Then you're ready to use the usual `rails` commands (like `rails serve`) to run 
 
 To run tests:
 
+Tests of our BODS export use the [lib-cove-bods](https://github.com/openownership/lib-cove-bods)
+validator to validate BODS output. You need to install this separately, via the
+instructions in the README, then set an ENV var so the tests where it's
+installed.
+
+In `.env.test.local` set `LIB_COVE_BODS` to `/path/to/cloned-repo/.ve/bin/libcovebods`
+
+With that you can run the specs:
+
 ```bash
 bundle exec rspec
 ```

@@ -174,8 +174,6 @@ GEM
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
     jmespath (1.3.1)
-    json-schema (2.8.1)
-      addressable (>= 2.4)
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -421,7 +419,6 @@ DEPENDENCIES
   haml_lint (~> 0.27.0)
   iso8601
   jbuilder
-  json-schema (~> 2.8, >= 2.8.1)
   kaminari-mongoid
   launchy
   listen (~> 3.0.5)

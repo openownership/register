@@ -59,6 +59,36 @@ jobs:
             - ~/.cache/yarn
 
       - run:
+          name: Download lib-cove-bods
+          working_directory: ~/openownership
+          command: |
+              sudo apt update
+              sudo apt-get install python3-pip python3-venv
+              wget https://github.com/openownership/lib-cove-bods/archive/v0.5.0.zip
+              unzip v0.5.0.zip
+
+      # Restore pip cache
+      - restore_cache:
+          keys:
+            - lib-cove-bods-v1-{{ checksum "~/openownership/lib-cove-bods-0.5.0/requirements.txt" }}
+            - lib-cove-bods-v1-
+
+      - run:
+          name: 'Install lib-cove-bods'
+          working_directory: ~/openownership/lib-cove-bods-0.5.0
+          command: |
+              python3 -m venv .ve
+              source .ve/bin/activate
+              pip3 install -r requirements.txt
+              pip3 install -e .
+
+      # Store pip cache
+      - save_cache:
+          key: lib-cove-bods-v1-{{ checksum "~/openownership/lib-cove-bods-0.5.0/requirements.txt" }}
+          paths:
+            - ~/.cache/pip
+
+      - run:
           name: Wait for MongoDB
           command: dockerize -wait tcp://localhost:27017 -timeout 1m
 
@@ -71,6 +101,7 @@ jobs:
           environment:
             RAILS_ENV: test
             RACK_ENV: test
+            LIB_COVE_BODS: ~/openownership/lib-cove-bods-0.5.0/.ve/bin/libcovebods
       - run: yarn test
       - run: bundle exec rubocop
       - run: bundle exec haml-lint .

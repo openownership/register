@@ -22,8 +22,6 @@ Sidekiq::Logging.logger = nil
 Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
 Dir["./spec/shared_contexts/**/*.rb"].each { |f| require f }
 
-JSON::Validator.schema_reader = JSON::Schema::Reader.new(accept_uri: false, accept_file: true)
-
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
