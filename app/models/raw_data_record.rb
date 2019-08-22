@@ -15,6 +15,8 @@ class RawDataRecord
   validates :raw_data, presence: true
   validates :etag, presence: true
 
+  attr_readonly :raw_data, :etag
+
   index({ etag: 1 }, unique: true)
 
   def self.bulk_upsert_for_import(records, import)
