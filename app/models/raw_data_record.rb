@@ -7,7 +7,6 @@ class RawDataRecord
   RAW_DATA_COMPRESSION_LIMIT = 1_000_000 # 1MB
   MONGODB_MAX_DOC_SIZE = 16_000_000 # 16MB (slightly lower than real life limit)
 
-  field :data, type: Hash
   field :etag, type: String
   field :raw_data, type: String
   field :compressed, type: Boolean
