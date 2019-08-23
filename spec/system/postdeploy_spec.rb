@@ -13,7 +13,7 @@ RSpec.describe 'postdeploy task' do
     expect(Submissions::Relationship.count).to eq(6)
     expect(Statement.count).to eq(69)
     expect(User.count).to eq(10)
-    expect(DataSource.count).to eq(1)
+    expect(DataSource.count).to eq(24)
     expect(Import.count).to eq(1)
     expect(RawDataProvenance.count).to eq(3172)
     expect(RawDataRecord.count).to eq(1113)

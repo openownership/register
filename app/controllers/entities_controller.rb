@@ -30,7 +30,7 @@ class EntitiesController < ApplicationController
       format.html
       format.json do
         relationships = (
-          @source_relationships +
+          source_relationships +
           @ultimate_source_relationship_groups.map do |g|
             g[:relationships].map(&:sourced_relationships)
           end.flatten.compact

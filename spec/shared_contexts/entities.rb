@@ -166,10 +166,7 @@ RSpec.shared_context 'entity with no ultimate ownership' do
     FactoryGirl.create(:statement, entity: intermediate_company)
   end
   let!(:no_owner) do
-    UnknownPersonsEntity.new(
-      id: "statement-descriptions-no-individual-or-entity-with-signficant-control",
-      name: I18n.t("statement-descriptions.no-individual-or-entity-with-signficant-control"),
-    )
+    UnknownPersonsEntity.new_for_statement(intermediate_owner_statement)
   end
   let!(:intermediate_to_no_owner_relationship) do
     Relationship.new(source: no_owner, target: intermediate_company)
@@ -201,10 +198,7 @@ RSpec.shared_context 'entity with unknown ultimate ownership' do
     )
   end
   let!(:unknown_owner) do
-    UnknownPersonsEntity.new(
-      id: "#{intermediate_company.id}-unknown",
-      name: "unknown",
-    )
+    UnknownPersonsEntity.new_for_entity(intermediate_company)
   end
   let!(:intermediate_to_unknown_owner_relationship) do
     Relationship.new(source: unknown_owner, target: intermediate_company)
