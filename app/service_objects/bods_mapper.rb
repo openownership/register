@@ -1,3 +1,5 @@
+require 'xxhash'
+
 class BodsMapper
   def self.instance
     @instance ||= new
@@ -26,13 +28,28 @@ class BodsMapper
     super-secure-person-with-significant-control
   ].freeze
 
+  ID_PREFIX = 'openownership-register-'.freeze
+
   def statement_id(obj)
     case obj
     when Entity
       return nil unless generates_statement?(obj)
-      Digest::SHA256.hexdigest("openownership-register/entity/#{obj.id}")
-    when Relationship, Statement
-      Digest::SHA256.hexdigest(obj.id.to_json)
+      ID_PREFIX + hash("openownership-register/entity/#{obj.id}/#{obj.self_updated_at}")
+    when Relationship
+      things_that_make_relationship_statements_unique = {
+        id: obj.id,
+        updated_at: obj.updated_at,
+        source_id: statement_id(obj.source),
+        target_id: statement_id(obj.target),
+      }
+      ID_PREFIX + hash(things_that_make_relationship_statements_unique.to_json)
+    when Statement
+      things_that_make_psc_statement_statements_unique = {
+        id: obj.id,
+        updated_at: obj.updated_at,
+        entity_id: statement_id(obj.entity),
+      }
+      ID_PREFIX + hash(things_that_make_psc_statement_statements_unique.to_json)
     else
       raise "Unexpected object for statement_id - class: #{obj.class.name}, obj: #{obj.inspect}"
     end
@@ -100,6 +117,10 @@ class BodsMapper
       annotations: nil,
       replacesStatements: nil,
     }.compact
+  end
+
+  def hash(data)
+    XXhash.xxh64(data).to_s
   end
 
   private

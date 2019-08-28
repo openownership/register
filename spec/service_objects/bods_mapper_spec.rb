@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BodsMapper do
   describe "#statement_id" do
     context "for Entities" do
-      let(:entity) { create(:entity) }
+      let(:entity) { create(:legal_entity) }
 
       it "returns a stable id" do
         id = BodsMapper.new.statement_id(entity)
@@ -18,6 +18,22 @@ RSpec.describe BodsMapper do
         expect(id).not_to eq other_id
       end
 
+      it 'changes when the entity itself changes' do
+        entity.set(self_updated_at: 1.second.ago)
+        id = BodsMapper.new.statement_id(entity)
+        entity.touch(:self_updated_at)
+        new_id = BodsMapper.new.statement_id(entity)
+        expect(id).not_to eq new_id
+      end
+
+      it "doesn't change when just a relationship to the entity changes" do
+        entity.set(updated_at: 1.second.ago)
+        id = BodsMapper.new.statement_id(entity)
+        entity.touch # This is what changing a relationship will do
+        new_id = BodsMapper.new.statement_id(entity)
+        expect(id).to eq new_id
+      end
+
       context 'for UnknownPersonsEntities' do
         let(:statement) { create(:statement, type: 'psc-exists-but-not-identified') }
         let(:unknown_entity) do
@@ -30,12 +46,21 @@ RSpec.describe BodsMapper do
           expect(id).to eq second_id
         end
 
-        it "returns different ids for different entities" do
+        it "returns different ids for different statements" do
           other_statement = create(:statement, type: 'psc-exists-but-not-identified')
           other_unknown_entity = UnknownPersonsEntity.new_for_statement(other_statement)
           id = BodsMapper.new.statement_id(unknown_entity)
           other_id = BodsMapper.new.statement_id(other_unknown_entity)
           expect(id).not_to eq other_id
+        end
+
+        it "changes when the underlying statement changes" do
+          statement.set(updated_at: 1.second.ago) # Otherwise it can end up identical
+          id = BodsMapper.new.statement_id(unknown_entity)
+          statement.touch
+          new_unknown_entity = UnknownPersonsEntity.new_for_statement(statement)
+          new_id = BodsMapper.new.statement_id(new_unknown_entity)
+          expect(id).not_to eq new_id
         end
 
         it "returns nil for entities which don't generate statements" do
@@ -61,6 +86,30 @@ RSpec.describe BodsMapper do
         other_id = BodsMapper.new.statement_id(other_relationship)
         expect(id).not_to eq other_id
       end
+
+      it 'changes when the relationship changes' do
+        relationship.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(relationship)
+        relationship.touch
+        new_id = BodsMapper.new.statement_id(relationship)
+        expect(id).not_to eq new_id
+      end
+
+      it 'changes when the source entity changes' do
+        relationship.source.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(relationship)
+        relationship.source.touch(:self_updated_at)
+        new_id = BodsMapper.new.statement_id(relationship)
+        expect(id).not_to eq new_id
+      end
+
+      it 'changes when the relationship entity changes' do
+        relationship.target.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(relationship)
+        relationship.target.touch(:self_updated_at)
+        new_id = BodsMapper.new.statement_id(relationship)
+        expect(id).not_to eq new_id
+      end
     end
 
     context "for Statements" do
@@ -77,6 +126,22 @@ RSpec.describe BodsMapper do
         id = BodsMapper.new.statement_id(statement)
         other_id = BodsMapper.new.statement_id(other_statement)
         expect(id).not_to eq other_id
+      end
+
+      it 'changes when the statement changes' do
+        statement.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(statement)
+        statement.touch
+        new_id = BodsMapper.new.statement_id(statement)
+        expect(id).not_to eq new_id
+      end
+
+      it 'changes when the statement entity changes' do
+        statement.entity.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(statement)
+        statement.entity.touch(:self_updated_at)
+        new_id = BodsMapper.new.statement_id(statement)
+        expect(id).not_to eq new_id
       end
     end
 
