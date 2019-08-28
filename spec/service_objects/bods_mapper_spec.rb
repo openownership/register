@@ -19,8 +19,9 @@ RSpec.describe BodsMapper do
       end
 
       context 'for UnknownPersonsEntities' do
+        let(:statement) { create(:statement, type: 'psc-exists-but-not-identified') }
         let(:unknown_entity) do
-          UnknownPersonsEntity.new(id: '12345-unknown')
+          UnknownPersonsEntity.new_for_statement(statement)
         end
 
         it "returns a stable id" do
@@ -30,10 +31,17 @@ RSpec.describe BodsMapper do
         end
 
         it "returns different ids for different entities" do
-          other_unknown_entity = UnknownPersonsEntity.new(id: '56789-unknown')
+          other_statement = create(:statement, type: 'psc-exists-but-not-identified')
+          other_unknown_entity = UnknownPersonsEntity.new_for_statement(other_statement)
           id = BodsMapper.new.statement_id(unknown_entity)
           other_id = BodsMapper.new.statement_id(other_unknown_entity)
           expect(id).not_to eq other_id
+        end
+
+        it "returns nil for entities which don't generate statements" do
+          unknown_entity = UnknownPersonsEntity.new_for_entity(create(:legal_entity))
+          id = BodsMapper.new.statement_id(unknown_entity)
+          expect(id).to be_nil
         end
       end
     end

@@ -29,6 +29,7 @@ class BodsMapper
   def statement_id(obj)
     case obj
     when Entity
+      return nil unless generates_statement?(obj)
       Digest::SHA256.hexdigest("openownership-register/entity/#{obj.id}")
     when Relationship, Statement
       Digest::SHA256.hexdigest(obj.id.to_json)
