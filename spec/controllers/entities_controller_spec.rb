@@ -4,27 +4,20 @@ RSpec.describe EntitiesController do
   describe 'GET #show' do
     let(:entity) { create(:legal_entity) }
 
-    it 'sorts owned companies by ended_date and name' do
-      first_company = create(:legal_entity, name: 'ABC')
-      second_company = create(:legal_entity, name: 'ABC')
-      third_company = create(:legal_entity, name: 'DEF')
-      fourth_company = create(:legal_entity, name: 'DEF')
-
-      first_relationship = create(:relationship, source: entity, target: first_company, ended_date: nil)
-      second_relationship = create(:relationship, source: entity, target: second_company, ended_date: Time.zone.today.iso8601)
-      third_relationship = create(:relationship, source: entity, target: third_company, ended_date: nil)
-      fourth_relationship = create(:relationship, source: entity, target: fourth_company, ended_date: Time.zone.today.iso8601)
+    it 'sorts owned companies by started_date' do
+      first_relationship = create(:relationship, source: entity, started_date: nil)
+      second_relationship = create(:relationship, source: entity, started_date: '2019-08-28')
+      third_relationship = create(:relationship, source: entity, started_date: '2019-08-29')
 
       expected_order = [
-        first_relationship.id,
         third_relationship.id,
         second_relationship.id,
-        fourth_relationship.id,
+        first_relationship.id,
       ]
 
       get :show, params: { id: entity.id }
 
-      # The actual results get paginated and decorated so aren't Relationships
+      # The actual results get paginated and decorated so aren't Relationship
       # instances, hence just matching ids
       actual_order = assigns('source_relationships').map(&:id)
       expect(actual_order).to eq(expected_order)

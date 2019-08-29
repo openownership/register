@@ -5,14 +5,9 @@ class EntitiesController < ApplicationController
 
     @merged_entities = entity.merged_entities.page(params[:merged_page]).per(10)
 
-    # It's annoying that we're going to paginate this straight after and so
-    # throw away a lot of the relationships we find, but it's the only way to
-    # sort them by target name and date, because MongoDB can't do that directly.
-    source_relationships = decorate(
-      RelationshipsSorter.new(entity.relationships_as_source).call,
-    )
-    @source_relationships = Kaminari
-      .paginate_array(source_relationships)
+    @source_relationships = entity
+      .relationships_as_source
+      .order_by(started_date: :desc)
       .page(params[:source_page]).per(10)
 
     @ultimate_source_relationship_groups = decorate_with(
@@ -30,7 +25,8 @@ class EntitiesController < ApplicationController
       format.html
       format.json do
         relationships = (
-          source_relationships +
+          # Not just the paginated ones we show in HTML, all of them
+          entity.relationships_as_source +
           @ultimate_source_relationship_groups.map do |g|
             g[:relationships].map(&:sourced_relationships)
           end.flatten.compact
