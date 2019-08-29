@@ -66,41 +66,16 @@ RSpec.describe 'Entity pages' do
     include_context 'basic entity with one owner'
 
     let!(:relationships) do
-      relationships = FactoryGirl.create_list(
-        :relationship,
-        12,
-        source: company,
-        interests: ['ownership-of-shares-75-to-100-percent'],
-      )
-      # Need to sort them the same way as the view to test what is/isn't on
-      # each page
-      RelationshipsSorter.new(relationships).call
+      relationships = []
+      (1...13).each do |i|
+        relationships << FactoryGirl.create(:relationship, source: company, started_date: i.day.ago.to_date.iso8601)
+      end
+      relationships
     end
-
-    let!(:ended_relationship_1) do
-      FactoryGirl.create(
-        :relationship,
-        source: company,
-        interests: ['ownership-of-shares-75-to-100-percent'],
-        ended_date: Time.zone.yesterday.iso8601,
-      )
-    end
-
-    let!(:ended_relationship_2) do
-      FactoryGirl.create(
-        :relationship,
-        source: company,
-        interests: ['ownership-of-shares-75-to-100-percent'],
-        ended_date: Time.zone.today.iso8601,
-      )
-    end
-
-    let(:ended_company_1) { ended_relationship_1.target }
-    let(:ended_company_2) { ended_relationship_2.target }
 
     it 'paginates the list of owned companies' do
       visit entity_path(company)
-      expect(page).to have_text 'Displaying companies 1 - 10 of 14 in total'
+      expect(page).to have_text 'Displaying companies 1 - 10 of 12 in total'
 
       expect(page).not_to have_text relationships.last.target.name
       expect(page).not_to have_text relationships[-2].target.name
@@ -129,19 +104,6 @@ RSpec.describe 'Entity pages' do
           expect(page).to have_text('2')
         end
       end
-    end
-
-    it "puts ended relationships at the end" do
-      visit entity_path(company)
-      # Page 1
-      expect(page).not_to have_text(ended_company_1.name)
-      expect(page).not_to have_text(ended_company_2.name)
-
-      within('.pagination') { click_link '2' }
-
-      # Page 2
-      expect(page).to have_text(ended_company_1.name)
-      expect(page).to have_text(ended_company_2.name)
     end
   end
 
@@ -571,15 +533,11 @@ RSpec.describe 'Entity pages' do
     include_context 'basic entity with one owner'
 
     let!(:relationships) do
-      relationships = FactoryGirl.create_list(
-        :relationship,
-        12,
-        source: person,
-        interests: ['ownership-of-shares-75-to-100-percent'],
-      )
-      # Need to sort them the same way as the view to test what is/isn't on
-      # each page
-      RelationshipsSorter.new(relationships).call
+      relationships = []
+      (1...13).each do |i|
+        relationships << FactoryGirl.create(:relationship, source: person, started_date: i.day.ago.to_date.iso8601)
+      end
+      relationships
     end
 
     let!(:merged_people) { create_list(:natural_person, 12, master_entity: person) }
