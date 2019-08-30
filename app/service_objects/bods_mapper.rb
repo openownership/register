@@ -1,6 +1,8 @@
 require 'xxhash'
 
 class BodsMapper
+  extend Memoist
+
   def self.instance
     @instance ||= new
   end
@@ -367,6 +369,7 @@ class BodsMapper
 
     return country.alpha2 if country
   end
+  memoize :try_parse_country_name_to_code
 
   def parse_interest_string(interest)
     case interest
@@ -494,6 +497,7 @@ class BodsMapper
       }
     end
   end
+  memoize :parse_interest_string
 
   def ocs_unspecified_reason(unknown_person)
     return if generates_statement?(unknown_person)
