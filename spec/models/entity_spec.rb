@@ -271,6 +271,10 @@ RSpec.describe Entity do
         expect { subject.upsert }.not_to change { Entity.count }
       end
 
+      it 'sets the updated_at' do
+        expect { subject.upsert }.to change { @entity.reload.updated_at }
+      end
+
       context "when the new document has multiple identifiers" do
         let(:other_identifier) { { 'a' => 'b' } }
         before do
@@ -366,6 +370,11 @@ RSpec.describe Entity do
         expect(entity.new_record?).to eq(true)
         entity.upsert
         expect(entity.new_record?).to eq(false)
+      end
+
+      it 'sets updated_at on the new entity' do
+        subject.upsert
+        expect(Entity.first.updated_at).not_to be_nil
       end
     end
 

@@ -85,7 +85,13 @@ class Entity
 
   # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
   # are found using their embeddeded identifiers instead of the _id field.
-  def upsert
+  def upsert(options: {})
+    prepare_upsert(options) do
+      _upsert
+    end
+  end
+
+  def _upsert
     selector = Entity.with_identifiers(identifiers).selector
 
     attributes = as_document.except('_id', 'identifiers')
@@ -105,7 +111,6 @@ class Entity
     )
 
     self.id = document.fetch('_id')
-    self.new_record = false
 
     reload
   rescue Mongo::Error::OperationFailure => exception
