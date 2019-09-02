@@ -77,7 +77,8 @@ class Entity
     if type == Types::NATURAL_PERSON
       []
     else
-      _relationships_as_target.entries.presence || CreateRelationshipsForStatements.call(self)
+      relationships = Relationship.includes(:target, :source).where(target_id: id)
+      relationships.entries.presence || CreateRelationshipsForStatements.call(self)
     end
   end
 
