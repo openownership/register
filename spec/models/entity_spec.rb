@@ -29,11 +29,11 @@ RSpec.describe Entity do
   end
 
   describe '#relationships_as_target' do
-    let(:entity) { Entity.new }
+    let(:entity) { create(:legal_entity) }
     subject { entity.relationships_as_target }
 
     context "when entity is a Entity::Types::NATURAL_PERSON" do
-      before { entity.type = Entity::Types::NATURAL_PERSON }
+      let(:entity) { create(:natural_person) }
 
       it "returns empty array" do
         expect(subject).to eq([])
@@ -41,23 +41,15 @@ RSpec.describe Entity do
     end
 
     context "when entity is not a Entity::Types::NATURAL_PERSON" do
-      before { entity.type = nil }
-
       context "when entity is target of some persisted relationships" do
-        before do
-          allow(entity).to receive(:_relationships_as_target).and_return([:relationship])
-        end
+        let!(:relationships) { create_list(:relationship, 3, target: entity) }
 
         it "returns those relationships" do
-          expect(subject).to eq([:relationship])
+          expect(subject).to match_array(relationships)
         end
       end
 
       context "when entity is target of no persisted relationships" do
-        before do
-          allow(entity).to receive(:_relationships_as_target).and_return([])
-        end
-
         it "returns an array containing a relationship to an unknown persons entity" do
           expect(subject.count).to eq(1)
           expect(subject[0].source).to eq(UnknownPersonsEntity.new_for_entity(entity))
@@ -273,6 +265,10 @@ RSpec.describe Entity do
 
       it 'sets the updated_at' do
         expect { subject.upsert }.to change { @entity.reload.updated_at }
+      end
+
+      it 'sets the self_updated_at' do
+        expect { subject.upsert }.to change { @entity.reload.self_updated_at }
       end
 
       context "when the new document has multiple identifiers" do

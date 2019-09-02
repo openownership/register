@@ -18,6 +18,10 @@ RSpec.describe UnknownPersonsEntity do
     it 'has the default reason' do
       expect(subject.unknown_reason).to eq('unknown')
     end
+
+    it 'copies the self_updated_at from the entity' do
+      expect(subject.self_updated_at).to eq(entity.self_updated_at)
+    end
   end
 
   describe '.new_for_statement' do
@@ -39,6 +43,10 @@ RSpec.describe UnknownPersonsEntity do
 
     it 'gives it an unknown_reason from the Statement type' do
       expect(subject.unknown_reason).to eq('no-individual-or-entity-with-signficant-control')
+    end
+
+    it "copies the updated_at from the statement's self_updated_at" do
+      expect(subject.self_updated_at).to eq(statement.updated_at)
     end
   end
 end

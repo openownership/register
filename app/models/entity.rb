@@ -29,11 +29,15 @@ class Entity
     optional: true,
     index: true,
     counter_cache: :merged_entities_count,
+    touch: true,
   )
   has_many :raw_data_provenances, as: :entity_or_relationship
 
   field :oc_updated_at, type: Time
   field :last_resolved_at, type: Time
+  # When this was last directly updated, different from updated_at which gets
+  # bumped whenever a related relationship or merged entity is updated
+  field :self_updated_at, type: Time
 
   index({ identifiers: 1 }, unique: true, sparse: true)
   index('identifiers.document_id' => 1)
@@ -57,6 +61,9 @@ class Entity
     indexes :lang_code, type: :keyword
     indexes :company_number, type: :keyword
   end
+
+  set_callback :update, :before, :set_self_updated_at
+  set_callback :upsert, :before, :set_self_updated_at
 
   def self.find_or_unknown(id)
     if id.to_s.include?('statement') || id.to_s.include?(UNKNOWN_ID_MODIFIER)
@@ -211,6 +218,10 @@ class Entity
     identifiers.select do |i|
       psc_self_link_identifier? i
     end
+  end
+
+  def set_self_updated_at
+    self.self_updated_at = Time.zone.now
   end
 end
 

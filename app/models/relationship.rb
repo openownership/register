@@ -16,8 +16,8 @@ class Relationship
   field :started_date, type: ISO8601::Date
   field :ended_date, type: ISO8601::Date
 
-  belongs_to :source, class_name: 'Entity', inverse_of: :_relationships_as_source
-  belongs_to :target, class_name: 'Entity', inverse_of: :_relationships_as_target
+  belongs_to :source, class_name: 'Entity', inverse_of: :_relationships_as_source, touch: true
+  belongs_to :target, class_name: 'Entity', inverse_of: :_relationships_as_target, touch: true
 
   embeds_one :provenance
   has_many :raw_data_provenances, as: :entity_or_relationship
