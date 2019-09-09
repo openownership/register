@@ -24,7 +24,7 @@ gem 'iso8601'
 gem 'devise'
 gem 'roadie-rails', '~> 1.3.0'
 gem 'factory_girl_rails'
-gem 'aws-sdk'
+gem 'aws-sdk-s3', '~> 1'
 gem 'rubyzip', '~> 1.2', '>= 1.2.2', require: false
 gem 'twitter_cldr', '~> 4.4', '>= 4.4.2'
 gem 'draper', '~> 3.0', '>= 3.0.1'
