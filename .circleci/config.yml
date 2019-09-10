@@ -17,6 +17,8 @@ jobs:
 
       - image: elasticsearch:6.6.0
 
+      - image: circleci/redis:4.0.9-alpine
+
     steps:
 
       - checkout
@@ -95,6 +97,10 @@ jobs:
       - run:
           name: Wait for ElasticSearch
           command: dockerize -wait tcp://localhost:9200 -timeout 1m
+
+      - run:
+          name: Wait for Redis
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
 
       - run:
           command: bundle exec rspec --color --require spec_helper --format documentation spec
