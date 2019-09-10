@@ -15,6 +15,10 @@ RSpec.shared_context 'BODS: basic entity with one owner' do
         'name' => company.name,
         'identifiers' => [],
         'foundingDate' => 10.years.ago.to_date.iso8601,
+        'incorporatedInJurisdiction' => {
+          'name' => 'United Kingdom of Great Britain and Northern Ireland',
+          'code' => 'GB',
+        },
       },
       {
         'statementID' => person_id,
@@ -193,6 +197,10 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
             'country' => 'DK',
           },
         ],
+        'incorporatedInJurisdiction' => {
+          'name' => 'Denmark',
+          'code' => 'DK',
+        },
       },
       {
         'statementID' => natural_person_id,
@@ -281,6 +289,10 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
             'country' => 'GB',
           },
         ],
+        'incorporatedInJurisdiction' => {
+          'name' => 'United Kingdom of Great Britain and Northern Ireland',
+          'code' => 'GB',
+        },
       },
       {
         'statementID' => legal_entity_1_legal_entity_2_relationship_id,
@@ -351,6 +363,10 @@ RSpec.shared_context 'BODS: company with no relationships' do
         "foundingDate" => 10.years.ago.to_date.iso8601,
         "identifiers" => [],
         "name" => company.name,
+        'incorporatedInJurisdiction' => {
+          'name' => 'United Kingdom of Great Britain and Northern Ireland',
+          'code' => 'GB',
+        },
       },
       {
         "statementID" => relationship_id,
@@ -389,6 +405,10 @@ RSpec.shared_context 'BODS: company that declares an unknown owner' do
         "foundingDate" => 10.years.ago.to_date.iso8601,
         "identifiers" => [],
         "name" => company.name,
+        'incorporatedInJurisdiction' => {
+          'name' => 'United Kingdom of Great Britain and Northern Ireland',
+          'code' => 'GB',
+        },
       },
       {
         "statementID" => unknown_person_id,
