@@ -1,7 +1,7 @@
 class BodsExportWorker
   include Sidekiq::Worker
 
-  REDIS_POOL = ConnectionPool.new(size: 25, timeout: 3) { Redis.new }
+  REDIS_POOL = ConnectionPool.new(size: Sidekiq.options[:concurrency], timeout: 3) { Redis.new }
 
   def perform(entity_ids, export_id)
     @export = BodsExport.find(export_id)
