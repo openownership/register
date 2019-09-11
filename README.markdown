@@ -479,3 +479,93 @@ appear on the site.
 6. If these look right, you can publish those numbers by setting `published` to
    true on them all:
    `psc_data_source.statistics.draft.update_all(published: true)`
+
+# Running a BODS export
+
+Running a BODS export is a CPU intensive process and requires a persistent local
+disk to store intermediate results on. Therefore, we run it on an EC2 machine
+instead of Heroku (because Heroku's disks are reset every 24hrs). We still use
+the database and redis instance attached to the production Heroku app though.
+
+The setup process for this looks like:
+
+## Setting up the server
+
+- Increase Redis to an extra-large instance in Heroku
+- Get an EC2 server in the eu-west-1 region.
+  So far I've used a c5.xlarge (4 CPUs, 8GB ram) with 250GB disk space.
+- Set up the checkout of the repo to be able to connect to the production
+  services.
+  - `git pull` in the repo (`~/register`)
+  - `bundle install`
+  - `yarn install`
+  - Edit `config/mongoid.yml` and change the development database to a `uri`
+    setting like production, copying in the production connection string from
+    Heroku
+  - Create a `.env.local` with the following environment variable overrides,
+    using values from the production Heroku:
+    - `REDIS_URL`
+    -`REDIS_PROVIDER=REDIS_URL`
+    - `MEMCACHIER_PASSWORD`, `MEMCACHIER_SERVERS`, `MEMCACHIER_USERNAME`
+    - `BODS_EXPORT_AWS_ACCESS_KEY_ID`, `BODS_EXPORT_AWS_SECRET_ACCESS_KEY`,
+      `BODS_EXPORT_S3_BUCKET_NAME`
+- Test in rails console you can see db and connect to redis
+  ```ruby
+  redis = Redis.new
+  redis.keys('*')
+  redis.close
+  ```
+
+## Running the export
+
+- Start a screen session: `screen -S bods-export`
+- Start sidekiq processes equal to the number of cpus in your EC2 machine:
+  `bundle exec sidekiq`, `ctrl+a c`, repeat
+- In a new screen window (ctrl+a c), start a rails console `bundle exec rails c`
+  - In the rails console, create and start the exporter: `BodsExporter.new.call`
+  - Note: for incremental exports, you need to have primed Redis with the existing
+    statement ids from S3. (Download the file from S3, read each line into an
+    array, then initialise the exporter with `existing_ids: your_array`)
+- Once the exporter has completed, you can close the console and the screen
+  window.
+- Detach screen with `ctrl+a ctrl+d`, reattach with `screen -r`
+
+Monitoring it:
+
+- Open /admin/sidekiq to monitor the jobs (on the heroku app) and Redis memory
+  usage
+- Optional: open Mlab's telemetry page to monitor db access/burst credit usage
+- Optional: check the temporary statements directory to make sure files are being
+  created and they look right.
+- Optional: Use AWS' instance monitoring to check on CPU and Memory utilisation
+- Optional: Use AWS' volume monitoring to check on Disk utilisation
+- Check on disk usage and inode usage: `df -h`, `df -i`
+
+## Combining and Uploading the results
+
+- Find the export id from the export you just finished (it should be the same as
+  the latest/only folder name in RAILS_ROOT/tmp/exports).
+- Decide whether you're creating a wholly new file, or an incremental update:
+
+### Wholly new update (replacing existing ones)
+
+- This is a temporary workaround to our data not containing change markers in
+  the form of `replacesStatements` values.
+- Comment out the `download_from_s3` lines in `BodsExportUploader.call` (the
+  first two lines)
+- Run `BodsExportUploader.new(export_id).call`
+
+### Incremental update
+
+- Assuming you ran the export with a primed list of existing statement ids!
+- Run `BodsExportUploader.new(export_id).call` (nothing out of the ordinary
+  needed, this should be the default)
+
+Monitoring it:
+- Check on the export's output folder and monitor the filesize of the files
+  therein.
+
+## Troubleshooting
+
+- Sudden slowdown? Have we tripped over one of the burst credit limits, either
+  on EC2, EBS or Mlab's DB?
