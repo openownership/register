@@ -84,10 +84,10 @@ class Entity
 
   def relationships_as_source
     if merged_entities.empty?
-      Relationship.includes(:target, :source).where(source_id: id)
+      Relationship.includes(:target, :source, :raw_data_provenances).where(source_id: id)
     else
       self_and_merged_entity_ids = [id] + merged_entities.only(:_id)
-      Relationship.includes(:target, :source).in(source_id: self_and_merged_entity_ids)
+      Relationship.includes(:target, :source, :raw_data_provenances).in(source_id: self_and_merged_entity_ids)
     end
   end
 
