@@ -176,9 +176,6 @@ GEM
     i18n (0.7.0)
     i18n_data (0.8.0)
     iso8601 (0.9.1)
-    jbuilder (2.8.0)
-      activesupport (>= 4.2.0)
-      multi_json (>= 1.2)
     jmespath (1.4.0)
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
@@ -421,7 +418,6 @@ DEPENDENCIES
   haml-rails (~> 1.0)
   haml_lint (~> 0.27.0)
   iso8601
-  jbuilder
   kaminari-mongoid
   launchy
   listen (~> 3.0.5)

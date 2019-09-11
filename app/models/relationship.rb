@@ -28,17 +28,6 @@ class Relationship
   index '_id.document_id' => 1
   index ended_date: 1
 
-  def to_builder
-    Jbuilder.new do |json|
-      json.source_id source_id.to_s
-      json.target_id target_id.to_s
-      json.interests interests
-      json.sample_date sample_date&.atoms
-
-      json.provenance provenance.to_builder
-    end
-  end
-
   def keys_for_uniq_grouping
     interest_types = interests.map do |i|
       case i
