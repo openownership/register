@@ -5,6 +5,7 @@ import EntityGraph from 'entity-graph';
 import OCAdditionalInfo from 'oc-additional-info';
 import Submissions from 'submissions';
 import Tree from 'tree';
+import DataDownloadMessage from 'data-download-message';
 
 (() => {
   Rails.start();
@@ -30,6 +31,7 @@ import Tree from 'tree';
   const ocAdditionalInfo = new OCAdditionalInfo(window.document);
   const submissions = new Submissions(window.document);
   const tree = new Tree(window.document);
+  const dataDownloadMessage = new DataDownloadMessage(window.document);
 
   ready(() => {
     entityGraph.init();
@@ -37,5 +39,6 @@ import Tree from 'tree';
     submissions.init();
     tree.init();
     tippy('[data-tippy-content]');
+    dataDownloadMessage.init();
   });
 })();
