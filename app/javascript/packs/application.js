@@ -1,5 +1,5 @@
 import Rails from 'rails-ujs';
-import 'bootstrap.native.collapse';
+import 'bootstrap.native.custom';
 import tippy from 'tippy.js';
 import EntityGraph from 'entity-graph';
 import OCAdditionalInfo from 'oc-additional-info';
