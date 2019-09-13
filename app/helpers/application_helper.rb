@@ -73,6 +73,12 @@ module ApplicationHelper
     REPORT_INCORRECT_DATA_URL
   end
 
+  REGISTER_FOR_BULK_DOWNLOAD_URL = 'https://docs.google.com/forms/d/1V5uxFmXPPGGHB2sJsHbuHxzl0INNq_riMtNV-U3swIs'.freeze
+
+  def register_for_bulk_download_url
+    REGISTER_FOR_BULK_DOWNLOAD_URL
+  end
+
   def transliteration_action(should_transliterate)
     link_to_if !should_transliterate, t('shared.transliteration.transliterate'), params_with_transliterated do
       link_to t('shared.transliteration.dont_transliterate'), params_without_transliterated
