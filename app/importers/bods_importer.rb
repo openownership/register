@@ -257,7 +257,7 @@ class BodsImporter
     record['retried'] = true
     string = record.to_json
     chunk = ChunkHelper.to_chunk [string]
-    BodsChunkImportWorker.perform_async(chunk, retrieved_at)
+    BodsChunkImportWorker.perform_async(chunk, retrieved_at, @company_number_extractor.schemes)
   end
 
   def earliest_interest_start_date(interests)
@@ -283,7 +283,6 @@ class BodsImporter
   def map_interests(interests)
     return [] if interests.blank?
     interests.map do |interest|
-      next unless interest['beneficialOwnershipOrControl']
       if interest['share'].present?
         {
           type: interest['type'],

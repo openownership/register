@@ -114,13 +114,32 @@ Once all jobs have been processed in the Sidekiq admin panel (/admin/sidekiq)
 
 ## Running a BODS import
 
-The BODS importer is currently just an example, since we have no live data in
-BODS format. Therefore it loads data from our data examples on Github.
+The BODS importer has only been tested on example data and exports from the
+register, so it's possible there are issues with whatever BODS data you may have
+from 'the wild'.
 
-You run it like any other importer: `heroku run:detached --app openownership-register bin/rails bods:trigger` and then spin up a worker.
+Because it's generic, but we assume will be used on a source-by-source basis, it
+has more options that need to be supplied in order for it to function correctly:
 
-The example data is so small, this shouldn't need any upgrades to dyno sizes or
-redis caches.
+`heroku run:detached --app openownership-register bin/rails bods:trigger[<url>,<schemes>,<chunk_size>,<jsonl>]`
+
+The arguments are as follows:
+
+- `url`: A url to the data. This currently expects a single, uncompressed file
+  in either json (i.e. all statements in one top-level array) or jsonl (i.e. all
+  statements as individual lines) format. See `jsonl` for how to specify which.
+  It uses Ruby's `open-uri`, so the url can also be a (absolute) local file path.
+- `schemes`: an array of company number scheme ids that you expect to find in the
+  data's identifiers. This allows the import to extract company numbers from the
+  identifiers. Remember that Rake allows array params as space-separate lists
+  only. E.g. GB-COH UA-EDR DK-CVR
+- `chunk_size`: how many records to process in one chunk. Defaults to 100.
+- `jsonl`: whether the data is in jsonl format (true/false). Defaults to false.
+
+As with other importers, scale the Redis instance to something appropriate to
+your dataset (note that this importer does not use RawDataRecords yet, so all
+the data ends up in Redis in compressed form). Then finally start some workers
+to process the jobs.
 
 ## The `EntityIntegrityChecker`
 

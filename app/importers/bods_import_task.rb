@@ -1,11 +1,12 @@
 class BodsImportTask
-  def initialize(records, retrieved_at)
+  def initialize(records, retrieved_at, schemes)
     @records = records
     @retrieved_at = retrieved_at
+    @schemes = schemes
   end
 
   def call
-    extractor = BodsCompanyNumberExtractor.new('GB-COH')
+    extractor = BodsCompanyNumberExtractor.new(@schemes)
     importer = BodsImporter.new(company_number_extractor: extractor)
     importer.source_url = 'http://example.com'
     importer.source_name = 'BODS Example Data Import'
