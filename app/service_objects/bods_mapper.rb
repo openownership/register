@@ -71,7 +71,7 @@ class BodsMapper
       missingInfoReason: nil,
       name: legal_entity.name,
       alternateNames: nil,
-      incorporatedInJurisdiction: nil,
+      incorporatedInJurisdiction: es_jurisdiction(legal_entity),
       identifiers: map_identifiers(legal_entity),
       foundingDate: legal_entity.incorporation_date.try(:iso8601),
       dissolutionDate: legal_entity.dissolution_date.try(:iso8601),
@@ -214,6 +214,17 @@ class BodsMapper
         country: legal_entity.country_code,
       }.compact,
     ]
+  end
+
+  def es_jurisdiction(legal_entity)
+    country = legal_entity.country
+
+    return nil if country.blank?
+
+    {
+      name: country.name,
+      code: country.alpha2,
+    }
   end
 
   def ps_names(natural_person)

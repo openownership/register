@@ -207,6 +207,10 @@ RSpec.describe BodsMapper do
   end
 
   describe "#entity_statement" do
+    let(:entity) { create(:legal_entity) }
+
+    subject { BodsMapper.new.entity_statement(entity) }
+
     it "gives the statement an id"
     it 'sets statementType to entityStatement'
     it 'maps entityType to registeredEntity'
@@ -271,6 +275,26 @@ RSpec.describe BodsMapper do
 
     it 'maps foundingDate to ISO8601 formatted incorporation_date if it exists'
     it 'maps dissolutionDate to ISO8601 formatted dissolution_date if it exists'
+
+    describe 'mapping incorporatedInJurisdiction' do
+      let(:entity) { create(:legal_entity, jurisdiction_code: 'gb') }
+
+      it 'maps the jurisdiction_code to a Jurisdiction' do
+        expected = {
+          name: 'United Kingdom of Great Britain and Northern Ireland',
+          code: 'GB',
+        }
+        expect(subject[:incorporatedInJurisdiction]).to eq(expected)
+      end
+
+      context "when there's no jurisdiction_code" do
+        let(:entity) { create(:legal_entity, jurisdiction_code: nil) }
+
+        it 'maps to nil' do
+          expect(subject[:incorporatedInJurisdiction]).to be_nil
+        end
+      end
+    end
   end
 
   describe "#person_statement" do
