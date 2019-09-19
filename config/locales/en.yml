@@ -46,6 +46,7 @@ en:
       grouping_note_html: "<span class='grouping-note-label'>Note:</span> These owners have been grouped together because they have exactly the same name. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
       view_as_tree: View as graph
       company_name_missing: ‹Company name missing›
+      person_name_missing: ‹Person name missing›
       merged_people: Merged people
       merged_note_html:
         one: "<span class='grouping-note-label'>Note:</span> This person has been merged because they have exactly the same name, date of birth and address. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
