@@ -44,7 +44,10 @@ class SkImporter
   private
 
   def child_entity!(record)
-    item = record['PartneriVerejnehoSektora'].find { |p| p['PlatnostDo'].nil? }
+    right_now = Time.zone.now.iso8601
+    item = record['PartneriVerejnehoSektora'].max_by do |p|
+      p['PlatnostDo'].nil? ? right_now : p['PlatnostDo']
+    end
 
     if item.nil?
       Rails.logger.warn("[#{self.class.name}] record Id: #{record['Id']} has no current child entity (PartneriVerejnehoSektora)")
