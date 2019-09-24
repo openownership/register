@@ -34,6 +34,54 @@ RSpec.describe EntitiesController do
         expect(response).to redirect_to(entity_path(master_entity))
       end
     end
+
+    context 'when the entity has raw data provenance' do
+      let(:data_source_1) { create(:data_source, name: 'Data Source 1') }
+      let(:data_source_2) { create(:data_source, name: 'Data Source 2') }
+      let(:import_1) { create(:import, data_source: data_source_1) }
+      let(:import_2) { create(:import, data_source: data_source_2) }
+
+      let!(:raw_provenances) do
+        [
+          create(:raw_data_provenance, entity_or_relationship: entity, import: import_1),
+          create(:raw_data_provenance, entity_or_relationship: entity, import: import_2),
+        ]
+      end
+
+      it 'sets a list of data source names' do
+        get :show, params: { id: entity.id }
+        expected = ['Data Source 1', 'Data Source 2']
+        expect(assigns(:data_source_names)).to match_array(expected)
+      end
+
+      it 'sets the newest raw data record timestamp' do
+        get :show, params: { id: entity.id }
+        expected = raw_provenances.last.raw_data_records.last.updated_at
+        expect(assigns(:newest_raw_record)).to be_within(1.second).of(expected)
+      end
+
+      it 'sets the total count of raw data records' do
+        get :show, params: { id: entity.id }
+        expect(assigns(:raw_record_count)).to eq(4)
+      end
+    end
+
+    context 'when the entity has no raw data provenance' do
+      it 'sets data source names to an empty list' do
+        get :show, params: { id: entity.id }
+        expect(assigns(:data_source_names)).to match_array([])
+      end
+
+      it "doesn't set the newest raw data record timestamp" do
+        get :show, params: { id: entity.id }
+        expect(assigns(:newest_raw_record)).to be_nil
+      end
+
+      it "doesn't set the total count of raw data records" do
+        get :show, params: { id: entity.id }
+        expect(assigns(:raw_record_count)).to be_nil
+      end
+    end
   end
 
   describe 'GET #show, format: :json' do
@@ -160,11 +208,42 @@ RSpec.describe EntitiesController do
       end
     end
 
-    it 'paginates raw data records, most recently created first' do
+    it 'paginates raw data records, most recently updated first' do
       get :raw, params: { id: entity.id }
       expect(assigns(:raw_data_records)).to match_array(raw_data_records.last(10))
       get :raw, params: { id: entity.id, page: 2 }
       expect(assigns(:raw_data_records)).to match_array([raw_data_records.first])
+    end
+
+    it 'sets the global newest and oldest record dates for the entity' do
+      expected_newest = Time.zone.now
+      expected_oldest = 1.day.ago
+      # Make one record newer than all the rest
+      raw_data_records.first.timeless.update_attribute(:updated_at, expected_newest)
+      # Make one record older than all the rest
+      raw_data_records.last.timeless.update_attribute(:created_at, expected_oldest)
+      get :raw, params: { id: entity.id }
+      expect(assigns(:newest)).to be_within(1.second).of(expected_newest)
+      expect(assigns(:oldest)).to be_within(1.second).of(expected_oldest)
+    end
+
+    it 'sets a list of data sources' do
+      second_provenance = create(:raw_data_provenance, entity_or_relationship: entity)
+
+      expected = [import.data_source, second_provenance.import.data_source]
+
+      get :raw, params: { id: entity.id }
+      expect(assigns(:data_sources)).to match_array(expected)
+    end
+
+    it "handles entities with no raw records" do
+      entity_with_no_records = create(:legal_entity)
+
+      get :raw, params: { id: entity_with_no_records.id }
+      expect(assigns(:raw_data_records).to_a).to be_empty
+      expect(assigns(:newest)).to be_nil
+      expect(assigns(:oldest)).to be_nil
+      expect(assigns(:data_sources)).to be_nil
     end
   end
 end

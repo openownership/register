@@ -19,6 +19,12 @@ class EntitiesController < ApplicationController
       @similar_people = entity.natural_person? ? decorate(similar_people(entity)) : nil
     end
 
+    @data_source_names = DataSource.all_for_entity(entity).pluck(:name)
+    unless @data_source_names.empty?
+      @newest_raw_record = RawDataRecord.newest_for_entity(entity).updated_at
+      @raw_record_count = RawDataRecord.all_for_entity(entity).size
+    end
+
     @entity = decorate(entity)
 
     respond_to do |format|
@@ -65,10 +71,10 @@ class EntitiesController < ApplicationController
       .order_by(updated_at: :desc, created_at: :desc)
       .page(params[:page])
       .per(10)
+    return if @raw_data_records.empty?
     @newest = RawDataRecord.newest_for_entity(entity).updated_at
     @oldest = RawDataRecord.oldest_for_entity(entity).created_at
     @data_sources = DataSource.all_for_entity(entity)
-    @latest_imports = latest_imports_by_data_source(@data_sources)
   end
 
   def opencorporates_additional_info
@@ -116,11 +122,5 @@ class EntitiesController < ApplicationController
 
     client = OpencorporatesClient.new_for_app timeout: 2.0
     client.get_company(entity.jurisdiction_code, entity.company_number, sparse: false)
-  end
-
-  def latest_imports_by_data_source(data_sources)
-    data_sources.map do |ds|
-      [ds.id.to_s, ds.imports.desc(:created_at).pluck(:created_at).first]
-    end.to_h
   end
 end

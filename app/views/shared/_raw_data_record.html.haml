@@ -8,7 +8,7 @@
         %h6= t("raw_data_records.show.data_sources")
         %p= raw_record.data_sources.map(&:name).to_sentence
         %h6= t("raw_data_records.show.seen_in_most_recent_import")
-        %p= humanize_boolean(@latest_imports[last_data_source.id.to_s] <= raw_record.updated_at)
+        %p= humanize_boolean(raw_record.seen_in_most_recent_import?)
         %h6= t("raw_data_records.show.last_seen")
         %p= raw_record.updated_at
         %h6= t("raw_data_records.show.first_seen")

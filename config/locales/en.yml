@@ -54,9 +54,15 @@ en:
         one: "<span class='grouping-note-label'>Note:</span> This person has been merged because they have exactly the same name, date of birth and address. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
         other: "<span class='grouping-note-label'>Note:</span> These people have been merged because they have exactly the same name, date of birth and address. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
       similar_people: People with similar names
+      provenance: 'Provenance'
     ultimate_source_relationship:
       controls_via: Owned via
       details: Details ›
+    provenance:
+      latest_data: 'Latest data: %{date}'
+      detail:
+        one: 'See the original source record'
+        other: 'See the %{count} original source records'
   data_sources:
     show:
       data_availability_title: Data availability and license
