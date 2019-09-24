@@ -55,11 +55,27 @@
 
 .content.entity-content
   .container-fluid
-    .row
+    .row.raw_data_records_title
       .col-lg-12
-        = page_entries_info @raw_data_records, entry_name: 'raw record'
-        - @raw_data_records.each do |raw_record|
-          = render(partial: 'shared/raw_data_record', locals: { raw_record: raw_record })
-        = paginate @raw_data_records
+        %h2= page_entries_info @raw_data_records, entry_name: 'raw record'
+    - if @raw_data_records.any?
+      .row.raw_data_records_summary
+        .col-lg-8
+          .meta
+            %h6= t('raw_data_records.show.data_sources')
+            %p= @data_sources.map(&:name).to_sentence
+        .col-lg-2
+          .meta
+            %h6= t('raw_data_records.show.oldest')
+            %p= @oldest
+        .col-lg-2
+          .meta
+            %h6= t('raw_data_records.show.newest')
+            %p= @newest
+      .row
+        .col-lg-12
+          - @raw_data_records.each do |raw_record|
+            = render(partial: 'shared/raw_data_record', locals: { raw_record: raw_record })
+          = paginate @raw_data_records
 
 

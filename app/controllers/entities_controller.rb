@@ -60,22 +60,15 @@ class EntitiesController < ApplicationController
     entity = Entity.find(params[:id])
     redirect_to_master_entity(:raw, entity)
     @entity = decorate(entity)
-    entity_ids = [@entity.id]
-    entity_ids += @entity.merged_entity_ids if @entity.merged_entities.size.positive?
-    raw_record_ids = RawDataProvenance
-      .where(
-        'entity_or_relationship_id' => { '$in' => entity_ids },
-        'entity_or_relationship_type' => 'Entity',
-      )
-      .pluck(:raw_data_record_ids)
-      .flatten
-      .compact
-    @raw_data_records = RawDataRecord
+    @raw_data_records = RawDataRecord.all_for_entity(entity)
       .includes(:imports)
-      .where('id' => { '$in' => raw_record_ids })
-      .order_by(%i[created_at desc])
+      .order_by(updated_at: :desc, created_at: :desc)
       .page(params[:page])
       .per(10)
+    @newest = RawDataRecord.newest_for_entity(entity).updated_at
+    @oldest = RawDataRecord.oldest_for_entity(entity).created_at
+    @data_sources = DataSource.all_for_entity(entity)
+    @latest_imports = latest_imports_by_data_source(@data_sources)
   end
 
   def opencorporates_additional_info
@@ -123,5 +116,11 @@ class EntitiesController < ApplicationController
 
     client = OpencorporatesClient.new_for_app timeout: 2.0
     client.get_company(entity.jurisdiction_code, entity.company_number, sparse: false)
+  end
+
+  def latest_imports_by_data_source(data_sources)
+    data_sources.map do |ds|
+      [ds.id.to_s, ds.imports.desc(:created_at).pluck(:created_at).first]
+    end.to_h
   end
 end

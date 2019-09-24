@@ -1,4 +1,6 @@
 en:
+  :true: 'Yes'
+  :false: 'No'
   entities:
     show:
       controlled_entities_html: Companies controlled by %{entity}
@@ -369,6 +371,10 @@ en:
   raw_data_records:
     show:
       data_sources: Data source(s)
-      imports: Seen in import(s)
+      oldest: 'Oldest'
+      newest: 'Newest'
+      seen_in_most_recent_import: Seen in most recent import?
+      first_seen: First seen
+      last_seen: Last seen
       fields:
         etag: Etag

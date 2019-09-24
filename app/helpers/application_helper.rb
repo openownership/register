@@ -85,6 +85,10 @@ module ApplicationHelper
     end
   end
 
+  def humanize_boolean(boolean)
+    I18n.t(boolean.to_s)
+  end
+
   private
 
   def params_with_transliterated
