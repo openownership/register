@@ -202,6 +202,10 @@ class Entity
   def set_self_updated_at
     self.self_updated_at = Time.zone.now
   end
+
+  def all_ids
+    [id] + merged_entity_ids
+  end
 end
 
 class DuplicateEntitiesDetected < StandardError

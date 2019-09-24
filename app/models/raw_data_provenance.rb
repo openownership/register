@@ -44,4 +44,11 @@ class RawDataProvenance
 
     collection.bulk_write(bulk_operations, ordered: false)
   end
+
+  def self.all_for_entity(entity)
+    where(
+      'entity_or_relationship_id' => { '$in' => entity.all_ids },
+      'entity_or_relationship_type' => 'Entity',
+    )
+  end
 end

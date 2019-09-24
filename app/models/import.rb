@@ -8,4 +8,12 @@ class Import
   # it.
 
   validates :data_source, presence: true
+
+  def self.all_for_entity(entity)
+    where(
+      'id' => {
+        '$in' => RawDataProvenance.all_for_entity(entity).distinct(:import_id),
+      },
+    )
+  end
 end
