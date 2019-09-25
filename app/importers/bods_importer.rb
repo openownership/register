@@ -248,16 +248,11 @@ class BodsImporter
   end
 
   def enqueue_retry(record)
-    if record['retried']
-      retried_error = "Cannot find dependent records for statement: " \
-                      "#{record['statementID']} on retry, skipping"
-      Rollbar.error(retried_error)
-      return
-    end
+    raise "Cannot find dependent records for statement: #{record['statementID']} on retry" if record['retried']
     record['retried'] = true
     string = record.to_json
     chunk = ChunkHelper.to_chunk [string]
-    BodsChunkImportWorker.perform_async(chunk, retrieved_at)
+    BodsChunkImportRetryWorker.perform_async(chunk, retrieved_at, @company_number_extractor.schemes)
   end
 
   def earliest_interest_start_date(interests)
@@ -283,7 +278,6 @@ class BodsImporter
   def map_interests(interests)
     return [] if interests.blank?
     interests.map do |interest|
-      next unless interest['beneficialOwnershipOrControl']
       if interest['share'].present?
         {
           type: interest['type'],

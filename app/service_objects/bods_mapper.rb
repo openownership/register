@@ -1,4 +1,8 @@
+require 'xxhash'
+
 class BodsMapper
+  extend Memoist
+
   def self.instance
     @instance ||= new
   end
@@ -26,12 +30,28 @@ class BodsMapper
     super-secure-person-with-significant-control
   ].freeze
 
+  ID_PREFIX = 'openownership-register-'.freeze
+
   def statement_id(obj)
     case obj
     when Entity
-      Digest::SHA256.hexdigest("openownership-register/entity/#{obj.id}")
-    when Relationship, Statement
-      Digest::SHA256.hexdigest(obj.id.to_json)
+      return nil unless generates_statement?(obj)
+      ID_PREFIX + hash("openownership-register/entity/#{obj.id}/#{obj.self_updated_at}")
+    when Relationship
+      things_that_make_relationship_statements_unique = {
+        id: obj.id,
+        updated_at: obj.updated_at,
+        source_id: statement_id(obj.source),
+        target_id: statement_id(obj.target),
+      }
+      ID_PREFIX + hash(things_that_make_relationship_statements_unique.to_json)
+    when Statement
+      things_that_make_psc_statement_statements_unique = {
+        id: obj.id,
+        updated_at: obj.updated_at,
+        entity_id: statement_id(obj.entity),
+      }
+      ID_PREFIX + hash(things_that_make_psc_statement_statements_unique.to_json)
     else
       raise "Unexpected object for statement_id - class: #{obj.class.name}, obj: #{obj.inspect}"
     end
@@ -51,7 +71,7 @@ class BodsMapper
       missingInfoReason: nil,
       name: legal_entity.name,
       alternateNames: nil,
-      incorporatedInJurisdiction: nil,
+      incorporatedInJurisdiction: es_jurisdiction(legal_entity),
       identifiers: map_identifiers(legal_entity),
       foundingDate: legal_entity.incorporation_date.try(:iso8601),
       dissolutionDate: legal_entity.dissolution_date.try(:iso8601),
@@ -99,6 +119,10 @@ class BodsMapper
       annotations: nil,
       replacesStatements: nil,
     }.compact
+  end
+
+  def hash(data)
+    XXhash.xxh64(data).to_s
   end
 
   private
@@ -192,6 +216,17 @@ class BodsMapper
     ]
   end
 
+  def es_jurisdiction(legal_entity)
+    country = legal_entity.country
+
+    return nil if country.blank?
+
+    {
+      name: country.name,
+      code: country.alpha2,
+    }
+  end
+
   def ps_names(natural_person)
     [
       {
@@ -219,7 +254,6 @@ class BodsMapper
 
     [
       {
-        type: 'residence',
         address: natural_person.address,
         country: try_parse_country_name_to_code(natural_person.country_of_residence),
       }.compact,
@@ -345,6 +379,7 @@ class BodsMapper
 
     return country.alpha2 if country
   end
+  memoize :try_parse_country_name_to_code
 
   def parse_interest_string(interest)
     case interest
@@ -472,6 +507,7 @@ class BodsMapper
       }
     end
   end
+  memoize :parse_interest_string
 
   def ocs_unspecified_reason(unknown_person)
     return if generates_statement?(unknown_person)

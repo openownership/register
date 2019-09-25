@@ -28,23 +28,6 @@ RSpec.describe Relationship do
     end
   end
 
-  describe '#to_builder' do
-    it 'returns a JSON representation' do
-      expect(JSON.parse(subject.to_builder.target!)).to eq(
-        'source_id' => '1',
-        'target_id' => '2',
-        'interests' => [3, 4],
-        'sample_date' => [2016, 3, 17],
-        'provenance' => {
-          'source_url' => nil,
-          'source_name' => nil,
-          'retrieved_at' => nil,
-          'imported_at' => nil,
-        },
-      )
-    end
-  end
-
   describe '#source' do
     context 'when the source entity has a master_entity' do
       let(:master_person) { create(:natural_person) }

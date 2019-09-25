@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BodsMapper do
   describe "#statement_id" do
     context "for Entities" do
-      let(:entity) { create(:entity) }
+      let(:entity) { create(:legal_entity) }
 
       it "returns a stable id" do
         id = BodsMapper.new.statement_id(entity)
@@ -18,9 +18,26 @@ RSpec.describe BodsMapper do
         expect(id).not_to eq other_id
       end
 
+      it 'changes when the entity itself changes' do
+        entity.set(self_updated_at: 1.second.ago)
+        id = BodsMapper.new.statement_id(entity)
+        entity.touch(:self_updated_at)
+        new_id = BodsMapper.new.statement_id(entity)
+        expect(id).not_to eq new_id
+      end
+
+      it "doesn't change when just a relationship to the entity changes" do
+        entity.set(updated_at: 1.second.ago)
+        id = BodsMapper.new.statement_id(entity)
+        entity.touch # This is what changing a relationship will do
+        new_id = BodsMapper.new.statement_id(entity)
+        expect(id).to eq new_id
+      end
+
       context 'for UnknownPersonsEntities' do
+        let(:statement) { create(:statement, type: 'psc-exists-but-not-identified') }
         let(:unknown_entity) do
-          UnknownPersonsEntity.new(id: '12345-unknown')
+          UnknownPersonsEntity.new_for_statement(statement)
         end
 
         it "returns a stable id" do
@@ -29,11 +46,27 @@ RSpec.describe BodsMapper do
           expect(id).to eq second_id
         end
 
-        it "returns different ids for different entities" do
-          other_unknown_entity = UnknownPersonsEntity.new(id: '56789-unknown')
+        it "returns different ids for different statements" do
+          other_statement = create(:statement, type: 'psc-exists-but-not-identified')
+          other_unknown_entity = UnknownPersonsEntity.new_for_statement(other_statement)
           id = BodsMapper.new.statement_id(unknown_entity)
           other_id = BodsMapper.new.statement_id(other_unknown_entity)
           expect(id).not_to eq other_id
+        end
+
+        it "changes when the underlying statement changes" do
+          statement.set(updated_at: 1.second.ago) # Otherwise it can end up identical
+          id = BodsMapper.new.statement_id(unknown_entity)
+          statement.touch
+          new_unknown_entity = UnknownPersonsEntity.new_for_statement(statement)
+          new_id = BodsMapper.new.statement_id(new_unknown_entity)
+          expect(id).not_to eq new_id
+        end
+
+        it "returns nil for entities which don't generate statements" do
+          unknown_entity = UnknownPersonsEntity.new_for_entity(create(:legal_entity))
+          id = BodsMapper.new.statement_id(unknown_entity)
+          expect(id).to be_nil
         end
       end
     end
@@ -53,6 +86,30 @@ RSpec.describe BodsMapper do
         other_id = BodsMapper.new.statement_id(other_relationship)
         expect(id).not_to eq other_id
       end
+
+      it 'changes when the relationship changes' do
+        relationship.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(relationship)
+        relationship.touch
+        new_id = BodsMapper.new.statement_id(relationship)
+        expect(id).not_to eq new_id
+      end
+
+      it 'changes when the source entity changes' do
+        relationship.source.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(relationship)
+        relationship.source.touch(:self_updated_at)
+        new_id = BodsMapper.new.statement_id(relationship)
+        expect(id).not_to eq new_id
+      end
+
+      it 'changes when the relationship entity changes' do
+        relationship.target.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(relationship)
+        relationship.target.touch(:self_updated_at)
+        new_id = BodsMapper.new.statement_id(relationship)
+        expect(id).not_to eq new_id
+      end
     end
 
     context "for Statements" do
@@ -69,6 +126,22 @@ RSpec.describe BodsMapper do
         id = BodsMapper.new.statement_id(statement)
         other_id = BodsMapper.new.statement_id(other_statement)
         expect(id).not_to eq other_id
+      end
+
+      it 'changes when the statement changes' do
+        statement.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(statement)
+        statement.touch
+        new_id = BodsMapper.new.statement_id(statement)
+        expect(id).not_to eq new_id
+      end
+
+      it 'changes when the statement entity changes' do
+        statement.entity.set(updated_at: 1.second.ago) # Otherwise it can end up idential
+        id = BodsMapper.new.statement_id(statement)
+        statement.entity.touch(:self_updated_at)
+        new_id = BodsMapper.new.statement_id(statement)
+        expect(id).not_to eq new_id
       end
     end
 
@@ -134,6 +207,10 @@ RSpec.describe BodsMapper do
   end
 
   describe "#entity_statement" do
+    let(:entity) { create(:legal_entity) }
+
+    subject { BodsMapper.new.entity_statement(entity) }
+
     it "gives the statement an id"
     it 'sets statementType to entityStatement'
     it 'maps entityType to registeredEntity'
@@ -198,6 +275,26 @@ RSpec.describe BodsMapper do
 
     it 'maps foundingDate to ISO8601 formatted incorporation_date if it exists'
     it 'maps dissolutionDate to ISO8601 formatted dissolution_date if it exists'
+
+    describe 'mapping incorporatedInJurisdiction' do
+      let(:entity) { create(:legal_entity, jurisdiction_code: 'gb') }
+
+      it 'maps the jurisdiction_code to a Jurisdiction' do
+        expected = {
+          name: 'United Kingdom of Great Britain and Northern Ireland',
+          code: 'GB',
+        }
+        expect(subject[:incorporatedInJurisdiction]).to eq(expected)
+      end
+
+      context "when there's no jurisdiction_code" do
+        let(:entity) { create(:legal_entity, jurisdiction_code: nil) }
+
+        it 'maps to nil' do
+          expect(subject[:incorporatedInJurisdiction]).to be_nil
+        end
+      end
+    end
   end
 
   describe "#person_statement" do

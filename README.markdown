@@ -84,8 +84,11 @@ process.
    - `heroku run:detached --app openownership-register bin/rails psc:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails sk:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails dk:trigger`
-1. Now turn on **1** worker dyno, making sure it's a `performance-l`.
-1. Note down the time the worker was started.
+1. Now turn on worker dynos to process the import jobs. You can scale these
+   horizontally as required, but remember that each will create 10 connections
+   to the database, and MLab is quite limited in performance, so 4-5 is perhaps
+   a sensible maximum.
+1. Note down the time the workers were started.
 1. Monitor the status of the import via the Sidekiq admin panel and papertrail.
    Note that although no jobs may show as active or enqueued, the triggers can
    still be running (if they're downloading data we've already seen, we don't
@@ -114,13 +117,32 @@ Once all jobs have been processed in the Sidekiq admin panel (/admin/sidekiq)
 
 ## Running a BODS import
 
-The BODS importer is currently just an example, since we have no live data in
-BODS format. Therefore it loads data from our data examples on Github.
+The BODS importer has only been tested on example data and exports from the
+register, so it's possible there are issues with whatever BODS data you may have
+from 'the wild'.
 
-You run it like any other importer: `heroku run:detached --app openownership-register bin/rails bods:trigger` and then spin up a worker.
+Because it's generic, but we assume will be used on a source-by-source basis, it
+has more options that need to be supplied in order for it to function correctly:
 
-The example data is so small, this shouldn't need any upgrades to dyno sizes or
-redis caches.
+`heroku run:detached --app openownership-register bin/rails bods:trigger[<url>,<schemes>,<chunk_size>,<jsonl>]`
+
+The arguments are as follows:
+
+- `url`: A url to the data. This currently expects a single, uncompressed file
+  in either json (i.e. all statements in one top-level array) or jsonl (i.e. all
+  statements as individual lines) format. See `jsonl` for how to specify which.
+  It uses Ruby's `open-uri`, so the url can also be a (absolute) local file path.
+- `schemes`: an array of company number scheme ids that you expect to find in the
+  data's identifiers. This allows the import to extract company numbers from the
+  identifiers. Remember that Rake allows array params as space-separate lists
+  only. E.g. GB-COH UA-EDR DK-CVR
+- `chunk_size`: how many records to process in one chunk. Defaults to 100.
+- `jsonl`: whether the data is in jsonl format (true/false). Defaults to false.
+
+As with other importers, scale the Redis instance to something appropriate to
+your dataset (note that this importer does not use RawDataRecords yet, so all
+the data ends up in Redis in compressed form). Then finally start some workers
+to process the jobs.
 
 ## The `EntityIntegrityChecker`
 
@@ -479,3 +501,93 @@ appear on the site.
 6. If these look right, you can publish those numbers by setting `published` to
    true on them all:
    `psc_data_source.statistics.draft.update_all(published: true)`
+
+# Running a BODS export
+
+Running a BODS export is a CPU intensive process and requires a persistent local
+disk to store intermediate results on. Therefore, we run it on an EC2 machine
+instead of Heroku (because Heroku's disks are reset every 24hrs). We still use
+the database and redis instance attached to the production Heroku app though.
+
+The setup process for this looks like:
+
+## Setting up the server
+
+- Increase Redis to an extra-large instance in Heroku
+- Get an EC2 server in the eu-west-1 region.
+  So far I've used a c5.xlarge (4 CPUs, 8GB ram) with 250GB disk space.
+- Set up the checkout of the repo to be able to connect to the production
+  services.
+  - `git pull` in the repo (`~/register`)
+  - `bundle install`
+  - `yarn install`
+  - Edit `config/mongoid.yml` and change the development database to a `uri`
+    setting like production, copying in the production connection string from
+    Heroku
+  - Create a `.env.local` with the following environment variable overrides,
+    using values from the production Heroku:
+    - `REDIS_URL`
+    -`REDIS_PROVIDER=REDIS_URL`
+    - `MEMCACHIER_PASSWORD`, `MEMCACHIER_SERVERS`, `MEMCACHIER_USERNAME`
+    - `BODS_EXPORT_AWS_ACCESS_KEY_ID`, `BODS_EXPORT_AWS_SECRET_ACCESS_KEY`,
+      `BODS_EXPORT_S3_BUCKET_NAME`
+- Test in rails console you can see db and connect to redis
+  ```ruby
+  redis = Redis.new
+  redis.keys('*')
+  redis.close
+  ```
+
+## Running the export
+
+- Start a screen session: `screen -S bods-export`
+- Start sidekiq processes equal to the number of cpus in your EC2 machine:
+  `bundle exec sidekiq`, `ctrl+a c`, repeat
+- In a new screen window (ctrl+a c), start a rails console `bundle exec rails c`
+  - In the rails console, create and start the exporter: `BodsExporter.new.call`
+  - Note: for incremental exports, you need to have primed Redis with the existing
+    statement ids from S3. (Download the file from S3, read each line into an
+    array, then initialise the exporter with `existing_ids: your_array`)
+- Once the exporter has completed, you can close the console and the screen
+  window.
+- Detach screen with `ctrl+a ctrl+d`, reattach with `screen -r`
+
+Monitoring it:
+
+- Open /admin/sidekiq to monitor the jobs (on the heroku app) and Redis memory
+  usage
+- Optional: open Mlab's telemetry page to monitor db access/burst credit usage
+- Optional: check the temporary statements directory to make sure files are being
+  created and they look right.
+- Optional: Use AWS' instance monitoring to check on CPU and Memory utilisation
+- Optional: Use AWS' volume monitoring to check on Disk utilisation
+- Check on disk usage and inode usage: `df -h`, `df -i`
+
+## Combining and Uploading the results
+
+- Find the export id from the export you just finished (it should be the same as
+  the latest/only folder name in RAILS_ROOT/tmp/exports).
+- Decide whether you're creating a wholly new file, or an incremental update:
+
+### Wholly new update (replacing existing ones)
+
+- This is a temporary workaround to our data not containing change markers in
+  the form of `replacesStatements` values.
+- Comment out the `download_from_s3` lines in `BodsExportUploader.call` (the
+  first two lines)
+- Run `BodsExportUploader.new(export_id).call`
+
+### Incremental update
+
+- Assuming you ran the export with a primed list of existing statement ids!
+- Run `BodsExportUploader.new(export_id).call` (nothing out of the ordinary
+  needed, this should be the default)
+
+Monitoring it:
+- Check on the export's output folder and monitor the filesize of the files
+  therein.
+
+## Troubleshooting
+
+- Sudden slowdown? Have we tripped over one of the burst credit limits, either
+  on EC2, EBS or Mlab's DB?

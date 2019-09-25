@@ -29,11 +29,15 @@ class Entity
     optional: true,
     index: true,
     counter_cache: :merged_entities_count,
+    touch: true,
   )
   has_many :raw_data_provenances, as: :entity_or_relationship
 
   field :oc_updated_at, type: Time
   field :last_resolved_at, type: Time
+  # When this was last directly updated, different from updated_at which gets
+  # bumped whenever a related relationship or merged entity is updated
+  field :self_updated_at, type: Time
 
   index({ identifiers: 1 }, unique: true, sparse: true)
   index('identifiers.document_id' => 1)
@@ -58,6 +62,9 @@ class Entity
     indexes :company_number, type: :keyword
   end
 
+  set_callback :update, :before, :set_self_updated_at
+  set_callback :upsert, :before, :set_self_updated_at
+
   def self.find_or_unknown(id)
     if id.to_s.include?('statement') || id.to_s.include?(UNKNOWN_ID_MODIFIER)
       UnknownPersonsEntity.new(id: id, name: id)
@@ -70,22 +77,29 @@ class Entity
     if type == Types::NATURAL_PERSON
       []
     else
-      _relationships_as_target.entries.presence || CreateRelationshipsForStatements.call(self)
+      relationships = Relationship.includes(:target, :source).where(target_id: id)
+      relationships.entries.presence || CreateRelationshipsForStatements.call(self)
     end
   end
 
   def relationships_as_source
     if merged_entities.empty?
-      Relationship.includes(:target, :source).where(source_id: id)
+      Relationship.includes(:target, :source, :raw_data_provenances).where(source_id: id)
     else
       self_and_merged_entity_ids = [id] + merged_entities.only(:_id)
-      Relationship.includes(:target, :source).in(source_id: self_and_merged_entity_ids)
+      Relationship.includes(:target, :source, :raw_data_provenances).in(source_id: self_and_merged_entity_ids)
     end
   end
 
   # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
   # are found using their embeddeded identifiers instead of the _id field.
-  def upsert
+  def upsert(options: {})
+    prepare_upsert(options) do
+      _upsert
+    end
+  end
+
+  def _upsert
     selector = Entity.with_identifiers(identifiers).selector
 
     attributes = as_document.except('_id', 'identifiers')
@@ -105,7 +119,6 @@ class Entity
     )
 
     self.id = document.fetch('_id')
-    self.new_record = false
 
     reload
   rescue Mongo::Error::OperationFailure => exception
@@ -149,28 +162,6 @@ class Entity
     as_json(only: %i[name type lang_code company_number], methods: %i[name_transliterated country_code])
   end
 
-  def to_builder
-    Jbuilder.new do |json|
-      json.id id.to_s
-      json.type type
-      json.name name
-      json.address address
-
-      case type
-      when Types::NATURAL_PERSON
-        json.nationality nationality
-        json.country_of_residence country_of_residence
-        json.dob dob&.atoms
-      when Types::LEGAL_ENTITY
-        json.jurisdiction_code jurisdiction_code
-        json.company_number company_number
-        json.incorporation_date incorporation_date
-        json.dissolution_date dissolution_date
-        json.company_type company_type
-      end
-    end
-  end
-
   scope :with_identifiers, ->(identifiers) {
     where(identifiers: { :$elemMatch => { :$in => identifiers } })
   }
@@ -206,6 +197,10 @@ class Entity
     identifiers.select do |i|
       psc_self_link_identifier? i
     end
+  end
+
+  def set_self_updated_at
+    self.self_updated_at = Time.zone.now
   end
 end
 

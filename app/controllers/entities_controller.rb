@@ -95,7 +95,7 @@ class EntitiesController < ApplicationController
   end
 
   def ultimate_source_relationship_groups(entity)
-    label_for = ->(r) { r.source.id.to_s.include?('statement') ? rand : r.source.name }
+    label_for = ->(r) { r.source.is_a?(UnknownPersonsEntity) || r.source.name.blank? ? rand : r.source.name }
 
     relationships = InferredRelationshipGraph.new(entity).ultimate_source_relationships
 

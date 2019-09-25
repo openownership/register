@@ -15,6 +15,7 @@ require 'support/bods_schema_matcher'
 require 'support/user_helpers'
 require 'support/entity_helpers'
 require 'support/psc_stats_helpers'
+require 'support/bods_export_helpers'
 
 require 'sidekiq/testing'
 Sidekiq::Logging.logger = nil

@@ -11,7 +11,11 @@ class EntityDecorator < ApplicationDecorator
   alias transliterated_name name
   def name
     if object.name.blank?
-      I18n.t 'entities.show.company_name_missing'
+      if object.natural_person?
+        I18n.t 'entities.show.person_name_missing'
+      else
+        I18n.t 'entities.show.company_name_missing'
+      end
     else
       transliterated_name
     end

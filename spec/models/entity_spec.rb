@@ -29,11 +29,11 @@ RSpec.describe Entity do
   end
 
   describe '#relationships_as_target' do
-    let(:entity) { Entity.new }
+    let(:entity) { create(:legal_entity) }
     subject { entity.relationships_as_target }
 
     context "when entity is a Entity::Types::NATURAL_PERSON" do
-      before { entity.type = Entity::Types::NATURAL_PERSON }
+      let(:entity) { create(:natural_person) }
 
       it "returns empty array" do
         expect(subject).to eq([])
@@ -41,23 +41,15 @@ RSpec.describe Entity do
     end
 
     context "when entity is not a Entity::Types::NATURAL_PERSON" do
-      before { entity.type = nil }
-
       context "when entity is target of some persisted relationships" do
-        before do
-          allow(entity).to receive(:_relationships_as_target).and_return([:relationship])
-        end
+        let!(:relationships) { create_list(:relationship, 3, target: entity) }
 
         it "returns those relationships" do
-          expect(subject).to eq([:relationship])
+          expect(subject).to match_array(relationships)
         end
       end
 
       context "when entity is target of no persisted relationships" do
-        before do
-          allow(entity).to receive(:_relationships_as_target).and_return([])
-        end
-
         it "returns an array containing a relationship to an unknown persons entity" do
           expect(subject.count).to eq(1)
           expect(subject[0].source).to eq(UnknownPersonsEntity.new_for_entity(entity))
@@ -271,6 +263,14 @@ RSpec.describe Entity do
         expect { subject.upsert }.not_to change { Entity.count }
       end
 
+      it 'sets the updated_at' do
+        expect { subject.upsert }.to change { @entity.reload.updated_at }
+      end
+
+      it 'sets the self_updated_at' do
+        expect { subject.upsert }.to change { @entity.reload.self_updated_at }
+      end
+
       context "when the new document has multiple identifiers" do
         let(:other_identifier) { { 'a' => 'b' } }
         before do
@@ -367,6 +367,11 @@ RSpec.describe Entity do
         entity.upsert
         expect(entity.new_record?).to eq(false)
       end
+
+      it 'sets updated_at on the new entity' do
+        subject.upsert
+        expect(Entity.first.updated_at).not_to be_nil
+      end
     end
 
     it 'retries on duplicate key error exceptions' do
@@ -403,58 +408,6 @@ RSpec.describe Entity do
       it 'merges the two entities together and upserts the existing entity' do
         expect { new_entity.upsert }.not_to change { Entity.count }
         expect(new_entity.reload).to eq existing_entity.reload
-      end
-    end
-  end
-
-  describe '#to_builder' do
-    subject do
-      described_class.new(
-        id: 1,
-        type: type,
-        name: 'name',
-        address: 'address',
-        nationality: 'British',
-        country_of_residence: 'GB',
-        dob: '1975-08-24',
-        jurisdiction_code: 'blue',
-        company_number: '123456789',
-        incorporation_date: '21/08/1990',
-        company_type: 'funky',
-      )
-    end
-
-    context 'when a person' do
-      let(:type) { Entity::Types::NATURAL_PERSON }
-
-      it 'returns a JSON representation' do
-        expect(JSON.parse(subject.to_builder.target!)).to eq(
-          'id' => '1',
-          'type' => Entity::Types::NATURAL_PERSON,
-          'name' => 'name',
-          'address' => 'address',
-          'nationality' => 'British',
-          'country_of_residence' => 'GB',
-          'dob' => [1975, 8, 24],
-        )
-      end
-    end
-
-    context 'when a legal entity' do
-      let(:type) { Entity::Types::LEGAL_ENTITY }
-
-      it 'returns a JSON representation' do
-        expect(JSON.parse(subject.to_builder.target!)).to eq(
-          'id' => '1',
-          'type' => Entity::Types::LEGAL_ENTITY,
-          'name' => 'name',
-          'address' => 'address',
-          'jurisdiction_code' => 'blue',
-          'company_number' => '123456789',
-          'incorporation_date' => '1990-08-21',
-          'dissolution_date' => nil,
-          'company_type' => 'funky',
-        )
       end
     end
   end
