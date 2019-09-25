@@ -38,7 +38,6 @@ RSpec.shared_context 'BODS: basic entity with one owner' do
         'birthDate' => 50.years.ago.to_date.iso8601,
         'addresses' => [
           {
-            'type' => 'residence',
             'address' => '61 Example Road, N1 1XY',
             'country' => 'GB',
           },
@@ -225,7 +224,6 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         'birthDate' => 50.years.ago.to_date.iso8601,
         'addresses' => [
           {
-            'type' => 'residence',
             'address' => '25 road street',
             'country' => 'GB',
           },

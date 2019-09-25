@@ -129,7 +129,6 @@ RSpec.describe 'BODS Export' do
           'birthDate' => 50.years.ago.to_date.iso8601,
           'addresses' => [
             {
-              'type' => 'residence',
               'address' => '25 road street',
               'country' => 'GB',
             },

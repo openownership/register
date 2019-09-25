@@ -254,7 +254,6 @@ class BodsMapper
 
     [
       {
-        type: 'residence',
         address: natural_person.address,
         country: try_parse_country_name_to_code(natural_person.country_of_residence),
       }.compact,
