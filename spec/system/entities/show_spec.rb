@@ -571,4 +571,49 @@ RSpec.describe 'Entity pages' do
       expect(page).to have_text relationships[-2].target.name
     end
   end
+
+  context 'when the entity has raw data provenance' do
+    include_context 'basic entity with one owner'
+
+    let(:data_source_1) { create(:data_source, name: 'Data Source 1') }
+    let(:data_source_2) { create(:data_source, name: 'Data Source 2') }
+    let(:oldest) { 10.days.ago }
+    let(:newest) { 1.day.ago }
+    let(:import_1) do
+      import = create(:import, data_source: data_source_1)
+      import.timeless.update_attribute(:created_at, oldest)
+      import
+    end
+    let(:import_2) do
+      import = create(:import, data_source: data_source_2)
+      import.timeless.update_attribute(:created_at, newest)
+      import
+    end
+
+    let!(:import_1_provenances) do
+      create_list(:raw_data_provenance, 5, entity_or_relationship: company, import: import_1)
+    end
+    let!(:import_2_provenances) do
+      create_list(:raw_data_provenance, 5, entity_or_relationship: company, import: import_2)
+    end
+
+    it 'shows a provenance box with a summary and a link to the raw data page' do
+      visit entity_path(company)
+
+      expect(page).to have_text('Provenance')
+      expect(page).to have_text('Data Source 1 and Data Source 2')
+      expected_date = import_2_provenances.last.raw_data_records.last.updated_at.to_date
+      expect(page).to have_text("Latest data: #{expected_date}")
+      expect(page).to have_link("See the 20 original source records")
+    end
+  end
+
+  context 'when the entity has no raw data provenance' do
+    include_context 'basic entity with one owner'
+
+    it "doesn't show a provenance box" do
+      visit entity_path(company)
+      expect(page).not_to have_text('Provenance')
+    end
+  end
 end
