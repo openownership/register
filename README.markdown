@@ -84,8 +84,11 @@ process.
    - `heroku run:detached --app openownership-register bin/rails psc:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails sk:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails dk:trigger`
-1. Now turn on **1** worker dyno, making sure it's a `performance-l`.
-1. Note down the time the worker was started.
+1. Now turn on worker dynos to process the import jobs. You can scale these
+   horizontally as required, but remember that each will create 10 connections
+   to the database, and MLab is quite limited in performance, so 4-5 is perhaps
+   a sensible maximum.
+1. Note down the time the workers were started.
 1. Monitor the status of the import via the Sidekiq admin panel and papertrail.
    Note that although no jobs may show as active or enqueued, the triggers can
    still be running (if they're downloading data we've already seen, we don't
