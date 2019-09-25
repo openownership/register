@@ -6,16 +6,16 @@ RSpec.describe 'BODS Export' do
   let(:exporter) { BodsExporter.new }
   let(:export) { exporter.export }
   let(:uploader) { BodsExportUploader.new(export.id) }
-  let(:latest_statements_url) { "https://#{ENV['BUCKETEER_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz" }
-  let(:latest_ids_url) { "https://#{ENV['BUCKETEER_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statement-ids.latest.txt.gz" }
+  let(:latest_statements_url) { "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz" }
+  let(:latest_ids_url) { "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statement-ids.latest.txt.gz" }
   let(:redis) { Redis.new }
 
   def export_statements_url(export)
-    "https://#{ENV['BUCKETEER_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statements.#{export.created_at.iso8601}.jsonl.gz"
+    "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statements.#{export.created_at.iso8601}.jsonl.gz"
   end
 
   def export_ids_url(export)
-    "https://#{ENV['BUCKETEER_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz"
+    "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz"
   end
 
   def stub_upload_of_latest_files

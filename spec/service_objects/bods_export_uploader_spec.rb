@@ -4,7 +4,7 @@ RSpec.describe BodsExportUploader do
   include BodsExportHelpers
 
   let(:export) { create(:bods_export) }
-  let(:bucket) { ENV['BUCKETEER_BUCKET_NAME'] }
+  let(:bucket) { ENV['BODS_EXPORT_S3_BUCKET_NAME'] }
   let(:mapper) { BodsMapper.instance }
 
   let(:existing_relationship) { create(:relationship) }

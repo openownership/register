@@ -5,7 +5,7 @@ class BodsExportUploader
     @export = BodsExport.find(export_id)
 
     @redis = Redis.new
-    @bucket = ENV['BUCKETEER_BUCKET_NAME']
+    @bucket = ENV['BODS_EXPORT_S3_BUCKET_NAME']
 
     @s3_folder = 'public/exports'
     @local_folder = @export.output_folder
