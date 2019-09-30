@@ -29,6 +29,11 @@ class DataSource
 
   index({ name: 1 }, unique: true)
 
+  def self.all_for_entity(entity)
+    ids = Import.all_for_entity(entity).distinct(:data_source_id)
+    where('id' => { '$in' => ids })
+  end
+
   def statistics_by_type
     statistics.published.to_a.group_by(&:type)
   end
@@ -49,5 +54,9 @@ class DataSource
         errors.add :types, "#{type} is not a valid DataSource type"
       end
     end
+  end
+
+  def most_recent_import
+    imports.desc(:created_at)&.first
   end
 end

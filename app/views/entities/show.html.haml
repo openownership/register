@@ -126,6 +126,19 @@
             - else
               %p.unknown= t(".no_further_information_known", type: t("entity_types.#{@entity.type}", default: t("entity_types.default")))
 
+        - if @data_source_names.any?
+          .frame-light.meta.provenance
+            .frame-wrap
+              %h6= glossary_tooltip(t(".provenance"), :provenance, :right)
+              %ul
+                %li
+                  %p= @data_source_names.to_sentence
+                  %p.meta-secondary
+                    = t('entities.provenance.latest_data', date: @newest_raw_record.to_date)
+                %li
+                  = link_to(t('entities.provenance.detail', count: @raw_record_count), raw_entity_path(@entity))
+
+
         - if @entity.restricted_for_marketing
           .frame-light.meta
             .frame-wrap

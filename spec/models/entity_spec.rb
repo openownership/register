@@ -520,4 +520,29 @@ RSpec.describe Entity do
       expect(Entity.search(merged_person.name).records.first).to eq(merged_person)
     end
   end
+
+  describe '#all_ids' do
+    context 'when the entity has no merged entities' do
+      let(:entity) { create(:natural_person) }
+
+      it 'returns an array with the entity id in it' do
+        expect(entity.all_ids).to eq([entity.id])
+      end
+    end
+
+    context 'when the entity has merged entities' do
+      let(:entity) { create(:natural_person) }
+      let(:merged_entity_1) { create(:natural_person, master_entity: entity) }
+      let(:merged_entity_2) { create(:natural_person, master_entity: entity) }
+
+      it 'returns an array with the entity id and its merged entity ids in it' do
+        expected = [
+          entity.id,
+          merged_entity_1.id,
+          merged_entity_2.id,
+        ]
+        expect(entity.all_ids).to match_array(expected)
+      end
+    end
+  end
 end

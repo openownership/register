@@ -27,6 +27,23 @@ RSpec.describe DataSource do
     end
   end
 
+  describe '.all_for_entity' do
+    let(:entity) { create(:legal_entity) }
+    let!(:provenances) do
+      create_list(:raw_data_provenance, 3, entity_or_relationship: entity)
+    end
+    let(:data_sources) { provenances.map { |p| p.import.data_source } }
+
+    it 'returns all the data sources the entity is connected to via raw data' do
+      expect(DataSource.all_for_entity(entity)).to match_array(data_sources)
+    end
+
+    it "doesn't return duplicate data sources" do
+      create(:raw_data_provenance, entity_or_relationship: entity, import: provenances.first.import)
+      expect(DataSource.all_for_entity(entity)).to match_array(data_sources)
+    end
+  end
+
   describe '#statistics_by_type' do
     subject { source.statistics_by_type }
 
@@ -73,6 +90,30 @@ RSpec.describe DataSource do
       source.save!
       current_stats = source.current_statistics
       expect(current_stats.find { |s| s.type == 'missing' }).to be_nil
+    end
+  end
+
+  describe '#most_recent_import' do
+    let!(:data_source) { create(:data_source) }
+
+    context 'when there are imports connected to the data source' do
+      let!(:imports) do
+        (0..2).map do |i|
+          import = create(:import, data_source: data_source)
+          import.timeless.update_attribute(:created_at, i.days.ago)
+          import
+        end
+      end
+
+      it 'returns the most recently created one' do
+        expect(data_source.most_recent_import).to eq(imports[0])
+      end
+    end
+
+    context 'when there are no imports connected to the data source' do
+      it 'returns nil' do
+        expect(data_source.most_recent_import).to be_nil
+      end
     end
   end
 end

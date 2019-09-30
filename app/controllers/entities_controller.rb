@@ -19,6 +19,12 @@ class EntitiesController < ApplicationController
       @similar_people = entity.natural_person? ? decorate(similar_people(entity)) : nil
     end
 
+    @data_source_names = DataSource.all_for_entity(entity).pluck(:name)
+    unless @data_source_names.empty?
+      @newest_raw_record = RawDataRecord.newest_for_entity(entity).updated_at
+      @raw_record_count = RawDataRecord.all_for_entity(entity).size
+    end
+
     @entity = decorate(entity)
 
     respond_to do |format|
@@ -60,22 +66,15 @@ class EntitiesController < ApplicationController
     entity = Entity.find(params[:id])
     redirect_to_master_entity(:raw, entity)
     @entity = decorate(entity)
-    entity_ids = [@entity.id]
-    entity_ids += @entity.merged_entity_ids if @entity.merged_entities.size.positive?
-    raw_record_ids = RawDataProvenance
-      .where(
-        'entity_or_relationship_id' => { '$in' => entity_ids },
-        'entity_or_relationship_type' => 'Entity',
-      )
-      .pluck(:raw_data_record_ids)
-      .flatten
-      .compact
-    @raw_data_records = RawDataRecord
+    @raw_data_records = RawDataRecord.all_for_entity(entity)
       .includes(:imports)
-      .where('id' => { '$in' => raw_record_ids })
-      .order_by(%i[created_at desc])
+      .order_by(updated_at: :desc, created_at: :desc)
       .page(params[:page])
       .per(10)
+    return if @raw_data_records.empty?
+    @newest = RawDataRecord.newest_for_entity(entity).updated_at
+    @oldest = RawDataRecord.oldest_for_entity(entity).created_at
+    @data_sources = DataSource.all_for_entity(entity)
   end
 
   def opencorporates_additional_info
