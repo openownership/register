@@ -37,6 +37,11 @@
 
             %hr
 
+            %p
+              = link_to "Download our data", download_path, class: 'btn btn-primary'
+
+            %hr
+
             - if user_signed_in?
               %p
                 = link_to "Add your company’s beneficial ownership", submissions_path, class: 'btn btn-primary'
