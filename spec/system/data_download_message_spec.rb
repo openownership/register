@@ -5,22 +5,22 @@ RSpec.describe 'the data download message' do
     visit '/'
 
     within('.data-download-alert') do
-      expect(page).to have_text "Bulk downloads are coming soon"
-      expect(page).to have_link("Register to be notified when they're available", href: 'https://docs.google.com/forms/d/1V5uxFmXPPGGHB2sJsHbuHxzl0INNq_riMtNV-U3swIs')
+      expect(page).to have_text "Bulk downloads are here"
+      expect(page).to have_link("Read our documentation", href: download_path)
       click_button('×')
     end
 
-    expect(page).not_to have_text "Bulk downloads are coming soon"
+    expect(page).not_to have_text "Bulk downloads are here"
 
     visit '/'
-    expect(page).not_to have_text "Bulk downloads are coming soon"
+    expect(page).not_to have_text "Bulk downloads are here"
 
     Capybara.reset!
 
     visit '/'
 
     within('.data-download-alert') do
-      expect(page).to have_text "Bulk downloads are coming soon"
+      expect(page).to have_text "Bulk downloads are here"
     end
   end
 end

@@ -6,7 +6,7 @@ class DataDownloadMessage {
   }
 
   setCookie() {
-    this.document.cookie = 'seenDataDownloadMessage=1; max-age=31536000';
+    this.document.cookie = 'seenDataDownloadAvailableMessage=1; max-age=31536000';
   }
 
   init() {

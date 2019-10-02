@@ -25,6 +25,6 @@ class ApplicationController < ActionController::Base
   end
 
   def set_seen_data_download_message
-    @seen_data_download_message = cookies.key? :seenDataDownloadMessage
+    @seen_data_download_message = cookies.key? :seenDataDownloadAvailableMessage
   end
 end

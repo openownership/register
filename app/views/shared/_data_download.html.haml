@@ -1,6 +1,6 @@
 .container-fluid
   - unless @seen_data_download_message
     .alert.data-download-alert.alert-success.alert-dismissible.fade.in{ 'role' => 'alert' }
-      = t('shared.data_download_message_html', url: register_for_bulk_download_url)
+      = t('shared.data_download_message_html', url: download_path)
       %button.close{ 'type' => 'button', 'data' => { 'dismiss' => 'alert' } }
         %span= '×'
