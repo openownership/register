@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get 'privacy' => 'pages#privacy'
   get 'faq' => 'pages#faq'
   get 'glossary' => 'pages#glossary'
+  get 'download' => 'pages#download'
   resources :submissions, only: %i[index create show edit], controller: 'submissions/submissions' do
     member do
       post :submit

@@ -39,6 +39,7 @@ gem 'redcarpet'
 gem 'mongoid-slug'
 gem 'xxhash'
 gem 'oj'
+gem 'coderay'
 
 group :development, :test do
   gem 'byebug'

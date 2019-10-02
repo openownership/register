@@ -1,0 +1,228 @@
+- content_for(:title, t(".title"))
+
+.content.page-content
+  .container-fluid
+    .row
+      .col-lg-8
+        .page-header
+          %h1= t(".title")
+
+    .row
+      .col-lg-8
+        .page-text
+          %h2 Contents
+          %ul
+            %li <a href="#downloads">Downloads</a>
+            %li <a href="#what-is-it">What is this data?</a>
+            %li <a href="#what-isnt-it">What is this data not?</a>
+            %li
+              <a href="#how-to-use-it">How do I use it?</a>
+              %ul
+                %li <a href="#format">Format & Structure</a>
+                %li <a href="#examples">Example data</a>
+            %li <a href="#license">License</a>
+            %li <a href="#further-information">Further information</a>
+
+          %h2{ id: 'downloads' } Downloads
+          %p Links to the most recent files we've exported:
+          %ul
+            - @exports.each do |export|
+              %li= link_to export.created_at.to_date, "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.#{export.created_at.iso8601}.jsonl.gz", rel: 'nofollow'
+
+          %h2{ id: 'what-is-it' } What is this data?
+          %p
+            <strong>Each file contains a complete snapshot of all of the data in this
+            register</strong>. That includes data from:
+          %ul
+            %li <a href="/data_sources/uk-psc-register">UK PSC Register</a> (regularly updated)
+            %li <a href="https://cvr.dk/">Denmark Central Business Register (CVR)</a> (regularly updated)
+            %li <a href="https://rpvs.gov.sk/">Slovakia Public Sector Partners Register</a> (regularly updated)
+            %li <a href="https://data.gov.ua/dataset/1c7f3815-3259-45e0-bdf1-64dca07ddc10">Ukraine Unified States Register (EDR)</a> (one-off snapshot from Spring 2018)
+            %li <a href="https://eiti.org/">EITI</a> pilot data (one off snapshot from Autumn 2017, with data collected 2014-17)
+            %li User submitted data
+          %p
+            <strong>The raw data from each of these sources has been imported, the
+            companies <strong>reconciled with
+            <a href="https://opencorporates.com">OpenCorporates</a> and</strong> - where
+            possible - de-duplicated</strong> based on OpenCorporates results and our
+            own de-duplication algorithms. It has also been periodically
+            refreshed with reconciliations with OpenCorporates database to
+            collect company name changes, dissolutions, etc.
+          %p
+            <strong>The data is formatted in version 0.1 of
+            <a href="https://standard.openownership.org">OpenOwnership's
+            Beneficial Ownership Data Standard</a></strong>. All source data has been
+            standardised on export, attempting to keep as much source-specific
+            information as possible, but prioritising consistency across
+            sources.
+          %p
+            We have <a href="http://standard.openownership.org/en/v0-1/">
+            extensive documentation on the standard</a>, in particular we
+            recommend understanding the <a href="http://standard.openownership.org/en/v0-1/schema/concepts.html">
+            key concepts in the data model</a> and then referring to the
+            specifics using the
+            <a href="http://standard.openownership.org/en/v0-1/schema/schema-browser.html">
+            interactive schema browser</a>.
+          %p
+            <strong>The file is in <a href="http://jsonlines.org/">JSONLines</a> format</strong>,
+            meaning each BODS <code>statement</code> is a JSON object on a
+            single line of the file. It has been compressed with
+            <a href="https://www.gnu.org/software/gzip/">Gzip</a>, which is
+            usually already available on MacOS and Linux systems, and is easily
+            readable with a variety of compression programs on Windows.
+          %p
+            <strong>Our regular data updates occur every three weeks</strong>, and we will
+            endeavour to make a new export after each update. This page will be
+            updated as soon as that happens, but you can also rely on the
+            "latest" link at the top of the page to always point to the most
+            recent data.
+
+          %h2{ id: 'what-isnt-it' } What is this data not?
+          %p
+            <strong>100% accurate, up-to-date, or lawful for every use case</strong>. As per our
+            <a href="/terms-and-conditions">terms and conditions</a> we cannot
+            guarantee the accuracy of the data, nor that your use of it is
+            lawful. Due to the nature of our periodic update and refresh
+            process, we also can't guarantee the freshness of the data. Refer to
+            the <a href="/terms-and-conditions#quality">information quality section</a>
+            of our terms for more details.
+          %p
+            <strong>A comprehensive dataset of <i>companies</i> in the jurisdictions
+            we have data for</strong>. It only contains those people and companies who've
+            declared beneficial ownership information. For example, the UK PSC
+            and DK CVR registers are broadly intended to cover all companies in
+            their respective countries, but there will always be companies who
+            don't comply. In addition, some jurisdictions (e.g. Slovakia)
+            only require declarations from specific sectors or types of
+            companies.
+          %p
+            <strong>Data on company directors, officials or shareholders</strong>. Whilst
+            individuals in these roles may also be beneficial owners, the
+            inverse is not always true. The people in our data are only those
+            who meet the definition of a beneficial owner in their respective
+            jurisdiction. There are often thresholds of share-holding (for
+            example) which must be exceeded to qualify. Conversely,
+            share-holding is not the only way one becomes a beneficial owner.
+          %p
+            <strong>A complete BODS representation of the Register's dataset</strong>. As you'll see
+            from <a href="http://standard.openownership.org/en/v0-1/schema/schema-browser.html">
+            the documentation</a>, BODS' schema provides fields for lots of
+            data. We try to map the Register's data to this model as fully as
+            possible, but there is data we don't have because it's not
+            provided in our sources and data we haven't mapped fully yet.
+
+          %p
+            In particular, we're aware of the following omissions and issues:
+          %p
+            %button.btn.btn-primary{ data: { toggle: "collapse", target: "#caveats" } }
+              Expand issues &nbsp;<i class="fa fa-plus"></i>
+          %ul.collapse{ id: 'caveats' }
+            %li
+              The data is in v0.1 of the data standard, not the most recent
+              v0.2. We're working on updating this.
+            %li
+              We're not making incremental updates and marking old statements
+              via <code>replacesStatements</code> fields. Each update is a
+              standalone snapshot of the entire data set, although our
+              <code>statementIDs</code> should be consistent where data
+              doesn't change.
+            %li
+              We're not reporting identifiers (such as company numbers) where
+              we don't trust them to be official in the original source. This
+              means companies from submissions, third party collected data
+              like the EITI pilot, or companies outside of the source's
+              jurisdiction (e.g. non-UK companies in PSC data) may not have
+              any identifiers.
+            %li
+              Not all sources provide <code>identifiers</code> for people. Where they do,
+              we include them, but often they're missing.
+            %li
+              We're not marking what type of <code>address</code> a person's address is,
+              as this information is not available in our sources.
+            %li
+              We're not marking which specific <code>Interests</code>
+              constitute beneficial ownership and which don't. We need to do
+              more analysis on our sources to understand when it's possible
+              to determine this.
+            %li
+              We don't set <code>minimum</code> and <code>maximum</code>
+              values to the same value as <code>exact</code> on percentage
+              interests where we have an exact value. In other words, you
+              can't only rely on <code>minimum</code> and <code>maximum</code>,
+              you have to check <code>exact</code> too.
+            %li
+              We only set <code>source</code> fields to report provenance on
+              <code>ownershipOrControlStatements</code>, not
+              <code>entityStatements</code> or <code>personStatements</code>.
+              This is because of how, historically, the register has stored
+              provenance information, but we're working on it.
+            %li
+              We don't set <code>statementDate</code>, because we don't have a
+              dates available across our sources that is consistent with BODS'
+              meaning of this field. We need to do more work to understand when
+              we can report this accurately.
+            %li
+              We currently report all entities as <code>registeredEntity</code>
+              even when they're obviously not, such as the state which owns
+              state-owned entities.
+            %li
+              We don't have any data to be able to report <code>placeOfBirth</code>,
+              <code>placeOfResidence</code>, <code>pepStatus</code> or
+              <code>deathDate</code> for people, nor <code>alternateNames</code>
+              for companies.
+
+          %h2{ id: 'how-to-use-it' } How do I use it?
+          %p
+            While we suggest you read the <a href="http://standard.openownership.org/en/v0-1/">
+            Beneficial Ownership Data Standard documentation</a>, here's a very
+            brief overview of how the data is structured and how we suggest
+            you can use it:
+          %h3{ id: 'format' } Format & Structure
+          %p
+            As mentioned above, the file is a single JSONLines format file,
+            with one JSON <code>statement</code> per line. Lines are
+            separated by Unix line endings (<code>\n</code>). The file has been
+            compressed with Gzip, so expect the uncompressed version to be
+            roughly 10x bigger than the compressed one.
+          %p
+            Each statement concerns a person, entity or relationship between
+            them. They are in order such that, if you process the file
+            sequentially from first line to last, you will see the people or
+            entities involved in any relationships <i>before</i> you see the
+            relationships. Note that this means if you process the file in a
+            parallel or distributed fashion, you will need a means of
+            revisiting statements which you see out of order.
+          %h3{ id: 'examples' } Example data
+          %p
+            An entity statement for an example company, registered with the UK's
+            Companies House register:
+          .card
+            .card-block
+              = @example_entity
+          %p An example person who will own the example company:
+          .card
+            .card-block
+              = @example_person
+          %p Their relationship (Jane owns all the shares in Example Ltd):
+          .card
+            .card-block
+              = @example_ownership
+
+          %h2{ id: 'license' } License
+          %p
+            Please see our <a href="/terms-and-conditions">terms and conditions</a>.
+
+          %h2{ id: 'further-information' } Further information
+          %p
+            <a href="mailto:register@openownership.org">Contact us</a> if you
+            have questions about using this data which aren't answered here.
+
+      .col-lg-4
+        %br
+        .card
+          .card-block
+            %h5.card-title Latest data
+            %p Exported: #{@exports.first.created_at.to_date}
+            %p
+              = link_to 'https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz', rel: 'nofollow', class: 'btn btn-primary', id: 'latest-data' do
+                Download &nbsp;<i class='fa fa-download'></i>

@@ -178,6 +178,8 @@ en:
       title: FAQ
     glossary:
       title: Glossary
+    download:
+      title: Download our data
   relationships:
     provenance:
       unknown: Not yet uploaded
