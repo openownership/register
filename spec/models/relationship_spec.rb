@@ -117,4 +117,47 @@ RSpec.describe Relationship do
       end
     end
   end
+
+  describe '#upsert' do
+    let(:relationship) { build(:relationship) }
+
+    it 'upserts the document' do
+      relationship.upsert
+      expect(relationship.persisted?).to be true
+      updated_relationship = Relationship.new(relationship.as_document.merge!(ended_date: '2019-10-07'))
+      updated_relationship.upsert
+      expect(relationship.reload).to eq(updated_relationship)
+    end
+
+    describe 'retrying duplicate key exceptions' do
+      let(:error) { Mongo::Error::OperationFailure.new('E11000 duplicate key error collection: ...') }
+
+      it 'retries E11000 exceptions' do
+        collection = subject.collection
+        allow(relationship).to receive(:collection).and_return(collection)
+        allow(relationship.collection).to receive(:find).and_raise(error)
+        allow(relationship.collection).to receive(:find).and_call_original
+        relationship.upsert
+        expect(relationship.persisted?).to be true
+      end
+
+      it 'raises other exceptions' do
+        collection = subject.collection
+        allow(relationship).to receive(:collection).and_return(collection)
+        allow(relationship.collection).to receive(:find).and_raise("Another error")
+
+        expect { relationship.upsert }.to raise_error('Another error')
+        expect(relationship.persisted?).to be false
+      end
+
+      it 'only retries once' do
+        collection = subject.collection
+        allow(relationship).to receive(:collection).and_return(collection)
+        allow(relationship.collection).to receive(:find).and_raise(error)
+
+        expect { relationship.upsert }.to raise_error(error)
+        expect(relationship.persisted?).to be false
+      end
+    end
+  end
 end
