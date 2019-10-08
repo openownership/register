@@ -51,7 +51,7 @@
               %li.option-transliterate
                 = transliteration_action(@should_transliterate)
               %li.option-report.last
-                = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank'
+                = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank', rel: 'noopener'
 
 .content.entity-content
   .container-fluid
@@ -147,7 +147,7 @@
                 = t(".advertising_protection.text")
                 - if from_denmark_cvr?(@entity)
                   = ' - '
-                  = link_to(t(".advertising_protection.terms_of_use"), 'https://datacvr.virk.dk/data/cvr-help/conditions-use', target: '_blank')
+                  = link_to(t(".advertising_protection.terms_of_use"), 'https://datacvr.virk.dk/data/cvr-help/conditions-use', target: '_blank', rel: 'noopener')
 
         - unless @entity.natural_person?
           .js-opencorporates-additional-info{ 'data-additional-info-url' => opencorporates_additional_info_entity_path(@entity), 'data-no-data-msg' => t(".no_data_from_opencorporates") }
@@ -159,10 +159,10 @@
         .frame-light.meta.entity-search-links
           .frame-wrap
             %h6= t(".more_on", name: @entity.name)
-            %p= link_to 'Google', google_search_uri(q: @entity.name), class: 'external', target: '_blank'
+            %p= link_to 'Google', google_search_uri(q: @entity.name), class: 'external', target: '_blank', rel: 'noopener'
             - if @entity.natural_person?
-              %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank'
-        = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, class: 'feedback-button', target: '_blank'
+              %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank', rel: 'noopener'
+        = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, class: 'feedback-button', target: '_blank', rel: 'noopener'
 
     - unless @merged_entities.empty?
       .row
