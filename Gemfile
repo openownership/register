@@ -3,7 +3,7 @@ ruby File.read(".ruby-version").strip
 
 gem 'addressable'
 gem 'rails', '~> 5.2.0', '>= 5.2.2.1'
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 4.0'
 
 gem 'sass-rails', '~> 5.0'
 gem 'haml-rails', '~> 1.0'
@@ -56,7 +56,7 @@ group :development do
   gem 'listen', '~> 3.0.5'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'rubocop', '~> 0.56.0', require: false
+  gem 'rubocop', '~> 0.75.0', require: false
   gem 'haml_lint', '~> 0.27.0', require: false
   gem 'spring-commands-rspec'
 end
