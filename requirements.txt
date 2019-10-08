@@ -1,0 +1,1 @@
+git+https://github.com/openownership/ua-edr-extractor.git@0ed04b9382589ee0609ef3b178dfa32058568366#egg=ua-edr-extractor
