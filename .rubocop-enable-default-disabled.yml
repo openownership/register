@@ -1,6 +1,3 @@
-Rails:
-  Enabled: true
-
 Layout/FirstArrayElementLineBreak:
   Description: >-
                  Checks for a line break before the first element in a

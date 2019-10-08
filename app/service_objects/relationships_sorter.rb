@@ -23,6 +23,7 @@ class RelationshipsSorter
 
   def ended_time(relationship)
     return 0 if relationship.ended_date.nil?
+
     relationship.ended_date.to_time.to_i
   end
 end

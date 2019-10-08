@@ -343,17 +343,17 @@ RSpec.describe BodsMapper do
         end
 
         it 'sets it to unknownPerson for all other unknown people' do
-          [
-            'psc-contacted-but-no-response',
-            'psc-contacted-but-no-response-partnership',
-            'restrictions-notice-issued-to-psc',
-            'restrictions-notice-issued-to-psc-partnership',
-            'psc-exists-but-not-identified',
-            'psc-exists-but-not-identified-partnership',
-            'psc-details-not-confirmed',
-            'psc-details-not-confirmed-partnership',
-            'psc-has-failed-to-confirm-changed-details',
-            'psc-has-failed-to-confirm-changed-details-partnership',
+          %w[
+            psc-contacted-but-no-response
+            psc-contacted-but-no-response-partnership
+            restrictions-notice-issued-to-psc
+            restrictions-notice-issued-to-psc-partnership
+            psc-exists-but-not-identified
+            psc-exists-but-not-identified-partnership
+            psc-details-not-confirmed
+            psc-details-not-confirmed-partnership
+            psc-has-failed-to-confirm-changed-details
+            psc-has-failed-to-confirm-changed-details-partnership
           ].each do |psc_type|
             psc_statement = create(:statement, type: psc_type)
             relationship = CreateRelationshipsForStatements.call(psc_statement.entity).first

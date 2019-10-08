@@ -25,8 +25,17 @@ Metrics/PerceivedComplexity:
 Style/Documentation:
   Enabled: false
 
+Style/FormatStringToken:
+  Enabled: false
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+Style/IfUnlessModifier:
+  Enabled: false
+
 Style/StringLiterals:
+  Enabled: false
+
+Style/WhileUntilModifier:
   Enabled: false

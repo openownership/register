@@ -18,6 +18,7 @@ class BodsImportTrigger
 
   def records
     return jsonl_records if @jsonl
+
     Oj.load(open(@download_url).read, mode: :rails).map { |r| Oj.dump(r, mode: :rails) }
   end
 

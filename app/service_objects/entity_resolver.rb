@@ -62,6 +62,7 @@ class EntityResolver
     original_number = normalise_company_number(entity.company_number)
     new_number = normalise_company_number(oc_data.fetch(:company_number))
     return if original_number == new_number
+
     msg = "[#{self.class.name}] Resolution with OpenCorporates changed the " \
           "company number of Entity with identifiers: #{entity.identifiers}. " \
           "Old number: #{entity.company_number}. " \

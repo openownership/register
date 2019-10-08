@@ -16,11 +16,9 @@ namespace :migrations do
     models.each do |klass|
       Rails.logger.info "Timestamping #{klass.name.pluralize}"
       klass.each do |record|
-        begin
-          record.timeless.update_attribute(:created_at, record.id.generation_time)
-        rescue StandardError => e
-          Rails.logger.warn "Error timestamping #{klass.name} with id: #{record.id}: #{e.message}"
-        end
+        record.timeless.update_attribute(:created_at, record.id.generation_time)
+      rescue StandardError => e
+        Rails.logger.warn "Error timestamping #{klass.name} with id: #{record.id}: #{e.message}"
       end
     end
 
@@ -28,11 +26,9 @@ namespace :migrations do
     # quite a good approximation for updated_at (at the time of writing)
     Rails.logger.info "Timestamping Submissions"
     Submissions::Submission.each do |submission|
-      begin
-        submission.timeless.update_attribute(:updated_at, submission.changed_at)
-      rescue StandardError => e
-        Rails.logger.warn "Error timestamping Submission with id: #{submission.id}: #{e.message}"
-      end
+      submission.timeless.update_attribute(:updated_at, submission.changed_at)
+    rescue StandardError => e
+      Rails.logger.warn "Error timestamping Submission with id: #{submission.id}: #{e.message}"
     end
   end
 end

@@ -121,8 +121,8 @@ class Entity
     self.id = document.fetch('_id')
 
     reload
-  rescue Mongo::Error::OperationFailure => exception
-    raise unless exception.message.start_with?('E11000')
+  rescue Mongo::Error::OperationFailure => e
+    raise unless e.message.start_with?('E11000')
 
     criteria = Entity.where(selector)
     if criteria.count > 1
@@ -137,8 +137,8 @@ class Entity
 
   def upsert_and_merge_duplicates!
     upsert
-  rescue DuplicateEntitiesDetected => ex
-    handle_duplicates!(ex.criteria)
+  rescue DuplicateEntitiesDetected => e
+    handle_duplicates!(e.criteria)
     retry
   end
 
@@ -173,6 +173,7 @@ class Entity
     OC_IDENTIFIER_KEYS.each_with_object({}) do |k, h|
       k_sym = k.to_sym
       raise "Cannot build OC identifier - data is missing required key '#{k}' - data = #{data.inspect}" unless data.key?(k_sym)
+
       h[k] = data[k_sym]
     end
   end

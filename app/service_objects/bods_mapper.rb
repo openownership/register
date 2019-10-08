@@ -36,6 +36,7 @@ class BodsMapper
     case obj
     when Entity
       return nil unless generates_statement?(obj)
+
       ID_PREFIX + hash("openownership-register/entity/#{obj.id}/#{obj.self_updated_at}")
     when Relationship
       things_that_make_relationship_statements_unique = {
@@ -59,6 +60,7 @@ class BodsMapper
 
   def generates_statement?(entity)
     return true unless entity.respond_to? :unknown_reason
+
     REASONS_FOR_UNKNOWN_PERSON_STATEMENT.include?(entity.unknown_reason)
   end
 
@@ -355,6 +357,7 @@ class BodsMapper
     if imports.map(&:data_source).uniq.length > 1
       raise "[#{self.class.name}] Relationship: #{relationship.id} comes from multiple data sources, can't produce a single Source for it"
     end
+
     most_recent_import = imports.max_by(&:created_at)
     data_source = most_recent_import.data_source
 

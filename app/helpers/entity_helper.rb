@@ -31,6 +31,7 @@ module EntityHelper
     if entity.unknown_reason == 'no-individual-or-entity-with-signficant-control'
       return 'No person'
     end
+
     'Unknown'
   end
 
@@ -61,6 +62,7 @@ module EntityHelper
 
   def date_of_birth(entity)
     return unless entity.dob
+
     parts = []
     parts << Date::MONTHNAMES[entity.dob.month] if entity.dob.atoms.size > 1
     parts << entity.dob.year

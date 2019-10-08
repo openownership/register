@@ -44,8 +44,9 @@ class Relationship
     retried = false
     begin
       super
-    rescue Mongo::Error::OperationFailure => exception
-      raise unless exception.message.start_with?('E11000') && !retried
+    rescue Mongo::Error::OperationFailure => e
+      raise unless e.message.start_with?('E11000') && !retried
+
       # MongoDB can get a race condition with multiple upserts.
       # In newer versions of Mongo (4.2+), errors like this are retried
       # automatically, see: https://jira.mongodb.org/browse/SERVER-14322, but we

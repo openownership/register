@@ -2,6 +2,8 @@ inherit_from:
   - .rubocop-disable-default-enabled.yml
   - .rubocop-enable-default-disabled.yml
 
+require: rubocop-rails
+
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true

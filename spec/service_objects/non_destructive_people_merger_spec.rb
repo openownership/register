@@ -24,17 +24,13 @@ RSpec.describe NonDestructivePeopleMerger do
 
     it "doesn't merge them" do
       expect do
-        begin
-          NonDestructivePeopleMerger.new(company, person_1).call
-        rescue StandardError # rubocop:disable Lint/HandleExceptions
-        end
+        NonDestructivePeopleMerger.new(company, person_1).call
+      rescue StandardError # rubocop:disable Lint/HandleExceptions
       end.not_to change { person_1.merged_entities.count }
 
       expect do
-        begin
-          NonDestructivePeopleMerger.new(person_1, company).call
-        rescue StandardError # rubocop:disable Lint/HandleExceptions
-        end
+        NonDestructivePeopleMerger.new(person_1, company).call
+      rescue StandardError # rubocop:disable Lint/HandleExceptions
       end.not_to change { company.merged_entities.count }
     end
   end
@@ -48,10 +44,8 @@ RSpec.describe NonDestructivePeopleMerger do
 
     it "doesn't merge them" do
       expect do
-        begin
-          NonDestructivePeopleMerger.new(person_1, person_1).call
-        rescue StandardError # rubocop:disable Lint/HandleExceptions
-        end
+        NonDestructivePeopleMerger.new(person_1, person_1).call
+      rescue StandardError # rubocop:disable Lint/HandleExceptions
       end.not_to change { person_1.merged_entities.count }
     end
   end

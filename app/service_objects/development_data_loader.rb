@@ -17,6 +17,7 @@ class DevelopmentDataLoader
         if klass == Entity
           instance_data['identifiers'].each do |identifier|
             next unless identifier.is_a?(Hash)
+
             identifier.each do |key, value|
               identifier[key] = BSON::ObjectId.from_string(value['$oid']) if value['$oid']
             end

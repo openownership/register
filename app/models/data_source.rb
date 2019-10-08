@@ -43,6 +43,7 @@ class DataSource
     # order of current_statistic_types
     stats_by_type = statistics_by_type
     return [] if stats_by_type.empty?
+
     current_statistic_types
       .map { |type| stats_by_type[type]&.max_by(&:created_at) }
       .compact

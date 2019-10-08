@@ -34,10 +34,10 @@ class PscImporter
         relationship = relationship!(child_entity, parent_entity, record['data'])
 
         return [child_entity, parent_entity, relationship]
-      rescue PotentiallyBadEntityMergeDetectedAndStopped => ex
+      rescue PotentiallyBadEntityMergeDetectedAndStopped => e
         msg = "[#{self.class.name}] Failed to handle a required entity merge " \
               "as a potentially bad merge has been detected and stopped: " \
-              "#{ex.message} - will not complete the import of this raw " \
+              "#{e.message} - will not complete the import of this raw " \
               "record: #{raw_record.id}"
         Rails.logger.warn msg
       end
@@ -203,11 +203,13 @@ class PscImporter
   def country_from_nationality(nationality)
     countries = ISO3166::Country.find_all_countries_by_nationality(nationality)
     return if countries.count > 1 # too ambiguous
+
     countries[0]
   end
 
   def entity_dob(elements)
     return unless elements
+
     parts = [elements['year']]
     parts << format('%02d', elements['month']) if elements['month']
     parts << format('%02d', elements['day']) if elements['month'] && elements['day']

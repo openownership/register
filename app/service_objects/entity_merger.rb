@@ -66,8 +66,8 @@ class EntityMerger
 
   def delete_entity_to_remove_from_search
     IndexEntityService.new(@to_remove).delete
-  rescue Elasticsearch::Transport::Transport::Errors::NotFound => ex
-    Rails.logger.warn "Entity merger failed to delete entity from ES because it was not found in the index - ID: #{@to_remove.id}; name: #{@to_remove.name}; error message: #{ex.message}"
+  rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+    Rails.logger.warn "Entity merger failed to delete entity from ES because it was not found in the index - ID: #{@to_remove.id}; name: #{@to_remove.name}; error message: #{e.message}"
   end
 
   def reindex_entity_to_keep_for_search

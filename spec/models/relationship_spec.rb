@@ -61,10 +61,7 @@ RSpec.describe Relationship do
     let(:relationship) do
       create(
         :relationship,
-        interests: [
-          'right-to-appoint-and-remove-directors',
-          'ownership-of-shares-25-to-50-percent',
-        ],
+        interests: %w[right-to-appoint-and-remove-directors ownership-of-shares-25-to-50-percent],
       )
     end
 

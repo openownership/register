@@ -10,6 +10,7 @@ class InferredRelationship
 
   def intermediate_entities
     return [] unless sourced_relationships.any?
+
     sourced_relationships[1..-1].map(&:source)
   end
 

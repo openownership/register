@@ -143,6 +143,7 @@ class OpencorporatesClient
   rescue Faraday::TimeoutError => e
     Rails.logger.info("Received #{e.inspect} when calling #{normalised_path} (#{params})")
     raise TimeoutError if @raise_timeouts
+
     nil
   end
 end

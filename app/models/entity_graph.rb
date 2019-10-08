@@ -21,6 +21,7 @@ class EntityGraph
   # visits, or LabelNode and LabelEdge instances where it bails out.
   def visit(entity, frontier, end_node, seen = Set[], level = 1)
     return if seen.include?(entity.id.to_s)
+
     seen.add entity.id.to_s
     @nodes.add Node.new(entity)
     relationships = RelationshipsSorter.new(entity.send(frontier))

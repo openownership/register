@@ -116,6 +116,7 @@ class DkImporter
 
   def most_recent(items)
     return unless items.all?
+
     sort_by_period(items).first
   end
 

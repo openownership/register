@@ -29,6 +29,7 @@ class BodsExporter
 
   def load_existing_ids_into_redis(redis)
     return if @existing_ids.nil?
+
     redis.sadd(BodsExport::REDIS_ALL_STATEMENTS_SET, @existing_ids)
   end
 end

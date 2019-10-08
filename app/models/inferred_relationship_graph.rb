@@ -30,12 +30,12 @@ class InferredRelationshipGraph
   end
 
   def select_relationships_recursive(
-                                     entity:,
-                                     inferred_relationships:,
-                                     seen_entities: [],
-                                     seen_relationships: [],
-                                     stop_condition:
-                                   )
+    entity:,
+    inferred_relationships:,
+    seen_entities: [],
+    seen_relationships: [],
+    stop_condition:
+  )
     immediate_relationships = entity.relationships_as_target
 
     if stop_condition.call(entity, immediate_relationships) \

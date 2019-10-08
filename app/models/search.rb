@@ -1,5 +1,5 @@
 class Search
-  EXCLUDED_TERMS_REGEX = /\b(llp|llc|plc|inc|ltd|limited)\b/i
+  EXCLUDED_TERMS_REGEX = /\b(llp|llc|plc|inc|ltd|limited)\b/i.freeze
 
   def self.query(search_params)
     query = normalise_query(search_params[:q])
@@ -98,6 +98,7 @@ class Search
 
   def self.normalise_query(query)
     return '' if query.blank?
+
     query.gsub(EXCLUDED_TERMS_REGEX, '').strip
   end
 end

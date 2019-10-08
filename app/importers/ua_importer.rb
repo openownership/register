@@ -20,11 +20,9 @@ class UaImporter
     end
 
     Parallel.each(queue, in_threads: Concurrent.processor_count) do |line|
-      begin
-        process(line)
-      rescue Timeout::Error
-        retry
-      end
+      process(line)
+    rescue Timeout::Error
+      retry
     end
   end
 

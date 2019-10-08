@@ -2,10 +2,10 @@ class BodsImporter
   attr_accessor :source_url, :source_name, :document_id, :retrieved_at
 
   def initialize(
-                 opencorporates_client: OpencorporatesClient.new_for_imports,
-                 entity_resolver: EntityResolver.new,
-                 company_number_extractor: nil
-               )
+    opencorporates_client: OpencorporatesClient.new_for_imports,
+    entity_resolver: EntityResolver.new,
+    company_number_extractor: nil
+  )
     @opencorporates_client = opencorporates_client
     @entity_resolver = entity_resolver
     @company_number_extractor = company_number_extractor
@@ -35,12 +35,13 @@ class BodsImporter
 
   def legal_entity!(record)
     raise "Missing entityType in statement: #{record['statementID']}" if record['entityType'].blank?
+
     entity = new_or_existing_legal_entity(record)
     @entity_resolver.resolve!(entity) if entity.jurisdiction_code.present?
     entity.save!
     index_entity(entity)
-  rescue Mongo::Error::OperationFailure => exception
-    skip_saving_duplicate_identifiers(entity, exception)
+  rescue Mongo::Error::OperationFailure => e
+    skip_saving_duplicate_identifiers(entity, e)
   end
 
   def natural_person!(record)
@@ -61,8 +62,8 @@ class BodsImporter
     entity.save!
 
     index_entity(entity)
-  rescue Mongo::Error::OperationFailure => exception
-    skip_saving_duplicate_identifiers(entity, exception)
+  rescue Mongo::Error::OperationFailure => e
+    skip_saving_duplicate_identifiers(entity, e)
   end
 
   def ownership!(record)
@@ -98,9 +99,9 @@ class BodsImporter
       entity: child,
     )
     statement.save!
-  rescue Mongo::Error::OperationFailure => exception
+  rescue Mongo::Error::OperationFailure => e
     # Make sure it's a duplicate key error "E11000 duplicate key error collection"
-    raise unless exception.message.start_with?('E11000')
+    raise unless e.message.start_with?('E11000')
     # Make sure it's the _id that is duplicated
     raise unless Statement.where('_id' => statement._id).exists?
     # Ignore this attempt to save, the record already exists
@@ -126,9 +127,9 @@ class BodsImporter
       },
     )
     relationship.save!
-  rescue Mongo::Error::OperationFailure => exception
+  rescue Mongo::Error::OperationFailure => e
     # Make sure it's a duplicate key error "E11000 duplicate key error collection"
-    raise unless exception.message.start_with?('E11000')
+    raise unless e.message.start_with?('E11000')
     # Make sure it's the _id that is duplicated
     raise unless Relationship.where('_id' => relationship._id).exists?
     # Ignore this attempt to save, the record already exists
@@ -171,17 +172,20 @@ class BodsImporter
 
   def entity_identifiers(identifiers)
     return [] if identifiers.blank?
+
     identifiers.map { |i| { entity_identifier_scheme(i) => i['id'] } }
   end
 
   def entity_identifier_scheme(identifier)
     scheme = identifier['scheme'] || identifier['schemeName']
     raise "No identifier scheme or schemeName given in #{identifier}" if scheme.blank?
+
     scheme
   end
 
   def entity_jurisdiction_code(jurisdiction)
     return if jurisdiction.blank?
+
     if jurisdiction['code'].present?
       jurisdiction['code'][0..1]
     elsif jurisdiction['name'].present?
@@ -191,34 +195,41 @@ class BodsImporter
 
   def first_address_of_type(type, addresses)
     return if addresses.blank?
+
     address = addresses.find { |a| a['type'] == type }
     address['address'] if address
   end
 
   def first_individual_name(names)
     return if names.blank?
+
     name = names.find { |a| a['type'] == 'individual' }
     name['fullName'] if name
   end
 
   def exact_iso8601_date(approximate_datetime)
     return if approximate_datetime.blank?
+
     iso_datetime = ISO8601::DateTime.new(approximate_datetime).to_date.iso8601
     ISO8601::Date.new(iso_datetime)
   end
 
   def exact_date(approximate_datetime)
     return if approximate_datetime.blank?
+
     ISO8601::DateTime.new(approximate_datetime).to_date
   end
 
   def country_code_from_nationalities(nationalities)
     return if nationalities.blank?
+
     nationality = nationalities.first
     return nationality['code'] if nationality['code'].present?
     return if nationality['name'].blank?
+
     country = ISO3166::Country.find_by_name(nationality['name']) # rubocop:disable Rails/DynamicFindBy
     return if country.blank?
+
     # Country is an array like ["ALPHA2-CODE", {country_object}]
     country.first
   end
@@ -231,6 +242,7 @@ class BodsImporter
     no_subject_error = "No describedByEntityStatement (child entity) given " \
                        "in statement: #{record['statementID']}"
     raise no_subject_error if record['subject']['describedByEntityStatement'].blank?
+
     Entity.find_by('identifiers.statement_id' => record['subject']['describedByEntityStatement'])
   end
 
@@ -238,6 +250,7 @@ class BodsImporter
     multiple_parties_error = "More than one interestedParty specified in " \
                              "statement: #{record['statementID']}"
     raise multiple_parties_error if record['interestedParty'].keys.length > 1
+
     party_type, party_details = record['interestedParty'].first
     case party_type
     when 'describedByEntityStatement', 'describedByPersonStatement'
@@ -249,6 +262,7 @@ class BodsImporter
 
   def enqueue_retry(record)
     raise "Cannot find dependent records for statement: #{record['statementID']} on retry" if record['retried']
+
     record['retried'] = true
     string = record.to_json
     chunk = ChunkHelper.to_chunk [string]
@@ -257,26 +271,31 @@ class BodsImporter
 
   def earliest_interest_start_date(interests)
     return if interests.blank?
+
     exact_iso8601_date(interests.map { |i| i['startDate'] }.compact.min)
   end
 
   def latest_interest_end_date(interests)
     return if interests.blank?
+
     exact_iso8601_date(interests.map { |i| i['endDate'] }.compact.max)
   end
 
   def all_interests_ended?(interests)
     return false if interests.blank?
+
     interests.all? { |i| i['endDate'] }
   end
 
   def ownership_end_date(interests)
     return nil unless all_interests_ended?(interests)
+
     latest_interest_end_date(interests)
   end
 
   def map_interests(interests)
     return [] if interests.blank?
+
     interests.map do |interest|
       if interest['share'].present?
         {
