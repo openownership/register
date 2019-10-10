@@ -1,0 +1,31 @@
+pipeline:
+    reader:
+        - ua_edr_extractor.reader.EDRReader
+        - file_path: 'will-be-replaced'
+    preprocessor:
+        - ua_edr_extractor.preprocessor.PreProcessor
+        - tokenizer: "!tokenize_uk.tokenize_words"
+    beneficiary_categorizer:
+        - ua_edr_extractor.categorizer.HasBeneficiaryOwnershipRecord
+    parser:
+        - ua_edr_extractor.record_parser.EnsembleBasedParser
+        -
+            voters:
+                -
+                    - "!ua_edr_extractor.record_parser.HeuristicBasedParser"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_combined_embeddings_name_class_syntetic.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_combined_embeddings_name_class_full.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_combined_embeddings_3class_all_data.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_combined_embeddings_3class_syntetic.dat') %>"
+            cutoff: 2
+            merge_overlapping: True
+output_format: jsonl
+export_only_beneficial_owners: True
