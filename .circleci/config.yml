@@ -86,6 +86,23 @@ jobs:
           paths:
             - ./venv
 
+      # Restore NER models cache
+      - restore_cache:
+          keys:
+            - ua-edr-extractor-v1-{{ checksum "config/ua-edr-extractor.yml.erb" }}
+            - ua-edr-extractor-
+
+      - run:
+          name: Download NER models
+          command: '[[ -f /home/circleci/openownership/models.tar.gz ]] || wget --output-document=/home/circleci/openownership/models.tar.gz --quiet https://oo-register-production.s3-eu-west-1.amazonaws.com/models.tar.gz'
+
+
+      # Store NER models cache
+      - save_cache:
+          key: ua-edr-extractor-v1-{{ checksum "config/ua-edr-extractor.yml.erb" }}
+          paths:
+            - /home/circleci/openownership/models.tar.gz
+
       - run:
           name: Wait for MongoDB
           command: dockerize -wait tcp://localhost:27017 -timeout 1m
@@ -103,3 +120,4 @@ jobs:
           environment:
             RAILS_ENV: test
             RACK_ENV: test
+            UA_NER_MODELS: /home/circleci/openownership/models.tar.gz
