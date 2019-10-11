@@ -3,8 +3,18 @@ require 'parallel'
 class UaImporter
   attr_accessor :source_url, :source_name, :document_id, :retrieved_at
 
-  def initialize(entity_resolver: EntityResolver.new)
+  def initialize(
+    entity_resolver: EntityResolver.new,
+    source_url:,
+    source_name:,
+    document_id:,
+    retrieved_at:
+  )
     @entity_resolver = entity_resolver
+    @source_url = source_url
+    @source_name = source_name
+    @document_id = document_id
+    @retrieved_at = retrieved_at
   end
 
   def parse(file)
