@@ -2,14 +2,10 @@
 
 ## Setup
 
-Install the version of ruby specified in `.ruby-version` using your favourite ruby version manager.
-
-Install and run bundler:
-
-```bash
-gem install bundler
-bundle
-```
+- Install the version of ruby specified in `.ruby-version` using your favourite ruby version manager.
+- Install yarn (see: https://yarnpkg.com/en/docs/install)
+- Install python3 (ideally matching the version in runtime.txt) and it's
+  supporting libraries for package installation, pip and virtualenv.
 
 Create an `.env.local` and add in the various required env vars from `.env` – generally, you can use config values from the Heroku app `openownership-register-staging`.
 
@@ -36,20 +32,37 @@ rake postdeploy
 
 Then you're ready to use the usual `rails` commands (like `rails serve`) to run / work with the app.
 
-To run tests:
+## Updates
 
-Tests of our BODS export use the [lib-cove-bods](https://github.com/openownership/lib-cove-bods)
-validator to validate BODS output. You need to install this separately, via the
-instructions in the README, then set an ENV var so the tests where it's
-installed.
+`bin/update` will bring your dependencies up to date, though note it won't
+remove python packages if you remove them from requirements.txt, because pip
+doesn't work that way.
 
-In `.env.test.local` set `LIB_COVE_BODS` to `/path/to/cloned-repo/.ve/bin/libcovebods`
+## Running tests
 
-With that you can run the specs:
+**Note**: Tests of our BODS export use the [lib-cove-bods](https://github.com/openownership/lib-cove-bods)
+validator to validate BODS output. Tests of our Ukraine import use
+[ua-edr-extractor](https://github.com/openownership/ua-edr-extractor).
+These are both python packages which provide commandline tools. These tests will
+be skipped if those tools can't be found in your $PATH, but it's better to run
+everything if you can. The easiest way is to activate the virtualenv which
+`bin/setup` created: `source venv/bin/activate` before you run the tests.
+
+To run all the tests and linters, as the CI service would, run:
 
 ```bash
-bundle exec rspec
+bin/test
 ```
+
+This deals with virtualenv for you.
+
+Or, you can run individual language tests or linters directly:
+
+Ruby tests: `bundle exec rspec`
+Javascript tests: `yarn test`
+Ruby lint: `bundle exec rubocop`
+Haml lint: `bundle exec haml-lint .`
+Javascript lint: `yarn lint`
 
 ## Writing an importer
 
