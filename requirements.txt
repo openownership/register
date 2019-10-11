@@ -1,1 +1,2 @@
 git+https://github.com/openownership/ua-edr-extractor.git@0ed04b9382589ee0609ef3b178dfa32058568366#egg=ua-edr-extractor
+git+https://github.com/openownership/lib-cove-bods.git@baa1c94e31bef51f35aab8f20e900a4c25ca0fc7#egg=lib-cove-bods

@@ -1,7 +1,12 @@
 require 'rails_helper'
 
+def libcovebods_missing?
+  stdout, _stderr, _status = Open3.capture3('which libcovebods')
+  stdout.blank? ? 'No libcovebods found, have you installed it or do you need to activate a venv?' : false
+end
+
 RSpec.shared_examples_for 'a well-behaved BODS output' do
-  it 'is valid BODS', skip: !ENV.key?('LIB_COVE_BODS') do
+  it 'is valid BODS', skip: libcovebods_missing? do
     expect(subject).to be_valid_bods
   end
 
