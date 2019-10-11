@@ -58,11 +58,13 @@ class UaImporter
 
     @entity_resolver.resolve!(entity)
 
-    entity.tap(&:upsert)
+    entity.upsert
+    index_entity(entity)
+    entity
   end
 
   def parent_entity!(record)
-    attributes = {
+    entity = Entity.new(
       lang_code: 'uk',
       identifiers: [
         {
@@ -75,9 +77,11 @@ class UaImporter
       name: record['Name'],
       country_of_residence: record['Country of residence'].presence,
       address: record['Address of residence'].presence,
-    }
+    )
 
-    Entity.new(attributes).tap(&:upsert)
+    entity.upsert
+    index_entity(entity)
+    entity
   end
 
   def relationship!(child_entity, parent_entity, record)
@@ -98,5 +102,9 @@ class UaImporter
     }
 
     Relationship.new(attributes).upsert
+  end
+
+  def index_entity(entity)
+    IndexEntityService.new(entity).index
   end
 end
