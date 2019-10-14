@@ -69,5 +69,8 @@ module ActsAsEntity
 
   def name_transliterated
     TransliterationService.for(lang_code).transliterate(name)
+  rescue TwitterCldr::Parsers::UnexpectedTokenError
+    Rollbar.error("Error transliterating: #{name} for Entity: #{id}")
+    name
   end
 end
