@@ -70,7 +70,7 @@ Importers are intended to run multiple times and so must be idempotent. If the s
 
 ## Running data imports on production
 
-We run all of the standard 'chunked' imports (UK, SK and DK currently) together
+We run all of the standard 'chunked' imports (UK, UA, SK and DK currently) together
 in order to save time and effort over the whole import and integrity checking
 process.
 
@@ -97,6 +97,7 @@ process.
    - `heroku run:detached --app openownership-register bin/rails psc:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails sk:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails dk:trigger`
+   - `heroku run:detached --app openownership-register -s performance-l bin/rails ua:trigger`
 1. Now turn on worker dynos to process the import jobs. You can scale these
    horizontally as required, but remember that each will create 10 connections
    to the database, and MLab is quite limited in performance, so 4-5 is perhaps
@@ -110,8 +111,12 @@ process.
 Note: The full import from scratch takes roughly 30 hours, but the incremental
 import in each sprint should complete in 2-3 hours.
 
-Note: The DK and SK import triggers need a lot of memory to run, because they're
+Note: The UA, DK and SK import triggers need a lot of memory to run, because they're
 iterating over all of the data, hence the performance-l dynos.
+
+Note: The UA import does not use sidekiq to process jobs, it manages its own
+parallelism internally, this means you cannot just rely on watching Sidekiq's
+queue  to know when it's finished, you need to check the dyno itself.
 
 Note: Currently all of our import jobs are set to not retry, so if they fail
 they have genuinely failed. We can't currently retry them because of the way we
@@ -120,6 +125,7 @@ batch up the data, so we just accept that this process is a best-effort.
 ### Post-import
 
 Once all jobs have been processed in the Sidekiq admin panel (/admin/sidekiq)
+and all of the worker dynos have finished.
 
 1. Shut down the worker dyno in the Heroku console so no workers are running.
 1. Downgrade openredis to micro again.
