@@ -404,6 +404,7 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   capybara-email
+  coderay
   countries (~> 3.0)
   dalli (~> 2.7, >= 2.7.9)
   database_cleaner
