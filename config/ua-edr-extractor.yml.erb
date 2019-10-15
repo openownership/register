@@ -25,6 +25,38 @@ pipeline:
                 -
                     - "!ua_edr_extractor.record_parser.MITIEBasedParser"
                     - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_combined_embeddings_3class_syntetic.dat') %>"
+            <% if Rails.env.production? %>
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_combined_embeddings_3classes_200k.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_combined_embeddings_3classes_full.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_combined_embeddings_address_class_full.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_combined_embeddings_country_class_full.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_gigaword_embeddings.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_gigaword_embeddings_local_run.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_gigaword_embeddings_local_run_plus_address.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'new_ner_model.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_edr_embeddings.dat') %>"
+                -
+                    - "!ua_edr_extractor.record_parser.MITIEBasedParser"
+                    - model: "<%= File.join(@working_dir, 'models', 'edr_ner_model_edr_embeddings_100k.dat') %>"
+            <% end %>
             cutoff: 2
             merge_overlapping: True
 output_format: jsonl

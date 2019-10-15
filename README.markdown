@@ -48,6 +48,12 @@ be skipped if those tools can't be found in your $PATH, but it's better to run
 everything if you can. The easiest way is to activate the virtualenv which
 `bin/setup` created: `source venv/bin/activate` before you run the tests.
 
+**Note**: ua-edr-extractor requires a set of trained models in order to be run.
+These can be found in the production S3 bucket. There are two files, one for use
+in tests and dev (ner-models/test-models.tar.gz) and one for production.
+Download test-models.tar.gz file and then set UA_NER_MODELS to its location on
+your system in `.env.test.local` so that the UaExtractor can find them.
+
 To run all the tests and linters, as the CI service would, run:
 
 ```bash
