@@ -544,8 +544,7 @@ The setup process for this looks like:
 - Set up the checkout of the repo to be able to connect to the production
   services.
   - `git pull` in the repo (`~/register`)
-  - `bundle install`
-  - `yarn install`
+  - `bin/setup-bods-export`
   - Edit `config/mongoid.yml` and change the development database to a `uri`
     setting like production, copying in the production connection string from
     Heroku
@@ -573,6 +572,16 @@ The setup process for this looks like:
   - Note: for incremental exports, you need to have primed Redis with the existing
     statement ids from S3. (Download the file from S3, read each line into an
     array, then initialise the exporter with `existing_ids: your_array`)
+
+## To perform a wholly new export
+
+- This is a temporary workaround to our data not containing change markers in
+  the form of `replacesStatements` values.
+- Comment out the lines in `BodsExporter.entity_ids_to_export` that deal with
+  limiting the export to entities updated since the last export (everything
+  except the first and last line).
+- Run `BodsExporter.new.call`
+
 - Once the exporter has completed, you can close the console and the screen
   window.
 - Detach screen with `ctrl+a ctrl+d`, reattach with `screen -r`
