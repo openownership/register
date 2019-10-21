@@ -603,6 +603,20 @@ Monitoring it:
   the latest/only folder name in RAILS_ROOT/tmp/exports).
 - Decide whether you're creating a wholly new file, or an incremental update:
 
+**Note**: If you're starting a new rails shell to run this command, remember
+a) to do it in a Screen session (it takes hours so you'll want to disconnect)
+and b) to run that rails session **without** spring:
+
+```shell
+DISABLE_SPRING=1 bundle exec rails c
+```
+
+Otherwise, spring tries to scan every single statement file that's been written
+to the rails tmp folder, locking up the whole machine and eating up all of the
+volume's boost credits. If you forget, you have to kill the spring process
+before anything can start, because it keeps running in the background (hint: it
+doesn't appear in ps for your user either).
+
 ### Wholly new update (replacing existing ones)
 
 - This is a temporary workaround to our data not containing change markers in
