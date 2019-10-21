@@ -4,6 +4,7 @@ namespace :migrations do
     Submissions::Relationship.each do |submission_relationship|
       relationship = Relationship.where(_id: submission_relationship.id).first
       next unless relationship
+
       new_relationship = relationship.clone
       new_relationship.id = {
         'submission_id' => submission_relationship.submission.id,
@@ -12,12 +13,13 @@ namespace :migrations do
       p "Creating Relationship #{new_relationship.id}"
       new_relationship.save!
       p "Removing Relationship #{relationship.id}"
-      relationship.destroy
+      relationship.destroy!
     end
 
     Submissions::Entity.each do |submission_entity|
       entity = Entity.where(identifiers: submission_entity.id).first
       next unless entity
+
       entity.update_attribute(
         :identifiers,
         [

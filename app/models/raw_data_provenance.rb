@@ -17,6 +17,7 @@ class RawDataProvenance
   def self.bulk_upsert_for_import(import, provenances)
     bulk_operations = provenances.map do |raw_record_id, entities_and_relationships|
       next unless entities_and_relationships.is_a? Array
+
       now = Time.zone.now
       entities_and_relationships.map do |entity_or_relationship|
         {

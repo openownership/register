@@ -46,8 +46,8 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.5.2)
-      public_suffix (>= 2.0.2, < 4.0)
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
     arel (9.0.0)
     ast (2.4.0)
     autoprefixer-rails (6.5.3)
@@ -166,7 +166,7 @@ GEM
       rake (>= 10, < 13)
       rubocop (>= 0.50.0)
       sysexits (~> 1.1)
-    hashdiff (0.3.1)
+    hashdiff (1.0.0)
     hashie (3.6.0)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
@@ -176,6 +176,7 @@ GEM
     i18n (0.7.0)
     i18n_data (0.8.0)
     iso8601 (0.9.1)
+    jaro_winkler (1.5.3)
     jmespath (1.4.0)
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
@@ -214,25 +215,25 @@ GEM
       stringex (~> 2.0)
     msgpack (1.2.6)
     multi_json (1.13.1)
-    multipart-post (2.0.0)
+    multipart-post (2.1.1)
     net-http-persistent (2.9.4)
     nio4r (2.3.1)
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     oj (3.7.12)
     orm_adapter (0.5.0)
-    parallel (1.10.0)
-    parser (2.5.1.0)
+    parallel (1.18.0)
+    parser (2.6.5.0)
       ast (~> 2.4.0)
-    powerpack (0.1.1)
     pry (0.11.0)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
     pry-byebug (3.4.3)
       byebug (>= 9.0, < 9.1)
       pry (~> 0.10)
-    public_suffix (3.0.2)
-    puma (3.6.0)
+    public_suffix (4.0.1)
+    puma (4.2.1)
+      nio4r (~> 2.0)
     rack (2.0.7)
     rack-attack (5.4.0)
       rack (>= 1.0, < 3)
@@ -307,18 +308,21 @@ GEM
       rspec-mocks (~> 3.8.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
-    rubocop (0.56.0)
+    rubocop (0.75.0)
+      jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.5)
-      powerpack (~> 0.1)
+      parser (>= 2.6)
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (~> 1.0, >= 1.0.1)
-    ruby-progressbar (1.9.0)
+      unicode-display_width (>= 1.4.0, < 1.7)
+    rubocop-rails (2.3.2)
+      rack (>= 1.1)
+      rubocop (>= 0.72.0)
+    ruby-progressbar (1.10.1)
     ruby_parser (3.11.0)
       sexp_processor (~> 4.9)
     rubyzip (1.3.0)
-    safe_yaml (1.0.4)
+    safe_yaml (1.0.5)
     sass (3.4.22)
     sass-rails (5.0.6)
       railties (>= 4.0.0, < 6)
@@ -365,7 +369,7 @@ GEM
       tzinfo
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    unicode-display_width (1.4.0)
+    unicode-display_width (1.6.0)
     unicode_utils (1.4.0)
     warden (1.2.8)
       rack (>= 2.0.6)
@@ -378,10 +382,10 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (~> 1.0)
       selenium-webdriver (~> 3.0)
-    webmock (2.1.0)
+    webmock (3.7.6)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-      hashdiff
+      hashdiff (>= 0.4.0, < 2.0.0)
     webpacker (4.0.7)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
@@ -429,7 +433,7 @@ DEPENDENCIES
   oj
   parallel
   pry-byebug
-  puma (~> 3.0)
+  puma (~> 4.0)
   rack-attack (~> 5.4)
   rails (~> 5.2.0, >= 5.2.2.1)
   rails-controller-testing
@@ -437,7 +441,8 @@ DEPENDENCIES
   roadie-rails (~> 1.3.0)
   rollbar
   rspec-rails
-  rubocop (~> 0.56.0)
+  rubocop (~> 0.75.0)
+  rubocop-rails
   rubyzip (~> 1.3)
   sass-rails (~> 5.0)
   selenium-webdriver
@@ -454,7 +459,7 @@ DEPENDENCIES
   xxhash
 
 RUBY VERSION
-   ruby 2.3.8p459
+   ruby 2.6.5p114
 
 BUNDLED WITH
    1.17.3

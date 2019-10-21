@@ -72,6 +72,7 @@ class EntitiesController < ApplicationController
       .page(params[:page])
       .per(10)
     return if @raw_data_records.empty?
+
     @newest = RawDataRecord.newest_for_entity(entity).updated_at
     @oldest = RawDataRecord.oldest_for_entity(entity).created_at
     @data_sources = DataSource.all_for_entity(entity)

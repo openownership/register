@@ -126,12 +126,12 @@ module FixOCIdentifiersOrderingHelper
     entity.save!
 
     results[:fixed] += 1
-  rescue DuplicateEntitiesDetected => ex
+  rescue DuplicateEntitiesDetected => e
     results[:dup_detected_on_upsert].add(entity._id.to_s)
 
     success = handle_duplicate_entities!(
       entity,
-      ex.criteria,
+      e.criteria,
       results,
       deleted,
     )
@@ -170,10 +170,10 @@ module FixOCIdentifiersOrderingHelper
     deleted.add(to_remove._id.to_s)
 
     true
-  rescue PotentiallyBadEntityMergeDetectedAndStopped => ex
+  rescue PotentiallyBadEntityMergeDetectedAndStopped => e
     e_id = entity._id.to_s
 
-    Rails.logger.warn "Failed to handle an entity merge - a potentially bad merge has been detected and stopped: #{ex.message} - triggered by trying to fix entity #{e_id}"
+    Rails.logger.warn "Failed to handle an entity merge - a potentially bad merge has been detected and stopped: #{e.message} - triggered by trying to fix entity #{e_id}"
 
     results[:failed_merge].add(e_id)
 

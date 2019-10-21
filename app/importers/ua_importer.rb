@@ -3,8 +3,18 @@ require 'parallel'
 class UaImporter
   attr_accessor :source_url, :source_name, :document_id, :retrieved_at
 
-  def initialize(entity_resolver: EntityResolver.new)
+  def initialize(
+    entity_resolver: EntityResolver.new,
+    source_url:,
+    source_name:,
+    document_id:,
+    retrieved_at:
+  )
     @entity_resolver = entity_resolver
+    @source_url = source_url
+    @source_name = source_name
+    @document_id = document_id
+    @retrieved_at = retrieved_at
   end
 
   def parse(file)
@@ -20,11 +30,9 @@ class UaImporter
     end
 
     Parallel.each(queue, in_threads: Concurrent.processor_count) do |line|
-      begin
-        process(line)
-      rescue Timeout::Error
-        retry
-      end
+      process(line)
+    rescue Timeout::Error
+      retry
     end
   end
 
@@ -60,11 +68,13 @@ class UaImporter
 
     @entity_resolver.resolve!(entity)
 
-    entity.tap(&:upsert)
+    entity.upsert
+    index_entity(entity)
+    entity
   end
 
   def parent_entity!(record)
-    attributes = {
+    entity = Entity.new(
       lang_code: 'uk',
       identifiers: [
         {
@@ -77,9 +87,11 @@ class UaImporter
       name: record['Name'],
       country_of_residence: record['Country of residence'].presence,
       address: record['Address of residence'].presence,
-    }
+    )
 
-    Entity.new(attributes).tap(&:upsert)
+    entity.upsert
+    index_entity(entity)
+    entity
   end
 
   def relationship!(child_entity, parent_entity, record)
@@ -100,5 +112,9 @@ class UaImporter
     }
 
     Relationship.new(attributes).upsert
+  end
+
+  def index_entity(entity)
+    IndexEntityService.new(entity).index
   end
 end

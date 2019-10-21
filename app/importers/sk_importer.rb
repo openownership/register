@@ -145,12 +145,14 @@ class SkImporter
 
   def entity_dob(timestamp)
     return unless timestamp
+
     ISO8601::Date.new(timestamp.split('T')[0])
   end
 
   def all_parent_records(record)
     company_record = @client.company_record(record['Id'])
     return [] if company_record.nil?
+
     company_record['KonecniUzivateliaVyhod']
   end
 

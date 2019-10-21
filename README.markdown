@@ -2,14 +2,10 @@
 
 ## Setup
 
-Install the version of ruby specified in `.ruby-version` using your favourite ruby version manager.
-
-Install and run bundler:
-
-```bash
-gem install bundler
-bundle
-```
+- Install the version of ruby specified in `.ruby-version` using your favourite ruby version manager.
+- Install yarn (see: https://yarnpkg.com/en/docs/install)
+- Install python3 (ideally matching the version in runtime.txt) and it's
+  supporting libraries for package installation, pip and virtualenv.
 
 Create an `.env.local` and add in the various required env vars from `.env` – generally, you can use config values from the Heroku app `openownership-register-staging`.
 
@@ -36,20 +32,43 @@ rake postdeploy
 
 Then you're ready to use the usual `rails` commands (like `rails serve`) to run / work with the app.
 
-To run tests:
+## Updates
 
-Tests of our BODS export use the [lib-cove-bods](https://github.com/openownership/lib-cove-bods)
-validator to validate BODS output. You need to install this separately, via the
-instructions in the README, then set an ENV var so the tests where it's
-installed.
+`bin/update` will bring your dependencies up to date, though note it won't
+remove python packages if you remove them from requirements.txt, because pip
+doesn't work that way.
 
-In `.env.test.local` set `LIB_COVE_BODS` to `/path/to/cloned-repo/.ve/bin/libcovebods`
+## Running tests
 
-With that you can run the specs:
+**Note**: Tests of our BODS export use the [lib-cove-bods](https://github.com/openownership/lib-cove-bods)
+validator to validate BODS output. Tests of our Ukraine import use
+[ua-edr-extractor](https://github.com/openownership/ua-edr-extractor).
+These are both python packages which provide commandline tools. These tests will
+be skipped if those tools can't be found in your $PATH, but it's better to run
+everything if you can. The easiest way is to activate the virtualenv which
+`bin/setup` created: `source venv/bin/activate` before you run the tests.
+
+**Note**: ua-edr-extractor requires a set of trained models in order to be run.
+These can be found in the production S3 bucket. There are two files, one for use
+in tests and dev (ner-models/test-models.tar.gz) and one for production.
+Download test-models.tar.gz file and then set UA_NER_MODELS to its location on
+your system in `.env.test.local` so that the UaExtractor can find them.
+
+To run all the tests and linters, as the CI service would, run:
 
 ```bash
-bundle exec rspec
+bin/test
 ```
+
+This deals with virtualenv for you.
+
+Or, you can run individual language tests or linters directly:
+
+Ruby tests: `bundle exec rspec`
+Javascript tests: `yarn test`
+Ruby lint: `bundle exec rubocop`
+Haml lint: `bundle exec haml-lint .`
+Javascript lint: `yarn lint`
 
 ## Writing an importer
 
@@ -57,7 +76,7 @@ Importers are intended to run multiple times and so must be idempotent. If the s
 
 ## Running data imports on production
 
-We run all of the standard 'chunked' imports (UK, SK and DK currently) together
+We run all of the standard 'chunked' imports (UK, UA, SK and DK currently) together
 in order to save time and effort over the whole import and integrity checking
 process.
 
@@ -84,6 +103,7 @@ process.
    - `heroku run:detached --app openownership-register bin/rails psc:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails sk:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails dk:trigger`
+   - `heroku run:detached --app openownership-register -s performance-l bin/rails ua:trigger`
 1. Now turn on worker dynos to process the import jobs. You can scale these
    horizontally as required, but remember that each will create 10 connections
    to the database, and MLab is quite limited in performance, so 4-5 is perhaps
@@ -97,8 +117,12 @@ process.
 Note: The full import from scratch takes roughly 30 hours, but the incremental
 import in each sprint should complete in 2-3 hours.
 
-Note: The DK and SK import triggers need a lot of memory to run, because they're
+Note: The UA, DK and SK import triggers need a lot of memory to run, because they're
 iterating over all of the data, hence the performance-l dynos.
+
+Note: The UA import does not use sidekiq to process jobs, it manages its own
+parallelism internally, this means you cannot just rely on watching Sidekiq's
+queue  to know when it's finished, you need to check the dyno itself.
 
 Note: Currently all of our import jobs are set to not retry, so if they fail
 they have genuinely failed. We can't currently retry them because of the way we
@@ -107,6 +131,7 @@ batch up the data, so we just accept that this process is a best-effort.
 ### Post-import
 
 Once all jobs have been processed in the Sidekiq admin panel (/admin/sidekiq)
+and all of the worker dynos have finished.
 
 1. Shut down the worker dyno in the Heroku console so no workers are running.
 1. Downgrade openredis to micro again.

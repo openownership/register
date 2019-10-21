@@ -1,5 +1,6 @@
 {
   "name": "openownership-register",
+  "stack": "heroku-18",
   "scripts": {
     "postdeploy": "rake postdeploy"
   },
@@ -83,5 +84,7 @@
     "memcachier:dev"
   ],
   "buildpacks": [
+    { "url": "heroku/python" },
+    { "url": "heroku/ruby" }
   ]
 }

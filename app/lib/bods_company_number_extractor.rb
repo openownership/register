@@ -10,6 +10,7 @@ class BodsCompanyNumberExtractor
       @schemes.include?(i['scheme']) && i.key?('id')
     end
     return if company_number_identifier.blank?
+
     company_number_identifier['id']
   end
 end

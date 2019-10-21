@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe RelationshipsHelper do
   let(:relationship) { instance_double('Relationship') }
   let(:known_interests) { ['Ownership of shares - 20.0%', 'ownership-of-shares-25-to-50-percent'] }
-  let(:unknown_interests) { ['significant-influence-or-control-as-trust', 'some-other-interest'] }
+  let(:unknown_interests) { %w[significant-influence-or-control-as-trust some-other-interest] }
 
   before do
     allow(relationship).to receive(:interests).and_return(known_interests + unknown_interests)

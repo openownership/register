@@ -1,7 +1,7 @@
 require 'open-uri'
 
 class PscImportTrigger
-  FILENAME_REGEX = /^psc-snapshot-\d{4}-\d{2}-\d{2}_\d+of\d+.zip$/
+  FILENAME_REGEX = /^psc-snapshot-\d{4}-\d{2}-\d{2}_\d+of\d+.zip$/.freeze
 
   def call(data_source, chunk_size)
     import = Import.create! data_source: data_source

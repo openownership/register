@@ -2,7 +2,7 @@ RSpec::Matchers.define :be_valid_bods do
   match do |response|
     file = Tempfile.new('bods.json', '/tmp')
     file.syswrite JSON.dump(response)
-    stdout, stderr, = Open3.capture3("#{ENV['LIB_COVE_BODS']} #{file.path}")
+    stdout, stderr, = Open3.capture3("libcovebods #{file.path}")
     begin
       @validation = JSON.parse(stdout)
     rescue JSON::ParserError => e

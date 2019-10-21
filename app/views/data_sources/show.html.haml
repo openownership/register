@@ -53,7 +53,7 @@
               %h6
                 = t('.links_title')
               %p
-                = link_to(t('.source_url_link'), @data_source.url, class: 'external', target: '_blank')
+                = link_to(t('.source_url_link'), @data_source.url, class: 'external', target: '_blank', rel: 'noopener')
         - if @data_source.timeline_url.present?
           .frame-light.meta
             .frame-wrap

@@ -10,6 +10,7 @@ class TreeNode
 
   def leaf_nodes
     return [self] if nodes.empty?
+
     nodes.map(&:leaf_nodes).flatten
   end
 

@@ -2,6 +2,8 @@ inherit_from:
   - .rubocop-disable-default-enabled.yml
   - .rubocop-enable-default-disabled.yml
 
+require: rubocop-rails
+
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
@@ -19,10 +21,10 @@ Layout/CaseIndentation:
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
-Layout/FirstParameterIndentation:
+Layout/IndentFirstArgument:
   EnforcedStyle: consistent
 
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   EnforcedStyle: consistent
 
 Layout/MultilineMethodCallIndentation:

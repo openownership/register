@@ -43,9 +43,11 @@ module ActsAsEntity
   def country
     if natural_person?
       return unless nationality
+
       ISO3166::Country[nationality]
     else
       return unless jurisdiction_code
+
       code, = jurisdiction_code.split('_')
       ISO3166::Country[code]
     end
@@ -54,8 +56,10 @@ module ActsAsEntity
   def country_subdivision
     return if natural_person?
     return unless country
+
     _, code = jurisdiction_code.split('_')
     return unless code
+
     country.subdivisions[code.upcase]
   end
 
@@ -65,5 +69,8 @@ module ActsAsEntity
 
   def name_transliterated
     TransliterationService.for(lang_code).transliterate(name)
+  rescue TwitterCldr::Parsers::UnexpectedTokenError
+    Rollbar.error("Error transliterating: #{name} for Entity: #{id}")
+    name
   end
 end

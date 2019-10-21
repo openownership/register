@@ -6,7 +6,7 @@ jobs:
 
     docker:
 
-      - image: circleci/ruby:2.3.8-node-browsers
+      - image: circleci/ruby:2.6.5-node-browsers
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
@@ -31,8 +31,8 @@ jobs:
       # Restore bundle cache
       - restore_cache:
           keys:
-            - app-bundle-v1-{{ checksum "Gemfile.lock" }}
-            - app-bundle-v1-
+            - app-bundle-v2-{{ checksum "Gemfile.lock" }}
+            - app-bundle-v2-
 
       - run:
           name: Bundle install
@@ -40,7 +40,7 @@ jobs:
 
       # Store bundle cache
       - save_cache:
-          key: app-bundle-v1-{{ checksum "Gemfile.lock" }}
+          key: app-bundle-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
@@ -61,34 +61,47 @@ jobs:
             - ~/.cache/yarn
 
       - run:
-          name: Download lib-cove-bods
-          working_directory: ~/openownership
+          name: Install python
           command: |
               sudo apt update
               sudo apt-get install python3-pip python3-venv
-              wget https://github.com/openownership/lib-cove-bods/archive/v0.5.0.zip
-              unzip v0.5.0.zip
 
       # Restore pip cache
       - restore_cache:
           keys:
-            - lib-cove-bods-v1-{{ checksum "~/openownership/lib-cove-bods-0.5.0/requirements.txt" }}
-            - lib-cove-bods-v1-
+            - app-pip-v2-{{ checksum "requirements.txt" }}
+            - app-pip-v2-
 
       - run:
-          name: 'Install lib-cove-bods'
-          working_directory: ~/openownership/lib-cove-bods-0.5.0
+          name: 'Pip Install'
           command: |
-              python3 -m venv .ve
-              source .ve/bin/activate
+              python3 -m venv venv
+              source ./venv/bin/activate
               pip3 install -r requirements.txt
-              pip3 install -e .
+              deactivate
 
       # Store pip cache
       - save_cache:
-          key: lib-cove-bods-v1-{{ checksum "~/openownership/lib-cove-bods-0.5.0/requirements.txt" }}
+          key: app-pip-v2-{{ checksum "requirements.txt" }}
           paths:
-            - ~/.cache/pip
+            - ./venv
+
+      # Restore NER models cache
+      - restore_cache:
+          keys:
+            - ua-edr-extractor-v1-{{ checksum "config/ua-edr-extractor.yml.erb" }}
+            - ua-edr-extractor-v1
+
+      - run:
+          name: Download NER models
+          command: '[[ -f /home/circleci/openownership/test-models.tar.gz ]] || wget --output-document=/home/circleci/openownership/test-models.tar.gz --quiet https://oo-register-production.s3-eu-west-1.amazonaws.com/ner-models/test-models.tar.gz'
+
+
+      # Store NER models cache
+      - save_cache:
+          key: ua-edr-extractor-v1-{{ checksum "config/ua-edr-extractor.yml.erb" }}
+          paths:
+            - /home/circleci/openownership/test-models.tar.gz
 
       - run:
           name: Wait for MongoDB
@@ -103,12 +116,8 @@ jobs:
           command: dockerize -wait tcp://localhost:6379 -timeout 1m
 
       - run:
-          command: bundle exec rspec --color --require spec_helper --format documentation spec
+          command: bin/test
           environment:
             RAILS_ENV: test
             RACK_ENV: test
-            LIB_COVE_BODS: ~/openownership/lib-cove-bods-0.5.0/.ve/bin/libcovebods
-      - run: yarn test
-      - run: bundle exec rubocop
-      - run: bundle exec haml-lint .
-      - run: yarn lint
+            UA_NER_MODELS: /home/circleci/openownership/test-models.tar.gz

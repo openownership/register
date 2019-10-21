@@ -51,7 +51,7 @@
               %li.option-transliterate
                 = transliteration_action(@should_transliterate)
               %li.option-report.last
-                = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank'
+                = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank', rel: 'noopener'
 
 .content.entity-content
   .container-fluid

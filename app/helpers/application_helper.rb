@@ -15,6 +15,7 @@ module ApplicationHelper
     return unless Rails.application.config.enable_analytics
 
     safe_join([
+      # rubocop:disable Style/TrailingCommaInArguments
       raw( # rubocop:disable Rails/OutputSafety
         <<-GA
         <script async src="https://www.googletagmanager.com/gtag/js?id=#{Rails.application.config.ga_tracking_id}"></script>
@@ -27,6 +28,7 @@ module ApplicationHelper
         </script>
         GA
       ),
+      # rubocop:enable Style/TrailingCommaInArguments
     ])
   end
 

@@ -21,6 +21,7 @@ namespace :migrations do
       country_name = data['document_id'].gsub('EITI Structured Data - ', '')
       name = "EITI pilot data - #{country_name}"
       next if DataSource.where(name: name).exists?
+
       DataSource.create!(
         name: name,
         url: data['url'],

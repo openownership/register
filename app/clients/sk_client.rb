@@ -30,6 +30,7 @@ class SkClient
     uri = "#{@api_url}(#{company_id})?#{@record_expansion_param}"
     response = fetch(uri)
     return if response.nil?
+
     Oj.load(response.body, mode: :rails)
   end
 
@@ -48,6 +49,7 @@ class SkClient
 
   def yield_response(response, yielder)
     return if response.nil?
+
     Oj.load(response.body, mode: :rails).tap do |object|
       object['value'].each { |record| yielder << record }
     end

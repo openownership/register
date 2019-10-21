@@ -7,7 +7,7 @@ task :sanitize => :environment do
 
     u.skip_reconfirmation!
 
-    u.update(
+    u.update!(
       name: "User #{counter}",
       email: "user_#{counter}@example.org",
       company_name: "Company #{counter}",

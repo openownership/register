@@ -40,6 +40,7 @@ class BodsExportWorker
 
   def record_statements_in_job(statements)
     return if statements.empty?
+
     statement_ids = statements.map { |s| s[:statementID] }
     REDIS_POOL.with do |redis|
       redis.sadd(@job_statements_set, statement_ids)
@@ -48,6 +49,7 @@ class BodsExportWorker
 
   def record_created_statements(statements)
     return if statements.empty?
+
     statement_ids = statements.map { |s| s[:statementID] }
     REDIS_POOL.with do |redis|
       redis.multi do |multi|
@@ -61,6 +63,7 @@ class BodsExportWorker
 
   def save_statements(statements)
     return if statements.empty?
+
     statements.each do |statement|
       filename = @export.statement_filename(statement[:statementID])
       File.open(filename, 'w') { |f| f.puts Oj.dump(statement, mode: :rails) }

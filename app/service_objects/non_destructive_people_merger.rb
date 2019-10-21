@@ -26,8 +26,8 @@ class NonDestructivePeopleMerger
 
   def delete_entity_to_merge_from_search
     IndexEntityService.new(@to_merge).delete
-  rescue Elasticsearch::Transport::Transport::Errors::NotFound => ex
-    Rails.logger.warn "Entity merger failed to delete entity from ES because it was not found in the index - ID: #{@to_merge.id}; name: #{@to_merge.name}; error message: #{ex.message}"
+  rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+    Rails.logger.warn "Entity merger failed to delete entity from ES because it was not found in the index - ID: #{@to_merge.id}; name: #{@to_merge.name}; error message: #{e.message}"
   end
 
   def recursively_merge_merged_entities
