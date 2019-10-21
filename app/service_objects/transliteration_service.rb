@@ -20,6 +20,11 @@ class TransliterationService
     end
 
     rule_set.transform(value)
+  rescue StandardError => e
+    # We want to know about these errors, but we don't want them to crash a page
+    # or an import.
+    Rollbar.error(e)
+    value
   end
 
   private
