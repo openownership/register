@@ -40,6 +40,7 @@ gem 'mongoid-slug'
 gem 'xxhash'
 gem 'oj'
 gem 'coderay'
+gem 'geokit'
 
 group :development, :test do
   gem 'byebug'
