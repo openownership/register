@@ -76,7 +76,7 @@ class SkImporter
     )
     @entity_resolver.resolve!(entity)
 
-    entity.upsert
+    entity.upsert_and_merge_duplicates!
     index_entity(entity)
     entity
   end
