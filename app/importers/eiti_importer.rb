@@ -109,9 +109,10 @@ class EitiImporter
           jurisdiction_code: jurisdiction_code,
           company_number: record.parent_identifier,
         )
-        @entity_resolver.resolve!(entity)
       end
     end
+
+    @entity_resolver.resolve!(entity)
 
     entity.tap(&:upsert)
   end

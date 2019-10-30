@@ -37,7 +37,7 @@ class BodsImporter
     raise "Missing entityType in statement: #{record['statementID']}" if record['entityType'].blank?
 
     entity = new_or_existing_legal_entity(record)
-    @entity_resolver.resolve!(entity) if entity.jurisdiction_code.present?
+    @entity_resolver.resolve!(entity)
     entity.save!
     index_entity(entity)
   rescue Mongo::Error::OperationFailure => e
