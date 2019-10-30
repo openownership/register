@@ -6,6 +6,8 @@ class EntityResolver
   end
 
   def resolve!(entity)
+    return if entity.jurisdiction_code.nil?
+
     if entity.company_number
       response = @opencorporates_client.get_company(entity.jurisdiction_code, entity.company_number)
 
