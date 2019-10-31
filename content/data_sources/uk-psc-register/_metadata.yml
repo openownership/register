@@ -1,0 +1,17 @@
+---
+name: UK PSC Register
+slugs:
+- uk-psc-register
+document_id: GB PSC Snapshot
+timeline_url: https://twitter.com/sheislaurence/timelines/1107584066134654976?ref_src=twsrc%5Etfw
+current_statistic_types:
+- total
+- register_total
+- psc_no_owner
+- psc_unknown_owner
+- psc_offshore_rle
+- psc_non_legit_rle
+- psc_secrecy_rle
+- dissolved
+types:
+- officialRegister

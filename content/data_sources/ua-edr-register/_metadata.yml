@@ -1,0 +1,8 @@
+---
+name: Ukraine Consolidated State Registry (Edinyy Derzhavnyj Reestr [EDR])
+slugs:
+- ua-edr-register
+document_id: Ukraine EDR
+current_statistic_types: []
+types:
+- officialRegister
