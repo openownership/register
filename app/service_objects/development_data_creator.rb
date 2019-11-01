@@ -1,5 +1,7 @@
 class DevelopmentDataCreator
   def call
+    DataSourceLoader.new.call
+
     FactoryGirl.create_list(:draft_submission, 3)
     FactoryGirl.create_list(:submitted_submission, 3)
     FactoryGirl.create_list(:approved_submission, 3)
@@ -40,16 +42,6 @@ class DevelopmentDataCreator
     importer.process_records(records)
 
     eiti_data = Rails.root.join('db', 'data', 'eiti-data.txt')
-    File.readlines(eiti_data).each do |line|
-      data = JSON.parse(line)
-      country_name = data['document_id'].gsub('EITI Structured Data - ', '')
-      FactoryGirl.create(
-        :eiti_data_source,
-        name: "EITI pilot data - #{country_name}",
-        url: data['url'],
-        document_id: data['document_id'],
-      )
-    end
     Rake::Task['eiti:import'].invoke(eiti_data)
 
     Entity.import(force: true)
