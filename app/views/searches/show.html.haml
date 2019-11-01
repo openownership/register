@@ -25,13 +25,26 @@
             .data-sources-info
               %p= t(".data_sources_preface", count: number_with_delimiter(@legal_entity_count))
               %ul.list-unstyled
-                - if @psc_data_source.present?
-                  %li= link_to('UK PSC Register', data_source_path(@psc_data_source))
+                - if @data_sources['uk-psc-register'].present?
+                  %li= link_to('UK PSC Register', data_source_path(@data_sources['uk-psc-register']))
                 - else
                   %li= link_to('UK PSC Register', 'http://download.companieshouse.gov.uk/en_pscdata.html', target: '_blank', rel: 'noopener')
-                %li= link_to('Denmark Central Business Register (CVR)', 'https://cvr.dk', target: '_blank', rel: 'noopener')
-                %li= link_to('Slovakia Public Sector Partners Register', 'https://rpvs.gov.sk/', target: '_blank', rel: 'noopener')
-                %li= link_to('Ukraine Unified States Register (EDR)', 'https://data.gov.ua/dataset/1c7f3815-3259-45e0-bdf1-64dca07ddc10', target: '_blank', rel: 'noopener')
+
+                - if @data_sources['dk-cvr-register'].present?
+                  %li= link_to('Denmark Central Business Register (CVR)', data_source_path(@data_sources['dk-cvr-register']))
+                - else
+                  %li= link_to('Denmark Central Business Register (CVR)', 'https://cvr.dk', target: '_blank', rel: 'noopener')
+
+                - if @data_sources['sk-rpvs-register'].present?
+                  %li= link_to('Slovakia Public Sector Partners Register', data_source_path(@data_sources['sk-rpvs-register']))
+                - else
+                  %li= link_to('Slovakia Public Sector Partners Register', 'https://rpvs.gov.sk/', target: '_blank', rel: 'noopener')
+
+                - if @data_sources['ua-edr-register'].present?
+                  %li= link_to('Ukraine Unified States Register (EDR)', data_source_path(@data_sources['ua-edr-register']))
+                - else
+                  %li= link_to('Ukraine Unified States Register (EDR)', 'https://data.gov.ua/dataset/1c7f3815-3259-45e0-bdf1-64dca07ddc10', target: '_blank', rel: 'noopener')
+
                 %li EITI pilot data
                 %li User submissions
 

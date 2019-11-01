@@ -1,0 +1,9 @@
+---
+name: EITI pilot data - Mali
+slugs:
+- eiti-pilot-data-mali
+document_id: EITI Structured Data - Mali
+current_statistic_types: []
+types:
+- thirdParty
+- primaryResearch
