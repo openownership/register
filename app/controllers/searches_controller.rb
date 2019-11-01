@@ -1,7 +1,7 @@
 class SearchesController < ApplicationController
   def show
     @legal_entity_count = Entity.legal_entities.count
-    @psc_data_source = psc_data_source
+    @data_sources = DataSource.all.map { |ds| [ds.slug, ds] }.to_h
 
     return if params[:q].blank?
 
@@ -19,12 +19,6 @@ class SearchesController < ApplicationController
 
   def search_params
     params.permit(:q, :type, :country)
-  end
-
-  def psc_data_source
-    DataSource.find('uk-psc-register')
-  rescue Mongoid::Errors::DocumentNotFound
-    nil
   end
 
   helper_method :search_params
