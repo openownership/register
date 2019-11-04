@@ -1,9 +1,10 @@
 class SkImporter
   attr_accessor :import, :retrieved_at
 
-  def initialize(entity_resolver: EntityResolver.new, client: SkClient.new)
+  def initialize(entity_resolver: EntityResolver.new, client: SkClient.new, geocoder_client: GoogleGeocoderClient.new)
     @entity_resolver = entity_resolver
     @client = client
+    @geocoder_client = geocoder_client
   end
 
   def process_records(raw_records)
@@ -52,13 +53,13 @@ class SkImporter
     if item.nil?
       Rails.logger.warn("[#{self.class.name}] record Id: #{record['Id']} has no current child entity (PartneriVerejnehoSektora)")
       return
-    elsif !slovakian_address?(item['Adresa'])
-      Rails.logger.warn("[#{self.class.name}] record Id: #{record['Id']} has a child entity (PartneriVerejnehoSektora) with a non-Slovakian address")
-      return
     elsif item['ObchodneMeno'].nil?
       Rails.logger.warn("[#{self.class.name}] record Id: #{record['Id']} has a child entity (PartneriVerejnehoSektora) with no company name (ObchodneMeno)")
       return
     end
+
+    address = address_string(item['Adresa'])
+    jurisdiction_code = @geocoder_client.jurisdiction(address)
 
     entity = Entity.new(
       identifiers: [
@@ -68,14 +69,14 @@ class SkImporter
         },
       ],
       type: Entity::Types::LEGAL_ENTITY,
-      jurisdiction_code: 'sk',
-      company_number: item['Ico'],
+      jurisdiction_code: jurisdiction_code,
+      company_number: jurisdiction_code == 'sk' ? item['Ico'] : nil,
       name: item['ObchodneMeno'].strip,
-      address: address_string(item['Adresa']),
+      address: address,
     )
     @entity_resolver.resolve!(entity)
 
-    entity.upsert
+    entity.upsert_and_merge_duplicates!
     index_entity(entity)
     entity
   end
@@ -123,10 +124,6 @@ class SkImporter
     relationship = Relationship.new(attributes)
     relationship.upsert
     relationship
-  end
-
-  def slovakian_address?(address)
-    address['Psc'].present? && address['Psc'].strip =~ /^\d{3} ?\d{2}$/
   end
 
   def address_string(address)

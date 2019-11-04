@@ -84,26 +84,23 @@ class PscImporter
         name: data['name'],
       )
 
-      country = data['identification']['country_registered']
+      jurisdiction_code = entity_jurisdiction_code(data['identification']['country_registered'])
 
-      unless country.nil?
-        jurisdiction_code = @opencorporates_client.get_jurisdiction_code(country)
-
-        unless jurisdiction_code.nil?
-          entity.assign_attributes(
-            identifiers: [
-              {
-                'document_id' => import.data_source.document_id,
-                'link' => data['links']['self'],
-                'company_number' => data['identification']['registration_number'],
-              },
-            ],
-            jurisdiction_code: jurisdiction_code,
-            company_number: data['identification']['registration_number'],
-          )
-          @entity_resolver.resolve!(entity)
-        end
+      unless jurisdiction_code.nil?
+        entity.assign_attributes(
+          identifiers: [
+            {
+              'document_id' => import.data_source.document_id,
+              'link' => data['links']['self'],
+              'company_number' => data['identification']['registration_number'],
+            },
+          ],
+          jurisdiction_code: jurisdiction_code,
+          company_number: data['identification']['registration_number'],
+        )
       end
+
+      @entity_resolver.resolve!(entity)
     when 'individual-person-with-significant-control'
       entity.assign_attributes(
         type: Entity::Types::NATURAL_PERSON,
@@ -214,6 +211,12 @@ class PscImporter
     parts << format('%02d', elements['month']) if elements['month']
     parts << format('%02d', elements['day']) if elements['month'] && elements['day']
     ISO8601::Date.new(parts.join('-'))
+  end
+
+  def entity_jurisdiction_code(country)
+    return if country.nil?
+
+    @opencorporates_client.get_jurisdiction_code(country)
   end
 
   def index_entity(entity)
