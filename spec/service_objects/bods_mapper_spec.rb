@@ -594,24 +594,94 @@ RSpec.describe BodsMapper do
       end
 
       context 'when the interests are a Hash' do
-        it 'maps the type from the interest'
-        it "maps values to 'exact' if min == max"
-        it "maps values to min/max separately if min != max"
-        # TODO: BODS imported data will break this hard-coding!
-        it "sets exclusiveMinimum and Maximum to false"
+        before do
+          relationship.interests = [{
+            'type' => 'shareholding',
+            'share_min' => 10,
+            'share_max' => 20,
+          }]
+        end
+
+        it 'maps the type from the interest' do
+          expect(subject[:interests].first[:type]).to eq('shareholding')
+        end
+
+        it "maps values to 'exact' if min == max" do
+          relationship.interests.first['share_min'] = 20
+          expect(subject[:interests].first[:share][:exact]).to eq(20)
+          expect(subject[:interests].first[:share][:minimum]).to eq(20)
+          expect(subject[:interests].first[:share][:maximum]).to eq(20)
+        end
+
+        it "maps values to min/max separately and sets exclusivity if min != max" do
+          expect(subject[:interests].first[:share][:exact]).to be_nil
+          expect(subject[:interests].first[:share][:minimum]).to eq(10)
+          expect(subject[:interests].first[:share][:maximum]).to eq(20)
+          expect(subject[:interests].first[:share][:exclusiveMinimum]).to eq(false)
+          expect(subject[:interests].first[:share][:exclusiveMaximum]).to eq(false)
+        end
       end
 
-      context 'when the interests are a string' do
-        context '25-50% shareholdings'
-        context '50-75% shareholdings'
-        context '75-100% shareholdings'
-        context '25-50% voting rights'
-        context '50-75% voting rights'
-        context '75-100% voting rights'
-        context 'rights to appoint directors'
-        context 'rights to share surplus'
-        context 'significant influence or control'
-        context 'other interest strings'
+      context 'when the interests are a PSC share percentage string' do
+        before do
+          relationship.interests = ['ownership-of-shares-75-to-100-percent']
+        end
+
+        it 'sets the type' do
+          expect(subject[:interests].first[:type]).to eq('shareholding')
+        end
+
+        it 'copies the source string into details' do
+          expect(subject[:interests].first[:details]).to eq('ownership-of-shares-75-to-100-percent')
+        end
+
+        it 'sets the min/max' do
+          expect(subject[:interests].first[:share][:minimum]).to eq(75)
+          expect(subject[:interests].first[:share][:maximum]).to eq(100)
+        end
+
+        it 'sets exclusiveMin/Max' do
+          expect(subject[:interests].first[:share][:exclusiveMinimum]).to eq(false)
+          expect(subject[:interests].first[:share][:exclusiveMaximum]).to eq(false)
+        end
+      end
+
+      context 'when the interests are a PSC voting rights string' do
+        before do
+          relationship.interests = ['voting-rights-50-to-75-percent-as-trust-limited-liability-partnership']
+        end
+
+        it 'sets the type' do
+          expect(subject[:interests].first[:type]).to eq('voting-rights')
+        end
+
+        it 'copies the source string into details' do
+          expect(subject[:interests].first[:details]).to eq('voting-rights-50-to-75-percent-as-trust-limited-liability-partnership')
+        end
+
+        it 'sets the min/max' do
+          expect(subject[:interests].first[:share][:minimum]).to eq(50)
+          expect(subject[:interests].first[:share][:maximum]).to eq(75)
+        end
+
+        it 'sets exclusiveMin/Max' do
+          expect(subject[:interests].first[:share][:exclusiveMinimum]).to eq(true)
+          expect(subject[:interests].first[:share][:exclusiveMaximum]).to eq(true)
+        end
+      end
+
+      context 'when the interests are another kind of control string' do
+        before do
+          relationship.interests = ['right-to-share-surplus-assets-50-to-75-percent-as-firm-limited-liability-partnership']
+        end
+
+        it 'sets the type' do
+          expect(subject[:interests].first[:type]).to eq('rights-to-surplus-assets')
+        end
+
+        it 'copies the source string into details' do
+          expect(subject[:interests].first[:details]).to eq('right-to-share-surplus-assets-50-to-75-percent-as-firm-limited-liability-partnership')
+        end
       end
     end
 

@@ -244,6 +244,8 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
             'type' => 'shareholding',
             'share' => {
               'exact' => 100,
+              'minimum' => 100,
+              'maximum' => 100,
             },
           },
           {

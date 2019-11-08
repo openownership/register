@@ -304,11 +304,16 @@ class BodsMapper
     relationship.interests.map do |i|
       entry = case i
       when Hash
+        if i['exclusive_min'] || i['exclusive_max']
+          Rollbar.error('Exporting interests with exclusivity set will overwrite it to false')
+        end
         {
           type: i['type'],
           share: if i['share_min'] == i['share_max']
                    {
                      exact: i['share_min'],
+                     minimum: i['share_min'],
+                     maximum: i['share_max'],
                    }
                  else
                    {

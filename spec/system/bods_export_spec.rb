@@ -149,6 +149,8 @@ RSpec.describe 'BODS Export' do
               'type' => 'shareholding',
               'share' => {
                 'exact' => 100,
+                'minimum' => 100,
+                'maximum' => 100,
               },
             },
             {
