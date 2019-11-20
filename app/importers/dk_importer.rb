@@ -103,6 +103,7 @@ class DkImporter
         retrieved_at: retrieved_at,
         imported_at: Time.now.utc,
       },
+      is_indirect: relation[:is_indirect],
     }.compact
 
     relationship = Relationship.new(attributes)
@@ -133,6 +134,7 @@ class DkImporter
 
       real_owner_role = nil
       interests = []
+      is_indirect = false
 
       item['organisationer'].each do |o|
         o['medlemsData'].each do |md|
@@ -143,6 +145,7 @@ class DkImporter
               a['vaerdier'].select { |v| v['vaerdi'] == 'Reel ejer' },
             )
             interests = parse_and_build_interests(md['attributter'])
+            is_indirect = indirect?(md['attributter'])
           end
         end
 
@@ -157,6 +160,7 @@ class DkImporter
         end_date: real_owner_role['periode']['gyldigTil'],
         company: item['virksomhed'],
         interests: interests,
+        is_indirect: is_indirect,
       }
     end
   end
@@ -186,6 +190,13 @@ class DkImporter
     end
 
     interests
+  end
+
+  def indirect?(attributes)
+    special_ownership = attributes.find { |a| a['type'] == 'SÆRLIGE_EJERFORHOLD' }
+    return false if special_ownership.blank?
+
+    most_recent(special_ownership['vaerdier'])['vaerdi'] == 'Har indirekte besiddelser'
   end
 
   def build_address(data)

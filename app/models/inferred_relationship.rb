@@ -26,4 +26,10 @@ class InferredRelationship
     relationship = sourced_relationships.detect { |r| r.ended_date.present? } # rubocop:disable Style/CollectionMethods
     relationship.try(:ended_date)
   end
+
+  def is_indirect # rubocop:disable Naming/PredicateName
+    return nil unless sourced_relationships.any?
+
+    sourced_relationships.any?(&:is_indirect)
+  end
 end

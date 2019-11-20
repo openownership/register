@@ -15,6 +15,7 @@ class Relationship
   field :sample_date, type: ISO8601::Date
   field :started_date, type: ISO8601::Date
   field :ended_date, type: ISO8601::Date
+  field :is_indirect, type: Boolean
 
   belongs_to :source, class_name: 'Entity', inverse_of: :_relationships_as_source, touch: true
   belongs_to :target, class_name: 'Entity', inverse_of: :_relationships_as_target, touch: true

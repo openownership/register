@@ -18,6 +18,9 @@
         %span.target
           = @entity.name
         = country_flag(@entity.country)
+        - if relationship.is_indirect
+          .indirect
+            = t("shared.relationship_interests.also_indirect")
         - if ended_date
           .ended_date
             = t("shared.relationship_interests.ended", date: ended_date)
