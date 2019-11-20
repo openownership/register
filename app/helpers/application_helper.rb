@@ -69,16 +69,16 @@ module ApplicationHelper
     PARTIAL_DATE_FORMATS[iso8601_date.atoms.size] % iso8601_date.atoms
   end
 
-  REPORT_INCORRECT_DATA_URL = 'https://docs.google.com/forms/d/18-kex64GHUc_EIRBYOl1oedSthU0UOlllKDZrtarCOk'.freeze
+  REPORT_INCORRECT_DATA_URL = 'https://share.hsforms.com/1it46pw4MTL2L2jaUiepirA3upv4'.freeze
 
   def report_incorrect_data_url
     REPORT_INCORRECT_DATA_URL
   end
 
-  REGISTER_FOR_BULK_DOWNLOAD_URL = 'https://docs.google.com/forms/d/1V5uxFmXPPGGHB2sJsHbuHxzl0INNq_riMtNV-U3swIs'.freeze
+  FEEDBACK_FORM_URL = 'https://share.hsforms.com/1t-W-_8y1REuXNcXWxwTiaQ3upv4'.freeze
 
-  def register_for_bulk_download_url
-    REGISTER_FOR_BULK_DOWNLOAD_URL
+  def feedback_form_url
+    FEEDBACK_FORM_URL
   end
 
   def transliteration_action(should_transliterate)
