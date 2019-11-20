@@ -4,6 +4,10 @@ RSpec.describe EntitiesController do
   describe 'GET #show' do
     let(:entity) { create(:legal_entity) }
 
+    before do
+      Entity.import(force: true, refresh: true)
+    end
+
     it 'sorts owned companies by started_date' do
       first_relationship = create(:relationship, source: entity, started_date: nil)
       second_relationship = create(:relationship, source: entity, started_date: '2019-08-28')
