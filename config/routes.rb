@@ -10,7 +10,6 @@ Rails.application.routes.draw do
     resources :relationships, only: :show, path: ''
   end
   resource :search, only: :show
-  get 'feedback' => 'pages#feedback'
   get 'terms-and-conditions' => 'pages#terms_and_conditions'
   get 'privacy' => 'pages#privacy'
   get 'faq' => 'pages#faq'

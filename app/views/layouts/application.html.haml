@@ -40,8 +40,9 @@
                   %li.nav-item
                     %a.nav-link.external{ href: "https://www.openownership.org/connect-with-us/", target: "_blank" }
                       = t(".nav.connect_with_us")
-                  %li.nav-item{ class: ("active" if current_page?(feedback_path)) }
-                    = link_to t(".nav.feedback"), feedback_path, class: "nav-link"
+                  %li.nav-item
+                    %a.nav-link.external{ href: feedback_form_url, target: "_blank" }
+                      = t(".nav.feedback")
                   .float-md-right.sign-up-nav
                     - if user_signed_in?
                       %li.nav-item
