@@ -20,3 +20,7 @@ Rack::Attack.blocklist("blocked user agents") do |request|
     end
   end
 end
+
+Rack::Attack.throttle("requests by ip", limit: 10, period: 10) do |request|
+  request.ip unless request.path.start_with?('/assets')
+end

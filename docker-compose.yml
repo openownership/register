@@ -36,12 +36,14 @@ services:
     image: memcached:1.5-alpine
     ports:
       - 11211:11211
+    restart: always
 
   mailcatcher:
     image: schickling/mailcatcher
     ports:
       - 1080:1080
       - 1025:1025
+    restart: always
 
 volumes:
   mongodb_data:
