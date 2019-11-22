@@ -30,6 +30,12 @@ end
 #        100 requests in 0.38 days (~250 requests/day)
 (1..5).each do |level|
   Rack::Attack.throttle("ip/#{level}", limit: (20 * level), period: (8**level).seconds) do |req|
-    req.ip unless req.path.start_with?('/assets')
+    req.ip unless asset_path?(req.path)
   end
+end
+
+def asset_path?(path)
+  path.start_with?('/assets') \
+    || path.start_with?('/packs') \
+    || path.start_with?('/favicon')
 end
