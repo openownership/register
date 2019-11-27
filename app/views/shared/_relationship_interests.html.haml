@@ -1,5 +1,8 @@
 .relationship-interests
   %ul.list-unstyled{ id: ("cite-back-#{relationship[:reference_number]}" if relationship[:reference_number]) }
+    - if relationship.is_indirect
+      %li.indirect
+        = t(".indirect")
     - if relationship.started_date
       %li.started_date
         = t(".started", date: relationship.started_date)

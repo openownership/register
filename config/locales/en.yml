@@ -216,6 +216,8 @@ en:
       unknown: Interests unknown
       started: Started on %{date}
       ended: Ended on %{date}
+      indirect: Owned via one or more undisclosed legal entities
+      also_indirect: Also owned via one or more undisclosed legal entities
     search_bar:
       new_search: Search company or name of person
     report_incorrect_data: Report incorrect data

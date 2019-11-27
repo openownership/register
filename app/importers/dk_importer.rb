@@ -103,6 +103,7 @@ class DkImporter
         retrieved_at: retrieved_at,
         imported_at: Time.now.utc,
       },
+      is_indirect: relation[:is_indirect],
     }.compact
 
     relationship = Relationship.new(attributes)
@@ -133,6 +134,7 @@ class DkImporter
 
       real_owner_role = nil
       interests = []
+      is_indirect = false
 
       item['organisationer'].each do |o|
         o['medlemsData'].each do |md|
@@ -143,6 +145,7 @@ class DkImporter
               a['vaerdier'].select { |v| v['vaerdi'] == 'Reel ejer' },
             )
             interests = parse_and_build_interests(md['attributter'])
+            is_indirect = indirect?(md['attributter'])
           end
         end
 
@@ -157,6 +160,7 @@ class DkImporter
         end_date: real_owner_role['periode']['gyldigTil'],
         company: item['virksomhed'],
         interests: interests,
+        is_indirect: is_indirect,
       }
     end
   end
@@ -166,57 +170,33 @@ class DkImporter
 
     attributes.each do |a|
       interest_type = nil
-      interest_share_min = nil
-      interest_share_max = nil
 
       case a['type']
       when 'EJERANDEL_PROCENT'
         interest_type = 'shareholding'
-        percentage_of_shares = most_recent(a['vaerdier'])['vaerdi'].to_f * 100.0
-        interest_share_min, interest_share_max = percentage_range(percentage_of_shares)
       when 'EJERANDEL_STEMMERET_PROCENT'
         interest_type = 'voting-rights'
-        voting_percentage = most_recent(a['vaerdier'])['vaerdi'].to_f * 100.0
-        interest_share_min, interest_share_max = percentage_range(voting_percentage)
       end
 
       next if interest_type.blank?
 
+      share_percentage = most_recent(a['vaerdier'])['vaerdi'].to_f * 100.0
+
       interests << {
         'type' => interest_type,
-        'share_min' => interest_share_min,
-        'share_max' => interest_share_max,
+        'share_min' => share_percentage,
+        'share_max' => share_percentage,
       }
     end
 
     interests
   end
 
-  # From the data source docs:
-  #
-  # Legal owners are recorded in intervals and exhibited with a limit value. The displayed limit values are expressed as follows:
-  #
-  # 0.05:   5-9.99%
-  # 0.1:    10-14.99%
-  # 0.15:   15-19.99%
-  # 0.2:    20-24.99%
-  # 0.25:   25-33.33%
-  # 0.33:   33.34-49.99%
-  # 0.5:    5-66.65%
-  # 0.6667: 66.66-89.99%
-  # 0.9:    90-99.99%
-  # 1.0:    100%
-  def percentage_range(value)
-    return [5.0, 9.99] if value <= 5.0
-    return [10.0, 14.99] if value <= 10.0
-    return [15.0, 19.99] if value <= 15.0
-    return [20.0, 24.99] if value <= 20.0
-    return [25.0, 33.33] if value <= 25.0
-    return [33.34, 49.99] if value <= 33.33
-    return [50.0, 66.65] if value <= 50.0
-    return [66.66, 89.99] if value <= 66.67
-    return [90.0, 99.99] if value <= 90.0
-    return [100.0, 100.0] if value == 100.0
+  def indirect?(attributes)
+    special_ownership = attributes.find { |a| a['type'] == 'SÆRLIGE_EJERFORHOLD' }
+    return false if special_ownership.blank?
+
+    most_recent(special_ownership['vaerdier'])['vaerdi'] == 'Har indirekte besiddelser'
   end
 
   def build_address(data)

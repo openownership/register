@@ -9,6 +9,7 @@ module Submissions
 
     field :started_date, type: ISO8601::Date
     field :ended_date, type: ISO8601::Date
+    field :is_indirect, type: Boolean
 
     field :ownership_of_shares_percentage, type: Float
     field :voting_rights_percentage, type: Float
