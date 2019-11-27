@@ -125,17 +125,19 @@
               via <code>replacesStatements</code> fields. Each update is a
               standalone snapshot of the entire data set, although our
               <code>statementIDs</code> should be consistent where data
-              doesn't change.
+              doesn't change. We include BODS identifiers with the register's
+              internal ID for each entity and person (along with any from the
+              source data and OpenCorporates) to help you de-dupe statements.
             %li
-              We're not reporting identifiers (such as company numbers) where
-              we don't trust them to be official in the original source. This
-              means companies from submissions, third party collected data
-              like the EITI pilot, or companies outside of the source's
-              jurisdiction (e.g. non-UK companies in PSC data) may not have
-              any identifiers.
-            %li
-              Not all sources provide <code>identifiers</code> for people. Where they do,
-              we include them, but often they're missing.
+              Because we try to reconcile every company with OpenCorporates, the
+              data you see may not have actually come from the source. If we can
+              match a company to OpenCorporates we prefer their data because it
+              is normalised, cleaned and derived from more sources than ours. In
+              particular this affects the company name, address, jurisdiction,
+              company number, incorporation date, dissolution date and company
+              type. We're aware of some issues where this causes a loss of data
+              from the source and are working on plans to make the process more
+              granular and transparent.
             %li
               We're not marking what type of <code>address</code> a person's address is,
               as this information is not available in our sources.
