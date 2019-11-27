@@ -218,48 +218,284 @@ RSpec.describe BodsMapper do
     it 'sets the entity name'
 
     describe 'mapping identifiers' do
-      context 'GB PSC' do
-        context 'companies' do
-          it 'sets the scheme to GB-COH and uses the company number for id'
+      it 'adds a register identifier' do
+        expected_url = Rails.application.routes.url_helpers.entity_url(entity)
+        expected_identifier = {
+          schemeName: 'OpenOwnership Register',
+          id: expected_url,
+          uri: expected_url,
+        }
+        expect(subject[:identifiers]).to include(expected_identifier)
+      end
+
+      context 'companies matched to OpenCorporates' do
+        before do
+          entity.identifiers << {
+            'jurisdiction_code' => 'gb',
+            'company_number' => '1234567',
+          }
         end
-        context 'people' do
-          it 'returns nil'
+
+        it 'adds an open corporates identifier' do
+          expected_url = "https://opencorporates.com/companies/gb/1234567"
+          expected_identifier = {
+            schemeName: 'OpenCorporates',
+            id: expected_url,
+            uri: expected_url,
+          }
+          expect(subject[:identifiers]).to include(expected_identifier)
+        end
+
+        context 'companies with multiple OC identifiers' do
+          before do
+            entity.identifiers << {
+              'jurisdiction_code' => 'gb',
+              'company_number' => '1234567-2',
+            }
+          end
+
+          it 'adds an OC identifier for each' do
+            expected_url1 = "https://opencorporates.com/companies/gb/1234567"
+            expected_identifier1 = {
+              schemeName: 'OpenCorporates',
+              id: expected_url1,
+              uri: expected_url1,
+            }
+            expected_url2 = "https://opencorporates.com/companies/gb/1234567-2"
+            expected_identifier2 = {
+              schemeName: 'OpenCorporates',
+              id: expected_url2,
+              uri: expected_url2,
+            }
+            expect(subject[:identifiers]).to include(expected_identifier1)
+            expect(subject[:identifiers]).to include(expected_identifier2)
+          end
         end
       end
 
-      context 'Denmark CVR' do
-        context 'companies' do
-          it 'sets the scheme to DK-CVR and uses the company number for id'
+      context 'Org-Id identifiers' do
+        context 'GB-COH identifiers' do
+          it 'adds a GB-COH identifier for child UK companies from the PSC register' do
+            entity.identifiers = [{
+              'document_id' => 'GB PSC Snapshot',
+              'company_number' => '1234567',
+            }]
+            entity.jurisdiction_code = 'gb'
+            expected_identifier = {
+              scheme: 'GB-COH',
+              schemeName: 'Companies House',
+              id: '1234567',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it 'adds a GB-COH identifier for parent UK companies from the PSC register' do
+            entity.identifiers = [{
+              'document_id' => 'GB PSC Snapshot',
+              'company_number' => '56789',
+              'link' => 'https://example.com/1234567/56789', # Note this doesn't appear in the result
+            }]
+            entity.jurisdiction_code = 'gb'
+            expected_identifier = {
+              scheme: 'GB-COH',
+              schemeName: 'Companies House',
+              id: '56789',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it "doesn't add a GB-COH identifier for non-UK companies from the PSC register" do
+            entity.identifiers = [{
+              'document_id' => 'GB PSC Snapshot',
+              'company_number' => '56789',
+              'link' => 'https://example.com/1234567/56789',
+            }]
+            entity.jurisdiction_code = 'de'
+            non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
+            expect(non_register_identifiers.size).to eq(1)
+            expect(non_register_identifiers.first[:scheme]).to be_nil
+          end
         end
-        context 'people' do
-          it 'sets the scheme to MISC-Denmark CVR and uses the beneficial owner id'
+
+        context 'DK-CVR identifiers' do
+          it 'adds a DK-CVR identifier for DK companies from the CVR register' do
+            entity.identifiers = [{
+              'document_id' => 'Denmark CVR',
+              'company_number' => '1234567',
+            }]
+            entity.jurisdiction_code = 'dk'
+            expected_identifier = {
+              scheme: 'DK-CVR',
+              schemeName: 'Danish Central Business Register',
+              id: '1234567',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it "doesn't add a DK-CVR identifier for non-DK companies from the CVR" do
+            entity.identifiers = [{
+              'document_id' => 'DK CVR',
+              'company_number' => '1234567',
+            }]
+            entity.jurisdiction_code = 'gb'
+            non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
+            expect(non_register_identifiers.size).to eq(1)
+            expect(non_register_identifiers.first[:scheme]).to be_nil
+          end
+        end
+
+        context 'SK-ORSR identifiers' do
+          it 'adds a SK-ORSR identifier for SK companies from the PSP register' do
+            entity.identifiers = [{
+              'document_id' => 'Slovakia PSP Register',
+              'company_number' => '1234567',
+            }]
+            entity.jurisdiction_code = 'sk'
+            expected_identifier = {
+              scheme: 'SK-ORSR',
+              schemeName: 'Ministry of Justice Business Register',
+              id: '1234567',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it "doesn't add a SK-ORSR identifier for non-SK companies from the CVR" do
+            entity.identifiers = [{
+              'document_id' => 'Slovakia PSP Register',
+              'company_number' => '1234567',
+            }]
+            entity.jurisdiction_code = 'gb'
+            non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
+            expect(non_register_identifiers.size).to eq(1)
+            expect(non_register_identifiers.first[:scheme]).to be_nil
+          end
+        end
+
+        context 'UA-EDR identifiers' do
+          it 'adds a UA-EDR identifier for UA companies from the EDR register' do
+            entity.identifiers = [{
+              'document_id' => 'Ukraine EDR',
+              'company_number' => '1234567',
+            }]
+            entity.jurisdiction_code = 'ua'
+            expected_identifier = {
+              scheme: 'UA-EDR',
+              schemeName: 'United State Register',
+              id: '1234567',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it "doesn't add a UA-EDR identifier for non-UA companies from the EDR" do
+            entity.identifiers = [{
+              'document_id' => 'Ukraine EDR',
+              'company_number' => '1234567',
+            }]
+            entity.jurisdiction_code = 'gb'
+            non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
+            expect(non_register_identifiers.size).to eq(1)
+            expect(non_register_identifiers.first[:scheme]).to be_nil
+          end
+        end
+
+        it "doesn't add any Org-Id identifiers for EITI data" do
+          entity.identifiers = [{
+            'document_id' => 'EITI Structured Data - Mauritania',
+            'company_number' => '1234567',
+          }]
+          entity.jurisdiction_code = 'gb'
+          non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
+          expect(non_register_identifiers.size).to eq(1)
+          expect(non_register_identifiers.first[:scheme]).to be_nil
         end
       end
 
-      context 'Slovakia PSP' do
-        context 'companies' do
-          it 'sets the scheme to SK-ORSR and uses the company number for id'
+      context 'less official identifiers' do
+        it 'adds named-scheme identifiers for UK RLEs' do
+          entity.identifiers = [{
+            'document_id' => 'GB PSC Snapshot',
+            'company_number' => '56789',
+            'link' => '/company/56789/persons-with-significant-control/corporate/hijklmn12343',
+          }]
+          entity.jurisdiction_code = 'de'
+          expected_identifier = {
+            schemeName: 'GB PSC Snapshot',
+            id: '/company/56789/persons-with-significant-control/corporate/hijklmn12343',
+          }
+          expect(subject[:identifiers]).to include(expected_identifier)
         end
-        context 'people' do
-          it 'sets the scheme to MISC-Slovakia PSP Register and uses the beneficial owner id'
+
+        it 'adds named-scheme identifiers for foreign companies in SK data' do
+          entity.identifiers = [{
+            'document_id' => 'SK PSP Register',
+            'company_number' => '56789',
+          }]
+          entity.jurisdiction_code = 'gb'
+          expected_identifier = {
+            schemeName: 'SK PSP Register',
+            id: '56789',
+          }
+          expect(subject[:identifiers]).to include(expected_identifier)
+        end
+
+        it 'adds a named scheme identifier for other less-official identifiers' do
+          entity.identifiers = [{
+            'document_id' => 'EITI Structured Data - Mauritania',
+            'company_number' => '1234567',
+          }]
+          entity.jurisdiction_code = 'gb'
+          expected_identifier = {
+            schemeName: 'EITI Structured Data - Mauritania',
+            id: '1234567',
+          }
+          expect(subject[:identifiers]).to include(expected_identifier)
         end
       end
 
-      context 'Ukraine EDR' do
-        context 'companies' do
-          it 'sets the scheme to UA-EDR and uses the company number for id'
+      context 'companies from BODS data' do
+        let(:identifiers) do
+          [
+            {
+              'document_id' => 'BODS Example Import',
+              'statement_id' => '1234567abcdefg',
+            },
+            {
+              'scheme' => 'GB-COH',
+              'scheme_name' => 'Companies House',
+              'id' => '1234567',
+            },
+            {
+              'scheme_name' => 'Some other scheme',
+              'id' => '1234567',
+              'uri' => 'https://example.com/1234567',
+            },
+          ]
         end
-        context 'people' do
-          it 'returns nil'
+
+        before { entity.identifiers = identifiers }
+
+        it 'maps the document_id and statement_id to a new identifier' do
+          expected_identifier = {
+            schemeName: 'BODS Example Import',
+            id: '1234567abcdefg',
+          }
+          expect(subject[:identifiers]).to include(expected_identifier)
         end
-      end
 
-      context 'EITI' do
-        it 'returns nil for both companies and people'
-      end
-
-      context 'other sources' do
-        it 'returns nil for both companies and people'
+        it 'passes through other identifiers as they are' do
+          expected_identifier1 = {
+            scheme: 'GB-COH',
+            schemeName: 'Companies House',
+            id: '1234567',
+          }
+          expected_identifier2 = {
+            schemeName: 'Some other scheme',
+            id: '1234567',
+            uri: 'https://example.com/1234567',
+          }
+          expect(subject[:identifiers]).to include(expected_identifier1)
+          expect(subject[:identifiers]).to include(expected_identifier2)
+        end
       end
     end
 
@@ -298,6 +534,10 @@ RSpec.describe BodsMapper do
   end
 
   describe "#person_statement" do
+    let(:person) { create(:natural_person) }
+
+    subject { BodsMapper.new.person_statement(person) }
+
     context 'when the person is a known person' do
       it "gives the statement an id"
       it 'sets statementDate to nil'
@@ -320,6 +560,153 @@ RSpec.describe BodsMapper do
           end
           it 'maps to the ISO3166 code if the country_of_residence can be found as a name'
           it 'maps to the ISO3166 code if the country_of_residence can be found as a 3 digit code'
+        end
+      end
+
+      describe 'mapping identifiers' do
+        it 'adds a register identifier' do
+          expected_url = Rails.application.routes.url_helpers.entity_url(person)
+          expected_identifier = {
+            schemeName: 'OpenOwnership Register',
+            id: expected_url,
+            uri: expected_url,
+          }
+          expect(subject[:identifiers]).to include(expected_identifier)
+        end
+
+        it 'adds historical identifiers for DK people to maintain compatibility' do
+          person.identifiers = [{
+            'document_id' => 'Denmark CVR',
+            'beneficial_owner_id' => '1234567',
+          }]
+          expected_identifier = {
+            scheme: 'MISC-Denmark CVR',
+            schemeName: 'Not a valid Org-Id scheme, provided for backwards compatibility',
+            id: '1234567',
+          }
+          expect(subject[:identifiers]).to include(expected_identifier)
+        end
+
+        it 'adds historical identifiers for SK people to maintain compatibility' do
+          person.identifiers = [{
+            'document_id' => 'Slovakia PSP Register',
+            'beneficial_owner_id' => '1234567',
+          }]
+          expected_identifier = {
+            scheme: 'MISC-Slovakia PSP Register',
+            schemeName: 'Not a valid Org-Id scheme, provided for backwards compatibility',
+            id: '1234567',
+          }
+          expect(subject[:identifiers]).to include(expected_identifier)
+        end
+
+        context 'less official identifiers' do
+          it 'adds a beneficial owner id for people from DK data' do
+            person.identifiers = [{
+              'document_id' => 'Denmark CVR',
+              'beneficial_owner_id' => '1234567',
+            }]
+            expected_identifier = {
+              schemeName: 'Denmark CVR',
+              id: '1234567',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it 'adds a beneficial owner id for people from SK data' do
+            person.identifiers = [{
+              'document_id' => 'Slovakia PSP Register',
+              'beneficial_owner_id' => '1234567',
+            }]
+            expected_identifier = {
+              schemeName: 'Slovakia PSP Register',
+              id: '1234567',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it 'add a composite name/company_number id for people from UA data' do
+            person.identifiers = [{
+              'document_id' => 'Ukraine EDR',
+              'company_number' => '1234567',
+              'name' => 'Test Person',
+            }]
+            expected_identifier = {
+              schemeName: 'Ukraine EDR',
+              id: '1234567-Test Person',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it 'adds a self link id for people from PSC data' do
+            person.identifiers = [{
+              'document_id' => 'GB PSC Snapshot',
+              'link' => '/company/0123456/persons-with-significant-control/individual/hijklmn12343',
+            }]
+            expected_identifier = {
+              schemeName: 'GB PSC Snapshot',
+              id: '/company/0123456/persons-with-significant-control/individual/hijklmn12343',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it 'adds a named scheme identifier for other less-official identifiers' do
+            person.identifiers = [{
+              'document_id' => 'EITI Structured Data - Madagascar',
+              'name' => 'Test Person',
+            }]
+            expected_identifier = {
+              schemeName: 'EITI Structured Data - Madagascar',
+              id: 'Test Person',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+        end
+
+        context 'people from BODS data' do
+          let(:identifiers) do
+            [
+              {
+                'document_id' => 'BODS Example Import',
+                'statement_id' => '1234567abcdefg',
+              },
+              {
+                'scheme' => 'GB-COH',
+                'scheme_name' => 'Companies House',
+                'id' => '1234567',
+              },
+              {
+                'scheme_name' => 'Some other scheme',
+                'id' => '1234567',
+                'uri' => 'https://example.com/1234567',
+              },
+            ]
+          end
+
+          before { person.identifiers = identifiers }
+
+          it 'maps the document_id and statement_id to a new identifier' do
+            expected_identifier = {
+              schemeName: 'BODS Example Import',
+              id: '1234567abcdefg',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier)
+          end
+
+          it 'passes through other identifiers as they are' do
+            expected_identifier1 = {
+              scheme: 'GB-COH',
+              schemeName: 'Companies House',
+              id: '1234567',
+            }
+            expected_identifier2 = {
+              schemeName: 'Some other scheme',
+              id: '1234567',
+              uri: 'https://example.com/1234567',
+            }
+            expect(subject[:identifiers]).to include(expected_identifier1)
+            expect(subject[:identifiers]).to include(expected_identifier2)
+          end
         end
       end
     end

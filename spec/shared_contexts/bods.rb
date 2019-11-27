@@ -13,7 +13,11 @@ RSpec.shared_context 'BODS: basic entity with one owner' do
         'statementType' => 'entityStatement',
         'entityType' => 'registeredEntity',
         'name' => company.name,
-        'identifiers' => [],
+        'identifiers' => [{
+          'schemeName' => 'OpenOwnership Register',
+          'id' => Rails.application.routes.url_helpers.entity_url(company),
+          'uri' => Rails.application.routes.url_helpers.entity_url(company),
+        }],
         'foundingDate' => 10.years.ago.to_date.iso8601,
         'incorporatedInJurisdiction' => {
           'name' => 'United Kingdom of Great Britain and Northern Ireland',
@@ -28,7 +32,11 @@ RSpec.shared_context 'BODS: basic entity with one owner' do
           'type' => 'individual',
           'fullName' => person.name,
         ],
-        'identifiers' => [],
+        'identifiers' => [{
+          'schemeName' => 'OpenOwnership Register',
+          'id' => Rails.application.routes.url_helpers.entity_url(person),
+          'uri' => Rails.application.routes.url_helpers.entity_url(person),
+        }],
         'nationalities' => [
           {
             'name' => 'United Kingdom of Great Britain and Northern Ireland',
@@ -183,9 +191,25 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         'name' => legal_entity_2.name,
         'identifiers' => [
           {
+            'schemeName' => 'OpenCorporates',
+            'id' => 'https://opencorporates.com/companies/dk/67890',
+            'uri' => 'https://opencorporates.com/companies/dk/67890',
+          },
+          {
             'scheme' => 'DK-CVR',
+            'schemeName' => 'Danish Central Business Register',
             'id' => '67890',
           },
+          {
+            'schemeName' => 'GB PSC Snapshot',
+            'id' => 'fooo',
+          },
+          {
+            'schemeName' => 'OpenOwnership Register',
+            'id' => Rails.application.routes.url_helpers.entity_url(legal_entity_2),
+            'uri' => Rails.application.routes.url_helpers.entity_url(legal_entity_2),
+          },
+
         ],
         'foundingDate' => 2.months.ago.to_date.iso8601,
         'dissolutionDate' => 1.month.ago.to_date.iso8601,
@@ -211,8 +235,18 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         ],
         'identifiers' => [
           {
-            'scheme' => 'MISC-Denmark CVR',
+            'schemeName' => 'Denmark CVR',
             'id' => 'P123456',
+          },
+          {
+            'scheme' => 'MISC-Denmark CVR',
+            'schemeName' => 'Not a valid Org-Id scheme, provided for backwards compatibility',
+            'id' => 'P123456',
+          },
+          {
+            'schemeName' => 'OpenOwnership Register',
+            'id' => Rails.application.routes.url_helpers.entity_url(natural_person),
+            'uri' => Rails.application.routes.url_helpers.entity_url(natural_person),
           },
         ],
         'nationalities' => [
@@ -276,8 +310,19 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         'name' => legal_entity_1.name,
         'identifiers' => [
           {
+            'schemeName' => 'OpenCorporates',
+            'id' => 'https://opencorporates.com/companies/gb/12345',
+            'uri' => 'https://opencorporates.com/companies/gb/12345',
+          },
+          {
             'scheme' => 'GB-COH',
+            'schemeName' => 'Companies House',
             'id' => '12345',
+          },
+          {
+            'schemeName' => 'OpenOwnership Register',
+            'id' => Rails.application.routes.url_helpers.entity_url(legal_entity_1),
+            'uri' => Rails.application.routes.url_helpers.entity_url(legal_entity_1),
           },
         ],
         'foundingDate' => 2.months.ago.to_date.iso8601,
@@ -361,7 +406,13 @@ RSpec.shared_context 'BODS: company with no relationships' do
         "statementType" => "entityStatement",
         "entityType" => "registeredEntity",
         "foundingDate" => 10.years.ago.to_date.iso8601,
-        "identifiers" => [],
+        "identifiers" => [
+          {
+            'schemeName' => 'OpenOwnership Register',
+            'id' => Rails.application.routes.url_helpers.entity_url(company),
+            'uri' => Rails.application.routes.url_helpers.entity_url(company),
+          },
+        ],
         "name" => company.name,
         'incorporatedInJurisdiction' => {
           'name' => 'United Kingdom of Great Britain and Northern Ireland',
@@ -403,7 +454,13 @@ RSpec.shared_context 'BODS: company that declares an unknown owner' do
         "statementType" => "entityStatement",
         "entityType" => "registeredEntity",
         "foundingDate" => 10.years.ago.to_date.iso8601,
-        "identifiers" => [],
+        "identifiers" => [
+          {
+            'schemeName' => 'OpenOwnership Register',
+            'id' => Rails.application.routes.url_helpers.entity_url(company),
+            'uri' => Rails.application.routes.url_helpers.entity_url(company),
+          },
+        ],
         "name" => company.name,
         'incorporatedInJurisdiction' => {
           'name' => 'United Kingdom of Great Britain and Northern Ireland',

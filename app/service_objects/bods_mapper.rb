@@ -32,6 +32,26 @@ class BodsMapper
 
   ID_PREFIX = 'openownership-register-'.freeze
 
+  # See: https://org-id.guide
+  # The keys are jurisdiction_code-document_id => [org-id scheme code, org-id scheme name]
+  # We use a combined key because we only trust sources to have valid ids for
+  # their own local companies, e.g. GB companies from the PSC register, we don't
+  # declare 'official' identifiers from unofficial sources.
+  LEGAL_ENTITY_ORG_ID_SCHEMES = {
+    'gb-GB PSC Snapshot' => ['GB-COH', 'Companies House'],
+    'dk-Denmark CVR' => ['DK-CVR', 'Danish Central Business Register'],
+    'sk-Slovakia PSP Register' => ['SK-ORSR', 'Ministry of Justice Business Register'],
+    'ua-Ukraine EDR' => ['UA-EDR', 'United State Register'],
+  }.freeze
+
+  # These do not conform to the BODS schema for natural persons, but we've
+  # released data with them, so for compatibility we continue to include them.
+  # Format: document_id => scheme code
+  HISTORICAL_PERSON_ID_SCHEMES = {
+    'Denmark CVR' => 'MISC-Denmark CVR',
+    'Slovakia PSP Register' => 'MISC-Slovakia PSP Register',
+  }.freeze
+
   def statement_id(obj)
     case obj
     when Entity
@@ -152,54 +172,99 @@ class BodsMapper
   end
 
   def map_identifiers(entity)
-    entity.identifiers.map do |i|
-      case i['document_id']
-      when 'GB PSC Snapshot'
-        if entity.legal_entity?
-          if i.key?('company_number') && !i.key?('link')
-            {
-              scheme: 'GB-COH',
-              id: i['company_number'],
-            }
-          end
-        elsif entity.natural_person?
-          nil # No unique identifier for people from this data source
-        end
-      when 'Denmark CVR'
-        if entity.legal_entity?
-          {
-            scheme: 'DK-CVR',
-            id: i['company_number'],
-          }
-        elsif entity.natural_person?
-          {
-            scheme: 'MISC-Denmark CVR',
-            id: i['beneficial_owner_id'],
-          }
-        end
-      when 'Slovakia PSP Register'
-        if entity.legal_entity?
-          {
-            scheme: 'SK-ORSR',
-            id: i['company_number'],
-          }
-        elsif entity.natural_person?
-          {
-            scheme: 'MISC-Slovakia PSP Register',
-            id: i['beneficial_owner_id'],
-          }
-        end
-      when 'Ukraine EDR'
-        if entity.legal_entity?
-          {
-            scheme: 'UA-EDR',
-            id: i['company_number'],
-          }
-        elsif entity.natural_person?
-          nil # No unique identifier for people from this data source
-        end
+    identifiers = entity.identifiers.flat_map do |identifier|
+      next opencorporates_identifier(identifier) if entity.oc_identifier? identifier
+
+      scheme, scheme_name = identifier_scheme(identifier, entity)
+      scheme_name = identifier_scheme_name(identifier) if scheme.blank?
+
+      next if scheme.blank? && scheme_name.blank?
+
+      bods_identifiers = [
+        {
+          scheme: scheme,
+          schemeName: scheme_name,
+          id: identifier_id(identifier, entity, scheme).presence,
+          uri: identifier['uri'],
+        }.compact,
+      ]
+
+      # These do not conform to the BODS schema, but we've released data with
+      # them, so for compatibility we continue to include them.
+      if entity.natural_person? && HISTORICAL_PERSON_ID_SCHEMES.key?(identifier['document_id'])
+        bods_identifiers << {
+          scheme: HISTORICAL_PERSON_ID_SCHEMES[identifier['document_id']],
+          schemeName: 'Not a valid Org-Id scheme, provided for backwards compatibility',
+          id: identifier['beneficial_owner_id'],
+        }
       end
-    end.compact
+
+      bods_identifiers
+    end
+    identifiers << register_identifier(entity)
+    identifiers.compact
+  end
+
+  def identifier_scheme(identifier, entity)
+    return [identifier['scheme'], identifier['scheme_name']] if identifier['scheme']
+
+    return unless entity.legal_entity?
+
+    key = "#{entity.jurisdiction_code}-#{identifier['document_id']}"
+    LEGAL_ENTITY_ORG_ID_SCHEMES[key]
+  end
+
+  def identifier_scheme_name(identifier)
+    return identifier['scheme_name'] if identifier['scheme_name']
+
+    identifier['document_id']
+  end
+
+  def identifier_id(identifier, entity, scheme)
+    # Pass through existing BODS ids
+    return identifier['id'] if identifier['id']
+    # Return OC uris for OC identifiers
+    return identifier_uri(identifier, entity) if entity.oc_identifier? identifier
+    # If we've got a scheme, we're an official identifier so only need a single
+    # value from one of these fields
+    return identifier['company_number'] || identifier['beneficial_owner_id'] if scheme
+
+    # This is a standalone identifier, there's no need to combine it, but we
+    # didn't always trust it, so our internal identifiers have a company_number
+    # too.
+    return identifier['link'] if identifier['link']
+    # These are a always unique on their owner
+    return identifier['statement_id'] if identifier['statement_id']
+
+    # These remaining ones (if not caught above) have to be combined with each
+    # other to make things fully unique. This applies to UA and EITI data.
+    id_parts = [
+      identifier['company_number'],
+      identifier['beneficial_owner_id'],
+      identifier['name'],
+    ].compact
+
+    id_parts.join('-')
+  end
+
+  def opencorporates_identifier(identifier)
+    jurisdiction = identifier['jurisdiction_code']
+    number = identifier['company_number']
+    oc_url = "https://opencorporates.com/companies/#{jurisdiction}/#{number}"
+    {
+      schemeName: "OpenCorporates",
+      id: oc_url,
+      uri: oc_url,
+    }
+  end
+
+  def register_identifier(entity)
+    url = Rails.application.routes.url_helpers.entity_url(entity)
+    {
+      schemeName: 'OpenOwnership Register',
+      id: url,
+      uri: url,
+    }
   end
 
   def es_entity_type(_legal_entity)
