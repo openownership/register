@@ -363,8 +363,8 @@ RSpec.describe BodsMapper do
         end
       end
 
-      it "maps the missingInfoReason to the unknown person's name" do
-        expect(subject[:missingInfoReason]).to eq unknown_person.name
+      it "maps the missingInfoReason to the unknown person's unknown_reason" do
+        expect(subject[:missingInfoReason]).to eq unknown_person.unknown_reason
       end
 
       it 'maps other fields to nil or empty lists as appropriate' do
@@ -485,7 +485,7 @@ RSpec.describe BodsMapper do
         it "maps the interestedParty to an unspecified relationship" do
           expected = {
             unspecified: {
-              description: 'unknown',
+              description: 'Unknown person(s)',
               reason: 'unknown',
             },
           }

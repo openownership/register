@@ -377,7 +377,7 @@ RSpec.shared_context 'BODS: company with no relationships' do
         "interestedParty" => {
           "unspecified" => {
             "reason" => "unknown",
-            "description" => "unknown",
+            "description" => "Unknown person(s)",
           },
         },
         "interests" => [],

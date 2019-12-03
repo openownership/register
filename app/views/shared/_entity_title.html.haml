@@ -3,7 +3,10 @@
     = entity_link(entity) do
       %span.flag-wrap
         = country_flag(entity.country)
-      = entity_name_or_tooltip(entity, :right)
+      = entity.name
+      - if entity.respond_to?(:unknown_reason) && entity.unknown_reason
+        %span.entity-unknown-reason
+          = entity.unknown_reason
       - if entity.natural_person?
         .type-icon.natural-person
           = image_tag "icon-natural-person.svg"

@@ -3,33 +3,6 @@ require 'rails_helper'
 RSpec.describe EntityHelper do
   let(:entity) { Entity.new }
 
-  describe '#entity_name_or_tooltip' do
-    subject { helper.entity_name_or_tooltip(entity, :top) }
-
-    context "when entity is a normal entity" do
-      before { entity.name = "name" }
-
-      it 'returns the entity name' do
-        expect(subject).to eq("name")
-      end
-    end
-
-    context "when entity is a unknown persons entity" do
-      let(:company) { create(:legal_entity) }
-      let(:entity) { UnknownPersonsEntity.new_for_entity(company) }
-
-      it "returns a tooltip" do
-        expect(helper).to receive(:tooltip).with(
-          content_tag(:span, "Unknown", class: "unknown"),
-          'unknown',
-          anything,
-        ).and_return(:tooltip)
-
-        expect(subject).to eq(:tooltip)
-      end
-    end
-  end
-
   describe '#entity_link' do
     subject do
       helper.entity_link(entity) do
@@ -54,36 +27,22 @@ RSpec.describe EntityHelper do
     end
 
     context 'when entity is a unknown persons entity' do
-      let(:tooltip) { content_tag(:span, label, class: 'unknown') }
+      let(:entity) { UnknownPersonsEntity.new(id: 1234) }
 
-      before { allow(helper).to receive(:tooltip) }
+      it 'returns just the label' do
+        expect(subject).to eq("label")
+      end
+    end
 
-      context 'when no PSC' do
-        let(:statement) do
-          create(
-            :statement,
-            type: 'no-individual-or-entity-with-signficant-control',
-          )
-        end
-        let(:label) { 'No person' }
-        let(:entity) { UnknownPersonsEntity.new_for_statement(statement) }
+    context 'when the entity has a master entity' do
+      let(:master_entity) { Entity.new }
 
-        it 'returns "No person" with tooltip' do
-          subject
-          expect(helper).to have_received(:tooltip).with(tooltip, entity.name, :top)
-        end
+      before do
+        entity.master_entity = master_entity
       end
 
-      context 'when unknown PSC' do
-        let(:id) { 1234 }
-        let(:label) { 'Unknown' }
-        let(:company) { create(:legal_entity) }
-        let(:entity) { UnknownPersonsEntity.new_for_entity(company) }
-
-        it 'returns "Unknown" with tooltip' do
-          subject
-          expect(helper).to have_received(:tooltip).with(tooltip, 'unknown', :top)
-        end
+      it 'returns just the label' do
+        expect(subject).to eq("label")
       end
     end
   end
