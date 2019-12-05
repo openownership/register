@@ -419,7 +419,7 @@ RSpec.describe BodsMapper do
           }]
           entity.jurisdiction_code = 'de'
           expected_identifier = {
-            schemeName: 'GB PSC Snapshot',
+            schemeName: 'GB Persons Of Significant Control Register',
             id: '/company/56789/persons-with-significant-control/corporate/hijklmn12343',
           }
           expect(subject[:identifiers]).to include(expected_identifier)
@@ -427,12 +427,12 @@ RSpec.describe BodsMapper do
 
         it 'adds named-scheme identifiers for foreign companies in SK data' do
           entity.identifiers = [{
-            'document_id' => 'SK PSP Register',
+            'document_id' => 'SK Register Partnerov Verejného Sektora',
             'company_number' => '56789',
           }]
           entity.jurisdiction_code = 'gb'
           expected_identifier = {
-            schemeName: 'SK PSP Register',
+            schemeName: 'SK Register Partnerov Verejného Sektora',
             id: '56789',
           }
           expect(subject[:identifiers]).to include(expected_identifier)
@@ -445,7 +445,7 @@ RSpec.describe BodsMapper do
           }]
           entity.jurisdiction_code = 'gb'
           expected_identifier = {
-            schemeName: 'EITI Structured Data - Mauritania',
+            schemeName: 'MR EITI 2013-2015 beneficial ownership pilot',
             id: '1234567',
           }
           expect(subject[:identifiers]).to include(expected_identifier)
@@ -607,7 +607,7 @@ RSpec.describe BodsMapper do
               'beneficial_owner_id' => '1234567',
             }]
             expected_identifier = {
-              schemeName: 'Denmark CVR',
+              schemeName: 'DK Centrale Virksomhedsregister',
               id: '1234567',
             }
             expect(subject[:identifiers]).to include(expected_identifier)
@@ -619,7 +619,7 @@ RSpec.describe BodsMapper do
               'beneficial_owner_id' => '1234567',
             }]
             expected_identifier = {
-              schemeName: 'Slovakia PSP Register',
+              schemeName: 'SK Register Partnerov Verejného Sektora',
               id: '1234567',
             }
             expect(subject[:identifiers]).to include(expected_identifier)
@@ -632,7 +632,7 @@ RSpec.describe BodsMapper do
               'name' => 'Test Person',
             }]
             expected_identifier = {
-              schemeName: 'Ukraine EDR',
+              schemeName: 'UA Edinyy Derzhavnyj Reestr',
               id: '1234567-Test Person',
             }
             expect(subject[:identifiers]).to include(expected_identifier)
@@ -644,7 +644,7 @@ RSpec.describe BodsMapper do
               'link' => '/company/0123456/persons-with-significant-control/individual/hijklmn12343',
             }]
             expected_identifier = {
-              schemeName: 'GB PSC Snapshot',
+              schemeName: 'GB Persons Of Significant Control Register',
               id: '/company/0123456/persons-with-significant-control/individual/hijklmn12343',
             }
             expect(subject[:identifiers]).to include(expected_identifier)
@@ -656,7 +656,7 @@ RSpec.describe BodsMapper do
               'name' => 'Test Person',
             }]
             expected_identifier = {
-              schemeName: 'EITI Structured Data - Madagascar',
+              schemeName: 'MG EITI 2013-2015 beneficial ownership pilot',
               id: 'Test Person',
             }
             expect(subject[:identifiers]).to include(expected_identifier)
@@ -904,7 +904,7 @@ RSpec.describe BodsMapper do
           end
 
           it "maps description to the source_name" do
-            expect(subject[:source][:description]).to eq('UK PSC Register')
+            expect(subject[:source][:description]).to eq('GB Persons Of Significant Control Register')
           end
 
           it "maps url to the url" do
@@ -919,7 +919,7 @@ RSpec.describe BodsMapper do
 
       context 'when the relationship has RawDataProvenances' do
         let(:data_source) do
-          create(:data_source, name: 'Example', document_id: 'Example')
+          create(:data_source, name: 'UK PSC Register', document_id: 'Example')
         end
 
         let(:import) do
@@ -942,8 +942,8 @@ RSpec.describe BodsMapper do
           expect(subject[:source][:type]).to match_array(['officialRegister'])
         end
 
-        it "maps description to the data source's name" do
-          expect(subject[:source][:description]).to eq 'Example'
+        it "maps description to the data source's name via our mapping" do
+          expect(subject[:source][:description]).to eq 'GB Persons Of Significant Control Register'
         end
 
         it "maps url to the data source's url" do

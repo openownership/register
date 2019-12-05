@@ -201,7 +201,7 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
             'id' => '67890',
           },
           {
-            'schemeName' => 'GB PSC Snapshot',
+            'schemeName' => 'GB Persons Of Significant Control Register',
             'id' => 'fooo',
           },
           {
@@ -235,7 +235,7 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         ],
         'identifiers' => [
           {
-            'schemeName' => 'Denmark CVR',
+            'schemeName' => 'DK Centrale Virksomhedsregister',
             'id' => 'P123456',
           },
           {
@@ -298,7 +298,7 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         ],
         'source' => {
           'type' => ['officialRegister'],
-          'description' => 'Denmark Central Business Register (Centrale Virksomhedsregister [CVR])',
+          'description' => 'DK Centrale Virksomhedsregister',
           'url' => 'http://www.example.com',
           'retrievedAt' => retrieved_at.iso8601,
         },
@@ -381,7 +381,7 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         ],
         'source' => {
           'type' => ['officialRegister'],
-          'description' => 'UK PSC Register',
+          'description' => 'GB Persons Of Significant Control Register',
           'url' => 'http://www.example.com',
           'retrievedAt' => retrieved_at.iso8601,
         },
