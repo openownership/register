@@ -12,7 +12,7 @@ class PagesController < ApplicationController
 
   def example_entity
     {
-      "statementID": "1dc0e987-5c57-4a1c-b3ad-61353b66a9b7",
+      "statementID": "openownership-register-123456789",
       "statementType": "entityStatement",
       "entityType": "registeredEntity",
       "name": "EXAMPLE LTD",
@@ -20,7 +20,22 @@ class PagesController < ApplicationController
       "identifiers": [
         {
           "scheme": "GB-COH",
+          "schemeName": "Companies House",
           "id": "0123456",
+        },
+        {
+          "schemeName": "GB Persons Of Significant Control Register",
+          "id": "0123456",
+        },
+        {
+          "schemeName": "OpenOwnership Register",
+          "id": "https://register.openownership.org/entities/abcdefg12345",
+          "uri": "https://register.openownership.org/entities/abcdefg12345",
+        },
+        {
+          "schemeName": "OpenCorporates",
+          "id": "https://opencorporates.com/companies/gb/0123456",
+          "uri": "https://opencorporates.com/companies/gb/0123456",
         },
       ],
       "incorporatedInJurisdiction": {
@@ -39,10 +54,21 @@ class PagesController < ApplicationController
 
   def example_person
     {
-      "statementID": "019a93f1-e470-42e9-957b-03559861b2e2",
+      "statementID": "0openownership-register-91011121314",
       "statementType": "personStatement",
       "statementDate": "2019-10-01",
       "personType": "knownPerson",
+      "identifiers": [
+        {
+          "schemeName": "GB Persons Of Significant Control Register",
+          "id": "/company/0123456/persons-with-significant-control/individual/hijklmn12343",
+        },
+        {
+          "schemeName": "OpenOwnership Register",
+          "id": "https://register.openownership.org/entities/abcdefg678910",
+          "uri": "https://register.openownership.org/entities/abcdefg678910",
+        },
+      ],
       "nationalities": [
         {
           "code": "GB",
@@ -67,14 +93,14 @@ class PagesController < ApplicationController
 
   def example_ownership
     {
-      "statementID": "fbfd0547-d0c6-4a00-b559-5c5e91c34f5c",
+      "statementID": "openownership-register-1516171819",
       "statementType": "ownershipOrControlStatement",
       "statementDate": "2019-10-01",
       "subject": {
-        "describedByEntityStatement": "1dc0e987-5c57-4a1c-b3ad-61353b66a9b7",
+        "describedByEntityStatement": "openownership-register-123456789",
       },
       "interestedParty": {
-        "describedByPersonStatement": "019a93f1-e470-42e9-957b-03559861b2e2",
+        "describedByPersonStatement": "openownership-register-91011121314",
       },
       "interests": [
         {
