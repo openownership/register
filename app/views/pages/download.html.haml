@@ -20,6 +20,7 @@
               %ul
                 %li <a href="#format">Format & Structure</a>
                 %li <a href="#examples">Example data</a>
+                %li <a href="#identifiers">Identifying and linking entities</a>
             %li <a href="#license">License</a>
             %li <a href="#further-information">Further information</a>
 
@@ -38,7 +39,7 @@
             %li <a href="/data_sources/dk-cvr-register">Denmark Central Business Register (CVR)</a> (regularly updated)
             %li <a href="/data_sources/sk-rpvs-register">Slovakia Public Sector Partners Register</a> (regularly updated)
             %li <a href="/data_sources/ua-edr-register">Ukraine Unified States Register (EDR)</a> (regularly updated)
-            %li <a href="https://eiti.org/">EITI</a> pilot data (one off snapshot from Autumn 2017, with data collected 2014-17)
+            %li <a href="https://eiti.org/">EITI</a> pilot data (data collected 2013-15)
             %li User submitted data
           %p
             <strong>The raw data from each of these sources has been imported, the
@@ -50,7 +51,7 @@
             collect company name changes, dissolutions, etc.
           %p
             <strong>The data is formatted in version 0.1 of
-            <a href="https://standard.openownership.org">OpenOwnership's
+            <a href="https://standard.openownership.org/en/v0-1">OpenOwnership's
             Beneficial Ownership Data Standard</a></strong>. All source data has been
             standardised on export, attempting to keep as much source-specific
             information as possible, but prioritising consistency across
@@ -125,17 +126,19 @@
               via <code>replacesStatements</code> fields. Each update is a
               standalone snapshot of the entire data set, although our
               <code>statementIDs</code> should be consistent where data
-              doesn't change. We include BODS identifiers with the register's
-              internal ID for each entity and person (along with any from the
-              source data and OpenCorporates) to help you de-dupe statements.
+              doesn't change. See our documentation on <a href="#identifiers">
+              identifiers</a> for more information on the ways you can link data
+              across releases.
             %li
               Because we try to reconcile every company with OpenCorporates, the
               data you see may not have actually come from the source. If we can
               match a company to OpenCorporates we prefer their data because it
               is normalised, cleaned and derived from more sources than ours. In
-              particular this affects the company name, address, jurisdiction,
-              company number, incorporation date, dissolution date and company
-              type. We're aware of some issues where this causes a loss of data
+              particular this affects the <code>company name</code>,
+              <code>address</code>, <code>jurisdiction</code>,
+              <code>company number</code>, <code>incorporation date</code>,
+              <code>dissolution date</code> and <code>company type</code>.
+              We're aware of some issues where this causes a loss of data
               from the source and are working on plans to make the process more
               granular and transparent.
             %li
@@ -153,7 +156,7 @@
               This is because of how, historically, the register has stored
               provenance information, but we're working on it.
             %li
-              We don't set <code>statementDate</code>, because we don't have a
+              We don't set <code>statementDate</code>, because we don't have
               dates available across our sources that is consistent with BODS'
               meaning of this field. We need to do more work to understand when
               we can report this accurately.
@@ -203,6 +206,124 @@
           .card
             .card-block
               = @example_ownership
+          %h3{ id: 'identifiers' } Identifying and linking entities
+          %p
+            The primary identifier in BODS is the <code>statementID</code>. This uniquely
+            identifies a particular statement about a person, legal entity or
+            relationship between them. Every time details about one of those
+            things changes, a new statement is needed, which has a new id.
+            With our current data, we are only providing a 'snapshot', i.e.
+            the most recent set of statements, but you may want to link these
+            statements to older releases to see what changes. You may also want
+            to link our data to other datasets that have company numbers or
+            other identifiers in them. You may even want to link your project
+            back to us (which would be very nice, thank you!).
+          %p
+            The <code>identifiers</code> field is the way you can do all of these
+            things.
+          %p
+            The <a href="http://standard.openownership.org/en/v0-1/schema/reference.html#schema-identifier">
+            BODS schema</a> allows for an array of identifiers to help users of
+            the data link people and companies to other data sources. We make
+            use of this feature to provide several of our own identifiers as well
+            as transferring as much information from the original source data as
+            we can, so that you can link the records back to their original
+            data.
+          %p
+            Here are some examples of identifiers you might see and an
+            explanation of how to interpret them:
+          %p
+            %strong An official identifier using an Org-Id scheme
+          .card
+            .card-block
+              = @example_official_identifier
+          %p
+            We will give these identifiers when we're sure that the id we have is
+            from the <a href="http://org-id.guide">Org-Id.guide</a>
+            <code>scheme</code> given. For example, we'll give
+            company numbers under the <code>GB-COH</code> scheme for
+            companies declaring their beneficial owners in the Companies House
+            Persons of Significant Control register. However, we won't use it for
+            companies listed as beneficial owners in the same dataset, because
+            the company numbers given in that case aren't verified by Companies
+            House. Likewise, we won't give identifiers under that scheme for UK
+            companies from other countries' registers, as we assume they haven't
+            been validated or verified.
+          %p
+            If entities have identifiers from a register that we matched in
+            Org-Id, you should be able to uniquely identify them and connect
+            them to other data sources. For example, you can match companies to
+            a national register or match them to other datasets like Open
+            Contracting which uses the same identifiers.
+          %p
+            All of the identifiers we currently match to Org-Id schemes are for
+            company numbers. Org-Id has many other identifier schemes available,
+            such as for charities or educational institutions, however none of
+            our data sources have verified data which we can link to them, so we
+            do not use them. Similarly, BODS allows for schemes to declare
+            official identifiers for people, such as tax ids or passport numbers,
+            but none of our data sources report these either.
+          %p
+            %strong Unofficial identifiers
+          .card
+            .card-block
+              = @example_unofficial_company_identifier
+          .card
+            .card-block
+              = @example_unofficial_person_identifier
+          .card
+            .card-block
+              = @example_composite_unofficial_person_identifier
+          %p
+            In cases where we can't give an official Org-Id <code>scheme</code>,
+            we'll give an identifier with just a <code>schemeName</code>.
+            These names will always start with the ISO-3166-1 alpha2
+            country code for the country the register is in, followed by the
+            original language name for the register. For example: <i>GB Persons
+            Of Significant Control Register</i> or <i>UA Edinyy Derzhavnyj
+            Reestr</i>.
+          %p
+            The intention is that these identifiers can be used to
+            uniquely identify a person/company record within that data source,
+            though not necessarily outside of it. Likewise, they will identify
+            the record but may not uniquely identify the entity. For example,
+            for beneficial owners from the <i>GB Persons Of Significant Control
+            Register</i> we give the value of the 'self link', a path-like string
+            which uniquely identifies a beneficial owner record, but doesn't
+            identify a specific person or company across records.
+          %p
+            The values in the <code>id</code> field will vary depending on the
+            source. As shown above, we use whatever field(s) in the source can
+            uniquely identify the record. In some cases this means combining
+            multiple fields (with a hyphen <code>-</code>). Currently, the fields are:
+          %ul
+            %li <i>DK Centrale Virksomhedsregister</i>: <code>enhedsNummer</code>
+            %li <i>SK Register Partnerov Verejného Sektora</i>: <code>KonecniUzivateliaVyhod.Id</code>
+            %li <i>GB Persons Of Significant Control Register</i>: beneficial owner "self links"
+            %li <i>UA Edinyy Derzhavnyj Reestr</i>: company number and beneficial owner name
+            %li <i>EITI 2013-2015 beneficial ownership pilots</i>: beneficial owner name
+          %p
+            %strong An OpenCorporates identifier
+          .card
+            .card-block
+              = @example_oc_identifier
+          %p
+            For companies we've successfully matched to OpenCorporates, we
+            include the url to that company on opencorporates.com. Note that in
+            some rare occasions we will have matched a company to more than one
+            OpenCorporates record. For completeness, we're including the same
+            value in both the <code>id</code> and the <code>uri</code> fields.
+          %p
+            %strong A register identifier
+          .card
+            .card-block
+              = @example_register_identifier
+          %p
+            Every single known person and company will have an identifier that
+            gives their url on the register. Unknown companies are declared
+            explicitly in BODS, but don't have a corresponding page in the
+            register so we cannot give a url for them. Again the value is in
+            both the <code>id</code> and <code>uri</code>.
 
           %h2{ id: 'license' } License
           %p

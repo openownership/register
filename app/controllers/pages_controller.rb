@@ -1,14 +1,29 @@
 class PagesController < ApplicationController
   def download
     @exports = BodsExport.where(:completed_at.ne => nil).desc(:created_at).take(5)
-    # rubocop:disable Rails/OutputSafety
-    @example_entity = CodeRay.scan(JSON.pretty_generate(example_entity), :json).div(line_numbers: :table).html_safe
-    @example_person = CodeRay.scan(JSON.pretty_generate(example_person), :json).div(line_numbers: :table).html_safe
-    @example_ownership = CodeRay.scan(JSON.pretty_generate(example_ownership), :json).div(line_numbers: :table).html_safe
-    # rubocop:enable Rails/OutputSafety
+
+    @example_entity = formatted_json(example_entity)
+    @example_person = formatted_json(example_person)
+    @example_ownership = formatted_json(example_ownership)
+
+    @example_official_identifier = formatted_json(example_official_identifier)
+    @example_oc_identifier = formatted_json(example_oc_identifier)
+    @example_register_identifier = formatted_json(example_register_identifier)
+    @example_unofficial_company_identifier = formatted_json(example_unofficial_company_identifier)
+    @example_unofficial_person_identifier = formatted_json(example_unofficial_person_identifier)
+    @example_composite_unofficial_person_identifier = formatted_json(example_composite_unofficial_person_identifier)
   end
 
   private
+
+  def formatted_json(hash)
+    # rubocop:disable Rails/OutputSafety
+    CodeRay
+      .scan(JSON.pretty_generate(hash), :json)
+      .div(line_numbers: :table)
+      .html_safe
+    # rubocop:enable Rails/OutputSafety
+  end
 
   def example_entity
     {
@@ -18,25 +33,10 @@ class PagesController < ApplicationController
       "name": "EXAMPLE LTD",
       "foundingDate": "2019-10-01",
       "identifiers": [
-        {
-          "scheme": "GB-COH",
-          "schemeName": "Companies House",
-          "id": "0123456",
-        },
-        {
-          "schemeName": "GB Persons Of Significant Control Register",
-          "id": "0123456",
-        },
-        {
-          "schemeName": "OpenOwnership Register",
-          "id": "https://register.openownership.org/entities/abcdefg12345",
-          "uri": "https://register.openownership.org/entities/abcdefg12345",
-        },
-        {
-          "schemeName": "OpenCorporates",
-          "id": "https://opencorporates.com/companies/gb/0123456",
-          "uri": "https://opencorporates.com/companies/gb/0123456",
-        },
+        example_official_identifier,
+        example_unofficial_company_identifier,
+        example_register_identifier,
+        example_oc_identifier,
       ],
       "incorporatedInJurisdiction": {
         "code": "GB",
@@ -59,10 +59,7 @@ class PagesController < ApplicationController
       "statementDate": "2019-10-01",
       "personType": "knownPerson",
       "identifiers": [
-        {
-          "schemeName": "GB Persons Of Significant Control Register",
-          "id": "/company/0123456/persons-with-significant-control/individual/hijklmn12343",
-        },
+        example_unofficial_person_identifier,
         {
           "schemeName": "OpenOwnership Register",
           "id": "https://register.openownership.org/entities/abcdefg678910",
@@ -111,6 +108,51 @@ class PagesController < ApplicationController
           },
         },
       ],
+    }
+  end
+
+  def example_official_identifier
+    {
+      "scheme": "GB-COH",
+      "schemeName": "Companies House",
+      "id": "0123456",
+    }
+  end
+
+  def example_unofficial_company_identifier
+    {
+      "schemeName": "GB Persons Of Significant Control Register",
+      "id": "0123456",
+    }
+  end
+
+  def example_unofficial_person_identifier
+    {
+      "schemeName": "GB Persons Of Significant Control Register",
+      "id": "/company/0123456/persons-with-significant-control/individual/hijklmn12343",
+    }
+  end
+
+  def example_composite_unofficial_person_identifier
+    {
+      "schemeName": "UA Edinyy Derzhavnyj Reestr",
+      "id": "12345-Test Person",
+    }
+  end
+
+  def example_register_identifier
+    {
+      "schemeName": "OpenOwnership Register",
+      "id": "https://register.openownership.org/entities/abcdefg12345",
+      "uri": "https://register.openownership.org/entities/abcdefg12345",
+    }
+  end
+
+  def example_oc_identifier
+    {
+      "schemeName": "OpenCorporates",
+      "id": "https://opencorporates.com/companies/gb/0123456",
+      "uri": "https://opencorporates.com/companies/gb/0123456",
     }
   end
 end
