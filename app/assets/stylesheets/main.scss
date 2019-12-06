@@ -664,6 +664,14 @@ a, button {
     .entity-link {
       position: relative;
     }
+    .entity-unknown-reason {
+      text-transform: none;
+      font-size: 0.8125rem;
+      display: block;
+      margin-top: 0.5rem;
+      letter-spacing: normal;
+      line-height: normal;
+    }
   }
 }
 

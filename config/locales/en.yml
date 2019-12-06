@@ -234,7 +234,11 @@ en:
     natural-person: person
 
   unknown_persons_entity:
-    name: unknown
+    names:
+      unknown: Unknown person(s)
+      no_person: 'No person'
+    reasons:
+      totally_unknown: 'We have no data to tell us who this person or people might be.'
 
   circular_ownership_entity:
     name: circular ownership

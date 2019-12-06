@@ -59,9 +59,9 @@ class BodsMapper
   end
 
   def generates_statement?(entity)
-    return true unless entity.respond_to? :unknown_reason
+    return true unless entity.respond_to? :unknown_reason_code
 
-    REASONS_FOR_UNKNOWN_PERSON_STATEMENT.include?(entity.unknown_reason)
+    REASONS_FOR_UNKNOWN_PERSON_STATEMENT.include?(entity.unknown_reason_code)
   end
 
   def entity_statement(legal_entity)
@@ -135,7 +135,7 @@ class BodsMapper
       statementType: 'personStatement',
       statementDate: nil,
       personType: unknown_ps_person_type(unknown_person),
-      missingInfoReason: unknown_person.name,
+      missingInfoReason: unknown_person.unknown_reason,
       names: [],
       identifiers: [],
       nationalities: [],
@@ -263,7 +263,7 @@ class BodsMapper
   end
 
   def unknown_ps_person_type(unknown_person)
-    case unknown_person.unknown_reason
+    case unknown_person.unknown_reason_code
     when 'super-secure-person-with-significant-control'
       'anonymousPerson'
     else
@@ -520,7 +520,7 @@ class BodsMapper
   def ocs_unspecified_reason(unknown_person)
     return if generates_statement?(unknown_person)
 
-    case unknown_person.unknown_reason
+    case unknown_person.unknown_reason_code
     when 'no-individual-or-entity-with-signficant-control',
          'no-individual-or-entity-with-signficant-control-partnership'
       'no-beneficial-owners'

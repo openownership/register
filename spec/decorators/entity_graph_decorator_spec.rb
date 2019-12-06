@@ -25,9 +25,8 @@ RSpec.describe EntityGraphDecorator do
   describe 'generating entity nodes' do
     subject { JSON.parse(decorated.cytoscape_data[:elements])['nodes'] }
 
-    it 'creates a nice entity name for the label' do
+    it 'adds the entity name for the label' do
       expect(subject.first['data']['label']).to eq entity.name
-      expect(subject.last['data']['label']).to eq 'Unknown'
     end
 
     it "adds a flag for the entity's country", type: :helper do

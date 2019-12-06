@@ -67,7 +67,7 @@ class Entity
 
   def self.find_or_unknown(id)
     if id.to_s.include?('statement') || id.to_s.include?(UNKNOWN_ID_MODIFIER)
-      UnknownPersonsEntity.new(id: id, name: id)
+      UnknownPersonsEntity.new(id: id)
     else
       find(id)
     end
