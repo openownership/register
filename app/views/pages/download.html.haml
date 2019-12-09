@@ -334,9 +334,9 @@
             <a href="mailto:register@openownership.org">Contact us</a> if you
             have questions about using this data which aren't answered here.
 
-      - unless @exports.empty?
-        .col-lg-4
-          %br
+      .col-lg-4
+        %br
+        - unless @exports.empty?
           .card
             .card-block
               %h5.card-title Latest data
@@ -344,3 +344,10 @@
               %p
                 = link_to 'https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz', rel: 'nofollow', class: 'btn btn-primary', id: 'latest-data' do
                   Download &nbsp;<i class='fa fa-download'></i>
+        .card
+          .card-block
+            %h5.card-title Changelog
+            %p
+              For more information on our iterative improvements to this data,
+              <a href="/data-changelog">see our changelog</a> of major
+              changes.

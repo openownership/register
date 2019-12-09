@@ -1,0 +1,79 @@
+- content_for(:title, t(".title"))
+
+.content.page-content
+  .container-fluid
+    .row
+      .col-lg-8
+        .page-header
+          %h1= t(".title")
+
+    .row
+      .col-lg-8
+        .page-text
+          %h2 About this page
+          %p
+            This page is a catalogue of the major changes we have made to the
+            data in this Register, in particular to the data available for bulk
+            download in BODS format.
+          %p
+            Each entry is a dated set of changes, with an explanation of the
+            changes that were made and any implications they may have for you
+            as a user of our data. Where possible, we'll identify directly
+            which releases of bulk data you'll see these changes in.
+
+          %h2 09 December 2019
+          %p
+            <strong>First affected bulk download:</strong> 10th December 2019
+          %ul
+            %li
+              We now include a lot more identifiers in our bulk data output. As
+              well as the existing identifiers for official registers, these
+              should allow users to link entities to source data, OpenCorporates
+              and back to the Register itself. See
+              <a href="/download#identifiers">our documentation</a> for more
+              information.
+            %li
+              We now correctly set <code>minimum</code> and <code>maximum</code>
+              values in <code>interests</code> when we have an
+              <code>exact</code> value. A small change but one that makes us
+              more compliant with BODS.
+
+          %h2 26th November 2019
+          %p
+            <strong>First affected bulk download:</strong> 28th November 2019
+          %ul
+            %li
+              We now include foreign companies from the Slovakian Public Sector
+              Partners Register (Register partnerov verejného sektora) where
+              previously we skipped them. This means we have around 1,000 new
+              companies and their owners, and in a few hundred cases, these are
+              also linked to entries in other registers.
+            %li
+              We've improved how we identify foreign companies in Slovakian
+              data. This means that some SK companies have changed jurisdiction
+              to other countries, and often we can now match those companies to
+              OpenCorporates where we couldn't before.
+
+          %h2 5th November 2019
+          %p
+            <strong>First affected bulk download:</strong> 7th November 2019
+          %ul
+            %li
+              We're now regularly importing data from the Ukrainian United State
+              Register of Legal Entities, meaning Ukrainian data is up to date,
+              not just a one-off import from 2018.
+            %li
+              Our data is now openly-licensed as ODC-BY, requiring only
+              attribution, rather than ODBL which imposed a 'share-alike'
+              condition.
+      - unless @exports.empty?
+        .col-lg-4
+          .card
+            .card-block
+              %h5.card-title Latest data
+              %ul
+              - @exports.each do |export|
+                %li= link_to export.created_at.to_date, "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.#{export.created_at.iso8601}.jsonl.gz", rel: 'nofollow'
+
+
+

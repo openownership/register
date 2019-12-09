@@ -179,6 +179,8 @@ en:
       title: Glossary
     download:
       title: Download our data
+    data_changelog:
+      title: Data changelog
   relationships:
     provenance:
       unknown: Not yet uploaded
