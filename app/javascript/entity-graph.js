@@ -37,6 +37,11 @@ class EntityGraph {
           'text-background-color': '#F4F6F8',
           'text-background-opacity': 1,
           'text-events': 'yes',
+        },
+      },
+      {
+        selector: 'node[flag]',
+        style: {
           // Flag image properties
           'background-image': 'data(flag)',
           'background-height': '100%',
