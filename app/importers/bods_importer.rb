@@ -173,14 +173,17 @@ class BodsImporter
   def entity_identifiers(identifiers)
     return [] if identifiers.blank?
 
-    identifiers.map { |i| { entity_identifier_scheme(i) => i['id'] } }
-  end
+    identifiers.map do |i|
+      scheme_id = i['scheme'] || i['schemeName']
+      raise "No identifier scheme or schemeName given in #{i}" if scheme_id.blank?
 
-  def entity_identifier_scheme(identifier)
-    scheme = identifier['scheme'] || identifier['schemeName']
-    raise "No identifier scheme or schemeName given in #{identifier}" if scheme.blank?
-
-    scheme
+      {
+        'scheme': i['scheme'],
+        'scheme_name': i['schemeName'],
+        'id': i['id'],
+        'uri': i['uri'],
+      }.compact
+    end
   end
 
   def entity_jurisdiction_code(jurisdiction)

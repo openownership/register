@@ -237,7 +237,7 @@ RSpec.describe 'BODS Export' do
           ],
           'source' => {
             'type' => ['officialRegister'],
-            'description' => 'UK PSC Register',
+            'description' => 'GB Persons Of Significant Control Register',
             'url' => 'http://www.example.com',
             'retrievedAt' => retrieved_at.iso8601,
           },

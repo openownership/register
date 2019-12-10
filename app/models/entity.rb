@@ -183,11 +183,15 @@ class Entity
   end
 
   def oc_identifiers
-    identifiers.select { |i| i.keys.map(&:to_s).to_set == OC_IDENTIFIER_KEYS_SET }
+    identifiers.select { |i| oc_identifier? i }
   end
 
   def oc_identifier
-    identifiers.find { |i| i.keys.map(&:to_s).to_set == OC_IDENTIFIER_KEYS_SET }
+    identifiers.find { |i| oc_identifier? i }
+  end
+
+  def oc_identifier?(identifier)
+    identifier.keys.map(&:to_s).to_set == OC_IDENTIFIER_KEYS_SET
   end
 
   def psc_self_link_identifier?(identifier)
