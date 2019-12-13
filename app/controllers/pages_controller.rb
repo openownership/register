@@ -14,6 +14,10 @@ class PagesController < ApplicationController
     @example_composite_unofficial_person_identifier = formatted_json(example_composite_unofficial_person_identifier)
   end
 
+  def data_changelog
+    @exports = BodsExport.where(:completed_at.ne => nil).desc(:created_at).take(5)
+  end
+
   private
 
   def formatted_json(hash)
