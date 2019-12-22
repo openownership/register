@@ -24,12 +24,13 @@ end
 # Hacky throttle with exponential backoff, so that people get banned for
 # increasingly long periods if they continue to exceed reasonable usage
 # See: https://github.com/kickstarter/rack-attack/wiki/Advanced-Configuration#exponential-backoff
-# Allows 20 requests in 8 seconds
-#        40 requests in 64 seconds
+# Allows 10 requests in 8 seconds
+#        20 requests in 64 seconds
+#        30 requests in 512 seconds
 #        ...
-#        100 requests in 0.38 days (~250 requests/day)
+#        50 requests in 0.38 days (~250 requests/day)
 (1..5).each do |level|
-  Rack::Attack.throttle("ip/#{level}", limit: (20 * level), period: (8**level).seconds) do |req|
+  Rack::Attack.throttle("ip/#{level}", limit: (10 * level), period: (8**level).seconds) do |req|
     req.ip unless asset_path?(req.path)
   end
 end
