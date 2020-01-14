@@ -87,7 +87,7 @@ process.
 
 ### Pre-import
 
-1. Make a backup of the MongoDB database via the mLab's console.
+1. Make a backup of the MongoDB database via the Atlas console.
 1. Note down the current `Entity.count` and `Relationship.count` via the Rails console.
 1. Open the Papertrail console (via the Heroku console) to monitor logs.
 1. Open the [sidekiq admin panel](https://register.openownership.org/admin/sidekiq) to monitor the background jobs.
@@ -106,7 +106,7 @@ process.
    - `heroku run:detached --app openownership-register -s performance-l bin/rails ua:trigger`
 1. Now turn on worker dynos to process the import jobs. You can scale these
    horizontally as required, but remember that each will create 10 connections
-   to the database, and MLab is quite limited in performance, so 4-5 is perhaps
+   to the database, and Atlas is quite limited in performance, so 4-5 is perhaps
    a sensible maximum.
 1. Note down the time the workers were started.
 1. Monitor the status of the import via the Sidekiq admin panel and papertrail.
@@ -159,7 +159,7 @@ The arguments are as follows:
   It uses Ruby's `open-uri`, so the url can also be a (absolute) local file path.
 - `schemes`: an array of company number scheme ids that you expect to find in the
   data's identifiers. This allows the import to extract company numbers from the
-  identifiers. Remember that Rake allows array params as space-separate lists
+  identifiers. Remember that Rake allows array params as space-separated lists
   only. E.g. GB-COH UA-EDR DK-CVR
 - `chunk_size`: how many records to process in one chunk. Defaults to 100.
 - `jsonl`: whether the data is in jsonl format (true/false). Defaults to false.
@@ -264,21 +264,20 @@ Go into the "Resources" section of the review app (on Heroku) and:
 Whilst these are getting set up, we need a copy of the production db to
 have relevant data.
 
-- Go to https://mlab.com/home (login details in 1Password)
-- Click 'create from backup'
-- In the dropdown, select the latest snapshot of the production deployment
-  (rather than the latest mongodump backup, snapshots are faster)
-- Click 'continue' (bottom right of the screen)
-- Choose EU-west-1 as the location (should be the default)
-- Choose the smallest standard cluster deployment size (M1)
-- Leave security options at the defaults
-- Enter a useful name for the 'display name' e.g. the branch name you're testing
+- Go to https://cloud.mongodb.com/ (login details in 1Password)
+- Create a 'cluster' to match the production cluster:
+  - Cloud provider & Region: AWS Ireland (eu-west-1)
+  - Cluster Tier: M20, scale storage to match production (60GB)
+  - Additional settings: Select the same version (3.6)
+  - Cluster name: the branch name you're testing
+- Once that's created, go to the cluster and select 'Migrate data to this
+  cluster" from the [...] menu on the right hand side.
 
 Once this has spun up the instance there are a couple more steps to get an
 accesible instance:
 
-- Add a database user through the Users tab (click the database name first)
-- Enable all public IP traffic through the networking tab
+- Add a database user through the Database Access menu on the left
+- Enable all public IP traffic through the Network Access menu on the left
 
 We also need to clone the production elastic search instance.
 
@@ -307,72 +306,12 @@ to be able to access these services
   `https://elastic:<password>@<host>`, where `<password>` is what you copied
   from the elastic cloud console.
 - Update the `ELASTICSEARCH_URL_ENV_NAME` config variable to `ELASTIC_CLOUD_URL`
-- Add the full url to the new mLab deployment into a new `MLAB_URI` setting
-  (click on the deployment in mLab and you should see it at the top of the page,
-  it starts with mongodb://)
-- Update `MONGODB_URI_ENV_NAME` to `MLAB_URI`
+- Add the full url to the new Altas deployment into a new `ATLAS_URI` setting
+  (click on the cluster in Atlas, then the [CONNECT] button)
+- Update `MONGODB_URI_ENV_NAME` to `ATLAS_URI`
 
 Now, locally, sanitize the database copy by running:
   `heroku run --app openownership-register--pr-XXX bin/rails sanitize`
-
-## Restoring from an offsite backup
-
-Note: If you're looking to restore from a normal backup, see [Setting up a review app to mimic production](#setting-up-a-review-app-to-mimic-production-eg-to-review-data-imports)
-
-In the event that something happens to mLab and the backups they store within
-their platform, we have several options to retrieve the production database.
-
-Firstly, mLab should have been making nightly backups to an S3 bucket under the
-OO AWS organisation account named 'oo-register-mlab-backups', and storing 8 days
-worth of old backups in there. If you can trust these backups and the S3 bucket
-is available, restoring from here will be the most efficient way to get the data
-back.
-
-If these backups are unavailable, or untrusted, the most recent 3 months of
-backups from this bucket should have also been duplicated to Google Cloud
-Storage under the OO-Register project. They're in a storage bucket with a
-similar name 'oo-register-mlab-backups'.
-
-### Verifying a backup locally
-Once you've chosen a backup source, download the zip file of the backup you want
-to restore and extract it locally. They can be accessed via the AWS Console or
-the GCP Console in a web browser. Then, restore it using `mongorestore` to your
-local mongodb (which must be running first):
-
-```shell
-$ mongorestore -h localhost:27017 ~/Downloads/rs-ds135134_2019-01-27T000458.000Z --drop --oplogReplay
-```
-
-This will restore the contents as faithfully as possible from the original
-backup, creating an `admin` db and a `heroku_some-random-chars` database for you
-locally, matching what mLab had in the production db. Note that it will drop
-any existing collections if those databases already exist, allowing you to run
-this multiple times. It takes a few minutes on a fast machine, so make a cup of
-tea.
-
-Finally, verify the database by switching the db name in `config/mongoid.yml` to
-the `heroku_some-random-chars` one you just created and perform some checks in
-the rails console:
-
-- Count the entities and relationships
-- Find some specific entities and check their networks
-- If relevant, ensure whatever corruption is present in the current production
-  db is not present in the backup
-
-As a final test, you can run the dev server and browse the data, though note that
-you'll have to re-index everything with elasticsearch for the search to work,
-which takes several hours.
-
-## Restoring a backup to production
-
-The details of this are too situation-specific to list, but assuming that you've
-identified a suitable backup to restore, and have a fresh, empty, MongoDB
-instance into which to restore it (making sure it's running the same version of
-MongoDB to avoid any compatibility issues), you can use `mongorestore` to
-rebuild the production instance and then edit heroku's config variables to point
-to the new instance. Exactly which databases you want to restore and how you
-want that process to execute is up to you, but you probably only want to restore
-the `heroku_` db, so `oplogReplay` won't be possible.
 
 # Migrating to a new elasticsearch host
 
@@ -590,7 +529,7 @@ Monitoring it:
 
 - Open /admin/sidekiq to monitor the jobs (on the heroku app) and Redis memory
   usage
-- Optional: open Mlab's telemetry page to monitor db access/burst credit usage
+- Optional: open Atlas' metrics page to monitor CPU usage and Disk IOPS
 - Optional: check the temporary statements directory to make sure files are being
   created and they look right.
 - Optional: Use AWS' instance monitoring to check on CPU and Memory utilisation
@@ -638,4 +577,4 @@ Monitoring it:
 ## Troubleshooting
 
 - Sudden slowdown? Have we tripped over one of the burst credit limits, either
-  on EC2, EBS or Mlab's DB?
+  on EC2, EBS or Atlas' DB?
