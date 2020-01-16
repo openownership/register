@@ -131,6 +131,8 @@ en:
         header: Sign up
         minimum_password_length: (%{length} characters minimum)
         submit: Sign up
+        errors:
+          captcha: must be completed to prove you're not a robot
     sessions:
       new:
         title: Sign in

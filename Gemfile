@@ -41,6 +41,7 @@ gem 'xxhash'
 gem 'oj'
 gem 'coderay'
 gem 'geokit'
+gem 'recaptcha'
 
 group :development, :test do
   gem 'byebug'
