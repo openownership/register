@@ -1,4 +1,0 @@
-ignored_endpoints:
-  - ActionDispatch::Static
-  - ActionDispatch::SSL
-  - ActionDispatch::Routing::RouteSet
