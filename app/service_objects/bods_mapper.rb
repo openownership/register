@@ -221,7 +221,7 @@ class BodsMapper
         {
           scheme: scheme,
           schemeName: scheme_name,
-          id: identifier_id(identifier, entity, scheme).presence,
+          id: identifier_id(identifier, entity, scheme).presence.try(:to_s),
           uri: identifier['uri'],
         }.compact,
       ]
@@ -232,7 +232,7 @@ class BodsMapper
         bods_identifiers << {
           scheme: HISTORICAL_PERSON_ID_SCHEMES[identifier['document_id']],
           schemeName: 'Not a valid Org-Id scheme, provided for backwards compatibility',
-          id: identifier['beneficial_owner_id'],
+          id: identifier['beneficial_owner_id'].to_s,
         }
       end
 
@@ -270,7 +270,7 @@ class BodsMapper
     # didn't always trust it, so our internal identifiers have a company_number
     # too.
     return identifier['link'] if identifier['link']
-    # These are a always unique on their owner
+    # These are always unique on their own
     return identifier['statement_id'] if identifier['statement_id']
 
     # These remaining ones (if not caught above) have to be combined with each
