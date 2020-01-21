@@ -590,7 +590,8 @@ RSpec.describe BodsMapper do
         it 'adds historical identifiers for SK people to maintain compatibility' do
           person.identifiers = [{
             'document_id' => 'Slovakia PSP Register',
-            'beneficial_owner_id' => '1234567',
+            # Note this is numeric but gets coerced
+            'beneficial_owner_id' => 1_234_567,
           }]
           expected_identifier = {
             scheme: 'MISC-Slovakia PSP Register',
@@ -616,7 +617,8 @@ RSpec.describe BodsMapper do
           it 'adds a beneficial owner id for people from SK data' do
             person.identifiers = [{
               'document_id' => 'Slovakia PSP Register',
-              'beneficial_owner_id' => '1234567',
+              # Note this is numeric but gets coerced
+              'beneficial_owner_id' => 1_234_567,
             }]
             expected_identifier = {
               schemeName: 'SK Register Partnerov Verejného Sektora',

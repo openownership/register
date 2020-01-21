@@ -107,6 +107,70 @@ RSpec.describe BodsExportUploader do
     end
   end
 
+  context 'when there are duplicate statement ids in the list' do
+    # Despite our best efforts to de-dupe statement output, because we use
+    # multiple independent workers and write their output to a list (not a set),
+    # we can end up with duplicate statement ids in that list.
+    # Therefore, when we combine the statements into a single file, we keep
+    # another Redis set to de-dupe.
+
+    before do
+      # Duplicate a statement ID in the ordered list of ids the uploader works
+      # through
+      redis.rpush(export.redis_statements_list, new_statement_ids.last)
+    end
+
+    it "de-dupes them when appending to the rolling file" do
+      with_temp_output_dir(export) do |dir|
+        create_statement_files(new_statements)
+
+        expect_s3_download(
+          remote: 'public/exports/statements.latest.jsonl.gz',
+          local: File.join(dir, 'statements.latest.jsonl.gz'),
+          contents: existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n",
+        )
+        expect_s3_download(
+          remote: 'public/exports/statement-ids.latest.txt.gz',
+          local: File.join(dir, 'statement-ids.latest.txt.gz'),
+          contents: existing_statement_ids.join("\n") + "\n",
+        )
+
+        expect_s3_upload(
+          remote: "public/exports/statements.latest.jsonl.gz",
+          local: File.join(dir, 'statements.latest.jsonl.gz'),
+        )
+        expect_s3_upload(
+          remote: "public/exports/statement-ids.latest.txt.gz",
+          local: File.join(dir, 'statement-ids.latest.txt.gz'),
+        )
+
+        expect_s3_copy(
+          from: "public/exports/statements.latest.jsonl.gz",
+          to: "public/exports/statements.#{export.created_at.iso8601}.jsonl.gz",
+        )
+        expect_s3_copy(
+          from: "public/exports/statement-ids.latest.txt.gz",
+          to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz",
+        )
+
+        BodsExportUploader.new(export.id).call
+
+        statements_json = Zlib::GzipReader.open(
+          File.join(dir, 'statements.latest.jsonl.gz'),
+          &:readlines
+        ).map(&:chomp).compact
+        statements = statements_json.map { |s| Oj.load(s, mode: :rails, symbol_keys: true) }
+        expect(statements).to eq(existing_statements + new_statements)
+
+        statement_ids = Zlib::GzipReader.open(
+          File.join(dir, 'statement-ids.latest.txt.gz'),
+          &:readlines
+        ).map(&:chomp).compact
+        expect(statement_ids).to eq(existing_statement_ids + new_statement_ids)
+      end
+    end
+  end
+
   it 'raises an error if a shell command fails' do
     with_temp_output_dir(export) do |dir|
       # Stub the downloads, but don't create the statement files, meaning the

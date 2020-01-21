@@ -490,10 +490,11 @@ The setup process for this looks like:
   - Create a `.env.local` with the following environment variable overrides,
     using values from the production Heroku:
     - `REDIS_URL`
-    -`REDIS_PROVIDER=REDIS_URL`
+    - `REDIS_PROVIDER=REDIS_URL`
     - `MEMCACHIER_PASSWORD`, `MEMCACHIER_SERVERS`, `MEMCACHIER_USERNAME`
     - `BODS_EXPORT_AWS_ACCESS_KEY_ID`, `BODS_EXPORT_AWS_SECRET_ACCESS_KEY`,
       `BODS_EXPORT_S3_BUCKET_NAME`
+    - `SITE_BASE_URL`
 - Test in rails console you can see db and connect to redis
   ```ruby
   redis = Redis.new
