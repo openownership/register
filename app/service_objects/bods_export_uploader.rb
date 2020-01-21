@@ -16,6 +16,8 @@ class BodsExportUploader
 
     @all_statement_ids = 'statement-ids.latest.txt.gz'
     @export_statement_ids = "statement-ids.#{@export.created_at.iso8601}.txt.gz"
+
+    @appended_statements_set = "#{BodsExport::REDIS_ALL_STATEMENTS_SET}:#{export_id}:appended"
   end
 
   def call
@@ -27,6 +29,8 @@ class BodsExportUploader
     copy_file_in_s3(@all_statements, @export_statements)
     copy_file_in_s3(@all_statement_ids, @export_statement_ids)
     complete_export
+  ensure
+    @redis.del @appended_statements_set
   end
 
   def download_from_s3(filename)
@@ -51,9 +55,12 @@ class BodsExportUploader
 
     (0..num_statement_ids - 1).each do |index|
       statement_id = @redis.lindex @export.redis_statements_list, index
+      next if seen_statement_id?(statement_id)
+
       statement_file = @export.statement_filename(statement_id)
       system_or_raise_exception("cat #{statement_file} >> #{statements_file}")
       system_or_raise_exception("echo #{statement_id} >> #{ids_file}")
+      @redis.sadd(@appended_statements_set, statement_id)
     end
 
     system_or_raise_exception("gzip #{statements_file}")
@@ -73,5 +80,11 @@ class BodsExportUploader
 
   def complete_export
     @export.touch(:completed_at)
+  end
+
+  private
+
+  def seen_statement_id?(statement_id)
+    @redis.sismember(@appended_statements_set, statement_id)
   end
 end
