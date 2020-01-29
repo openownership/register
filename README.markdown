@@ -480,21 +480,30 @@ The setup process for this looks like:
 - Increase Redis to an extra-large instance in Heroku
 - Get an EC2 server in the eu-west-1 region.
   So far I've used a c5.xlarge (4 CPUs, 8GB ram) with 250GB disk space.
+- Create an ssh key for the user:
+  `ssh-keygen -t rsa -b 4096 -C "tech+bods-export@openownership.org"` and add
+  that to github: https://github.com/openownership/register/settings/keys/new
+- Clone the register: `git clone git@github.com:openownership/register.git`
 - Set up the checkout of the repo to be able to connect to the production
   services.
-  - `git pull` in the repo (`~/register`)
+  - `cd register`
   - `bin/setup-bods-export`
   - Edit `config/mongoid.yml` and change the development database to a `uri`
     setting like production, copying in the production connection string from
     Heroku
   - Create a `.env.local` with the following environment variable overrides,
     using values from the production Heroku:
-    - `REDIS_URL`
-    - `REDIS_PROVIDER=REDIS_URL`
-    - `MEMCACHIER_PASSWORD`, `MEMCACHIER_SERVERS`, `MEMCACHIER_USERNAME`
-    - `BODS_EXPORT_AWS_ACCESS_KEY_ID`, `BODS_EXPORT_AWS_SECRET_ACCESS_KEY`,
-      `BODS_EXPORT_S3_BUCKET_NAME`
-    - `SITE_BASE_URL`
+    ```
+    REDIS_URL=
+    REDIS_PROVIDER=REDIS_URL
+    MEMCACHIER_PASSWORD=
+    MEMCACHIER_SERVERS=
+    MEMCACHIER_USERNAME=
+    BODS_EXPORT_AWS_ACCESS_KEY_ID=
+    BODS_EXPORT_AWS_SECRET_ACCESS_KEY=
+    BODS_EXPORT_S3_BUCKET_NAME=
+    SITE_BASE_URL=https://register.openownership.org
+    ```
 - Test in rails console you can see db and connect to redis
   ```ruby
   redis = Redis.new
