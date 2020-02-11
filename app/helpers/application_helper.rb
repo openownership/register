@@ -8,7 +8,7 @@ module ApplicationHelper
   end
 
   def render_haml(haml)
-    Haml::Engine.new(haml).render(self)
+    Haml::Engine.new(haml, escape_html: true).render(self)
   end
 
   def google_analytics
