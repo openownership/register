@@ -20,4 +20,33 @@ class EntityDecorator < ApplicationDecorator
       transliterated_name
     end
   end
+
+  def schema
+    return person_schema if object.natural_person?
+
+    organisation_schema
+  end
+
+  def person_schema
+    {
+      "@context" => "https://schema.org/",
+      "@type" => "Person",
+      "name": name,
+      "address" => object.address,
+      "birthDate" => h.partial_date_format(object.dob),
+      "url" => Rails.application.routes.url_helpers.entity_url(object),
+    }.compact.to_json
+  end
+
+  def organisation_schema
+    {
+      "@context" => "https://schema.org/",
+      "@type" => "Organization",
+      "name" => name,
+      "address" => object.address,
+      "foundingDate" => object.incorporation_date,
+      "dissolutionDate" => object.dissolution_date,
+      "url" => Rails.application.routes.url_helpers.entity_url(object),
+    }.compact.to_json
+  end
 end
