@@ -555,19 +555,16 @@ a, button {
     font-size: 0.8125rem;
     color: $darkBlue;
     &:after {
-      content: '';
+      // Font awesome base icon styling
       display: inline-block;
-      background-size: contain;
-      background-repeat: no-repeat;
-      width: 15px;
-      height: 16px;
+      font-style: normal;
+      font-variant: normal;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "FontAwesome";
+      // Our styling
       opacity: .5;
       margin-left: 5px;
-      position: relative;
-      top: 5px;
-      @include media-breakpoint-down(sm) {
-        top: 3px;
-      }
     }
   }
   a:hover, a:active, a:focus {
@@ -627,18 +624,28 @@ a, button {
 .option-transliterate {
   a {
     &:after {
-      background-image: asset-url("icon-transliterate.svg");
+      content: "\f1ab";
     }
   }
 }
 .option-report {
   a {
     &:after {
-      background-image: asset-url("icon-report-dark.svg");
-      width: 14px;
-      height: 14px;
-      opacity: .4;
-      top: 3px;
+      content: "\f06a";
+    }
+  }
+}
+.option-graph {
+  a {
+    &:after {
+      content: "\f0e8";
+    }
+  }
+}
+.option-bods {
+  a {
+    &:after {
+      content: "\f019";
     }
   }
 }
@@ -1108,11 +1115,9 @@ span.tooltip-helper {
 .feedback-button {
   display: block;
   border-radius: 2px;
-  padding: 10px 18px 8px;
-  max-width: 320px;
+  padding: 10px 18px 8px 18px;
   font-weight: bold;
   font-size: 14px;
-  background: image-url('icon-report.svg') calc(100% - 20px) center no-repeat;
   background-color: $darkBlue;
   color: white;
   box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
@@ -1128,6 +1133,10 @@ span.tooltip-helper {
   &:hover,
   &:active {
     background-color: lighten($darkBlue, 5%);
+  }
+
+  i {
+    margin-top: .25em; // To fix vertical alignment when floated right
   }
 }
 

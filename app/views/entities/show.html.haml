@@ -53,8 +53,12 @@
             %ul.list-unstyled
               %li.option-transliterate
                 = transliteration_action(@should_transliterate)
-              %li.option-report.last
+              %li.option-report
                 = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank', rel: 'noopener'
+              %li.option-graph
+                = link_to t(".view_as_graph"), graph_entity_path(@entity)
+              %li.option-bods.last
+                = link_to t(".download_bods"), entity_path(@entity, format: :json)
 
 .content.entity-content
   .container-fluid
@@ -68,9 +72,6 @@
             - else
               %h2
                 = t(".controlling_entities.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @entity.name"))
-              = link_to graph_entity_path(@entity), class: 'btn btn-sm btn-primary view-as-tree' do
-                %i.fa.fa-sitemap
-                %span= t(".view_as_tree")
               - @ultimate_source_relationship_groups.each do |group|
                 - if group.relationships.size > 1
                   .grouping
@@ -92,9 +93,6 @@
           - else
             %h2
               = t(".controlled_entities_html", entity: render_haml("%span.entity-name= @entity.name"))
-            = link_to graph_entity_path(@entity), class: 'btn btn-sm btn-primary view-as-tree' do
-              %i.fa.fa-sitemap
-              %span= t(".view_as_tree")
             = page_entries_info @source_relationships, entry_name: 'company'
             - @source_relationships.each do |relationship|
               .item{ class: ('ended' if relationship.ended_date) }
@@ -165,7 +163,9 @@
             %p= link_to 'Google', google_search_uri(q: @entity.name), class: 'external', target: '_blank', rel: 'noopener'
             - if @entity.natural_person?
               %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @entity.name), class: 'external', target: '_blank', rel: 'noopener'
-        = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, class: 'feedback-button', target: '_blank', rel: 'noopener'
+        = link_to report_incorrect_data_url, class: 'feedback-button', target: '_blank', rel: 'noopener' do
+          = t("shared.report_incorrect_data")
+          %i.fa.fa-exclamation-circle.fa-pull-right
 
     - unless @merged_entities.empty?
       .row
