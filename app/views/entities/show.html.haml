@@ -1,5 +1,8 @@
 - content_for(:title, @entity.name)
 
+- content_for(:schema) do
+  != @entity.schema
+
 .entity-header
   .container-fluid
     .row

@@ -36,4 +36,13 @@ RSpec.describe ApplicationHelper do
       end
     end
   end
+
+  describe '#render_haml' do
+    it 'escapes HTML chars' do
+      @xss = '<script>alert("pwn");</script>'
+      haml = '%span= @xss'
+      expected = "<span>&lt;script&gt;alert(&quot;pwn&quot;);&lt;/script&gt;</span>\n"
+      expect(helper.render_haml(haml)).to eq(expected)
+    end
+  end
 end

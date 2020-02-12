@@ -8,6 +8,8 @@
       - yield(:title).presence.try do |title|
         | #{title}
     %script document.documentElement.className = document.documentElement.className.replace("no-js","js");
+    %script{ type: 'application/ld+json' }
+      = yield :schema
     = google_analytics
     = csrf_meta_tags
     = stylesheet_link_tag 'application', media: 'all'

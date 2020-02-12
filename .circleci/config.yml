@@ -69,8 +69,8 @@ jobs:
       # Restore pip cache
       - restore_cache:
           keys:
-            - app-pip-v2-{{ checksum "requirements.txt" }}
-            - app-pip-v2-
+            - app-pip-v3-{{ checksum "requirements.txt" }}
+            - app-pip-v3-
 
       - run:
           name: 'Pip Install'
@@ -82,7 +82,7 @@ jobs:
 
       # Store pip cache
       - save_cache:
-          key: app-pip-v2-{{ checksum "requirements.txt" }}
+          key: app-pip-v3-{{ checksum "requirements.txt" }}
           paths:
             - ./venv
 
