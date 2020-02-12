@@ -46,7 +46,8 @@ en:
         other: "%{count} Matches"
       grouping_note: "These owners have been grouped together because they have exactly the same name."
       grouping_note_html: "<span class='grouping-note-label'>Note:</span> These owners have been grouped together because they have exactly the same name. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
-      view_as_tree: View as graph
+      view_as_graph: View as graph
+      download_bods: Download BODS json
       company_name_missing: ‹Company name missing›
       person_name_missing: ‹Person name missing›
       merged_people: Merged people
