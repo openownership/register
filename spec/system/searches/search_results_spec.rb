@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Search results' do
   include EntityHelpers
+  include SearchHelpers
 
   let!(:company) { FactoryGirl.create(:legal_entity) }
   let!(:holding_company) { FactoryGirl.create(:legal_entity) }
@@ -21,11 +22,7 @@ RSpec.describe 'Search results' do
   end
 
   it 'displays useful search results' do
-    visit '/'
-    within '.search-content' do
-      fill_in 'q', with: 'Example' # Matches all people and companies
-      click_button 'Search'
-    end
+    search_for 'Example' # Matches all people and companies
 
     # Company results
     expect(page).to have_text company.name
@@ -52,11 +49,7 @@ RSpec.describe 'Search results' do
     # Ended relationships that shouldn't be counted
     create_list(:relationship, 10, source: person, started_date: '2019-07-01', ended_date: '2019-07-21')
 
-    visit '/'
-    within '.search-content' do
-      fill_in 'q', with: person.name
-      click_button 'Search'
-    end
+    search_for person.name
 
     relationships.first(8).each do |relationship|
       within '.result-controls' do
@@ -77,11 +70,7 @@ RSpec.describe 'Search results' do
     end
 
     it "shows how many people have been merged together for each result" do
-      visit '/'
-      within '.search-content' do
-        fill_in 'q', with: 'Example' # Matches all people and companies
-        click_button 'Search'
-      end
+      search_for 'Example' # Matches all people and companies
 
       expect(page).to have_text 'Includes details of 3 other merged records'
     end

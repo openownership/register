@@ -184,6 +184,8 @@ en:
       title: Download our data
     data_changelog:
       title: Data changelog
+    home:
+      title: Search over 12 million beneficial ownership records
   relationships:
     provenance:
       unknown: Not yet uploaded
@@ -204,7 +206,7 @@ en:
       legal-entity_count: Currently showing %{count} companies
       data_sources_preface: "Free and open information on %{count} companies, from:"
       headline: Who controls, influences, or benefits from a company?
-      placeholder: Search company or name of person
+      placeholder: Search company name, number or name of person
       no_results: No results to show
       search: Search
       fallback: "No results containing all your search terms were found. Matches on some of your search terms:"

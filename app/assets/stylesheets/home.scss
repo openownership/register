@@ -1,0 +1,126 @@
+.home-content {
+  padding-top: 0px; // So the black hero blends into it
+
+  .row {
+    margin-bottom: 4em;
+
+    @media only screen and (min-width: 768px) {
+      margin-bottom: 6em;
+    }
+  }
+}
+
+.home-hero {
+  background: $darkBlue;
+  color: $white;
+  padding-top: 2em; // Replacing the padding-top so that it's black
+
+  .row {
+    margin-bottom: 4rem;
+  }
+
+  h1 {
+    font-family: $headline;
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+  }
+}
+
+.home-hero-search {
+  // This is pre-empting the Bootstrap 4.0 (rather than alpha) switch to flexbox
+  // where we could just use the justify-content-center class
+  @media only screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.home-hero-search-form {
+  .btn {
+    line-height: 1.5em // Match the input's line-height from .form-control
+  }
+}
+
+.home-hero-subheadings {
+  @media only screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  ul {
+    font-size: 1.25em;
+    li {
+      margin-bottom: 0.5em;
+    }
+  }
+}
+
+.home-hero-subhead {
+  font-family: $headline;
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+.home-hero-subhead--inner {
+  padding-bottom: 0.25em;
+  border-bottom: 3px solid $electricBlue;
+  // So that when they span multiple lines, the border doesn't mess them up
+  line-height: 1.5em;
+}
+
+.home-hero-or {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  padding-top: 1.5em;
+}
+
+.home-main-content {
+  margin-top: 4em;
+
+  @media only screen and (min-width: 768px) {
+    margin-top: 6em;
+  }
+
+  // Filling in (probably badly) what Boostrap's .flex-first and .flex-last do
+  @media only screen and (min-width: 768px) {
+    .row {
+      display: flex;
+      flex-direction: row;
+    }
+    .flex-last {
+      order: 1;
+    }
+    .flex-first {
+      order: -1
+    }
+  }
+}
+
+// cargo-culted from Stripe
+.floating-card {
+  .card-right, .card-left {
+    margin-top: 2em;
+  }
+
+  @media only screen and (min-width: 768px) {
+    perspective: 1500px;
+    .card-right, .card-left {
+      margin-top: 0;
+    }
+    .card-left {
+      margin-right: 2em;
+      transform: rotate3d(.5,.866,0,15deg) rotateZ(-1deg);
+      box-shadow: -27.1px 62.5px 125px -25px rgba(50,50,93,.5), -16.2px 37.5px 75px -37.5px rgba(0,0,0,.6);
+    }
+    .card-right {
+      margin-left: 2em;
+      transform: rotate3d(.5,-.866,0,15deg) rotateZ(1deg);
+      box-shadow: 27.1px 62.5px 125px -25px rgba(50,50,93,.5), 16.2px 37.5px 75px -37.5px rgba(0,0,0,.6);
+    }
+  }
+}
