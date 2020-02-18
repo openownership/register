@@ -234,7 +234,6 @@ en:
     javascript_required: (Javascript is required to view this content)
     controlled_companies_html: "Controls: %{company_links}"
     no_controlled_companies: "Does not currently control any companies"
-    data_download_message_html: "<h4 class='alert-title'><i class='fa fa-download'></i> &nbsp;Bulk downloads are here!</h4> <a href='%{url}' class='alert-link'>Read our documentation</a> to understand what they contain and get your hands on our data."
   entity_types:
     default: entity
     legal-entity: legal entity

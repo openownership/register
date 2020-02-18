@@ -10,8 +10,6 @@ class ApplicationController < ActionController::Base
 
   before_action :parse_should_transliterate_param
 
-  before_action :set_seen_data_download_message
-
   protected
 
   def configure_permitted_parameters
@@ -22,9 +20,5 @@ class ApplicationController < ActionController::Base
 
   def parse_should_transliterate_param
     @should_transliterate = boolean_param(:transliterated)
-  end
-
-  def set_seen_data_download_message
-    @seen_data_download_message = cookies.key? :seenDataDownloadAvailableMessage
   end
 end
