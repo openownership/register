@@ -46,7 +46,7 @@
                   %li.nav-item
                     %a.nav-link.external{ href: feedback_form_url, target: "_blank" }
                       = t(".nav.feedback")
-                  .float-md-right.sign-up-nav
+                  .float-lg-right.sign-up-nav
                     - if user_signed_in?
                       %li.nav-item
                         = link_to t(".nav.edit_user_registration"), edit_user_registration_path, class: "nav-link"
@@ -57,7 +57,7 @@
                         = link_to t(".nav.new_user_session"), new_user_session_path, class: "nav-link"
                       %li.nav-item
                         = link_to t(".nav.new_user_registration"), new_user_registration_path, class: "nav-link"
-                  %span.float-md-right.follow-nav
+                  %span.float-lg-right.follow-nav
                     %li.nav-item.follow-label
                       = t(".nav.follow")
                     %li.nav-item
