@@ -160,9 +160,8 @@ en:
         glossary: Glossary
         download: Download data
       nav:
-        what_we_do: What we do
+        back_to_oo: Back to main site
         follow: Follow our work on
-        connect_with_us: Connect with us
         home: Home
         feedback: Feedback
         new_user_session: Sign in
@@ -170,7 +169,6 @@ en:
         new_user_registration: Sign up
         edit_user_registration: My account
         submissions: Submit your data
-      subtitle: The Global Beneficial Ownership Register
   pages:
     terms_and_conditions:
       title: Terms & Conditions
