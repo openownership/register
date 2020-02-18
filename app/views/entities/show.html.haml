@@ -56,9 +56,9 @@
               %li.option-report
                 = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank', rel: 'noopener'
               %li.option-graph
-                = link_to t(".view_as_graph"), graph_entity_path(@entity)
+                = link_to t(".view_as_graph"), graph_entity_path(@entity), rel: 'nofollow'
               %li.option-bods.last
-                = link_to t(".download_bods"), entity_path(@entity, format: :json)
+                = link_to t(".download_bods"), entity_path(@entity, format: :json), rel: 'nofollow'
 
 .content.entity-content
   .container-fluid
