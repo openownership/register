@@ -54,12 +54,3 @@
                 = t('.links_title')
               %p
                 = link_to(t('.source_url_link'), @data_source.url, class: 'external', target: '_blank', rel: 'noopener')
-        - if @data_source.timeline_url.present?
-          .frame-light.meta
-            .frame-wrap
-              - if @data_source.timeline_url.present?
-                %h6
-                  = t('.news_title')
-                = link_to(@data_source.timeline_url, 'class' => "twitter-timeline", 'data-dnt' => 'true', 'data-link-color' => '#3C31D4', 'data-chrome' => 'transparent noheader nofooter noborders', 'data-height' => '600') do
-                  = t('.news_fallback_text')
-                  %script{ src: "https://platform.twitter.com/widgets.js", async: true, charset: "utf-8" }
