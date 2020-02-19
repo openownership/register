@@ -1,4 +1,8 @@
 class DataSourcesController < ApplicationController
+  def index
+    @data_sources = decorate DataSource.where(:overview.ne => nil)
+  end
+
   def show
     @data_source = DataSource.find(params[:id])
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
