@@ -1,4 +1,13 @@
+.home .content-wrapper {
+  // Default to a dark background so that things at the top of the page (e.g. messages for signing
+  // in/out) blend into the hero.
+  background: $darkBlue;
+  color: $white;
+}
+
 .home-content {
+  background: $background-color;
+  color: $text-default;
   padding-top: 0px; // So the black hero blends into it
 
   .row {
@@ -13,7 +22,7 @@
 .home-hero {
   background: $darkBlue;
   color: $white;
-  padding-top: 2em; // Replacing the padding-top so that it's black
+  padding-top: 2em; // Replacing the padding-top from .content so that it's black
 
   .row {
     margin-bottom: 4rem;
