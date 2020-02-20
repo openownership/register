@@ -159,10 +159,10 @@ en:
         faq: FAQ
         glossary: Glossary
         download: Download data
+        data_sources: Data sources
       nav:
-        what_we_do: What we do
+        back_to_oo: Back to main site
         follow: Follow our work on
-        connect_with_us: Connect with us
         home: Home
         feedback: Feedback
         new_user_session: Sign in
@@ -170,7 +170,6 @@ en:
         new_user_registration: Sign up
         edit_user_registration: My account
         submissions: Submit your data
-      subtitle: The Global Beneficial Ownership Register
   pages:
     terms_and_conditions:
       title: Terms & Conditions
@@ -184,6 +183,8 @@ en:
       title: Download our data
     data_changelog:
       title: Data changelog
+    home:
+      title: Search over 12 million beneficial ownership records
   relationships:
     provenance:
       unknown: Not yet uploaded
@@ -204,7 +205,7 @@ en:
       legal-entity_count: Currently showing %{count} companies
       data_sources_preface: "Free and open information on %{count} companies, from:"
       headline: Who controls, influences, or benefits from a company?
-      placeholder: Search company or name of person
+      placeholder: Search company name, number or name of person
       no_results: No results to show
       search: Search
       fallback: "No results containing all your search terms were found. Matches on some of your search terms:"
@@ -232,7 +233,6 @@ en:
     javascript_required: (Javascript is required to view this content)
     controlled_companies_html: "Controls: %{company_links}"
     no_controlled_companies: "Does not currently control any companies"
-    data_download_message_html: "<h4 class='alert-title'><i class='fa fa-download'></i> &nbsp;Bulk downloads are here!</h4> <a href='%{url}' class='alert-link'>Read our documentation</a> to understand what they contain and get your hands on our data."
   entity_types:
     default: entity
     legal-entity: legal entity

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Filtering search results' do
+  include SearchHelpers
+
   let!(:uk_company) { FactoryGirl.create(:legal_entity) }
   let!(:australian_company) { FactoryGirl.create(:legal_entity, jurisdiction_code: 'au') }
   let!(:uk_person) { FactoryGirl.create(:natural_person) }
@@ -11,11 +13,7 @@ RSpec.describe 'Filtering search results' do
   end
 
   it 'Can filter results by entity type' do
-    visit '/'
-    within '.search-content' do
-      fill_in 'q', with: 'Example' # Matches all people and companies
-      click_button 'Search'
-    end
+    search_for 'Example' # Matches all people and companies
 
     click_link 'Person', href: %r{\/search\/*}
     expect(page).to have_text uk_person.name
@@ -31,11 +29,7 @@ RSpec.describe 'Filtering search results' do
   end
 
   it 'Can filter results by country' do
-    visit '/'
-    within '.search-content' do
-      fill_in 'q', with: 'Example' # Matches all people and companies
-      click_button 'Search'
-    end
+    search_for 'Example' # Matches all people and companies
 
     click_link 'Australia', href: %r{\/search\/*}
     expect(page).to have_text australian_company.name

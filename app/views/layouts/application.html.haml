@@ -22,7 +22,7 @@
     %link{ color: "#3b26d8", href: "/safari-pinned-tab.svg", rel: "mask-icon" }/
     %meta{ content: "#12171d", name: "theme-color" }/
     = yield :head
-  %body
+  %body{ class: yield(:body_class) }
     %header.site-header{ class: ("site-header-small" unless current_page?(root_path)) }
       .container-fluid
         .row
@@ -39,14 +39,11 @@
                       = link_to t(".nav.submissions"), submissions_path, class: "nav-link"
                   %li.nav-item
                     %a.nav-link.external{ href: "https://www.openownership.org/what-we-do/", target: "_blank" }
-                      = t(".nav.what_we_do")
-                  %li.nav-item
-                    %a.nav-link.external{ href: "https://www.openownership.org/connect-with-us/", target: "_blank" }
-                      = t(".nav.connect_with_us")
+                      = t(".nav.back_to_oo")
                   %li.nav-item
                     %a.nav-link.external{ href: feedback_form_url, target: "_blank" }
                       = t(".nav.feedback")
-                  .float-md-right.sign-up-nav
+                  .float-lg-right.sign-up-nav
                     - if user_signed_in?
                       %li.nav-item
                         = link_to t(".nav.edit_user_registration"), edit_user_registration_path, class: "nav-link"
@@ -57,7 +54,7 @@
                         = link_to t(".nav.new_user_session"), new_user_session_path, class: "nav-link"
                       %li.nav-item
                         = link_to t(".nav.new_user_registration"), new_user_registration_path, class: "nav-link"
-                  %span.float-md-right.follow-nav
+                  %span.float-lg-right.follow-nav
                     %li.nav-item.follow-label
                       = t(".nav.follow")
                     %li.nav-item
@@ -75,7 +72,6 @@
             = render partial: 'shared/search_bar' unless submissions_section?
 
     .content-wrapper
-      = render 'shared/data_download'
       = render 'shared/messages'
       = yield
 
@@ -86,6 +82,7 @@
           = link_to t('.footer.terms_and_conditions'), terms_and_conditions_path
           = link_to t('.footer.faq'), faq_path
           = link_to t('.footer.glossary'), glossary_path
+          = link_to t('.footer.data_sources'), data_sources_path
           = link_to t('.footer.download'), download_path
       .supporters-footer
         .container-fluid

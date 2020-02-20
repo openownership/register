@@ -24,7 +24,6 @@ RSpec.describe 'Data Source pages' do
         :psc_data_source,
         overview: 'test [markdown](http://example.com/overview)',
         data_availability: 'test [markdown](http://example.com/availability)',
-        timeline_url: 'http://example.com/twitter',
         current_statistic_types: [
           DataSourceStatistic::Types::TOTAL,
           DataSourceStatistic::Types::REGISTER_TOTAL,
@@ -144,9 +143,6 @@ RSpec.describe 'Data Source pages' do
       # Test that markdown was parsed correctly in the content
       expect(page).to have_link(href: 'http://example.com/overview')
       expect(page).to have_link(href: 'http://example.com/availability')
-      # Twitter timeline won't load without JS, which is for the best in specs
-      expect(page).to have_text(I18n.t('data_sources.show.news_title'))
-      expect(page).to have_link(I18n.t('data_sources.show.news_fallback_text'))
 
       # Statistics
       expect(page).to have_text(I18n.t('data_sources.show.statistics_title'))

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Search pagination' do
+  include SearchHelpers
+
   let!(:companies) { FactoryGirl.create_list(:legal_entity, 20) }
   let!(:people) { FactoryGirl.create_list(:natural_person, 20) }
 
@@ -9,11 +11,7 @@ RSpec.describe 'Search pagination' do
   end
 
   it 'can page through results' do
-    visit '/'
-    within '.search-content' do
-      fill_in 'q', with: 'Example' # Matches all people and companies
-      click_button 'Search'
-    end
+    search_for 'Example' # Matches all people and companies
 
     expect(page).to have_selector('.list-entities .item', count: 10)
     expect(page).to have_text 'Displaying results 1 - 10 of 40 in total'
