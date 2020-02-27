@@ -21,7 +21,8 @@ module Submissions
     def edit
       @submission = current_user.submissions.find(params[:id])
       @node = TreeNode.new(@submission.entity)
-      redirect_to submission_path(@submission) if @submission.submitted?
+      return redirect_to submission_path(@submission) if @submission.submitted?
+      return redirect_to search_submission_entities_path(@submission) unless @submission.started?
     end
 
     def show
