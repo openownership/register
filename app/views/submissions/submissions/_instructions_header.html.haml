@@ -4,5 +4,5 @@
       = t('.started_title_html', entity: render('submissions/entities/long_snippet', entity: @submission.entity))
     - else
       = t('.unstarted_title')
-  - if @submission.draft? && !current_page?(edit_submission_path(@submission))
+  - if @submission.started? && @submission.draft? && !current_page?(edit_submission_path(@submission))
     %small= link_to t('.back'), edit_submission_path(@submission)

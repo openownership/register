@@ -4,6 +4,7 @@ RSpec.describe 'add controlling entity' do
   include SubmissionHelpers
 
   let(:submission) { create(:submission) }
+  let!(:root_entity) { create(:submission_legal_entity, submission: submission) }
 
   before do
     stub_opencorporates_api_for_search
@@ -11,10 +12,6 @@ RSpec.describe 'add controlling entity' do
   end
 
   context 'to root entity' do
-    before do
-      create(:submission_legal_entity, submission: submission)
-    end
-
     scenario 'successfully' do
       visit edit_submission_path(submission)
       click_on add_controlling_entity_button
@@ -24,6 +21,14 @@ RSpec.describe 'add controlling entity' do
       click_on 'Acme Corporation'
       expect(page).to have_text 'Acme Corporation'
     end
+
+    scenario 'circular ownership' do
+      visit edit_submission_path(submission)
+      click_on add_controlling_entity_button
+      click_on legal_entity_button
+      click_on root_entity.name
+      expect(page).to have_text circular_ownership
+    end
   end
 
   context 'to non-root entity' do
@@ -32,7 +37,7 @@ RSpec.describe 'add controlling entity' do
         :submission_relationship,
         submission: submission,
         target: create(:submission_legal_entity, submission: submission),
-        source: create(:submission_legal_entity, submission: submission),
+        source: root_entity,
       )
     end
 
@@ -44,6 +49,14 @@ RSpec.describe 'add controlling entity' do
       click_on submit_button
       click_on 'Acme Corporation'
       expect(page).to have_text 'Acme Corporation'
+    end
+
+    scenario 'circular ownership' do
+      visit edit_submission_path(submission)
+      click_on add_controlling_entity_button
+      click_on legal_entity_button
+      click_on root_entity.name
+      expect(page).to have_text circular_ownership
     end
   end
 
@@ -57,5 +70,9 @@ RSpec.describe 'add controlling entity' do
 
   def submit_button
     I18n.t('submissions.entities.search.submit')
+  end
+
+  def circular_ownership
+    I18n.t('circular_ownership_entity.name')
   end
 end

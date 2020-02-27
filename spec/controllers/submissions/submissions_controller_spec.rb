@@ -27,7 +27,7 @@ RSpec.describe Submissions::SubmissionsController do
     end
   end
 
-  describe "POST #show" do
+  describe "POST #create" do
     subject do
       post :create
     end
@@ -38,6 +38,8 @@ RSpec.describe Submissions::SubmissionsController do
   end
 
   describe "GET #edit" do
+    let(:submission) { create(:draft_submission) }
+
     subject do
       get :edit, params: { id: submission.id }
     end
@@ -46,6 +48,15 @@ RSpec.describe Submissions::SubmissionsController do
       it "renders the correct template" do
         subject
         expect(response).to render_template(:edit)
+      end
+    end
+
+    context "submission is not started" do
+      before { submission.reload.entity.destroy }
+
+      it "redirects to search" do
+        subject
+        expect(response).to redirect_to search_submission_entities_path(submission)
       end
     end
 
