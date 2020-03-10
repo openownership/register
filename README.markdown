@@ -547,7 +547,8 @@ Monitoring it:
 - Check on disk usage and inode usage: `df -h`, `df -i`
 
 ## Combining and Uploading the results
-
+- clean up the Redis set used to de-dupe the exported statements. It's not needed
+  (we only use the list for ordering) and takes up precious memory in Redis.
 - Find the export id from the export you just finished (it should be the same as
   the latest/only folder name in RAILS_ROOT/tmp/exports).
 - Decide whether you're creating a wholly new file, or an incremental update:
