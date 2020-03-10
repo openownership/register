@@ -1,5 +1,16 @@
 class DevelopmentDataCreator
+  def initialize
+    @tmp_dir = Rails.root.join('tmp', 'dev-data')
+    @s3_client = Aws::S3::Client.new(
+      region: 'eu-west-1',
+      access_key_id: ENV['DEV_DATA_AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['DEV_DATA_AWS_SECRET_ACCESS_KEY'],
+    )
+  end
+
   def call
+    FileUtils.mkdir_p @tmp_dir
+
     DataSourceLoader.new.call
 
     FactoryGirl.create_list(:draft_submission, 3)
@@ -18,7 +29,7 @@ class DevelopmentDataCreator
       )
     end
 
-    ua_data = Rails.root.join('db', 'data', 'ua_seed_data.jsonl')
+    ua_data = download_from_s3_to_tmp('ua_seed_data.jsonl')
     importer = UaImporter.new(
       source_url: 'https://data.gov.ua/dataset/1c7f3815-3259-45e0-bdf1-64dca07ddc10',
       source_name: 'Ukraine Consolidated State Registry (Edinyy Derzhavnyj Reestr [EDR])',
@@ -29,7 +40,7 @@ class DevelopmentDataCreator
 
     psc_data_source = DataSource.find('uk-psc-register')
     uk_import = Import.create!(data_source: psc_data_source)
-    uk_data = Rails.root.join('db', 'data', 'gb-persons-with-significant-control-snapshot-sample-1k.txt')
+    uk_data = download_from_s3_to_tmp('gb-persons-with-significant-control-snapshot-sample-1k.txt')
     records = open(uk_data).readlines.map do |line|
       data = JSON.parse(line)
       etag = data['data']['etag']
@@ -41,11 +52,24 @@ class DevelopmentDataCreator
     importer.retrieved_at = retrieved_at
     importer.process_records(records)
 
-    eiti_data = Rails.root.join('db', 'data', 'eiti-data.txt')
+    eiti_data = download_from_s3_to_tmp('eiti-data.txt')
     Rake::Task['eiti:import'].invoke(eiti_data)
 
     Entity.import(force: true)
 
     NaturalPersonsDuplicatesMerger.new.run
+  end
+
+  private
+
+  def download_from_s3_to_tmp(filename)
+    tmp_file = File.join(@tmp_dir, filename)
+    s3 = Aws::S3::Object.new(
+      ENV['DEV_DATA_S3_BUCKET_NAME'],
+      filename,
+      client: @s3_client,
+    )
+    s3.download_file(tmp_file)
+    tmp_file
   end
 end

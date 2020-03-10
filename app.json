@@ -26,6 +26,15 @@
     "DEFAULT_USERS": {
       "required": true
     },
+    "DEV_DATA_AWS_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "DEV_DATA_AWS_SECRET_ACCESS_KEY": {
+      "required": true
+    },
+    "DEV_DATA_S3_BUCKET_NAME": {
+      "required": true
+    },
     "CACHE_OC_API": {
       "required": true
     },
