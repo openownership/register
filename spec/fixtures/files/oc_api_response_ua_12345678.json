@@ -1,0 +1,22 @@
+{
+  "api_version": "0.4.6",
+  "results": {
+    "company": {
+      "company_number": "12345678",
+      "company_type": null,
+      "current_status": "Registered (зареєстровано)",
+      "dissolution_date": null,
+      "incorporation_date": "2015-01-01",
+      "jurisdiction_code": "ua",
+      "name": "Example Українська Company",
+      "registered_address": {
+        "country": "Ukraine",
+        "locality": null,
+        "postal_code": null,
+        "region": null,
+        "street_address": "12345, Example Region, Example City, Example District, Example Street, Building 1, Apartment 1"
+      },
+      "updated_at": "2015-01-01T00:00:00+00:00"
+    }
+  }
+}

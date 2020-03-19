@@ -1,0 +1,57 @@
+{
+  "Id": 1,
+  "PartneriVerejnehoSektora": [
+    {
+      "Id": 1,
+      "Meno": null,
+      "Priezvisko": null,
+      "DatumNarodenia": null,
+      "ObchodneMeno": "Example Slovak Company",
+      "Ico": "1234567",
+      "PlatnostOd": "2015-01-01T00:00:00+01:00",
+      "PlatnostDo": null,
+      "Adresa": {
+        "MenoUlice": "Example Street",
+        "OrientacneCislo": "1234/1",
+        "Mesto": "Example Place",
+        "Psc": "12345"
+      }
+    }
+  ],
+  "KonecniUzivateliaVyhod": [
+    {
+      "Id": 1,
+      "Meno": "Example",
+      "Priezvisko": "Person 1",
+      "DatumNarodenia": "1950-01-01T00:00:00+02:00",
+      "PlatnostOd": "2015-01-01T00:00:00+01:00",
+      "PlatnostDo": null,
+      "StatnaPrislusnost": {
+        "StatistickyKod": "703"
+      },
+      "Adresa": {
+        "MenoUlice": "Example Street",
+        "OrientacneCislo": "1234/1",
+        "Mesto": "Example Place",
+        "Psc": "12345"
+      }
+    },
+    {
+      "Id": 2,
+      "Meno": "Example",
+      "Priezvisko": "Person 2",
+      "DatumNarodenia": null,
+      "PlatnostOd": "2015-01-01T00:00:00+01:00",
+      "PlatnostDo": null,
+      "StatnaPrislusnost": {
+        "StatistickyKod": "703"
+      },
+      "Adresa": {
+        "MenoUlice": "Example Street",
+        "OrientacneCislo": "1234/2",
+        "Mesto": "Example Place",
+        "Psc": "12345"
+      }
+    }
+  ]
+}

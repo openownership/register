@@ -1,0 +1,89 @@
+{
+  "navne": [
+    {
+      "navn": "Danish Person 2",
+      "periode": {
+        "gyldigFra": null,
+        "gyldigTil": null
+      }
+    }
+  ],
+  "fejlRegistreret": false,
+  "virksomhedSummariskRelation": [
+    {
+      "organisationer": [
+        {
+          "medlemsData": [
+            {
+              "attributter": [
+                {
+                  "type": "EJERANDEL_PROCENT",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "1"
+                    }
+                  ]
+                },
+                {
+                  "type": "EJERANDEL_STEMMERET_PROCENT",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "1"
+                    }
+                  ]
+                },
+                {
+                  "type": "FUNKTION",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "Reel ejer",
+                      "periode": {
+                        "gyldigFra": "2015-01-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-01-01T00:00:00.000+02:00"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "virksomhed": {
+        "navne": [
+          {
+            "navn": "Danish Company 3",
+            "periode": {
+              "gyldigFra": "2015-01-01",
+              "gyldigTil": null
+            }
+          }
+        ],
+        "fejlRegistreret": false,
+        "cvrNummer": 13141516
+      }
+    }
+  ],
+  "enhedstype": "PERSON",
+  "beliggenhedsadresse": [
+    {
+      "fritekst": null,
+      "vejnavn": "Example Vej",
+      "conavn": null,
+      "periode": {
+        "gyldigFra": "2015-01-01",
+        "gyldigTil": null
+      },
+      "husnummerFra": 1,
+      "postboks": null,
+      "postnummer": 4567,
+      "etage": "1",
+      "husnummerTil": null,
+      "landekode": "DK",
+      "postdistrikt": "Example Town"
+    }
+  ],
+  "sidstOpdateret": "2015-01-01T00:00:00.000+02:00",
+  "enhedsNummer": 2
+}

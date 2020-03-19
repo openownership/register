@@ -1,0 +1,29 @@
+{
+  "enhedstype": "PERSON",
+  "fejlRegistreret": false,
+  "virksomhedSummariskRelation": [
+    {
+      "organisationer": [
+        {
+          "medlemsData": [
+            {
+              "attributter": [
+                {
+                  "type": "FUNKTION",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "DIREKTION"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "virksomhed": {
+        "fejlRegistreret": false
+      }
+    }
+  ]
+}

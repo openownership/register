@@ -1,0 +1,99 @@
+{
+    "results": [
+        {
+            "address_components": [
+                {
+                    "long_name": "1234",
+                    "short_name": "1234",
+                    "types": [
+                        "street_number"
+                    ]
+                },
+                {
+                    "long_name": "1",
+                    "short_name": "1",
+                    "types": [
+                        "premise"
+                    ]
+                },
+                {
+                    "long_name": "Example Street",
+                    "short_name": "Example Street",
+                    "types": [
+                        "route"
+                    ]
+                },
+                {
+                    "long_name": "Skúšobné predmestie",
+                    "short_name": "Skúšobné predmestie",
+                    "types": [
+                        "political",
+                        "sublocality",
+                        "sublocality_level_1"
+                    ]
+                },
+                {
+                    "long_name": "Example Place",
+                    "short_name": "Example Place",
+                    "types": [
+                        "locality",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "Example Place",
+                    "short_name": "Example Place",
+                    "types": [
+                        "administrative_area_level_2",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "Example Place",
+                    "short_name": "Example Place",
+                    "types": [
+                        "administrative_area_level_1",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "Slovakia",
+                    "short_name": "SK",
+                    "types": [
+                        "country",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "12345",
+                    "short_name": "12345",
+                    "types": [
+                        "postal_code"
+                    ]
+                }
+            ],
+            "formatted_address": "Example Street 1234/1, 12345 Example Place, Slovakia",
+            "geometry": {
+                "location": {
+                    "lat": 48.14,
+                    "lng": 17.1
+                },
+                "location_type": "ROOFTOP",
+                "viewport": {
+                    "northeast": {
+                        "lat": 48.14,
+                        "lng": 17.1
+                    },
+                    "southwest": {
+                        "lat": 48.14,
+                        "lng": 17.1
+                    }
+                }
+            },
+            "types": [
+                "street_address"
+            ]
+        }
+    ],
+    "status": "OK"
+}

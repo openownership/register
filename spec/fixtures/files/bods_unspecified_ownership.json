@@ -1,0 +1,15 @@
+[
+  {
+    "statementID": "fbfd0547-d0c6-4a00-b559-5c5e91c34f5e",
+    "statementType": "ownershipOrControlStatement",
+    "statementDate": "2015-01-01",
+    "subject": {
+      "describedByEntityStatement": "1dc0e987-5c57-4a1c-b3ad-61353b66a9b7"
+    },
+    "interestedParty": {
+      "unspecified": {
+        "reason": "no-beneficial-owners"
+      }
+    }
+  }
+]

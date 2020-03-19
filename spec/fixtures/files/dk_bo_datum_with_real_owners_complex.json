@@ -1,0 +1,161 @@
+{
+  "navne": [
+    {
+      "navn": "Danish Person 1",
+      "periode": {
+        "gyldigFra": null,
+        "gyldigTil": null
+      }
+    }
+  ],
+  "beliggenhedsadresse": [
+    {
+      "landekode": "DK",
+      "fritekst": null,
+      "husnummerFra": 1,
+      "husnummerTil": null,
+      "etage": null,
+      "conavn": null,
+      "postboks": null,
+      "vejnavn": "Example Vej",
+      "postnummer": 1234,
+      "postdistrikt": "Example Town",
+      "periode": {
+        "gyldigFra": "2015-01-01",
+        "gyldigTil": null
+      }
+    }
+  ],
+  "virksomhedSummariskRelation": [
+    {
+      "virksomhed": {
+        "enhedstype": "VIRKSOMHED",
+        "fejlRegistreret": false,
+        "sidstOpdateret": "2015-01-02T00:00:00.000+02:00",
+        "cvrNummer": 1234567,
+        "navne": [
+          {
+            "navn": "Danish Company 1",
+            "periode": {
+              "gyldigFra": "2015-01-01",
+              "gyldigTil": "2015-01-02"
+            }
+          },
+          {
+            "navn": "Renamed Danish Company 1",
+            "periode": {
+              "gyldigFra": "2015-01-02",
+              "gyldigTil": null
+            }
+          }
+        ]
+      },
+      "organisationer": [
+        {
+          "medlemsData": [
+            {
+              "attributter": [
+                {
+                  "type": "EJERANDEL_PROCENT",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "0.5"
+                    }
+                  ]
+                },
+                {
+                  "type": "EJERANDEL_STEMMERET_PROCENT",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "0.5"
+                    }
+                  ]
+                },
+                {
+                  "type": "FUNKTION",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "Reel ejer",
+                      "periode": {
+                        "gyldigFra": "2015-01-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-01-02T00:00:00.000+02:00"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "virksomhed": {
+        "enhedstype": "VIRKSOMHED",
+        "fejlRegistreret": false,
+        "cvrNummer": 89101112,
+        "navne": [
+          {
+            "navn": "Danish Company 2",
+            "periode": {
+              "gyldigFra": "2015-01-01",
+              "gyldigTil": null
+            }
+          }
+        ]
+      },
+      "organisationer": [
+        {
+          "medlemsData": [
+            {
+              "attributter": [
+                {
+                  "type": "EJERANDEL_PROCENT",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "0.5"
+                    }
+                  ]
+                },
+                {
+                  "type": "EJERANDEL_STEMMERET_PROCENT",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "0.5"
+                    }
+                  ]
+                },
+                {
+                  "type": "FUNKTION",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "Reel ejer",
+                      "periode": {
+                        "gyldigFra": "2015-01-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-01-01T00:00:00.000+02:00"
+                    }
+                  ]
+                },
+                {
+                  "type": "SÆRLIGE_EJERFORHOLD",
+                  "vaerdier": [
+                    {
+                      "vaerdi": "Har indirekte besiddelser"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fejlRegistreret": false,
+  "enhedsNummer": 1,
+  "enhedstype": "PERSON",
+  "sidstOpdateret": "2015-01-02T00:00:00.000+01:00"
+}
