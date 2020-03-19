@@ -4,6 +4,7 @@
     "cytoscape": "^3.8.1",
     "cytoscape-dagre": "^2.2.2",
     "cytoscape-popper": "^1.0.4",
+    "minimist": "1.2.2",
     "rails-ujs": "^5.2.2-1",
     "serialize-javascript": "2.1.1",
     "string-to-color": "^2.1.1",
