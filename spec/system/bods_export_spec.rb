@@ -18,6 +18,11 @@ RSpec.describe 'BODS Export' do
     "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz"
   end
 
+  def stub_s3_client_initialisation
+    stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials/")
+      .to_return(status: 200, body: "")
+  end
+
   def stub_upload_of_latest_files
     stub_request(:put, latest_statements_url).to_return(status: 200, body: "")
     stub_request(:put, latest_ids_url).to_return(status: 200, body: "")
@@ -69,6 +74,7 @@ RSpec.describe 'BODS Export' do
     include_context 'BODS: company that is part of a chain of relationships'
 
     before do
+      stub_s3_client_initialisation
       stub_request(:head, latest_statements_url).with(query: "partNumber=1").to_return(status: 404, body: "")
       stub_request(:head, latest_ids_url).with(query: "partNumber=1").to_return(status: 404, body: "")
       stub_upload_of_latest_files
@@ -286,6 +292,7 @@ RSpec.describe 'BODS Export' do
         new_legal_entity_2_natural_person_statement,
       ]
 
+      stub_s3_client_initialisation
       stub_request(:head, latest_statements_url).with(query: "partNumber=1")
         .to_return(status: 200, headers: { 'content-length' => existing_statements_file.bytesize })
       stub_request(:head, latest_ids_url).with(query: "partNumber=1")

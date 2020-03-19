@@ -6,9 +6,15 @@ class BodsExportUploader
     @export = BodsExport.find(export_id)
 
     @redis = Redis.new
-    @bucket = ENV['BODS_EXPORT_S3_BUCKET_NAME']
 
+    @bucket = ENV['BODS_EXPORT_S3_BUCKET_NAME']
     @s3_folder = 'public/exports'
+    @s3_client = Aws::S3::Client.new(
+      region: 'eu-west-1',
+      access_key_id: ENV['BODS_EXPORT_AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['BODS_EXPORT_AWS_SECRET_ACCESS_KEY'],
+    )
+
     @local_folder = @export.output_folder
 
     @all_statements = 'statements.latest.jsonl.gz'
@@ -35,7 +41,7 @@ class BodsExportUploader
 
   def download_from_s3(filename)
     local_file = File.join(@local_folder, filename)
-    s3 = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{filename}")
+    s3 = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{filename}", client: @s3_client)
     s3.download_file(local_file)
   rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::NotFound
     Rails.logger.warn("[#{self.class.name}] File #{@s3_folder}/#{filename} does not existing in #{@bucket}, skipping")
@@ -68,13 +74,13 @@ class BodsExportUploader
   end
 
   def upload_to_s3(filename)
-    s3 = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{filename}")
+    s3 = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{filename}", client: @s3_client)
     s3.upload_file(File.join(@local_folder, filename))
   end
 
   def copy_file_in_s3(from, to)
-    s3_from = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{from}")
-    s3_to = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{to}")
+    s3_from = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{from}", client: @s3_client)
+    s3_to = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{to}", client: @s3_client)
     s3_from.copy_to(s3_to)
   end
 

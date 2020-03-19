@@ -1,8 +1,18 @@
 class DevelopmentDataLoader
+  def initialize
+    @tmp_dir = Rails.root.join('tmp', 'dev-data', 'generated')
+    @s3_client = Aws::S3::Client.new(
+      region: 'eu-west-1',
+      access_key_id: ENV['DEV_DATA_AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['DEV_DATA_AWS_SECRET_ACCESS_KEY'],
+    )
+  end
+
   def call
+    FileUtils.mkdir_p @tmp_dir
     DevelopmentDataHelper::MODELS.each do |klass|
       file = klass.name.tableize
-      data = File.read(Rails.root.join('db', 'data', 'generated', "#{file}.json"))
+      data = File.read(download_from_s3_to_tmp("#{file}.json"))
       JSON.parse(data).each do |instance_data|
         if klass == User
           # We have to manually set the password and confirmed_at for users, devise
@@ -35,5 +45,19 @@ class DevelopmentDataLoader
     end
 
     Entity.import(force: true)
+  end
+
+  private
+
+  def download_from_s3_to_tmp(filename)
+    tmp_file = File.join(@tmp_dir, filename)
+    FileUtils.mkdir_p File.dirname(tmp_file) # Sometimes we have new sub-dirs
+    s3 = Aws::S3::Object.new(
+      ENV['DEV_DATA_S3_BUCKET_NAME'],
+      "generated/#{filename}",
+      client: @s3_client,
+    )
+    s3.download_file(tmp_file)
+    tmp_file
   end
 end

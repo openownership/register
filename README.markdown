@@ -70,6 +70,27 @@ Ruby lint: `bundle exec rubocop`
 Haml lint: `bundle exec haml-lint .`
 Javascript lint: `yarn lint`
 
+## A note on Git History
+
+Originally this repository contained some sample data, taken from the various
+data sources and external systems we interact with, which we used in various
+tests. When planning to open-source this repository we received legal advice
+that we should remove this data.
+
+To do so, we first invented data to replace it, using the formats and structures
+of the existing sources, but generic values. You'll note that all our tests use
+companies with names like "Example UK Company", numbers like 1234567 and dates
+which are all based around starting points of 01/01/1950 (for people) or
+01/01/2015 (for companies).
+
+In addition to changing this data, we also purged the old data from our Git
+history. You'll note that most of our importer tests in particular all suddenly
+appear in the history in 2020, which is because of this purging.
+
+If you have a need to see this history, we can provide limited access to a
+private repository on an individual basis, please contact us or raise an issue
+to request it and we can figure out the details.
+
 ## Writing an importer
 
 Importers are intended to run multiple times and so must be idempotent. If the source data itself is idempotent (i.e. it doesn't matter which order records are imported), then importers can be parallelised.

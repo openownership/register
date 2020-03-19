@@ -15,9 +15,23 @@ RSpec.describe BodsExportUploader do
   let(:new_statements) { BodsSerializer.new([new_relationship], mapper).statements.flatten }
   let(:new_statement_ids) { new_statements.map { |s| s[:statementID] } }
 
+  let(:s3_client) { instance_double(Aws::S3::Client) }
+
+  def expect_s3_client
+    expect(Aws::S3::Client).to(
+      receive(:new)
+        .with(hash_including(:access_key_id, :secret_access_key))
+        .and_return(s3_client),
+    )
+  end
+
   def expect_s3_object(path)
     s3 = instance_double(Aws::S3::Object)
-    expect(Aws::S3::Object).to receive(:new).with(bucket, path).and_return(s3)
+    expect(Aws::S3::Object).to(
+      receive(:new)
+        .with(bucket, path, client: s3_client)
+        .and_return(s3),
+    )
     s3
   end
 
@@ -60,6 +74,8 @@ RSpec.describe BodsExportUploader do
   it 'concatenates the new statements to the rolling file' do
     with_temp_output_dir(export) do |dir|
       create_statement_files(new_statements)
+
+      expect_s3_client
 
       expect_s3_download(
         remote: 'public/exports/statements.latest.jsonl.gz',
@@ -124,6 +140,8 @@ RSpec.describe BodsExportUploader do
       with_temp_output_dir(export) do |dir|
         create_statement_files(new_statements)
 
+        expect_s3_client
+
         expect_s3_download(
           remote: 'public/exports/statements.latest.jsonl.gz',
           local: File.join(dir, 'statements.latest.jsonl.gz'),
@@ -173,6 +191,8 @@ RSpec.describe BodsExportUploader do
 
   it 'raises an error if a shell command fails' do
     with_temp_output_dir(export) do |dir|
+      expect_s3_client
+
       # Stub the downloads, but don't create the statement files, meaning the
       # concatenation will fail
       expect_s3_download(
@@ -194,6 +214,8 @@ RSpec.describe BodsExportUploader do
   it 'completes the export' do
     with_temp_output_dir(export) do |dir|
       create_statement_files(new_statements)
+
+      expect_s3_client
 
       expect_s3_download(
         remote: 'public/exports/statements.latest.jsonl.gz',
