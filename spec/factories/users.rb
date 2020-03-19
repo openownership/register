@@ -5,7 +5,7 @@ FactoryGirl.define do
     password "hunter2"
     password_confirmation "hunter2"
     confirmed_at 10.minutes.ago
-    company_name 'Chrinon Ltd'
+    company_name 'Example Ltd'
     position 'Engineer'
   end
 end
