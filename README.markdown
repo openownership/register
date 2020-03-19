@@ -79,8 +79,8 @@ that we should remove this data.
 
 To do so, we first invented data to replace it, using the formats and structures
 of the existing sources, but generic values. You'll note that all our tests use
-companies with names like "Example UK Company", numbers like 1234567 and dates
-which are all based around starting points of 01/01/1950 (for people) or
+companies with names like "Example UK Company", company numbers like 1234567 and
+dates which are all based around starting points of 01/01/1950 (for people) or
 01/01/2015 (for companies).
 
 In addition to changing this data, we also purged the old data from our Git
@@ -90,6 +90,10 @@ appear in the history in 2020, which is because of this purging.
 If you have a need to see this history, we can provide limited access to a
 private repository on an individual basis, please contact us or raise an issue
 to request it and we can figure out the details.
+
+Because of this purging, you can expect tests on older commits to be incomplete
+or fail because of missing files. Again, if you have a reasonable need for them,
+please ask and we'll see what we can do.
 
 ## Writing an importer
 
