@@ -7,7 +7,7 @@ gem 'puma', '~> 4.3'
 
 gem 'sass-rails', '~> 5.0'
 gem 'haml-rails', '~> 1.0'
-gem 'bootstrap', '~> 4.0.0.alpha5'
+gem 'bootstrap', '~> 4.3.1'
 gem 'font-awesome-sass', '~> 4.7.0'
 
 gem 'webpacker'
