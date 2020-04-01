@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby File.read(".ruby-version").strip
 
 gem 'addressable'
-gem 'rails', '~> 5.2.0', '>= 5.2.2.1'
+gem 'rails', '~> 5.2.0', '>= 5.2.4.2'
 gem 'puma', '~> 4.3'
 
 gem 'sass-rails', '~> 5.0'
