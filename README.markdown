@@ -1,6 +1,6 @@
 # OpenOwnership Register
 
-This repository contains the code which powers 
+This repository contains the code which powers
 https://register.openownership.org, OpenOwnership's demonstration of a
 global beneficial ownership register. The website uses Ruby on Rails and
 runs on Heroku.
@@ -18,7 +18,7 @@ free to contact us on: register@openownership.org and we'd be happy to advise.
 - [A note on Git history](#a-note-on-git-history)
 
 ### Playbooks
-These are a series of instructions for performing specific tasks, either in 
+These are a series of instructions for performing specific tasks, either in
 normal (but not automated) production usage, or for one-off events.
 
 - [Running data imports](#running-data-imports)
@@ -63,7 +63,7 @@ bucket, because it is real data. We will not normally share this data outside of
 OpenOwnership.
 
 Import a subset of real data that's useful for local development and get it into
-ElasticSearch. 
+ElasticSearch.
 
 ```bash
 rake postdeploy
@@ -125,7 +125,7 @@ Importers, Clients and Service Object are where we think the most useful code to
 
 ### Data model
 
-The register's data model has evolved over time, and predates our 
+The register's data model has evolved over time, and predates our
 [Beneficial Ownership Data Standard](https://github.com/openownership/data-standard).
 Because of that, we don't intend to promote it as a basis, or model for other projects.
 That said, in order to understand our other code, it helps to have a basic overview of
@@ -378,9 +378,6 @@ The setup process for this looks like:
 - Increase Redis to an extra-large instance in Heroku
 - Get an EC2 server in the eu-west-1 region.
   So far I've used a c5.xlarge (4 CPUs, 8GB ram) with 250GB disk space.
-- Create an ssh key for the user:
-  `ssh-keygen -t rsa -b 4096 -C "tech+bods-export@openownership.org"` and add
-  that to github: https://github.com/openownership/register/settings/keys/new
 - Clone the register: `git clone git@github.com:openownership/register.git`
 - Set up the checkout of the repo to be able to connect to the production
   services.
@@ -414,26 +411,33 @@ The setup process for this looks like:
 - Start a screen session: `screen -S bods-export`
 - Start sidekiq processes equal to the number of cpus in your EC2 machine:
   `bundle exec sidekiq`, `ctrl+a c`, repeat
+- Decide whether you're running an incremental export or a whole one and run
+  the necessary steps below
 - In a new screen window (ctrl+a c), start a rails console `bundle exec rails c`
-  - In the rails console, create and start the exporter: `BodsExporter.new.call`
-  - Note: for incremental exports, you need to have primed Redis with the existing
-    statement ids from S3. (Download the file from S3, read each line into an
-    array, then initialise the exporter with `existing_ids: your_array`)
-
-### To perform a wholly new export
-
-- This is a temporary workaround to our data not containing change markers in
-  the form of `replacesStatements` values.
-- Comment out the lines in `BodsExporter.entity_ids_to_export` that deal with
-  limiting the export to entities updated since the last export (everything
-  except the first and last line).
-- Run `BodsExporter.new.call`
-
+- In the rails console, create and start the exporter: `BodsExporter.new.call`
 - Once the exporter has completed, you can close the console and the screen
   window.
 - Detach screen with `ctrl+a ctrl+d`, reattach with `screen -r`
 
-Monitoring it:
+#### Incremental export
+
+For incremental exports, you need to have primed Redis with the existing
+statement ids from S3.
+
+- Download the file from S3
+- Read each line into an array
+- Initialise the exporter with `existing_ids: your_array`
+
+#### To perform a wholly new export
+
+This is a temporary workaround to our data not containing change markers in
+the form of `replacesStatements` values.
+
+- Comment out the lines in `BodsExporter.entity_ids_to_export` that deal with
+  limiting the export to entities updated since the last export (everything
+  except the first and last line).
+
+### Monitoring exports
 
 - Open /admin/sidekiq to monitor the jobs (on the heroku app) and Redis memory
   usage
@@ -445,7 +449,8 @@ Monitoring it:
 - Check on disk usage and inode usage: `df -h`, `df -i`
 
 ### Combining and Uploading the results
-- clean up the Redis set used to de-dupe the exported statements. It's not needed
+
+- Clean up the Redis set used to de-dupe the exported statements. It's not needed
   (we only use the list for ordering) and takes up precious memory in Redis.
 - Find the export id from the export you just finished (it should be the same as
   the latest/only folder name in RAILS_ROOT/tmp/exports).
@@ -479,7 +484,8 @@ doesn't appear in ps for your user either).
 - Run `BodsExportUploader.new(export_id).call` (nothing out of the ordinary
   needed, this should be the default)
 
-Monitoring it:
+### Monitoring data combining/uploading
+
 - Check on the export's output folder and monitor the filesize of the files
   therein.
 
