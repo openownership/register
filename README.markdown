@@ -378,7 +378,7 @@ The setup process for this looks like:
 - Increase Redis to an extra-large instance in Heroku
 - Get an EC2 server in the eu-west-1 region.
   So far I've used a c5.xlarge (4 CPUs, 8GB ram) with 250GB disk space.
-- Clone the register: `git clone git@github.com:openownership/register.git`
+- Clone the register: `git clone https://github.com/openownership/register.git`
 - Set up the checkout of the repo to be able to connect to the production
   services.
   - `cd register`
