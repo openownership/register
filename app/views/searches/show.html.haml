@@ -77,7 +77,7 @@
                 - if @fallback
                   %em= t(".fallback", query: params[:q])
                   %br
-                = page_entries_info @response.results, entry_name: 'result'
+                = page_entries_info @response.records, entry_name: 'result'
               .options
                 .option-transliterate
                   = transliteration_action(@should_transliterate)
@@ -92,7 +92,7 @@
                     - if record.merged_entities_count&.positive?
                       .result-merged-people
                         = t('.merged_people', count: record.merged_entities_count)
-              = paginate @response.results
+              = paginate @response.records
 
       .col-lg-3
         - unless params[:q].blank? || @response.results.empty?

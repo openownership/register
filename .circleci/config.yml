@@ -31,8 +31,7 @@ jobs:
       # Restore bundle cache
       - restore_cache:
           keys:
-            - app-bundle-v2-{{ checksum "Gemfile.lock" }}
-            - app-bundle-v2-
+            - app-bundle-v3-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: Bundle install
@@ -40,15 +39,14 @@ jobs:
 
       # Store bundle cache
       - save_cache:
-          key: app-bundle-v2-{{ checksum "Gemfile.lock" }}
+          key: app-bundle-v3-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
       # Restore yarn cache
       - restore_cache:
           keys:
-            - app-yarn-v1-{{ checksum "yarn.lock" }}
-            - app-yarn-v1-
+            - app-yarn-v2-{{ checksum "yarn.lock" }}
 
       - run:
           name: Yarn Install
@@ -56,7 +54,7 @@ jobs:
 
       # Store yarn / webpacker cache
       - save_cache:
-          key: app-yarn-v1-{{ checksum "yarn.lock" }}
+          key: app-yarn-v2-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
@@ -69,8 +67,7 @@ jobs:
       # Restore pip cache
       - restore_cache:
           keys:
-            - app-pip-v3-{{ checksum "requirements.txt" }}
-            - app-pip-v3-
+            - app-pip-v4-{{ checksum "requirements.txt" }}
 
       - run:
           name: 'Pip Install'
@@ -82,15 +79,14 @@ jobs:
 
       # Store pip cache
       - save_cache:
-          key: app-pip-v3-{{ checksum "requirements.txt" }}
+          key: app-pip-v4-{{ checksum "requirements.txt" }}
           paths:
             - ./venv
 
       # Restore NER models cache
       - restore_cache:
           keys:
-            - ua-edr-extractor-v1-{{ checksum "config/ua-edr-extractor.yml.erb" }}
-            - ua-edr-extractor-v1
+            - ua-edr-extractor-v2-{{ checksum "config/ua-edr-extractor.yml.erb" }}
 
       - run:
           name: Download NER models
@@ -99,7 +95,7 @@ jobs:
 
       # Store NER models cache
       - save_cache:
-          key: ua-edr-extractor-v1-{{ checksum "config/ua-edr-extractor.yml.erb" }}
+          key: ua-edr-extractor-v2-{{ checksum "config/ua-edr-extractor.yml.erb" }}
           paths:
             - /home/circleci/openownership/test-models.tar.gz
 
