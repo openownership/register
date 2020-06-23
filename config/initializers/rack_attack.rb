@@ -1,6 +1,7 @@
 Rails.application.config.blocked_ips = ENV.fetch('BLOCKED_IPS', '').split(',').map(&:strip)
 Rails.application.config.blocked_uas = ENV.fetch('BLOCKED_USER_AGENTS', '').split(',').map(&:strip)
 Rails.application.config.unrestricted_ips = ENV.fetch('UNRESTRICTED_IPS', '').split(',').map(&:strip)
+Rails.application.config.enable_ratelimiting = (ENV.fetch('ENABLE_RATE_LIMITING', '') == 'true')
 
 if Rails.env.production?
   X_FORWARDED_FOR_HEADER = 'HTTP_X_FORWARDED_FOR'.freeze
@@ -27,23 +28,25 @@ if Rails.env.production?
     end
   end
 
-  # Hacky throttle with exponential backoff, so that people get banned for
-  # increasingly long periods if they continue to exceed reasonable usage
-  # See: https://github.com/kickstarter/rack-attack/wiki/Advanced-Configuration#exponential-backoff
-  # Allows 10 requests in 8 seconds
-  #        20 requests in 64 seconds
-  #        30 requests in 512 seconds
-  #        ...
-  #        50 requests in 0.38 days (~250 requests/day)
-  (1..5).each do |level|
-    Rack::Attack.throttle("ip/#{level}", limit: (10 * level), period: (8**level).seconds) do |req|
-      req.ip unless asset_path?(req.path)
+  if Rails.application.config.enable_ratelimiting
+    # Hacky throttle with exponential backoff, so that people get banned for
+    # increasingly long periods if they continue to exceed reasonable usage
+    # See: https://github.com/kickstarter/rack-attack/wiki/Advanced-Configuration#exponential-backoff
+    # Allows 10 requests in 8 seconds
+    #        20 requests in 64 seconds
+    #        30 requests in 512 seconds
+    #        ...
+    #        50 requests in 0.38 days (~250 requests/day)
+    (1..5).each do |level|
+      Rack::Attack.throttle("ip/#{level}", limit: (10 * level), period: (8**level).seconds) do |req|
+        req.ip unless asset_path?(req.path)
+      end
     end
-  end
 
-  def asset_path?(path)
-    path.start_with?('/assets') \
-      || path.start_with?('/packs') \
-      || path.start_with?('/favicon')
+    def asset_path?(path)
+      path.start_with?('/assets') \
+        || path.start_with?('/packs') \
+        || path.start_with?('/favicon')
+    end
   end
 end
