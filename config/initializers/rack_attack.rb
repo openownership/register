@@ -1,11 +1,11 @@
 Rails.application.config.blocked_ips = ENV.fetch('BLOCKED_IPS', '').split(',').map(&:strip)
 Rails.application.config.blocked_uas = ENV.fetch('BLOCKED_USER_AGENTS', '').split(',').map(&:strip)
-Rails.application.config.whitelist_ips = ENV.fetch('WHITELIST_IPS', '').split(',').map(&:strip)
+Rails.application.config.unrestricted_ips = ENV.fetch('UNRESTRICTED_IPS', '').split(',').map(&:strip)
 
 if Rails.env.production?
   X_FORWARDED_FOR_HEADER = 'HTTP_X_FORWARDED_FOR'.freeze
 
-  Rails.application.config.whitelist_ips.each do |ip|
+  Rails.application.config.unrestricted_ips.each do |ip|
     Rack::Attack.safelist_ip ip
   end
 
