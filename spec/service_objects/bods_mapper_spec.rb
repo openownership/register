@@ -288,33 +288,6 @@ RSpec.describe BodsMapper do
             }
             expect(subject[:identifiers]).to include(expected_identifier)
           end
-
-          it 'adds a GB-COH identifier for parent UK companies from the PSC register' do
-            entity.identifiers = [{
-              'document_id' => 'GB PSC Snapshot',
-              'company_number' => '56789',
-              'link' => 'https://example.com/1234567/56789', # Note this doesn't appear in the result
-            }]
-            entity.jurisdiction_code = 'gb'
-            expected_identifier = {
-              scheme: 'GB-COH',
-              schemeName: 'Companies House',
-              id: '56789',
-            }
-            expect(subject[:identifiers]).to include(expected_identifier)
-          end
-
-          it "doesn't add a GB-COH identifier for non-UK companies from the PSC register" do
-            entity.identifiers = [{
-              'document_id' => 'GB PSC Snapshot',
-              'company_number' => '56789',
-              'link' => 'https://example.com/1234567/56789',
-            }]
-            entity.jurisdiction_code = 'de'
-            non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
-            expect(non_register_identifiers.size).to eq(1)
-            expect(non_register_identifiers.first[:scheme]).to be_nil
-          end
         end
 
         context 'DK-CVR identifiers' do
@@ -411,18 +384,46 @@ RSpec.describe BodsMapper do
       end
 
       context 'less official identifiers' do
-        it 'adds named-scheme identifiers for UK RLEs' do
+        it 'adds self-link and registration number identifiers for parent UK companies from the PSC register' do
           entity.identifiers = [{
             'document_id' => 'GB PSC Snapshot',
             'company_number' => '56789',
-            'link' => '/company/56789/persons-with-significant-control/corporate/hijklmn12343',
+            'link' => 'https://example.com/1234567/56789',
+          }]
+          entity.jurisdiction_code = 'gb'
+          expected_identifiers = [
+            {
+              schemeName: 'GB Persons Of Significant Control Register',
+              id: 'https://example.com/1234567/56789',
+            },
+            {
+              schemeName: 'GB Persons Of Significant Control Register - Registration numbers',
+              id: '56789',
+            },
+          ]
+          non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
+          expect(non_register_identifiers).to match_array(expected_identifiers)
+        end
+
+        it "adds self-link and registration number identifiers for non-UK companies from the PSC register" do
+          entity.identifiers = [{
+            'document_id' => 'GB PSC Snapshot',
+            'company_number' => '56789',
+            'link' => 'https://example.com/1234567/56789',
           }]
           entity.jurisdiction_code = 'de'
-          expected_identifier = {
-            schemeName: 'GB Persons Of Significant Control Register',
-            id: '/company/56789/persons-with-significant-control/corporate/hijklmn12343',
-          }
-          expect(subject[:identifiers]).to include(expected_identifier)
+          expected_identifiers = [
+            {
+              schemeName: 'GB Persons Of Significant Control Register',
+              id: 'https://example.com/1234567/56789',
+            },
+            {
+              schemeName: 'GB Persons Of Significant Control Register - Registration numbers',
+              id: '56789',
+            },
+          ]
+          non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
+          expect(non_register_identifiers).to match_array(expected_identifiers)
         end
 
         it 'adds named-scheme identifiers for foreign companies in SK data' do
@@ -495,6 +496,42 @@ RSpec.describe BodsMapper do
           }
           expect(subject[:identifiers]).to include(expected_identifier1)
           expect(subject[:identifiers]).to include(expected_identifier2)
+        end
+      end
+
+      context 'companies with identifiers that create duplicates' do
+        it 'dedupes the output identifiers' do
+          # These will each generate a self link identifier *and* a registration
+          # number identifier, but the latter should get deduped
+          entity.identifiers = [
+            {
+              'document_id' => 'GB PSC Snapshot',
+              'company_number' => '56789',
+              'link' => 'https://example.com/1234567/56789',
+            },
+            {
+              'document_id' => 'GB PSC Snapshot',
+              'company_number' => '56789',
+              'link' => 'https://example.com/89101112/56789',
+            },
+          ]
+          entity.jurisdiction_code = 'gb'
+          expected_identifiers = [
+            {
+              schemeName: 'GB Persons Of Significant Control Register',
+              id: 'https://example.com/1234567/56789',
+            },
+            {
+              schemeName: 'GB Persons Of Significant Control Register',
+              id: 'https://example.com/89101112/56789',
+            },
+            {
+              schemeName: 'GB Persons Of Significant Control Register - Registration numbers',
+              id: '56789',
+            },
+          ]
+          non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
+          expect(non_register_identifiers).to match_array(expected_identifiers)
         end
       end
     end

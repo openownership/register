@@ -205,6 +205,10 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
             'id' => 'fooo',
           },
           {
+            'schemeName' => 'GB Persons Of Significant Control Register - Registration numbers',
+            'id' => '67890',
+          },
+          {
             'schemeName' => 'OpenOwnership Register',
             'id' => Rails.application.routes.url_helpers.entity_url(legal_entity_2),
             'uri' => Rails.application.routes.url_helpers.entity_url(legal_entity_2),

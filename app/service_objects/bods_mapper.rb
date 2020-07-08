@@ -211,6 +211,7 @@ class BodsMapper
   def map_identifiers(entity)
     identifiers = entity.identifiers.flat_map do |identifier|
       next opencorporates_identifier(identifier) if entity.oc_identifier? identifier
+      next psc_self_link_identifiers(identifier) if entity.legal_entity? && identifier['link']
 
       scheme, scheme_name = identifier_scheme(identifier, entity)
       scheme_name = identifier_scheme_name(identifier) if scheme.blank?
@@ -221,7 +222,7 @@ class BodsMapper
         {
           scheme: scheme,
           schemeName: scheme_name,
-          id: identifier_id(identifier, entity, scheme).presence.try(:to_s),
+          id: identifier_id(identifier, scheme).presence.try(:to_s),
           uri: identifier['uri'],
         }.compact,
       ]
@@ -239,7 +240,7 @@ class BodsMapper
       bods_identifiers
     end
     identifiers << register_identifier(entity)
-    identifiers.compact
+    identifiers.compact.uniq
   end
 
   def identifier_scheme(identifier, entity)
@@ -257,18 +258,16 @@ class BodsMapper
     DOCUMENT_IDS_MAP.fetch(identifier['document_id'], identifier['document_id'])
   end
 
-  def identifier_id(identifier, entity, scheme)
+  def identifier_id(identifier, scheme)
     # Pass through existing BODS ids
     return identifier['id'] if identifier['id']
-    # Return OC uris for OC identifiers
-    return identifier_uri(identifier, entity) if entity.oc_identifier? identifier
+
     # If we've got a scheme, we're an official identifier so only need a single
     # value from one of these fields
     return identifier['company_number'] || identifier['beneficial_owner_id'] if scheme
 
-    # This is a standalone identifier, there's no need to combine it, but we
-    # didn't always trust it, so our internal identifiers have a company_number
-    # too.
+    # Only from the UK PSC register, and here only for people - companies are
+    # dealt with separately.
     return identifier['link'] if identifier['link']
     # These are always unique on their own
     return identifier['statement_id'] if identifier['statement_id']
@@ -293,6 +292,29 @@ class BodsMapper
       id: oc_url,
       uri: oc_url,
     }
+  end
+
+  # When we import PSC data containing RLEs (intermediate company owners) we
+  # give them a weird three-part identifier including their company number and
+  # the original identifier from the data called a "self link". When we output
+  # this we want to output two BODS identifiers, one for the link and one for the
+  # company number. This allows us to a) link the statement back to the specific
+  # parts of the PSC data it came from and b) share the company number we
+  # figured out from an OC lookup, but make the provenance clearer.
+  def psc_self_link_identifiers(identifier)
+    scheme_name = DOCUMENT_IDS_MAP[identifier['document_id']]
+    [
+      {
+        schemeName: scheme_name,
+        id: identifier['link'],
+      },
+      {
+        # These should not be compared to self links, so we give them a
+        # different scheme name
+        schemeName: "#{scheme_name} - Registration numbers",
+        id: identifier['company_number'],
+      },
+    ]
   end
 
   def register_identifier(entity)
