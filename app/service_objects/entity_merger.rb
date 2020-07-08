@@ -54,7 +54,9 @@ class EntityMerger
   end
 
   def merge_identifiers
-    @to_keep.identifiers.concat @to_remove.identifiers
+    @to_remove.identifiers.each do |identifier|
+      @to_keep.identifiers << identifier unless @to_keep.identifiers.include? identifier
+    end
   end
 
   def update_references!

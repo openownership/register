@@ -161,5 +161,43 @@ RSpec.describe EntityMerger do
         expect_not_merged
       end
     end
+
+    context 'when the entities share some identifiers' do
+      let(:shared_identifier) do
+        Entity.build_oc_identifier(
+          jurisdiction_code: 'gb',
+          company_number: 1234,
+        )
+      end
+      let(:company_1_identifier) do
+        {
+          'document_id' => 'SOURCE_1',
+          'company_number' => 123_456_789,
+        }
+      end
+      let(:company_2_identifier) do
+        {
+          'document_id' => 'SOURCE_2',
+          'company_number' => 123_456_789,
+        }
+      end
+      let!(:to_remove) { create :legal_entity, identifiers: [company_1_identifier, shared_identifier] }
+      # We have to build this one, otherwise our DB indexes will stop us
+      # saving it. This is replicating a situation where we've built an
+      # entity from an import and are trying to save it, but something
+      # matching the OC identifier already exists in the DB.
+      let!(:to_keep) { build :legal_entity, identifiers: [company_2_identifier, shared_identifier] }
+
+      let(:merged_identifiers) do
+        [company_1_identifier, company_2_identifier, shared_identifier]
+      end
+
+      it 'shouldn\'t create duplicate identifiers in the kept entity' do
+        set_up_search_index_updated_expectations
+        merged_entity = subject.call
+        expect(merged_entity).to eq to_keep
+        expect_merged(merged_identifiers, [])
+      end
+    end
   end
 end
