@@ -303,18 +303,21 @@ class BodsMapper
   # figured out from an OC lookup, but make the provenance clearer.
   def psc_self_link_identifiers(identifier)
     scheme_name = DOCUMENT_IDS_MAP[identifier['document_id']]
-    [
+    identifiers = [
       {
         schemeName: scheme_name,
         id: identifier['link'],
       },
-      {
+    ]
+    if identifier['company_number'].present?
+      identifiers << {
         # These should not be compared to self links, so we give them a
         # different scheme name
         schemeName: "#{scheme_name} - Registration numbers",
         id: identifier['company_number'],
-      },
-    ]
+      }
+    end
+    identifiers
   end
 
   def register_identifier(entity)
