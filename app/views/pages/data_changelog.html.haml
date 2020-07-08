@@ -21,6 +21,43 @@
             as a user of our data. Where possible, we'll identify directly
             which releases of bulk data you'll see these changes in.
 
+          %h2 08 Juyl 2020
+          %p
+            <strong>First affected bulk download:</strong> August 2020
+
+          %ul
+            %li
+              %p
+                After a report of duplicate identifiers for UK companies in our
+                output we investigated and realised that we were assigning some
+                company numbers under the wrong identifier scheme. We were also
+                missing an opportunity to output the internal "self link"
+                identifier that Companies House give to Relevant Legal Entities
+                (i.e. intermediate or ultimate corporate owners).
+              %p
+                This affects approximately 28,000 companies from the UK PSC data
+                that were reported as owners of another company and where the
+                disclosure included a 'registration number'. Before, we would
+                output that registration number as a company number under the
+                'GB-COH' scheme (when the company was declared as being in the
+                UK jurisdiction). Now, we output it under a new named scheme
+                "GB Persons Of Significant Control Register - Registration
+                numbers" - to make it clear that the data is not verified and
+                therefore not directly comparable to the identifiers we output
+                from companies' own direct disclosures.
+              %p
+                In most cases, this will simply mean that we output an
+                additional identifier, because we will also give one under the
+                GB-COH scheme. For total accuracy, you should compare entities
+                via the OpenOwnership register identifiers and remove GB-COH
+                identifiers where they no longer appear in our data.
+              %p
+                In addition, we now output Companies House's internal
+                'self link' identifiers for all owners, whether legal entity or
+                natural person. We previously did this for all people, and legal
+                entities that had no registration number or where not UK
+                companies, so you should simply see more identifiers for some UK
+                companies.
           %h2 09 December 2019
           %p
             <strong>First affected bulk download:</strong> 10th December 2019
@@ -74,6 +111,3 @@
               %ul
               - @exports.each do |export|
                 %li= link_to export.created_at.to_date, "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.#{export.created_at.iso8601}.jsonl.gz", rel: 'nofollow'
-
-
-
