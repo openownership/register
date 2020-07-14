@@ -1,0 +1,19 @@
+{
+    "name": "Open Ownership",
+    "short_name": "Open Ownership",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png?v=A0m4LWjpR6",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png?v=A0m4LWjpR6",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#3b25d8",
+    "background_color": "#3b25d8",
+    "display": "standalone"
+}
