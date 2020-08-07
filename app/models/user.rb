@@ -30,5 +30,5 @@ class User
   field :confirmation_sent_at, type: Time
   field :unconfirmed_email,    type: String
 
-  has_many :submissions, class_name: 'Submissions::Submission'
+  has_many :submissions, class_name: 'Submissions::Submission', dependent: :destroy
 end
