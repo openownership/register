@@ -1,7 +1,7 @@
 class EntitiesController < ApplicationController
   def show
     entity = Entity.includes(:master_entity).find(params[:id])
-    redirect_to_master_entity(:show, entity)
+    redirect_to_master_entity?(:show, entity) && return
 
     @merged_entities = entity.merged_entities.page(params[:merged_page]).per(10)
 
@@ -50,21 +50,21 @@ class EntitiesController < ApplicationController
 
   def tree
     entity = Entity.find(params[:id])
-    redirect_to_master_entity(:tree, entity)
+    redirect_to_master_entity?(:tree, entity) && return
     @node = decorate_with(TreeNode.new(entity), TreeNodeDecorator)
     @entity = decorate(entity)
   end
 
   def graph
     entity = Entity.find(params[:id])
-    redirect_to_master_entity(:graph, entity)
+    redirect_to_master_entity?(:graph, entity) && return
     @graph = decorate(EntityGraph.new(entity))
     @entity = decorate(entity)
   end
 
   def raw
     entity = Entity.find(params[:id])
-    redirect_to_master_entity(:raw, entity)
+    redirect_to_master_entity?(:raw, entity) && return
     @entity = decorate(entity)
     @raw_data_records = RawDataRecord.all_for_entity(entity)
       .includes(:imports)
@@ -90,8 +90,15 @@ class EntitiesController < ApplicationController
 
   private
 
-  def redirect_to_master_entity(action, entity)
-    redirect_to(action: action, id: entity.master_entity.id.to_s) if entity.master_entity.present?
+  def redirect_to_master_entity?(action, entity)
+    return false if entity.master_entity.blank?
+
+    redirect_to(
+      action: action,
+      id: entity.master_entity.id.to_s,
+      format: params[:format],
+    )
+    true
   end
 
   def ultimate_source_relationship_groups(entity)

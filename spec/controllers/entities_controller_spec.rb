@@ -109,6 +109,17 @@ RSpec.describe EntitiesController do
       expect(entity_statements.length).to eq 11
       expect(oc_statements.length).to eq 11
     end
+
+    context 'when the entity is a merged entity' do
+      let!(:master_entity) { create(:natural_person) }
+      let!(:merged_entity) do
+        create(:natural_person, master_entity: master_entity)
+      end
+      it 'redirects to the master entity' do
+        get :show, params: { id: merged_entity.id, format: :json }
+        expect(response).to redirect_to(entity_path(master_entity, format: :json))
+      end
+    end
   end
 
   describe 'GET #tree' do
