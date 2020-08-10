@@ -24,7 +24,7 @@ module ApplicationHelper
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', '#{Rails.application.config.ga_tracking_id}');
+          gtag('config', '#{Rails.application.config.ga_tracking_id}', { anonymize_ip: true, client_storage: 'none' });
         </script>
         GA
       ),
