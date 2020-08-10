@@ -31,6 +31,24 @@ RSpec.describe 'My account' do
     expect(page).to have_text account_updated_message
   end
 
+  it 'can delete an account' do
+    draft = FactoryGirl.create(:draft_submission, user: user)
+    submitted = FactoryGirl.create(:submitted_submission, user: user)
+    approved = FactoryGirl.create(:approved_submission, user: user)
+
+    visit '/'
+    click_link 'Sign in'
+    signin_as user
+    click_link 'My account'
+    click_button 'Delete my account and all my submissions'
+    expect(page).to have_text account_deleted_message
+
+    expect(User.where(id: user.id)).to be_empty
+    expect(Submissions::Submission.where(id: draft.id)).to be_empty
+    expect(Submissions::Submission.where(id: submitted.id)).to be_empty
+    expect(Submissions::Submission.where(id: approved.id)).to be_empty
+  end
+
   def confirm_email_change_message
     I18n.t('devise.registrations.update_needs_confirmation')
   end
@@ -41,5 +59,9 @@ RSpec.describe 'My account' do
 
   def account_updated_message
     I18n.t('devise.registrations.updated')
+  end
+
+  def account_deleted_message
+    I18n.t('devise.registrations.destroyed')
   end
 end

@@ -11,9 +11,9 @@ module Submissions
 
     belongs_to :user, class_name: "User", inverse_of: :submissions
 
-    has_many :entities, class_name: 'Submissions::Entity'
+    has_many :entities, class_name: 'Submissions::Entity', dependent: :destroy
     field :entities_count, type: Integer, default: 0
-    has_many :relationships, class_name: 'Submissions::Relationship'
+    has_many :relationships, class_name: 'Submissions::Relationship', dependent: :destroy
 
     field :submitted_at, type: Time
     field :approved_at, type: Time

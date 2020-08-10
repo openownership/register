@@ -126,6 +126,12 @@ en:
           minimum_length: "%{length} characters minimum"
         pending_reconfirmation: "Currently waiting confirmation for: %{email}"
         submit: Update
+        destroy:
+          header: Delete your account
+          intro_html: If you want to delete your account you can do so here. We will remove all record of your submissions, draft and approved, but any data that has already included in the register will remain there, in accordance with <a href="/privacy#personal-information">our data retention policy</a>.
+          retention_html: If you would like your submitted data to be removed also, please consult <a href="/privacy#redaction">our privacy policy</a> to understand when we will do so and how to ask for us to remove it.
+          warning_html: Warning! There is no going back. Once you click this button all your data is gone and your account will be removed. We cannot retrieve it.
+          submit: Delete my account and all my submissions
       new:
         title: Sign up
         email_help: (Please use your company email address)
