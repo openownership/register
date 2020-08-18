@@ -30,9 +30,7 @@
                   %em
                     = t(".minimum_password_length", length: @minimum_password_length)
                 = f.password_field :password, autocomplete: 'new-password', class: 'form-control form-control-lg'
-              - if ENV['RECAPTCHA_SITE_KEY'].present?
-                .form-group
-                  = recaptcha_tags
+              = invisible_captcha
               .actions
                 = f.submit t(".submit"), class: 'btn btn-primary btn-lg btn-block'
             = render "devise/shared/links"
