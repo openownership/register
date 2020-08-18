@@ -40,7 +40,7 @@ gem 'xxhash'
 gem 'oj'
 gem 'coderay'
 gem 'geokit'
-gem 'recaptcha'
+gem 'invisible_captcha'
 
 group :development, :test do
   gem 'byebug'
