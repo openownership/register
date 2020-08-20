@@ -288,7 +288,7 @@ en:
     disclosure-transparency-rules-chapter-five-applies: "The company has been or is exempt from keeping a PSC register, because it is a DTR issuer and the shares are admitted to trading on a regulated market."
     psc-exempt-as-trading-on-regulated-market: "The company has been or is exempt from keeping a PSC register, as it has voting shares admitted to trading on a regulated market other than the UK."
     psc-exempt-as-shares-admitted-on-market: "The company has been or is exempt from keeping a PSC register, as it has voting shares admitted to trading on a market listed in the Register of People with Significant Control Regulations 2016."
-
+    open-ownership: "Open Ownership is a non-profit run by a small, expert team well positioned to support countries implementing beneficial ownership transparency (BOT). Our day-to-day management relies on an executive team who are overseen by a Steering Group made up of leading transparency and accountability organisations. In order to focus on our mission, Open Ownership is fiscally sponsored by Global Impact. Fiscal sponsorship is a common mechanism in the non-profit sector that enables organisations to launch new programmes without needing to complete the full process of establishing a new legal entity. The Steering Group and our partners help ensure that our organisation is strategic and focused on our mission. The Steering Group also contributes to fundraising and publicly champions BOT."
   relationship_interests:
     shareholding: "Ownership of shares"
     shareholding-exact: "Ownership of shares - %{share}%"

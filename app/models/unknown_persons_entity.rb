@@ -28,7 +28,7 @@ class UnknownPersonsEntity < Entity
   def name
     return self[:name] if self[:name].present?
 
-    if unknown_reason_code == 'no-individual-or-entity-with-signficant-control'
+    if %w[no-individual-or-entity-with-signficant-control open-ownership].include?(unknown_reason_code)
       I18n.t("unknown_persons_entity.names.no_person")
     else
       I18n.t("unknown_persons_entity.names.unknown")
