@@ -74,7 +74,7 @@ RSpec.describe 'UaImportTrigger' do
 
   it 'extracts the data using a UaExtractor instance' do
     Dir.mktmpdir do |dir|
-      expected_input = File.join(dir, '15.1-EX_XML_EDR_UO_14.05.2019.xml')
+      expected_input = File.join(dir, '15-UFOP_01.05.2019', '15.1-EX_XML_EDR_UO_14.05.2019.xml')
       expected_output = File.join(dir, 'output.jsonl')
       expect(UaExtractor).to receive(:new).with(expected_input, expected_output, dir).and_return(extractor)
       expect(extractor).to receive(:call) do

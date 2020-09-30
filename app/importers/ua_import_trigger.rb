@@ -36,6 +36,6 @@ class UaImportTrigger
     zip_download = File.join(@working_dir, 'data.zip')
     IO.copy_stream(open(data_url), zip_download)
     system_or_raise_exception("cd #{@working_dir} && unzip -o #{zip_download}")
-    Dir.glob("#{@working_dir}/*XML_EDR_UO*.xml").first
+    Dir.glob("#{@working_dir}/*UFOP*/*XML_EDR_UO*.xml").first
   end
 end
