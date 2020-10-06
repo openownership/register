@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe 'BODS Export' do
   include BodsExportHelpers
 
-  let(:exporter) { BodsExporter.new }
+  let(:exporter) { BodsExporter.new(incremental: true) }
   let(:export) { exporter.export }
-  let(:uploader) { BodsExportUploader.new(export.id) }
+  let(:uploader) { BodsExportUploader.new(export.id, incremental: true) }
   let(:latest_statements_url) { "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz" }
   let(:latest_ids_url) { "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statement-ids.latest.txt.gz" }
   let(:redis) { Redis.new }
@@ -253,7 +253,7 @@ RSpec.describe 'BODS Export' do
 
     let!(:existing_statement_ids) { existing_statements.map { |s| s["statementID"] } }
 
-    let(:exporter) { BodsExporter.new(existing_ids: existing_statement_ids) }
+    let(:exporter) { BodsExporter.new(existing_ids: existing_statement_ids, incremental: true) }
 
     before do
       sio = StringIO.new
