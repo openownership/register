@@ -1,6 +1,7 @@
 Beneficial ownership data in Ukraine has been publicly available as open data in
 the Unified State Register of Legal Entities and Individual Entrepreneurs (USR)
-since 2017.
+since 2017. We regularly imported this data until September 2020, when a data
+format change caused us to pause imports indefinitely.
 
 Ukrainian law refers to ‘controllers’ (контролери) as opposed to ‘founders’
 (засновниками) to differentiate beneficial ownership from legal
