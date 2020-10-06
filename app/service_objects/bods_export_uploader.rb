@@ -2,8 +2,9 @@ class BodsExportUploader
   include SystemCallHelper
   attr_accessor :export_id
 
-  def initialize(export_id)
+  def initialize(export_id, incremental: false)
     @export = BodsExport.find(export_id)
+    @incremental = incremental
 
     @redis = Redis.new
 
@@ -27,8 +28,10 @@ class BodsExportUploader
   end
 
   def call
-    download_from_s3(@all_statements)
-    download_from_s3(@all_statement_ids)
+    if @incremental
+      download_from_s3(@all_statements)
+      download_from_s3(@all_statement_ids)
+    end
     append_new_statements
     upload_to_s3(@all_statements)
     upload_to_s3(@all_statement_ids)

@@ -383,6 +383,7 @@ The setup process for this looks like:
   services.
   - `cd register`
   - `bin/setup-bods-export`
+  - Activate rbenv: `source ~/.bash_profile`
   - Edit `config/mongoid.yml` and change the development database to a `uri`
     setting like production, copying in the production connection string from
     Heroku
@@ -426,16 +427,7 @@ statement ids from S3.
 
 - Download the file from S3
 - Read each line into an array
-- Initialise the exporter with `existing_ids: your_array`
-
-#### To perform a wholly new export
-
-This is a temporary workaround to our data not containing change markers in
-the form of `replacesStatements` values.
-
-- Comment out the lines in `BodsExporter.entity_ids_to_export` that deal with
-  limiting the export to entities updated since the last export (everything
-  except the first and last line).
+- Initialise the exporter with `existing_ids: your_array` and `incremental: true`
 
 ### Monitoring exports
 
@@ -454,7 +446,6 @@ the form of `replacesStatements` values.
   (we only use the list for ordering) and takes up precious memory in Redis.
 - Find the export id from the export you just finished (it should be the same as
   the latest/only folder name in RAILS_ROOT/tmp/exports).
-- Decide whether you're creating a wholly new file, or an incremental update:
 
 **Note**: If you're starting a new rails shell to run this command, remember
 a) to do it in a Screen session (it takes hours so you'll want to disconnect)
@@ -470,19 +461,10 @@ volume's boost credits. If you forget, you have to kill the spring process
 before anything can start, because it keeps running in the background (hint: it
 doesn't appear in ps for your user either).
 
-#### Wholly new update (replacing existing ones)
-
-- This is a temporary workaround to our data not containing change markers in
-  the form of `replacesStatements` values.
-- Comment out the `download_from_s3` lines in `BodsExportUploader.call` (the
-  first two lines)
-- Run `BodsExportUploader.new(export_id).call`
-
 #### Incremental update
 
 - Assuming you ran the export with a primed list of existing statement ids!
-- Run `BodsExportUploader.new(export_id).call` (nothing out of the ordinary
-  needed, this should be the default)
+- Run `BodsExportUploader.new(export_id, incremental: true).call`
 
 ### Monitoring data combining/uploading
 

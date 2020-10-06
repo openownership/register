@@ -106,7 +106,7 @@ RSpec.describe BodsExportUploader do
         to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz",
       )
 
-      BodsExportUploader.new(export.id).call
+      BodsExportUploader.new(export.id, incremental: true).call
 
       statements_json = Zlib::GzipReader.open(
         File.join(dir, 'statements.latest.jsonl.gz'),
@@ -171,7 +171,7 @@ RSpec.describe BodsExportUploader do
           to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz",
         )
 
-        BodsExportUploader.new(export.id).call
+        BodsExportUploader.new(export.id, incremental: true).call
 
         statements_json = Zlib::GzipReader.open(
           File.join(dir, 'statements.latest.jsonl.gz'),
@@ -206,7 +206,7 @@ RSpec.describe BodsExportUploader do
         contents: existing_statement_ids.join("\n") + "\n",
       )
       expect do
-        BodsExportUploader.new(export.id).call
+        BodsExportUploader.new(export.id, incremental: true).call
       end.to raise_error(RuntimeError)
     end
   end
@@ -246,7 +246,7 @@ RSpec.describe BodsExportUploader do
         to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz",
       )
 
-      BodsExportUploader.new(export.id).call
+      BodsExportUploader.new(export.id, incremental: true).call
 
       expect(export.reload.completed_at).to be_within(1.second).of(Time.zone.now)
     end

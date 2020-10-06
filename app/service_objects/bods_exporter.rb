@@ -1,10 +1,11 @@
 class BodsExporter
   attr_accessor :chunk_size, :export
 
-  def initialize(existing_ids: nil, chunk_size: 100)
+  def initialize(existing_ids: nil, chunk_size: 100, incremental: false)
     @existing_ids = existing_ids
     @export = BodsExport.create!
     @chunk_size = chunk_size
+    @incremental = incremental
   end
 
   def call
@@ -20,9 +21,11 @@ class BodsExporter
 
   def entity_ids_to_export
     entities = Entity.legal_entities.no_timeout
-    last_export = BodsExport.most_recent
-    unless last_export.nil?
-      entities = entities.where(:updated_at.gt => last_export.created_at)
+    if @incremental
+      last_export = BodsExport.most_recent
+      unless last_export.nil?
+        entities = entities.where(:updated_at.gt => last_export.created_at)
+      end
     end
     entities.pluck(:id).map(&:to_s)
   end

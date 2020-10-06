@@ -46,6 +46,8 @@ RSpec.describe BodsExporter do
     end
 
     context "when there have been other completed exports" do
+      subject { BodsExporter.new(chunk_size: 1, incremental: true) }
+
       before do
         legal_entity_1.set(updated_at: '2019-01-01 00:00:00')
         legal_entity_2.set(updated_at: '2019-01-02 00:00:00')
