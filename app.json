@@ -1,9 +1,6 @@
 {
   "name": "openownership-register",
   "stack": "heroku-18",
-  "scripts": {
-    "postdeploy": "rake postdeploy"
-  },
   "env": {
     "ADMIN_BASIC_AUTH": {
       "required": true

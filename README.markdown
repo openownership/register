@@ -509,6 +509,17 @@ Atlas and change the `ATLAS_URI` configuration string in the review app's
 settings. Note that you'll need to create a new 'project' because we're limited
 to one free sandbox cluster per project.
 
+If you're not creating a new database, you might want to reset the database to a
+known state, since it's shared (and persists) between review apps. You can use
+the postdeploy rake task to do so:
+
+```shell
+heroku run --app your-review-apps-name bin/rails postdeploy
+```
+
+**Remember that this might be shared by other review apps if you have multiple
+running!**
+
 ## Setting up a review app to mimic production
 
 Usually needed because you want to test a data import, or some other large
