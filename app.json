@@ -84,7 +84,6 @@
   "formation": {
   },
   "addons": [
-    "mongolab:sandbox",
     {
       "plan": "searchbox:starter",
       "options": {
