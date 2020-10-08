@@ -498,6 +498,28 @@ these steps:
 7. Due to a bug in Mongoid, we have to update the cached count manually:
    `master.reset_counters(:merged_entities)`
 
+## Setting up a review app
+
+Most parts of review app setup are automated, but note that we have a single
+shared database hosted on MongoDB's Atlas which is re-used between apps because
+there is no free MongoDB add-on on Heroku any more.
+
+If you're testing database specifics, you might want to make a new cluster in
+Atlas and change the `ATLAS_URI` configuration string in the review app's
+settings. Note that you'll need to create a new 'project' because we're limited
+to one free sandbox cluster per project.
+
+If you're not creating a new database, you might want to reset the database to a
+known state, since it's shared (and persists) between review apps. You can use
+the postdeploy rake task to do so:
+
+```shell
+heroku run --app your-review-apps-name bin/rails postdeploy
+```
+
+**Remember that this might be shared by other review apps if you have multiple
+running!**
+
 ## Setting up a review app to mimic production
 
 Usually needed because you want to test a data import, or some other large
@@ -515,7 +537,6 @@ Go into the "Resources" section of the review app (on Heroku) and:
   don't need to test cache effectiveness on this review app you can use a much
   smaller plan, e.g. 250MB).
 - Remove the Heroku Redis instance
-- Remove the mLab MongoDB instance
 - Remove the SearchBox Elasticsearch instance
 - Add Redis: `heroku addons:create openredis:micro --app openownership-register--pr-XXX`
 - Set the `REDIS_PROVIDER` config var to `OPENREDIS_URL` so that the app can talk
