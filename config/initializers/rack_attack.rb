@@ -10,13 +10,8 @@ if Rails.env.production?
     Rack::Attack.safelist_ip ip
   end
 
-  Rack::Attack.blocklist("blocked IPs") do |request|
-    ips = request.get_header(X_FORWARDED_FOR_HEADER)
-    if ips.present?
-      ips.split(',').map(&:strip).map(&:presence).compact.any? do |ip|
-        Rails.application.config.blocked_ips.include?(ip)
-      end
-    end
+  Rails.application.config.blocked_ips.each do |ip|
+    Rack::Attack.blocklist_ip ip
   end
 
   Rack::Attack.blocklist("blocked user agents") do |request|
