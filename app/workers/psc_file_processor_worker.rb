@@ -14,6 +14,7 @@ class PscFileProcessorWorker
     with_file(source_url) do |file|
       file.lazy.each_slice(chunk_size) do |lines|
         raw_records = lines.map do |line|
+          line.force_encoding("UTF-8")
           data = Oj.load(line, mode: :rails)
           {
             raw_data: line,
