@@ -371,13 +371,23 @@ disk to store intermediate results on. Therefore, we run it on an EC2 machine
 instead of Heroku (because Heroku's disks are reset every 24hrs). We still use
 the database and redis instance attached to the production Heroku app though.
 
+There are three main manual steps:
+
+1. Setting up an AWS server to run the jobs
+2. Exporting data to the local filesystem
+3. Combining the many small exported files into one JSONLines format file,
+   compressing it and uploading it to S3.
+
 The setup process for this looks like:
 
 ### Setting up the server
 
 - Increase Redis to an extra-large instance in Heroku
 - Get an EC2 server in the eu-west-1 region.
-  So far I've used a c5.xlarge (4 CPUs, 8GB ram) with 250GB disk space.
+  So far I've used a c5.xlarge (4 CPUs, 8GB ram) with 250GB disk space. There's
+  a template in our org AWS account for this purpose and the SSH key to log in
+  is in our 1Password account.
+- SSH into the machine: `ssh -i wherever/you/have/the.pem ubuntu@the-machines-ip`
 - Clone the register: `git clone https://github.com/openownership/register.git`
 - Set up the checkout of the repo to be able to connect to the production
   services.
@@ -416,8 +426,6 @@ The setup process for this looks like:
   the necessary steps below
 - In a new screen window (ctrl+a c), start a rails console `bundle exec rails c`
 - In the rails console, create and start the exporter: `BodsExporter.new.call`
-- Once the exporter has completed, you can close the console and the screen
-  window.
 - Detach screen with `ctrl+a ctrl+d`, reattach with `screen -r`
 
 #### Incremental export
@@ -429,9 +437,9 @@ statement ids from S3.
 - Read each line into an array
 - Initialise the exporter with `existing_ids: your_array` and `incremental: true`
 
-### Monitoring exports
+#### Monitoring exports
 
-- Open /admin/sidekiq to monitor the jobs (on the heroku app) and Redis memory
+- Open /admin/sidekiq to monitor the jobs (on the live site) and Redis memory
   usage
 - Optional: open Atlas' metrics page to monitor CPU usage and Disk IOPS
 - Optional: check the temporary statements directory to make sure files are being
@@ -442,10 +450,18 @@ statement ids from S3.
 
 ### Combining and Uploading the results
 
-- Clean up the Redis set used to de-dupe the exported statements. It's not needed
-  (we only use the list for ordering) and takes up precious memory in Redis.
+- Re-attach to the screen session (assuming you left it running)
+- Stop the sidekiq instances and close each screen window:
+  `ctrl+a 1`, `ctrl+c`, `ctrl+d`, repeat for each numbered screen window.
+- In the existing rails console, or a new one. Clean up the Redis set used
+  to de-dupe the exported statements. It's not needed (we only need a 
+  list for ordering the combined file now) and takes up precious memory in Redis. 
+  `redis.del('bods-export-redis-statements-set')`.
 - Find the export id from the export you just finished (it should be the same as
   the latest/only folder name in RAILS_ROOT/tmp/exports).
+- Run a BodsExportUpoloader:
+  `BodsExportUploader.new(export_id).call`
+- This will take hours, so disconnect your screen session again
 
 **Note**: If you're starting a new rails shell to run this command, remember
 a) to do it in a Screen session (it takes hours so you'll want to disconnect)
@@ -466,7 +482,7 @@ doesn't appear in ps for your user either).
 - Assuming you ran the export with a primed list of existing statement ids!
 - Run `BodsExportUploader.new(export_id, incremental: true).call`
 
-### Monitoring data combining/uploading
+#### Monitoring data combining/uploading
 
 - Check on the export's output folder and monitor the filesize of the files
   therein.
