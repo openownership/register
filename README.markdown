@@ -221,7 +221,6 @@ process.
    - `heroku run:detached --app openownership-register bin/rails psc:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails sk:trigger`
    - `heroku run:detached --app openownership-register -s performance-l bin/rails dk:trigger`
-   - `heroku run:detached --app openownership-register -s performance-l bin/rails ua:trigger`
 1. Now turn on worker dynos to process the import jobs. You can scale these
    horizontally as required, but remember that each will create 10 connections
    to the database, and Atlas is quite limited in performance, so 4-5 is perhaps
@@ -233,14 +232,19 @@ process.
    have to enqueue anything). Use `heroku ps` to be sure everything's done.
 
 Note: The full import from scratch takes roughly 30 hours, but the incremental
-import in each sprint should complete in 2-3 hours.
+import each month should complete in 2-3 hours.
+
+Note: We did run an import from Ukraine as well, but their format changed and
+we didn't see the value in fixing it. It was run with:
+`heroku run:detached --app openownership-register -s performance-l bin/rails ua:trigger`
 
 Note: The UA, DK and SK import triggers need a lot of memory to run, because they're
 iterating over all of the data, hence the performance-l dynos.
 
 Note: The UA import does not use sidekiq to process jobs, it manages its own
 parallelism internally, this means you cannot just rely on watching Sidekiq's
-queue  to know when it's finished, you need to check the dyno itself.
+queue to know when it's finished, you need to check the dyno itself with 
+`heroku ps --app openownership-register`.
 
 Note: Currently all of our import jobs are set to not retry, so if they fail
 they have genuinely failed. We can't currently retry them because of the way we
