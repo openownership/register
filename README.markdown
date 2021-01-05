@@ -400,9 +400,11 @@ The setup process for this looks like:
   - Activate rbenv: `source ~/.bash_profile`
   - Edit `config/mongoid.yml` and change the development database to a `uri`
     setting like production, copying in the production connection string from
-    Heroku
-  - Create a `.env.local` with the following environment variable overrides,
-    using values from the production Heroku:
+    Heroku. This means swapping the `database` and `hosts` keys for a single `uri`
+    key.
+  - Edit the empty `.env.local` to add the following environment variable overrides,
+    using values from the production Heroku. Note that `REDIS_URL` is called 
+    `OPENREDIS_URL` in Heroku.
     ```
     REDIS_URL=
     REDIS_PROVIDER=REDIS_URL
@@ -416,8 +418,9 @@ The setup process for this looks like:
     ```
 - Test in rails console you can see db and connect to redis
   ```ruby
+  Entity.count # Should return a number in the millions
   redis = Redis.new
-  redis.keys('*')
+  redis.keys('*') # Should return an array of strings with sidekiq queue names in
   redis.close
   ```
 
