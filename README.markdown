@@ -205,8 +205,7 @@ process.
 
 ### Pre-import
 
-1. Make a backup of the MongoDB database via the Atlas console.
-1. Note down the current `Entity.count` and `Relationship.count` via the Rails console.
+1. Note down the current `Entity.count` and `Relationship.count` via the Rails console (`heroku run --app openownership-register bin/rails c`).
 1. Open the Papertrail console (via the Heroku console) to monitor logs.
 1. Open the [sidekiq admin panel](https://register.openownership.org/admin/sidekiq) to monitor the background jobs.
    - The login details for this can be found via the Config Vars for the production app, in the Heroku console.
@@ -417,6 +416,8 @@ The setup process for this looks like:
     SITE_BASE_URL=https://register.openownership.org
     ```
 - Test in rails console you can see db and connect to redis
+  `bundle exec rails c`
+  
   ```ruby
   Entity.count # Should return a number in the millions
   redis = Redis.new
