@@ -427,6 +427,9 @@ The setup process for this looks like:
 
 ### Running the export
 
+- Before you start, make sure you've turned off any worker dynos in Heroku
+
+On the EC2 machine:
 - Start a screen session: `screen -S bods-export`
 - Start sidekiq processes equal to the number of cpus in your EC2 machine:
   `bundle exec sidekiq`, `ctrl+a c`, repeat
