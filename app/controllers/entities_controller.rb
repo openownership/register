@@ -30,20 +30,34 @@ class EntitiesController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        relationships = (
-          # Not just the paginated ones we show in HTML, all of them
-          entity.relationships_as_source +
-          @ultimate_source_relationship_groups.map do |g|
-            g[:relationships].map(&:sourced_relationships)
-          end.flatten.compact
-        )
+        # We cache some large JSON output to reduce load, but we're selective
+        # so we can't do the usual Rails.cache.fetch with a block
+        cache_key = "#{entity.cache_key}/bods_statements"
+        statements = Rails.cache.read(cache_key)
+        if statements.blank?
+          relationships = (
+            # Not just the paginated ones we show in HTML, all of them
+            entity.relationships_as_source +
+            @ultimate_source_relationship_groups.map do |g|
+              g[:relationships].map(&:sourced_relationships)
+            end.flatten.compact
+          )
 
-        serializer = BodsSerializer.new(
-          relationships,
-          BodsMapper.instance,
-        )
+          serializer = BodsSerializer.new(
+            relationships,
+            BodsMapper.instance,
+          )
 
-        render json: serializer.statements
+          # It's only worth caching large entities which are expensive to
+          # traverse all the relationships for
+          if serializer.statements.size > 20
+            Rails.cache.write(cache_key, serializer.statements.to_json)
+          end
+
+          statements = serializer.statements.to_json
+        end
+
+        render json: statements
       end
     end
   end
