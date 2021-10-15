@@ -1,7 +1,7 @@
-# OpenOwnership Register
+# Open Ownership Register
 
 This repository contains the code which powers
-https://register.openownership.org, OpenOwnership's demonstration of a
+https://register.openownership.org, Open Ownership's demonstration of a
 global beneficial ownership register. The website uses Ruby on Rails and
 runs on Heroku.
 
@@ -60,7 +60,7 @@ bin/setup
 
 Note: this final step relies on sample data which is held in a private S3
 bucket, because it is real data. We will not normally share this data outside of
-OpenOwnership.
+Open Ownership.
 
 Import a subset of real data that's useful for local development and get it into
 ElasticSearch.
@@ -621,7 +621,7 @@ to be able to access these services
 Now, locally, sanitize the database copy by running:
   `heroku run --app openownership-register--pr-XXX bin/rails sanitize`
 
-## Migrating to a new elasticsearch host
+## Migrating to a new Elasticsearch host
 
 This was done in order to upgrade Elasticsearch from 5.6.9 (paid for through
 Heroku) to 6.6.1 (on a separate Elastic cloud account), as our experience doing
@@ -635,7 +635,7 @@ running, but empty.
 ### Create an index in the new cluster
 
 You need to copy across the settings that elasticsearch-model would normally
-make for us. The easiest way to find them is asking elasticsearch itself. e.g.
+make for us. The easiest way to find them is asking Elasticsearch itself. e.g.
 
 `GET https://<old-elasticsearch-host>/open_ownership_register_entities_production`
 
@@ -687,7 +687,7 @@ PUT <new-elasticsearch-host/open_ownership_register_entities_production
 
 ### Reindex from the existing host
 
-Using elasticsearch's `_reindex` api, you can request your new cluster loads
+Using Elasticsearch's `_reindex` api, you can request your new cluster loads
 data from the existing one:
 
 ```
