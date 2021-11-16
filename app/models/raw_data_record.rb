@@ -9,7 +9,7 @@ class RawDataRecord
 
   field :etag, type: String
   field :raw_data, type: String
-  field :compressed, type: Boolean
+  field :compressed, type: TrueClass
   has_and_belongs_to_many :imports, index: true, inverse_of: nil # rubocop:disable Rails/HasAndBelongsToMany
 
   validates :raw_data, presence: true

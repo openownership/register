@@ -103,7 +103,7 @@ class BodsImporter
     statement.save!
   rescue Mongo::Error::OperationFailure => e
     # Make sure it's a duplicate key error "E11000 duplicate key error collection"
-    raise unless e.message.start_with?('E11000')
+    raise unless /E11000/.match(e.message)
     # Make sure it's the _id that is duplicated
     raise unless Statement.where('_id' => statement._id).exists?
     # Ignore this attempt to save, the record already exists
@@ -131,7 +131,7 @@ class BodsImporter
     relationship.save!
   rescue Mongo::Error::OperationFailure => e
     # Make sure it's a duplicate key error "E11000 duplicate key error collection"
-    raise unless e.message.start_with?('E11000')
+    raise unless /E11000/.match(e.message)
     # Make sure it's the _id that is duplicated
     raise unless Relationship.where('_id' => relationship._id).exists?
     # Ignore this attempt to save, the record already exists
@@ -168,7 +168,7 @@ class BodsImporter
 
   def skip_saving_duplicate_identifiers(entity, exception)
     # Make sure it's a duplicate key error "E11000 duplicate key error collection"
-    raise unless exception.message.start_with?('E11000')
+    raise unless /E11000/.match(exception.message)
     # Make sure it's the identifiers that are duplicated
     raise unless Entity.where('identifiers' => entity.identifiers).exists?
     # Ignore this attempt to save, the record already exists

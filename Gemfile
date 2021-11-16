@@ -13,6 +13,7 @@ gem 'font-awesome-sass', '~> 4.7.0'
 gem 'webpacker'
 
 gem 'mongoid'
+gem 'kaminari'
 gem 'kaminari-mongoid'
 gem 'elasticsearch-model', '~> 6.0'
 gem 'net-http-persistent', '~> 2.0'

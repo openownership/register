@@ -122,7 +122,7 @@ class Entity
 
     reload
   rescue Mongo::Error::OperationFailure => e
-    raise unless e.message.start_with?('E11000')
+    raise unless /E11000/.match(e.message)
 
     criteria = Entity.where(selector)
     if criteria.count > 1

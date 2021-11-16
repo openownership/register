@@ -20,7 +20,7 @@ module Submissions
     has_many :relationships_as_source, class_name: "Submissions::Relationship", inverse_of: :source
     has_many :relationships_as_target, class_name: "Submissions::Relationship", inverse_of: :target
 
-    field :user_created, type: Boolean, default: false
+    field :user_created, type: TrueClass, default: false
 
     validates :name, presence: true
     validates :jurisdiction_code, presence: true, if: :legal_entity?
