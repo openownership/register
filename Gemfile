@@ -46,7 +46,7 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec-rails'
   gem 'dotenv-rails'
-  gem 'database_cleaner'
+  gem 'database_cleaner-mongoid'
   gem 'webmock'
   gem 'launchy'
   gem 'pry-byebug'
