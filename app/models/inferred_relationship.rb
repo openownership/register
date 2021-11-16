@@ -11,7 +11,7 @@ class InferredRelationship
   def intermediate_entities
     return [] unless sourced_relationships.any?
 
-    sourced_relationships[1..-1].map(&:source)
+    sourced_relationships[1..].map(&:source)
   end
 
   def started_date

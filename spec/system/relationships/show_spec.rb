@@ -50,8 +50,8 @@ RSpec.describe 'Viewing a relationship' do
       visit entity_relationship_path(start_company, ultimate_owner)
 
       expect_company_details_for(start_company)
-      expect_company_details_for(intermediate_company_1)
-      expect_company_details_for(intermediate_company_2)
+      expect_company_details_for(intermediate_company1)
+      expect_company_details_for(intermediate_company2)
       expect_person_details_for(ultimate_owner)
       expect_relationship_details_for(start_to_intermediate_1_relationship)
       expect_relationship_details_for(intermediate_1_to_intermediate_2_relationship)
@@ -110,8 +110,8 @@ RSpec.describe 'Viewing a relationship' do
       visit entity_relationship_path(start_company, ultimate_owner)
 
       expect_company_details_for(start_company)
-      expect_company_details_for(intermediate_company_1)
-      expect_company_details_for(intermediate_company_2)
+      expect_company_details_for(intermediate_company1)
+      expect_company_details_for(intermediate_company2)
       expect_person_details_for(ultimate_owner)
       expect_relationship_details_for(start_to_intermediate_1_relationship)
       expect_relationship_details_for(start_to_intermediate_2_relationship)
@@ -125,23 +125,23 @@ RSpec.describe 'Viewing a relationship' do
 
     context 'when viewing the relationship with the master entity' do
       it 'shows the normal relationship info' do
-        visit entity_relationship_path(company, person_1)
+        visit entity_relationship_path(company, person1)
 
-        expect(page).to have_text "Beneficial ownership chain: #{person_1.name} to #{company.name}"
+        expect(page).to have_text "Beneficial ownership chain: #{person1.name} to #{company.name}"
         expect_company_details_for(company)
-        expect_person_details_for(person_1)
-        expect_relationship_details_for(person_1_relationship)
+        expect_person_details_for(person1)
+        expect_relationship_details_for(person1_relationship)
       end
     end
 
     context 'when viewing the relationship with the merged entity' do
       it 'shows the master entity but the merged relationship' do
-        visit entity_relationship_path(company, person_2)
+        visit entity_relationship_path(company, person2)
 
-        expect(page).to have_text "Beneficial ownership chain: #{person_1.name} to #{company.name}"
+        expect(page).to have_text "Beneficial ownership chain: #{person1.name} to #{company.name}"
         expect_company_details_for(company)
-        expect_person_details_for(person_1)
-        expect_relationship_details_for(person_2_relationship)
+        expect_person_details_for(person1)
+        expect_relationship_details_for(person2_relationship)
       end
     end
   end

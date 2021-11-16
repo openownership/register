@@ -9,7 +9,11 @@ RSpec.describe BodsExportUploader do
 
   let(:existing_relationship) { create(:relationship) }
   let(:existing_statements) { BodsSerializer.new([existing_relationship], mapper).statements.flatten }
+  let(:existing_statements_dump) do
+    existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n" # rubocop:disable Style/StringConcatenation
+  end
   let(:existing_statement_ids) { existing_statements.map { |s| s[:statementID] } }
+  let(:existing_statement_ids_dump) { "#{existing_statement_ids.join("\n")}\n" }
 
   let(:new_relationship) { create(:relationship) }
   let(:new_statements) { BodsSerializer.new([new_relationship], mapper).statements.flatten }
@@ -80,12 +84,12 @@ RSpec.describe BodsExportUploader do
       expect_s3_download(
         remote: 'public/exports/statements.latest.jsonl.gz',
         local: File.join(dir, 'statements.latest.jsonl.gz'),
-        contents: existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n",
+        contents: existing_statements_dump,
       )
       expect_s3_download(
         remote: 'public/exports/statement-ids.latest.txt.gz',
         local: File.join(dir, 'statement-ids.latest.txt.gz'),
-        contents: existing_statement_ids.join("\n") + "\n",
+        contents: existing_statement_ids_dump,
       )
 
       expect_s3_upload(
@@ -145,12 +149,12 @@ RSpec.describe BodsExportUploader do
         expect_s3_download(
           remote: 'public/exports/statements.latest.jsonl.gz',
           local: File.join(dir, 'statements.latest.jsonl.gz'),
-          contents: existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n",
+          contents: existing_statements_dump,
         )
         expect_s3_download(
           remote: 'public/exports/statement-ids.latest.txt.gz',
           local: File.join(dir, 'statement-ids.latest.txt.gz'),
-          contents: existing_statement_ids.join("\n") + "\n",
+          contents: existing_statement_ids_dump,
         )
 
         expect_s3_upload(
@@ -198,12 +202,12 @@ RSpec.describe BodsExportUploader do
       expect_s3_download(
         remote: 'public/exports/statements.latest.jsonl.gz',
         local: File.join(dir, 'statements.latest.jsonl.gz'),
-        contents: existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n",
+        contents: existing_statements_dump,
       )
       expect_s3_download(
         remote: 'public/exports/statement-ids.latest.txt.gz',
         local: File.join(dir, 'statement-ids.latest.txt.gz'),
-        contents: existing_statement_ids.join("\n") + "\n",
+        contents: existing_statement_ids_dump,
       )
       expect do
         BodsExportUploader.new(export.id, incremental: true).call
@@ -220,12 +224,12 @@ RSpec.describe BodsExportUploader do
       expect_s3_download(
         remote: 'public/exports/statements.latest.jsonl.gz',
         local: File.join(dir, 'statements.latest.jsonl.gz'),
-        contents: existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n",
+        contents: existing_statements_dump,
       )
       expect_s3_download(
         remote: 'public/exports/statement-ids.latest.txt.gz',
         local: File.join(dir, 'statement-ids.latest.txt.gz'),
-        contents: existing_statement_ids.join("\n") + "\n",
+        contents: existing_statement_ids_dump,
       )
 
       expect_s3_upload(

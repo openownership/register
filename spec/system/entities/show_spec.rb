@@ -113,24 +113,24 @@ RSpec.describe 'Entity pages' do
     it 'shows both owners of the company' do
       visit entity_path(company)
       expect(page).to have_text "Beneficial owners of #{company.name}"
-      expect(page).to have_text interests_summary(relationship_1)
-      expect_beneficial_owner_section_for relationship_1
-      expect(page).to have_text interests_summary(relationship_2)
-      expect_beneficial_owner_section_for relationship_2
+      expect(page).to have_text interests_summary(relationship1)
+      expect_beneficial_owner_section_for relationship1
+      expect(page).to have_text interests_summary(relationship2)
+      expect_beneficial_owner_section_for relationship2
 
       expect(page).to have_text "No companies are known to be controlled by #{company.name}"
     end
 
     it 'shows the company for each owner' do
-      visit entity_path(person_1)
+      visit entity_path(person1)
 
-      expect(page).to have_text "Companies controlled by #{person_1.name}"
-      expect_controlled_company_section_for relationship_1
+      expect(page).to have_text "Companies controlled by #{person1.name}"
+      expect_controlled_company_section_for relationship1
 
-      visit entity_path(person_2)
+      visit entity_path(person2)
 
-      expect(page).to have_text "Companies controlled by #{person_2.name}"
-      expect_controlled_company_section_for relationship_2
+      expect(page).to have_text "Companies controlled by #{person2.name}"
+      expect_controlled_company_section_for relationship2
     end
   end
 
@@ -141,29 +141,29 @@ RSpec.describe 'Entity pages' do
       visit entity_path(start_company)
 
       expect(page).to have_text "Beneficial owners of #{start_company.name}"
-      expect(page).to have_text "Owned via #{intermediate_company_2.name}  → #{intermediate_company_1.name} → #{start_company.name}"
+      expect(page).to have_text "Owned via #{intermediate_company2.name}  → #{intermediate_company1.name} → #{start_company.name}"
       expect_beneficial_owner_section_for start_to_owner_relationship
 
       expect(page).to have_text "No companies are known to be controlled by #{start_company.name}"
     end
 
     it 'shows useful info for companies in the middle of the chain' do
-      visit entity_path(intermediate_company_1)
+      visit entity_path(intermediate_company1)
 
-      expect(page).to have_text "Beneficial owners of #{intermediate_company_1.name}"
-      expect(page).to have_text "Owned via #{intermediate_company_2.name}  → #{intermediate_company_1.name}"
+      expect(page).to have_text "Beneficial owners of #{intermediate_company1.name}"
+      expect(page).to have_text "Owned via #{intermediate_company2.name}  → #{intermediate_company1.name}"
       expect_beneficial_owner_section_for intermediate_1_to_owner_relationship
 
-      expect(page).to have_text "Companies controlled by #{intermediate_company_1.name}"
+      expect(page).to have_text "Companies controlled by #{intermediate_company1.name}"
       expect_controlled_company_section_for start_to_intermediate_1_relationship
 
-      visit entity_path(intermediate_company_2)
+      visit entity_path(intermediate_company2)
 
-      expect(page).to have_text "Beneficial owners of #{intermediate_company_2.name}"
+      expect(page).to have_text "Beneficial owners of #{intermediate_company2.name}"
       expect(page).to have_text interests_summary(intermediate_2_to_owner_relationship)
       expect_beneficial_owner_section_for intermediate_2_to_owner_relationship
 
-      expect(page).to have_text "Companies controlled by #{intermediate_company_2.name}"
+      expect(page).to have_text "Companies controlled by #{intermediate_company2.name}"
       expect_controlled_company_section_for intermediate_1_to_intermediate_2_relationship
     end
 
@@ -175,7 +175,7 @@ RSpec.describe 'Entity pages' do
       expect_controlled_company_section_for intermediate_2_to_owner_relationship
       # We only show directly controlled companies
       expect(page).not_to have_text start_company.name
-      expect(page).not_to have_text intermediate_company_1.name
+      expect(page).not_to have_text intermediate_company1.name
     end
   end
 
@@ -279,25 +279,25 @@ RSpec.describe 'Entity pages' do
     include_context 'entity with circular ownership'
 
     it 'shows an unknown ultimate owner for both companies' do
-      visit entity_path(company_1)
-      expect(page).to have_text "#{company_1.name} has no beneficial owners"
+      visit entity_path(company1)
+      expect(page).to have_text "#{company1.name} has no beneficial owners"
 
-      visit entity_path(company_2)
-      expect(page).to have_text "#{company_2.name} has no beneficial owners"
+      visit entity_path(company2)
+      expect(page).to have_text "#{company2.name} has no beneficial owners"
     end
 
     it 'shows the controlled companies for both companies' do
-      visit entity_path(company_1)
+      visit entity_path(company1)
 
-      expect(page).to have_text "Companies controlled by #{company_1.name}"
-      expect(page).to have_text interests_summary(company_2_to_company_1_relationship)
-      expect_controlled_company_section_for company_2_to_company_1_relationship
+      expect(page).to have_text "Companies controlled by #{company1.name}"
+      expect(page).to have_text interests_summary(company2_to_company1_relationship)
+      expect_controlled_company_section_for company2_to_company1_relationship
 
-      visit entity_path(company_2)
+      visit entity_path(company2)
 
-      expect(page).to have_text "Companies controlled by #{company_2.name}"
-      expect(page).to have_text interests_summary(company_1_to_company_2_relationship)
-      expect_controlled_company_section_for company_1_to_company_2_relationship
+      expect(page).to have_text "Companies controlled by #{company2.name}"
+      expect(page).to have_text interests_summary(company1_to_company2_relationship)
+      expect_controlled_company_section_for company1_to_company2_relationship
     end
   end
 
@@ -340,31 +340,31 @@ RSpec.describe 'Entity pages' do
       visit entity_path(start_company)
 
       expect(page).to have_text "Beneficial owners of #{start_company.name}"
-      expect(page).to have_text "Owned via #{intermediate_company_1.name} → #{start_company.name}"
-      expect_beneficial_owner_section_for start_to_owner_relationship_via_intermediate_1
-      expect(page).to have_text "Owned via #{intermediate_company_2.name} → #{start_company.name}"
-      expect_beneficial_owner_section_for start_to_owner_relationship_via_intermediate_2
+      expect(page).to have_text "Owned via #{intermediate_company1.name} → #{start_company.name}"
+      expect_beneficial_owner_section_for start_to_owner_relationship_via_intermediate1
+      expect(page).to have_text "Owned via #{intermediate_company2.name} → #{start_company.name}"
+      expect_beneficial_owner_section_for start_to_owner_relationship_via_intermediate2
 
       expect(page).to have_text "No companies are known to be controlled by #{start_company.name}"
     end
 
     it 'shows the same info for each company in the middle' do
-      visit entity_path(intermediate_company_1)
+      visit entity_path(intermediate_company1)
 
-      expect(page).to have_text "Beneficial owners of #{intermediate_company_1.name}"
+      expect(page).to have_text "Beneficial owners of #{intermediate_company1.name}"
       expect_beneficial_owner_section_for intermediate_1_to_owner_relationship
       expect(page).to have_text interests_summary(intermediate_1_to_owner_relationship)
 
-      expect(page).to have_text "Companies controlled by #{intermediate_company_1.name}"
+      expect(page).to have_text "Companies controlled by #{intermediate_company1.name}"
       expect_controlled_company_section_for start_to_intermediate_1_relationship
 
-      visit entity_path(intermediate_company_2)
+      visit entity_path(intermediate_company2)
 
-      expect(page).to have_text "Beneficial owners of #{intermediate_company_2.name}"
+      expect(page).to have_text "Beneficial owners of #{intermediate_company2.name}"
       expect_beneficial_owner_section_for intermediate_2_to_owner_relationship
       expect(page).to have_text interests_summary(intermediate_2_to_owner_relationship)
 
-      expect(page).to have_text "Companies controlled by #{intermediate_company_2.name}"
+      expect(page).to have_text "Companies controlled by #{intermediate_company2.name}"
       expect_controlled_company_section_for start_to_intermediate_2_relationship
     end
 
@@ -387,68 +387,68 @@ RSpec.describe 'Entity pages' do
     include_context 'two people owning the same company merged into one'
 
     it 'redirects from the merged person to the master person' do
-      visit entity_path(person_2)
+      visit entity_path(person2)
 
-      expect(current_path).to eq(entity_path(person_1))
+      expect(current_path).to eq(entity_path(person1))
     end
 
     it 'shows the details of people who are merged into the master person' do
-      visit entity_path(person_1)
+      visit entity_path(person1)
 
       expect(page).to have_text 'Merged people'
       expect(page).to have_text 'This person has been merged because'
       within '.merged-people' do
-        expect(page).to have_text person_2.name
+        expect(page).to have_text person2.name
         expect(page).to have_text("Controls: #{company.name}")
       end
     end
 
     context 'when both people have the same interests' do
       before do
-        person_1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
-        person_1_relationship.save!
-        person_2_relationship.interests << 'ownership-of-shares-75-to-100-percent'
-        person_2_relationship.save!
+        person1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person1_relationship.save!
+        person2_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person2_relationship.save!
       end
 
       it 'shows a single person as the ultimate owner of the company' do
         visit entity_path(company)
 
         expect(page).to have_text "Beneficial owners of #{company.name}"
-        expect_beneficial_owner_section_for person_1_relationship
-        expect(page).to have_text interests_summary(person_1_relationship)
+        expect_beneficial_owner_section_for person1_relationship
+        expect(page).to have_text interests_summary(person1_relationship)
         within '.ultimate-source-relationships' do
-          expect(page).not_to have_text person_2.name
+          expect(page).not_to have_text person2.name
         end
 
-        visit entity_path(person_1)
+        visit entity_path(person1)
 
-        expect(page).to have_text "Companies controlled by #{person_1.name}"
-        expect(page).to have_text interests_summary(person_1_relationship)
-        expect_controlled_company_section_for person_1_relationship
+        expect(page).to have_text "Companies controlled by #{person1.name}"
+        expect(page).to have_text interests_summary(person1_relationship)
+        expect_controlled_company_section_for person1_relationship
       end
     end
 
     context "when the people have different interests" do
       before do
-        person_1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
-        person_1_relationship.save!
-        person_2_relationship.interests << 'voting-rights-75-to-100-percent'
-        person_2_relationship.save!
+        person1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person1_relationship.save!
+        person2_relationship.interests << 'voting-rights-75-to-100-percent'
+        person2_relationship.save!
       end
 
       it 'shows two people grouped together by name with separate interests' do
         visit entity_path(company)
 
         expect(page).to have_text "Beneficial owners of #{company.name}"
-        expect_beneficial_owner_section_for person_1_relationship
-        expect_beneficial_owner_section_for person_2_relationship
-        expect(page).to have_text interests_summary(person_1_relationship)
-        expect(page).to have_text interests_summary(person_2_relationship)
+        expect_beneficial_owner_section_for person1_relationship
+        expect_beneficial_owner_section_for person2_relationship
+        expect(page).to have_text interests_summary(person1_relationship)
+        expect(page).to have_text interests_summary(person2_relationship)
         expect(page).to have_text 'These owners have been grouped together'
 
         within '.ultimate-source-relationships' do
-          expect(page).not_to have_text person_2.name
+          expect(page).not_to have_text person2.name
         end
       end
     end
@@ -458,35 +458,35 @@ RSpec.describe 'Entity pages' do
     include_context 'two people owning the two different companies merged into one'
 
     it 'shows a single person as the ultimate owner of both companies' do
-      visit entity_path(company_1)
+      visit entity_path(company1)
 
-      expect(page).to have_text "Beneficial owners of #{company_1.name}"
-      expect_beneficial_owner_section_for person_1_relationship
-      expect(page).to have_text interests_summary(person_1_relationship)
+      expect(page).to have_text "Beneficial owners of #{company1.name}"
+      expect_beneficial_owner_section_for person1_relationship
+      expect(page).to have_text interests_summary(person1_relationship)
 
-      expect(page).not_to have_text person_2.name
+      expect(page).not_to have_text person2.name
 
-      visit entity_path(company_2)
+      visit entity_path(company2)
 
-      expect(page).to have_text "Beneficial owners of #{company_2.name}"
+      expect(page).to have_text "Beneficial owners of #{company2.name}"
       within '.ultimate-source-relationships' do
-        expect(page).to have_selector '.entity-link', text: person_1.name
-        expect(page).to have_link person_1.name
-        expect(page).to have_selector '.entity-link', text: "Born #{birth_month_year(person_1)}"
+        expect(page).to have_selector '.entity-link', text: person1.name
+        expect(page).to have_link person1.name
+        expect(page).to have_selector '.entity-link', text: "Born #{birth_month_year(person1)}"
       end
-      expect(page).to have_text interests_summary(person_2_relationship)
+      expect(page).to have_text interests_summary(person2_relationship)
 
-      expect(page).not_to have_text person_2.name
+      expect(page).not_to have_text person2.name
 
-      visit entity_path(person_1)
+      visit entity_path(person1)
 
-      expect(page).to have_text "Companies controlled by #{person_1.name}"
-      expect(page).to have_selector '.entity-link', text: company_1.name
-      expect(page).to have_link company_1.name
-      expect(page).to have_selector '.entity-link', text: company_1.incorporation_date.iso8601
-      expect(page).to have_selector '.entity-link', text: company_2.name
-      expect(page).to have_link company_2.name
-      expect(page).to have_selector '.entity-link', text: company_2.incorporation_date.iso8601
+      expect(page).to have_text "Companies controlled by #{person1.name}"
+      expect(page).to have_selector '.entity-link', text: company1.name
+      expect(page).to have_link company1.name
+      expect(page).to have_selector '.entity-link', text: company1.incorporation_date.iso8601
+      expect(page).to have_selector '.entity-link', text: company2.name
+      expect(page).to have_link company2.name
+      expect(page).to have_selector '.entity-link', text: company2.incorporation_date.iso8601
     end
   end
 
@@ -575,26 +575,26 @@ RSpec.describe 'Entity pages' do
   context 'when the entity has raw data provenance' do
     include_context 'basic entity with one owner'
 
-    let(:data_source_1) { create(:data_source, name: 'Data Source 1') }
-    let(:data_source_2) { create(:data_source, name: 'Data Source 2') }
+    let(:data_source1) { create(:data_source, name: 'Data Source 1') }
+    let(:data_source2) { create(:data_source, name: 'Data Source 2') }
     let(:oldest) { 10.days.ago }
     let(:newest) { 1.day.ago }
-    let(:import_1) do
-      import = create(:import, data_source: data_source_1)
+    let(:import1) do
+      import = create(:import, data_source: data_source1)
       import.timeless.update_attribute(:created_at, oldest)
       import
     end
-    let(:import_2) do
-      import = create(:import, data_source: data_source_2)
+    let(:import2) do
+      import = create(:import, data_source: data_source2)
       import.timeless.update_attribute(:created_at, newest)
       import
     end
 
-    let!(:import_1_provenances) do
-      create_list(:raw_data_provenance, 5, entity_or_relationship: company, import: import_1)
+    let!(:import1_provenances) do
+      create_list(:raw_data_provenance, 5, entity_or_relationship: company, import: import1)
     end
-    let!(:import_2_provenances) do
-      create_list(:raw_data_provenance, 5, entity_or_relationship: company, import: import_2)
+    let!(:import2_provenances) do
+      create_list(:raw_data_provenance, 5, entity_or_relationship: company, import: import2)
     end
 
     it 'shows a provenance box with a summary and a link to the raw data page' do
@@ -602,7 +602,7 @@ RSpec.describe 'Entity pages' do
 
       expect(page).to have_text('Provenance')
       expect(page).to have_text('Data Source 1 and Data Source 2')
-      expected_date = import_2_provenances.last.raw_data_records.last.updated_at.to_date
+      expected_date = import2_provenances.last.raw_data_records.last.updated_at.to_date
       expect(page).to have_text("Latest data: #{expected_date}")
       expect(page).to have_link("See the 20 original source records")
     end

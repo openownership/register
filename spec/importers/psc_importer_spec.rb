@@ -102,11 +102,13 @@ RSpec.describe PscImporter do
           it 'resolves the parent entity' do
             subject.process_records(records)
 
-            expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
-              jurisdiction_code: 'gb',
-              company_number: '89101112',
-              name: 'Foo Bar Limited',
-            ))
+            expect(entity_resolver).to have_received(:resolve!).with(
+              having_attributes(
+                jurisdiction_code: 'gb',
+                company_number: '89101112',
+                name: 'Foo Bar Limited',
+              ),
+            )
           end
 
           it 'creates an entity with a document based identifier' do
@@ -250,11 +252,13 @@ RSpec.describe PscImporter do
 
     context 'when there is a person with significant control statement' do
       it 'creates a statement linked to the entity' do
-        allow(entity_resolver).to receive(:resolve!).with(having_attributes(
-          jurisdiction_code: 'gb',
-          company_number: '1234567',
-          name: nil,
-        )) do |entity_to_resolve|
+        allow(entity_resolver).to receive(:resolve!).with(
+          having_attributes(
+            jurisdiction_code: 'gb',
+            company_number: '1234567',
+            name: nil,
+          ),
+        ) do |entity_to_resolve|
           @entity = entity_to_resolve
         end
 
@@ -277,11 +281,13 @@ RSpec.describe PscImporter do
 
     context 'when there is a super secure person with significant control' do
       it 'creates a statement linked to the entity' do
-        allow(entity_resolver).to receive(:resolve!).with(having_attributes(
-          jurisdiction_code: 'gb',
-          company_number: '1234567',
-          name: nil,
-        )) do |entity_to_resolve|
+        allow(entity_resolver).to receive(:resolve!).with(
+          having_attributes(
+            jurisdiction_code: 'gb',
+            company_number: '1234567',
+            name: nil,
+          ),
+        ) do |entity_to_resolve|
           @entity = entity_to_resolve
         end
 
@@ -296,11 +302,13 @@ RSpec.describe PscImporter do
 
     context 'when there is an exemption' do
       it 'creates a statement linked to the entity' do
-        allow(entity_resolver).to receive(:resolve!).with(having_attributes(
-          jurisdiction_code: 'gb',
-          company_number: '1234567',
-          name: nil,
-        )) do |entity_to_resolve|
+        allow(entity_resolver).to receive(:resolve!).with(
+          having_attributes(
+            jurisdiction_code: 'gb',
+            company_number: '1234567',
+            name: nil,
+          ),
+        ) do |entity_to_resolve|
           @entity = entity_to_resolve
         end
 
@@ -361,15 +369,17 @@ RSpec.describe PscImporter do
       end
 
       it 'should merge the two existing entities into one and upsert the updated data' do
-        expect(entity_resolver).to receive(:resolve!).with(having_attributes(
-          jurisdiction_code: 'gb',
-          company_number: company_number,
-        )) do |e|
+        expect(entity_resolver).to receive(:resolve!).with(
+          having_attributes(
+            jurisdiction_code: 'gb',
+            company_number: company_number,
+          ),
+        ) do |e|
           e.name = new_name
           e.identifiers << oc_identifier
         end
 
-        # Note: this has become more of an integration test instead of a unit
+        # NOTE: this has become more of an integration test instead of a unit
         # test, as we would like to test that the duplicate error gets triggered
         # and the entity merge actually goes through and sets the appropriate
         # state in the db as expected. Of course this means we need to mock more
@@ -389,13 +399,17 @@ RSpec.describe PscImporter do
     end
 
     it 'indexes all of the entities' do
-      expect(IndexEntityService).to receive(:new).with(having_attributes(
-        name: 'Joe Bloggs',
-      ))
+      expect(IndexEntityService).to receive(:new).with(
+        having_attributes(
+          name: 'Joe Bloggs',
+        ),
+      )
 
-      expect(IndexEntityService).to receive(:new).with(having_attributes(
-        company_number: '01234567',
-      ))
+      expect(IndexEntityService).to receive(:new).with(
+        having_attributes(
+          company_number: '01234567',
+        ),
+      )
 
       subject.process_records(records)
     end

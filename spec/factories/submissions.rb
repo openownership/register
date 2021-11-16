@@ -35,10 +35,12 @@ FactoryGirl.define do
           entities[entity.id] = create(
             :entity,
             entity.attributes_for_submission.merge(
-              identifiers: [{
-                'submission_id' => submission.id,
-                'entity_id' => entity.id,
-              }],
+              identifiers: [
+                {
+                  'submission_id' => submission.id,
+                  'entity_id' => entity.id,
+                },
+              ],
             ),
           )
         end

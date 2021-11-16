@@ -80,11 +80,7 @@ module FixOCIdentifiersOrderingHelper
 
     e_id = entity._id.to_s
 
-    if identifiers_found.first != identifiers_found.second
-      results[:ids_mismatched].add(e_id)
-
-      Rails.logger.info "Entity #{e_id} was found to have two *mismatched* OC identifiers (i.e. with different company numbers) - won't attempt to fix this entity in this migration."
-    else
+    if identifiers_found.first == identifiers_found.second
       FixOCIdentifiersOrderingHelper.try_fix!(
         entity,
         {
@@ -94,6 +90,10 @@ module FixOCIdentifiersOrderingHelper
         results,
         deleted,
       )
+    else
+      results[:ids_mismatched].add(e_id)
+
+      Rails.logger.info "Entity #{e_id} was found to have two *mismatched* OC identifiers (i.e. with different company numbers) - won't attempt to fix this entity in this migration."
     end
   end
 

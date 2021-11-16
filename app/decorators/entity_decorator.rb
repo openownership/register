@@ -31,7 +31,7 @@ class EntityDecorator < ApplicationDecorator
     {
       "@context" => "https://schema.org/",
       "@type" => "Person",
-      "name": name,
+      name: name,
       "address" => object.address,
       "birthDate" => h.partial_date_format(object.dob),
       "url" => Rails.application.routes.url_helpers.entity_url(object),

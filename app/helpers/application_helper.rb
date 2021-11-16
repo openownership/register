@@ -14,22 +14,24 @@ module ApplicationHelper
   def google_analytics
     return unless Rails.application.config.enable_analytics
 
-    safe_join([
-      # rubocop:disable Style/TrailingCommaInArguments
-      raw( # rubocop:disable Rails/OutputSafety
-        <<-GA
-        <script async src="https://www.googletagmanager.com/gtag/js?id=#{Rails.application.config.ga_tracking_id}"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+    safe_join(
+      [
+        # rubocop:disable Style/TrailingCommaInArguments
+        raw( # rubocop:disable Rails/OutputSafety
+          <<-GA
+          <script async src="https://www.googletagmanager.com/gtag/js?id=#{Rails.application.config.ga_tracking_id}"></script>
+          <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-          gtag('config', '#{Rails.application.config.ga_tracking_id}', { anonymize_ip: true, client_storage: 'none' });
-        </script>
-        GA
-      ),
-      # rubocop:enable Style/TrailingCommaInArguments
-    ])
+            gtag('config', '#{Rails.application.config.ga_tracking_id}', { anonymize_ip: true, client_storage: 'none' });
+          </script>
+          GA
+        ),
+        # rubocop:enable Style/TrailingCommaInArguments
+      ],
+    )
   end
 
   def glossary_tooltip(label, glossary_key, position)

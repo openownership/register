@@ -18,7 +18,7 @@ RSpec.describe 'UA Import' do
       'result' => {
         'resources' => [
           {
-            'url': data_url,
+            url: data_url,
           },
         ],
       },
@@ -43,7 +43,7 @@ RSpec.describe 'UA Import' do
     Entity.__elasticsearch__.create_index! force: true
 
     stub_request(:get, ckan_url).to_return(body: ckan_data)
-    stub_request(:get, data_url).to_return(body: IO.binread(data_fixture))
+    stub_request(:get, data_url).to_return(body: File.binread(data_fixture))
 
     stub_oc_company_api_with_fixture('ua', company_number)
 

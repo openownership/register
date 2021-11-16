@@ -5,14 +5,14 @@ RSpec.describe EntityMerger do
 
   subject { described_class.new(to_remove, to_keep) }
 
-  let!(:relationship_1) { create :relationship, source: to_remove }
-  let!(:relationship_2) { create :relationship, target: to_remove }
+  let!(:relationship1) { create :relationship, source: to_remove }
+  let!(:relationship2) { create :relationship, target: to_remove }
   let!(:statement) { create :statement, entity: to_remove }
   let!(:raw_provenance) { create :raw_data_provenance, entity_or_relationship: to_remove }
 
   let!(:other_entity) { create :legal_entity }
-  let!(:other_relationship_1) { create :relationship, source: other_entity }
-  let!(:other_relationship_2) { create :relationship, target: other_entity }
+  let!(:other_relationship1) { create :relationship, source: other_entity }
+  let!(:other_relationship2) { create :relationship, target: other_entity }
   let!(:other_statement) { create :statement, entity: other_entity }
   let!(:other_raw_provenance) { create :raw_data_provenance, entity_or_relationship: other_entity }
 
@@ -25,8 +25,8 @@ RSpec.describe EntityMerger do
     expect(Entity.find(to_remove._id)).to eq to_remove
     expect(Entity.find(to_keep._id)).to eq to_keep
 
-    expect(Relationship.find(relationship_1._id).source).to eq to_remove
-    expect(Relationship.find(relationship_2._id).target).to eq to_remove
+    expect(Relationship.find(relationship1._id).source).to eq to_remove
+    expect(Relationship.find(relationship2._id).target).to eq to_remove
     expect(Statement.find(statement._id).entity).to eq to_remove
     expect(RawDataProvenance.find(raw_provenance._id).entity_or_relationship).to eq to_remove
 
@@ -43,8 +43,8 @@ RSpec.describe EntityMerger do
       expect(merged[k]).to eq v
     end
 
-    expect(Relationship.find(relationship_1._id).source).to eq to_keep
-    expect(Relationship.find(relationship_2._id).target).to eq to_keep
+    expect(Relationship.find(relationship1._id).source).to eq to_keep
+    expect(Relationship.find(relationship2._id).target).to eq to_keep
     expect(Statement.find(statement._id).entity).to eq to_keep
     expect(RawDataProvenance.find(raw_provenance._id).entity_or_relationship).to eq to_keep
 
@@ -54,8 +54,8 @@ RSpec.describe EntityMerger do
   def expect_others_not_changed
     expect(Entity.find(other_entity._id)).to eq other_entity
 
-    expect(Relationship.find(other_relationship_1._id).source).to eq other_entity
-    expect(Relationship.find(other_relationship_2._id).target).to eq other_entity
+    expect(Relationship.find(other_relationship1._id).source).to eq other_entity
+    expect(Relationship.find(other_relationship2._id).target).to eq other_entity
     expect(Statement.find(other_statement._id).entity).to eq other_entity
     expect(RawDataProvenance.find(other_raw_provenance._id).entity_or_relationship).to eq other_entity
   end
@@ -169,27 +169,27 @@ RSpec.describe EntityMerger do
           company_number: 1234,
         )
       end
-      let(:company_1_identifier) do
+      let(:company1_identifier) do
         {
           'document_id' => 'SOURCE_1',
           'company_number' => 123_456_789,
         }
       end
-      let(:company_2_identifier) do
+      let(:company2_identifier) do
         {
           'document_id' => 'SOURCE_2',
           'company_number' => 123_456_789,
         }
       end
-      let!(:to_remove) { create :legal_entity, identifiers: [company_1_identifier, shared_identifier] }
+      let!(:to_remove) { create :legal_entity, identifiers: [company1_identifier, shared_identifier] }
       # We have to build this one, otherwise our DB indexes will stop us
       # saving it. This is replicating a situation where we've built an
       # entity from an import and are trying to save it, but something
       # matching the OC identifier already exists in the DB.
-      let!(:to_keep) { build :legal_entity, identifiers: [company_2_identifier, shared_identifier] }
+      let!(:to_keep) { build :legal_entity, identifiers: [company2_identifier, shared_identifier] }
 
       let(:merged_identifiers) do
-        [company_1_identifier, company_2_identifier, shared_identifier]
+        [company1_identifier, company2_identifier, shared_identifier]
       end
 
       it 'shouldn\'t create duplicate identifiers in the kept entity' do

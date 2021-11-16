@@ -13,11 +13,13 @@ RSpec.shared_context 'BODS: basic entity with one owner' do
         'statementType' => 'entityStatement',
         'entityType' => 'registeredEntity',
         'name' => company.name,
-        'identifiers' => [{
-          'schemeName' => 'OpenOwnership Register',
-          'id' => Rails.application.routes.url_helpers.entity_url(company),
-          'uri' => Rails.application.routes.url_helpers.entity_url(company),
-        }],
+        'identifiers' => [
+          {
+            'schemeName' => 'OpenOwnership Register',
+            'id' => Rails.application.routes.url_helpers.entity_url(company),
+            'uri' => Rails.application.routes.url_helpers.entity_url(company),
+          },
+        ],
         'foundingDate' => 10.years.ago.to_date.iso8601,
         'incorporatedInJurisdiction' => {
           'name' => 'United Kingdom of Great Britain and Northern Ireland',
@@ -32,11 +34,13 @@ RSpec.shared_context 'BODS: basic entity with one owner' do
           'type' => 'individual',
           'fullName' => person.name,
         ],
-        'identifiers' => [{
-          'schemeName' => 'OpenOwnership Register',
-          'id' => Rails.application.routes.url_helpers.entity_url(person),
-          'uri' => Rails.application.routes.url_helpers.entity_url(person),
-        }],
+        'identifiers' => [
+          {
+            'schemeName' => 'OpenOwnership Register',
+            'id' => Rails.application.routes.url_helpers.entity_url(person),
+            'uri' => Rails.application.routes.url_helpers.entity_url(person),
+          },
+        ],
         'nationalities' => [
           {
             'name' => 'United Kingdom of Great Britain and Northern Ireland',
@@ -79,7 +83,7 @@ RSpec.shared_context 'BODS: basic entity with one owner' do
 end
 
 RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
-  let!(:legal_entity_1) do
+  let!(:legal_entity1) do
     create(
       :legal_entity,
       identifiers: [
@@ -95,7 +99,7 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
     )
   end
 
-  let!(:legal_entity_2) do
+  let!(:legal_entity2) do
     create(
       :legal_entity,
       identifiers: [
@@ -132,8 +136,8 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
     [
       create(
         :relationship,
-        source: legal_entity_2,
-        target: legal_entity_1,
+        source: legal_entity2,
+        target: legal_entity1,
         interests: [
           'ownership-of-shares-25-to-50-percent',
           'voting-rights-50-to-75-percent',
@@ -149,7 +153,7 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
       create(
         :relationship,
         source: natural_person,
-        target: legal_entity_2,
+        target: legal_entity2,
         interests: [
           {
             type: 'shareholding',
@@ -172,23 +176,23 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
     ]
   end
 
-  let(:legal_entity_1_id) { BodsMapper.new.statement_id(legal_entity_1) }
-  let(:legal_entity_2_id) { BodsMapper.new.statement_id(legal_entity_2) }
+  let(:legal_entity1_id) { BodsMapper.new.statement_id(legal_entity1) }
+  let(:legal_entity2_id) { BodsMapper.new.statement_id(legal_entity2) }
   let(:natural_person_id) { BodsMapper.new.statement_id(natural_person) }
-  let(:legal_entity_1_legal_entity_2_relationship_id) do
+  let(:legal_entity1_legal_entity2_relationship_id) do
     BodsMapper.new.statement_id(relationships.first)
   end
-  let(:legal_entity_2_natural_person_relationship_id) do
+  let(:legal_entity2_natural_person_relationship_id) do
     BodsMapper.new.statement_id(relationships.second)
   end
 
   let(:expected_statements) do
     [
       {
-        'statementID' => legal_entity_2_id,
+        'statementID' => legal_entity2_id,
         'statementType' => 'entityStatement',
         'entityType' => 'registeredEntity',
-        'name' => legal_entity_2.name,
+        'name' => legal_entity2.name,
         'identifiers' => [
           {
             'schemeName' => 'OpenCorporates',
@@ -210,8 +214,8 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
           },
           {
             'schemeName' => 'OpenOwnership Register',
-            'id' => Rails.application.routes.url_helpers.entity_url(legal_entity_2),
-            'uri' => Rails.application.routes.url_helpers.entity_url(legal_entity_2),
+            'id' => Rails.application.routes.url_helpers.entity_url(legal_entity2),
+            'uri' => Rails.application.routes.url_helpers.entity_url(legal_entity2),
           },
 
         ],
@@ -268,11 +272,11 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         ],
       },
       {
-        'statementID' => legal_entity_2_natural_person_relationship_id,
+        'statementID' => legal_entity2_natural_person_relationship_id,
         'statementType' => 'ownershipOrControlStatement',
         'statementDate' => '2017-01-23',
         'subject' => {
-          'describedByEntityStatement' => legal_entity_2_id,
+          'describedByEntityStatement' => legal_entity2_id,
         },
         'interestedParty' => {
           'describedByPersonStatement' => natural_person_id,
@@ -308,10 +312,10 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         },
       },
       {
-        'statementID' => legal_entity_1_id,
+        'statementID' => legal_entity1_id,
         'statementType' => 'entityStatement',
         'entityType' => 'registeredEntity',
-        'name' => legal_entity_1.name,
+        'name' => legal_entity1.name,
         'identifiers' => [
           {
             'schemeName' => 'OpenCorporates',
@@ -325,8 +329,8 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
           },
           {
             'schemeName' => 'OpenOwnership Register',
-            'id' => Rails.application.routes.url_helpers.entity_url(legal_entity_1),
-            'uri' => Rails.application.routes.url_helpers.entity_url(legal_entity_1),
+            'id' => Rails.application.routes.url_helpers.entity_url(legal_entity1),
+            'uri' => Rails.application.routes.url_helpers.entity_url(legal_entity1),
           },
         ],
         'foundingDate' => 2.months.ago.to_date.iso8601,
@@ -344,14 +348,14 @@ RSpec.shared_context 'BODS: company that is part of a chain of relationships' do
         },
       },
       {
-        'statementID' => legal_entity_1_legal_entity_2_relationship_id,
+        'statementID' => legal_entity1_legal_entity2_relationship_id,
         'statementType' => 'ownershipOrControlStatement',
         'statementDate' => '2017-01-23',
         'subject' => {
-          'describedByEntityStatement' => legal_entity_1_id,
+          'describedByEntityStatement' => legal_entity1_id,
         },
         'interestedParty' => {
-          'describedByEntityStatement' => legal_entity_2_id,
+          'describedByEntityStatement' => legal_entity2_id,
         },
         'interests' => [
           {

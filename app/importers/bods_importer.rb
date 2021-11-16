@@ -48,10 +48,12 @@ class BodsImporter
     return if Entity.where('identifiers.statement_id' => record['statementID']).exists?
 
     entity = Entity.new(
-      identifiers: [{
-        'document_id' => document_id,
-        'statement_id' => record['statementID'],
-      }] + entity_identifiers(record['identifiers']),
+      identifiers: [
+        {
+          'document_id' => document_id,
+          'statement_id' => record['statementID'],
+        },
+      ] + entity_identifiers(record['identifiers']),
       type: Entity::Types::NATURAL_PERSON,
       name: first_individual_name(record['names']),
       nationality: country_code_from_nationalities(record['nationalities']),
@@ -145,10 +147,12 @@ class BodsImporter
     return existing.first unless existing.empty?
 
     attributes = {
-      identifiers: [{
-        'document_id' => document_id,
-        'statement_id' => record["statementID"],
-      }] + entity_identifiers(record["identifiers"]),
+      identifiers: [
+        {
+          'document_id' => document_id,
+          'statement_id' => record["statementID"],
+        },
+      ] + entity_identifiers(record["identifiers"]),
       type: Entity::Types::LEGAL_ENTITY,
 
       name: record["name"],
@@ -178,10 +182,10 @@ class BodsImporter
       raise "No identifier scheme or schemeName given in #{i}" if scheme_id.blank?
 
       {
-        'scheme': i['scheme'],
-        'scheme_name': i['schemeName'],
-        'id': i['id'],
-        'uri': i['uri'],
+        scheme: i['scheme'],
+        scheme_name: i['schemeName'],
+        id: i['id'],
+        uri: i['uri'],
       }.compact
     end
   end

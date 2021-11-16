@@ -19,20 +19,20 @@ RSpec.describe BodsSerializer do
   end
 
   context 'when a chain of relationships are passed' do
-    let(:legal_entity_1) { create :legal_entity }
-    let(:legal_entity_2) { create :legal_entity }
+    let(:legal_entity1) { create :legal_entity }
+    let(:legal_entity2) { create :legal_entity }
     let(:natural_person) { create :natural_person }
 
     let(:relationships) do
       [
-        create(:relationship, source: legal_entity_2, target: legal_entity_1),
-        create(:relationship, source: natural_person, target: legal_entity_2),
+        create(:relationship, source: legal_entity2, target: legal_entity1),
+        create(:relationship, source: natural_person, target: legal_entity2),
       ]
     end
 
     it 'should return a list of BODS statements for the whole chain' do
       expect(mapper).to receive(:generates_statement?)
-        .with(legal_entity_2)
+        .with(legal_entity2)
         .and_return(true)
         .once
       expect(mapper).to receive(:generates_statement?)
@@ -41,20 +41,20 @@ RSpec.describe BodsSerializer do
         .once
 
       expect(mapper).to receive(:statement_id)
-        .with(legal_entity_1)
-        .and_return(:legal_entity_1)
+        .with(legal_entity1)
+        .and_return(:legal_entity1)
         .once
       expect(mapper).to receive(:entity_statement)
-        .with(legal_entity_1)
-        .and_return(statementID: :legal_entity_1)
+        .with(legal_entity1)
+        .and_return(statementID: :legal_entity1)
 
       expect(mapper).to receive(:statement_id)
-        .with(legal_entity_2)
-        .and_return(:legal_entity_2)
+        .with(legal_entity2)
+        .and_return(:legal_entity2)
         .twice
       expect(mapper).to receive(:entity_statement)
-        .with(legal_entity_2)
-        .and_return(statementID: :legal_entity_2)
+        .with(legal_entity2)
+        .and_return(statementID: :legal_entity2)
 
       expect(mapper).to receive(:statement_id)
         .with(natural_person)
@@ -66,26 +66,26 @@ RSpec.describe BodsSerializer do
 
       expect(mapper).to receive(:statement_id)
         .with(relationships.first)
-        .and_return(:relationship_1)
+        .and_return(:relationship1)
         .once
       expect(mapper).to receive(:ownership_or_control_statement)
         .with(relationships.first)
-        .and_return(statementID: :relationship_1)
+        .and_return(statementID: :relationship1)
 
       expect(mapper).to receive(:statement_id)
         .with(relationships.second)
-        .and_return(:relationship_2)
+        .and_return(:relationship2)
         .once
       expect(mapper).to receive(:ownership_or_control_statement)
         .with(relationships.second)
-        .and_return(statementID: :relationship_2)
+        .and_return(statementID: :relationship2)
 
       expected_statements = [
-        { statementID: :legal_entity_1 },
-        { statementID: :legal_entity_2 },
+        { statementID: :legal_entity1 },
+        { statementID: :legal_entity2 },
         { statementID: :natural_person },
-        { statementID: :relationship_1 },
-        { statementID: :relationship_2 },
+        { statementID: :relationship1 },
+        { statementID: :relationship2 },
       ]
 
       expect(subject.statements).to match_array expected_statements
@@ -106,23 +106,23 @@ RSpec.describe BodsSerializer do
 
       expect(mapper).to receive(:statement_id)
         .with(entity)
-        .and_return(:legal_entity_1)
+        .and_return(:legal_entity1)
         .once
       expect(mapper).to receive(:statement_id)
         .with(relationships.first)
-        .and_return(:relationship_1)
+        .and_return(:relationship1)
         .once
 
       expect(mapper).to receive(:entity_statement)
         .with(entity)
-        .and_return(statementID: :legal_entity_1)
+        .and_return(statementID: :legal_entity1)
       expect(mapper).to receive(:ownership_or_control_statement)
         .with(relationships.first)
-        .and_return(statementID: :relationship_1)
+        .and_return(statementID: :relationship1)
 
       expected_statements = [
-        { statementID: :legal_entity_1 },
-        { statementID: :relationship_1 },
+        { statementID: :legal_entity1 },
+        { statementID: :relationship1 },
       ]
 
       expect(subject.statements).to match_array expected_statements
@@ -143,31 +143,31 @@ RSpec.describe BodsSerializer do
 
       expect(mapper).to receive(:statement_id)
         .with(relationships.first.target)
-        .and_return(:legal_entity_1)
+        .and_return(:legal_entity1)
         .once
       expect(mapper).to receive(:statement_id)
         .with(relationships.first.source)
-        .and_return(:natural_person_1)
+        .and_return(:natural_person1)
         .once
       expect(mapper).to receive(:statement_id)
         .with(relationships.first)
-        .and_return(:relationship_1)
+        .and_return(:relationship1)
         .once
 
       expect(mapper).to receive(:entity_statement)
         .with(relationships.first.target)
-        .and_return(statementID: :legal_entity_1)
+        .and_return(statementID: :legal_entity1)
       expect(mapper).to receive(:person_statement)
         .with(relationships.first.source)
-        .and_return(statementID: :natural_person_1)
+        .and_return(statementID: :natural_person1)
       expect(mapper).to receive(:ownership_or_control_statement)
         .with(relationships.first)
-        .and_return(statementID: :relationship_1)
+        .and_return(statementID: :relationship1)
 
       expected_statements = [
-        { statementID: :legal_entity_1 },
-        { statementID: :natural_person_1 },
-        { statementID: :relationship_1 },
+        { statementID: :legal_entity1 },
+        { statementID: :natural_person1 },
+        { statementID: :relationship1 },
       ]
 
       expect(subject.statements).to match_array expected_statements

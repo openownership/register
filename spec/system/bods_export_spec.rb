@@ -92,10 +92,10 @@ RSpec.describe 'BODS Export' do
     let!(:existing_statements) do
       [
         {
-          'statementID' => legal_entity_2_id,
+          'statementID' => legal_entity2_id,
           'statementType' => 'entityStatement',
           'entityType' => 'registeredEntity',
-          'name' => legal_entity_2.name,
+          'name' => legal_entity2.name,
           'identifiers' => [
             {
               'scheme' => 'DK-CVR',
@@ -141,11 +141,11 @@ RSpec.describe 'BODS Export' do
           ],
         },
         {
-          'statementID' => legal_entity_2_natural_person_relationship_id,
+          'statementID' => legal_entity2_natural_person_relationship_id,
           'statementType' => 'ownershipOrControlStatement',
           'statementDate' => '2017-01-23',
           'subject' => {
-            'describedByEntityStatement' => legal_entity_2_id,
+            'describedByEntityStatement' => legal_entity2_id,
           },
           'interestedParty' => {
             'describedByPersonStatement' => natural_person_id,
@@ -181,10 +181,10 @@ RSpec.describe 'BODS Export' do
           },
         },
         {
-          'statementID' => legal_entity_1_id,
+          'statementID' => legal_entity1_id,
           'statementType' => 'entityStatement',
           'entityType' => 'registeredEntity',
-          'name' => legal_entity_1.name,
+          'name' => legal_entity1.name,
           'identifiers' => [
             {
               'scheme' => 'GB-COH',
@@ -202,14 +202,14 @@ RSpec.describe 'BODS Export' do
           ],
         },
         {
-          'statementID' => legal_entity_1_legal_entity_2_relationship_id,
+          'statementID' => legal_entity1_legal_entity2_relationship_id,
           'statementType' => 'ownershipOrControlStatement',
           'statementDate' => '2017-01-23',
           'subject' => {
-            'describedByEntityStatement' => legal_entity_1_id,
+            'describedByEntityStatement' => legal_entity1_id,
           },
           'interestedParty' => {
-            'describedByEntityStatement' => legal_entity_2_id,
+            'describedByEntityStatement' => legal_entity2_id,
           },
           'interests' => [
             {
@@ -259,37 +259,39 @@ RSpec.describe 'BODS Export' do
       sio = StringIO.new
       sio.binmode
       gz = Zlib::GzipWriter.new(sio)
+      # rubocop:disable Style/StringConcatenation
       gz.write existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n"
+      # rubocop:enable Style/StringConcatenation
       gz.close
       existing_statements_file = sio.string
 
       sio = StringIO.new
       sio.binmode
       gz = Zlib::GzipWriter.new(sio)
-      gz.write existing_statement_ids.join("\n") + "\n"
+      gz.write "#{existing_statement_ids.join("\n")}\n"
       gz.close
       existing_ids_file = sio.string
 
       # Update an entity in the middle of the chain
-      legal_entity_2.name = "Company B Updated"
-      legal_entity_2.save!
+      legal_entity2.name = "Company B Updated"
+      legal_entity2.save!
       # Without this, embedded document fields don't get stringified and the
       # bods mapping fails
-      legal_entity_2.reload
+      legal_entity2.reload
 
       # Create the new statement for it
       mapper = BodsMapper.new
-      new_legal_entity_2_statement = mapper.entity_statement(legal_entity_2).as_json
+      new_legal_entity2_statement = mapper.entity_statement(legal_entity2).as_json
       # Create new statements for the entity's relationships
-      new_legal_entity_1_legal_entity_2_statement = mapper.ownership_or_control_statement(relationships.first.reload).as_json
-      new_legal_entity_2_natural_person_statement = mapper.ownership_or_control_statement(relationships.second.reload).as_json
+      new_legal_entity1_legal_entity2_statement = mapper.ownership_or_control_statement(relationships.first.reload).as_json
+      new_legal_entity2_natural_person_statement = mapper.ownership_or_control_statement(relationships.second.reload).as_json
 
       # We expect the update to change both the entity statement and therefore
       # the relationships which point to it, but not the other entities
       @new_expected_statements = existing_statements + [
-        new_legal_entity_2_statement,
-        new_legal_entity_1_legal_entity_2_statement,
-        new_legal_entity_2_natural_person_statement,
+        new_legal_entity2_statement,
+        new_legal_entity1_legal_entity2_statement,
+        new_legal_entity2_natural_person_statement,
       ]
 
       stub_s3_client_initialisation

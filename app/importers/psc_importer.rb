@@ -24,7 +24,7 @@ class PscImporter
 
       statement = statement!(child_entity, record['data'])
 
-      return [child_entity, statement]
+      [child_entity, statement]
     when /(individual|corporate-entity|legal-person)-person-with-significant-control/
       begin
         child_entity = child_entity!(record['company_number'])
@@ -33,7 +33,7 @@ class PscImporter
 
         relationship = relationship!(child_entity, parent_entity, record['data'])
 
-        return [child_entity, parent_entity, relationship]
+        [child_entity, parent_entity, relationship]
       rescue PotentiallyBadEntityMergeDetectedAndStopped => e
         msg = "[#{self.class.name}] Failed to handle a required entity merge " \
               "as a potentially bad merge has been detected and stopped: " \
@@ -104,7 +104,7 @@ class PscImporter
     when 'individual-person-with-significant-control'
       entity.assign_attributes(
         type: Entity::Types::NATURAL_PERSON,
-        name: data['name_elements'].presence && name_string(data['name_elements']) || data['name'],
+        name: (data['name_elements'].presence && name_string(data['name_elements'])) || data['name'],
         nationality: country_from_nationality(data['nationality']).try(:alpha2),
         country_of_residence: data['country_of_residence'].presence,
         dob: entity_dob(data['date_of_birth']),

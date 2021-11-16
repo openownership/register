@@ -69,11 +69,13 @@ RSpec.describe DkImporter do
       end
 
       it 'resolves the one child company' do
-        expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
-          jurisdiction_code: 'dk',
-          company_number: '13141516',
-          name: 'Danish Company 3',
-        ))
+        expect(entity_resolver).to have_received(:resolve!).with(
+          having_attributes(
+            jurisdiction_code: 'dk',
+            company_number: '13141516',
+            name: 'Danish Company 3',
+          ),
+        )
       end
 
       it 'creates the one child company' do
@@ -94,12 +96,16 @@ RSpec.describe DkImporter do
       end
 
       it 'indexes all the entities' do
-        expect(IndexEntityService).to have_received(:new).with(having_attributes(
-          name: 'Danish Person 2',
-        ))
-        expect(IndexEntityService).to have_received(:new).with(having_attributes(
-          name: 'Danish Company 3',
-        ))
+        expect(IndexEntityService).to have_received(:new).with(
+          having_attributes(
+            name: 'Danish Person 2',
+          ),
+        )
+        expect(IndexEntityService).to have_received(:new).with(
+          having_attributes(
+            name: 'Danish Company 3',
+          ),
+        )
       end
 
       it 'creates a relationship between the parent entity and the child entity' do
@@ -113,10 +119,12 @@ RSpec.describe DkImporter do
         )
         expect(relationship.target).to eq(Entity.legal_entities.first)
         expect(relationship.source).to eq(Entity.natural_persons.first)
-        expect(relationship.interests).to match_array([
-          { 'type' => 'shareholding', 'share_min' => 100.0, 'share_max' => 100.0 },
-          { 'type' => 'voting-rights', 'share_min' => 100.0, 'share_max' => 100.0 },
-        ])
+        expect(relationship.interests).to match_array(
+          [
+            { 'type' => 'shareholding', 'share_min' => 100.0, 'share_max' => 100.0 },
+            { 'type' => 'voting-rights', 'share_min' => 100.0, 'share_max' => 100.0 },
+          ],
+        )
         expect(relationship.started_date).to eq(ISO8601::Date.new('2015-01-01'))
         expect(relationship.ended_date).to be nil
         expect(relationship.sample_date).to eq(ISO8601::Date.new('2015-01-01'))
@@ -154,17 +162,21 @@ RSpec.describe DkImporter do
       end
 
       it 'resolves all child companies' do
-        expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
-          jurisdiction_code: 'dk',
-          company_number: '1234567',
-          name: 'Renamed Danish Company 1',
-        ))
+        expect(entity_resolver).to have_received(:resolve!).with(
+          having_attributes(
+            jurisdiction_code: 'dk',
+            company_number: '1234567',
+            name: 'Renamed Danish Company 1',
+          ),
+        )
 
-        expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
-          jurisdiction_code: 'dk',
-          company_number: '89101112',
-          name: 'Danish Company 2',
-        ))
+        expect(entity_resolver).to have_received(:resolve!).with(
+          having_attributes(
+            jurisdiction_code: 'dk',
+            company_number: '89101112',
+            name: 'Danish Company 2',
+          ),
+        )
       end
 
       it 'creates all child companies' do
@@ -196,15 +208,21 @@ RSpec.describe DkImporter do
       end
 
       it 'indexes all entities' do
-        expect(IndexEntityService).to have_received(:new).with(having_attributes(
-          name: 'Danish Person 1',
-        ))
-        expect(IndexEntityService).to have_received(:new).with(having_attributes(
-          name: 'Renamed Danish Company 1',
-        ))
-        expect(IndexEntityService).to have_received(:new).with(having_attributes(
-          name: 'Danish Company 2',
-        ))
+        expect(IndexEntityService).to have_received(:new).with(
+          having_attributes(
+            name: 'Danish Person 1',
+          ),
+        )
+        expect(IndexEntityService).to have_received(:new).with(
+          having_attributes(
+            name: 'Renamed Danish Company 1',
+          ),
+        )
+        expect(IndexEntityService).to have_received(:new).with(
+          having_attributes(
+            name: 'Danish Company 2',
+          ),
+        )
       end
 
       it 'creates relationships between the parent entity and all child entities' do
@@ -222,10 +240,12 @@ RSpec.describe DkImporter do
         )
         expect(relationship.target).to eq(entity)
         expect(relationship.source).to eq(parent)
-        expect(relationship.interests).to match_array([
-          { 'type' => 'shareholding', 'share_min' => 50.0, 'share_max' => 50.0 },
-          { 'type' => 'voting-rights', 'share_min' => 50.0, 'share_max' => 50.0 },
-        ])
+        expect(relationship.interests).to match_array(
+          [
+            { 'type' => 'shareholding', 'share_min' => 50.0, 'share_max' => 50.0 },
+            { 'type' => 'voting-rights', 'share_min' => 50.0, 'share_max' => 50.0 },
+          ],
+        )
         expect(relationship.started_date).to eq(ISO8601::Date.new('2015-01-01'))
         expect(relationship.ended_date).to be nil
         expect(relationship.sample_date).to eq(ISO8601::Date.new('2015-01-02'))
@@ -242,10 +262,12 @@ RSpec.describe DkImporter do
         )
         expect(relationship.target).to eq(entity)
         expect(relationship.source).to eq(parent)
-        expect(relationship.interests).to match_array([
-          { 'type' => 'shareholding', 'share_min' => 50.0, 'share_max' => 50.0 },
-          { 'type' => 'voting-rights', 'share_min' => 50.0, 'share_max' => 50.0 },
-        ])
+        expect(relationship.interests).to match_array(
+          [
+            { 'type' => 'shareholding', 'share_min' => 50.0, 'share_max' => 50.0 },
+            { 'type' => 'voting-rights', 'share_min' => 50.0, 'share_max' => 50.0 },
+          ],
+        )
         expect(relationship.started_date).to eq(ISO8601::Date.new('2015-01-01'))
         expect(relationship.ended_date).to be nil
         expect(relationship.sample_date).to eq(ISO8601::Date.new('2015-01-01'))

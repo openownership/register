@@ -4,11 +4,7 @@ class UaImporter
   attr_accessor :source_url, :source_name, :document_id, :retrieved_at
 
   def initialize(
-    entity_resolver: EntityResolver.new,
-    source_url:,
-    source_name:,
-    document_id:,
-    retrieved_at:
+    source_url:, source_name:, document_id:, retrieved_at:, entity_resolver: EntityResolver.new
   )
     @entity_resolver = entity_resolver
     @source_url = source_url

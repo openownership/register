@@ -13,7 +13,7 @@ class EntityIntegrityChecker
 
       result = check entity, &block
 
-      result.keys.each { |k| stats[k] += 1 }
+      result.each_key { |k| stats[k] += 1 }
     end
 
     Rails.logger.info "[#{self.class.name}] check_all finished with stats: #{stats.to_json}"

@@ -4,48 +4,48 @@ RSpec.describe 'Entity raw data page' do
   include EntityHelpers
 
   let!(:entity) { create(:legal_entity) }
-  let(:data_source_1) { create(:data_source, name: 'Data Source 1') }
-  let(:data_source_2) { create(:data_source, name: 'Data Source 2') }
+  let(:data_source1) { create(:data_source, name: 'Data Source 1') }
+  let(:data_source2) { create(:data_source, name: 'Data Source 2') }
   let(:oldest) { 10.days.ago }
   let(:newest) { 1.day.ago }
-  let(:import_1) do
-    import = create(:import, data_source: data_source_1)
+  let(:import1) do
+    import = create(:import, data_source: data_source1)
     import.timeless.update_attribute(:created_at, oldest)
     import
   end
-  let(:import_2) do
-    import = create(:import, data_source: data_source_2)
+  let(:import2) do
+    import = create(:import, data_source: data_source2)
     import.timeless.update_attribute(:created_at, newest)
     import
   end
 
-  let!(:import_1_provenances) do
-    create_list(:raw_data_provenance, 5, entity_or_relationship: entity, import: import_1)
+  let!(:import1_provenances) do
+    create_list(:raw_data_provenance, 5, entity_or_relationship: entity, import: import1)
   end
-  let!(:import_2_provenances) do
-    create_list(:raw_data_provenance, 5, entity_or_relationship: entity, import: import_2)
+  let!(:import2_provenances) do
+    create_list(:raw_data_provenance, 5, entity_or_relationship: entity, import: import2)
   end
   let(:provenances_in_order) do
-    import_1_provenances.sort_by(&:updated_at) + import_2_provenances
+    import1_provenances.sort_by(&:updated_at) + import2_provenances
   end
   let(:raw_records) { provenances_in_order.map(&:raw_data_records).flatten }
 
   before do
     # Create some realistic timestamps on the raw data
-    import_1_provenances.map(&:raw_data_records).flatten.each do |record|
+    import1_provenances.map(&:raw_data_records).flatten.each do |record|
       record.timeless.update_attribute(:created_at, oldest)
       record.timeless.update_attribute(:updated_at, oldest)
     end
 
-    import_2_provenances.map(&:raw_data_records).flatten.each do |record|
+    import2_provenances.map(&:raw_data_records).flatten.each do |record|
       record.timeless.update_attribute(:created_at, newest)
       record.timeless.update_attribute(:updated_at, newest)
     end
 
     # Make it so some records have been seen in more than one data source
     # and more than one import
-    import_1_provenances.first.raw_data_records.each do |record|
-      record.imports << import_2
+    import1_provenances.first.raw_data_records.each do |record|
+      record.imports << import2
       record.timeless.update_attribute(:updated_at, newest)
     end
   end
@@ -135,7 +135,7 @@ RSpec.describe 'Entity raw data page' do
   it "shows whether each record was seen in the most recent import for it's data source" do
     # We need a third import here, so that some records can be missing from the
     # most recent import for a data source
-    import3 = create(:import, data_source: data_source_2)
+    import3 = create(:import, data_source: data_source2)
     create(
       :raw_data_provenance,
       raw_data_records: [provenances_in_order.last.raw_data_records.last],

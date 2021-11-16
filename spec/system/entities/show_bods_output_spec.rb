@@ -28,7 +28,7 @@ RSpec.describe 'Entity BODS export' do
     include_context 'BODS: company that is part of a chain of relationships'
 
     subject do
-      visit entity_path(legal_entity_1, format: :json)
+      visit entity_path(legal_entity1, format: :json)
       JSON.parse(page.html)
     end
 

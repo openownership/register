@@ -34,11 +34,13 @@ RSpec.describe EitiImporter do
       it 'resolves the child company' do
         subject.parse(file_fixture('eiti_individual.csv'))
 
-        expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
-          jurisdiction_code: 'gb',
-          company_number: '12345',
-          name: 'Example Child',
-        ))
+        expect(entity_resolver).to have_received(:resolve!).with(
+          having_attributes(
+            jurisdiction_code: 'gb',
+            company_number: '12345',
+            name: 'Example Child',
+          ),
+        )
       end
     end
 
@@ -50,11 +52,13 @@ RSpec.describe EitiImporter do
       it 'resolves the child company with the source jurisdiction_code' do
         subject.parse(file_fixture('eiti_individual.csv'))
 
-        expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
-          jurisdiction_code: 'ng',
-          company_number: '12345',
-          name: 'Example Child',
-        ))
+        expect(entity_resolver).to have_received(:resolve!).with(
+          having_attributes(
+            jurisdiction_code: 'ng',
+            company_number: '12345',
+            name: 'Example Child',
+          ),
+        )
       end
     end
 
@@ -116,11 +120,13 @@ RSpec.describe EitiImporter do
         it 'resolves the parent entity' do
           subject.parse(file)
 
-          expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
-            jurisdiction_code: 'gb',
-            company_number: nil,
-            name: 'Example Parent',
-          ))
+          expect(entity_resolver).to have_received(:resolve!).with(
+            having_attributes(
+              jurisdiction_code: 'gb',
+              company_number: nil,
+              name: 'Example Parent',
+            ),
+          )
         end
 
         it 'creates an entity with a document based identifier' do

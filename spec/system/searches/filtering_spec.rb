@@ -15,7 +15,7 @@ RSpec.describe 'Filtering search results' do
   it 'Can filter results by entity type' do
     search_for 'Example' # Matches all people and companies
 
-    click_link 'Person', href: %r{\/search\/*}
+    click_link 'Person', href: %r{/search/*}
     expect(page).to have_text uk_person.name
     expect(page).to have_text australian_person.name
     expect(page).not_to have_text uk_company.name
@@ -31,7 +31,7 @@ RSpec.describe 'Filtering search results' do
   it 'Can filter results by country' do
     search_for 'Example' # Matches all people and companies
 
-    click_link 'Australia', href: %r{\/search\/*}
+    click_link 'Australia', href: %r{/search/*}
     expect(page).to have_text australian_company.name
     expect(page).to have_text australian_person.name
     expect(page).not_to have_text uk_person.name

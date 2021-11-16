@@ -634,6 +634,7 @@ class BodsMapper
         type: 'influence-or-control',
         details: interest,
       }
+    # rubocop:disable Lint/DuplicateBranch
     else
       # Fallback
       {
@@ -641,6 +642,7 @@ class BodsMapper
         details: interest,
       }
     end
+    # rubocop:enable Lint/DuplicateBranch
   end
   memoize :parse_interest_string
 
@@ -658,8 +660,10 @@ class BodsMapper
     when 'steps-to-find-psc-not-yet-completed',
          'steps-to-find-psc-not-yet-completed-partnership'
       'unknown'
+    # rubocop:disable Lint/DuplicateBranch
     else
       'unknown'
     end
+    # rubocop:enable Lint/DuplicateBranch
   end
 end

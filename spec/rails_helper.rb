@@ -21,8 +21,8 @@ require 'support/search_helpers'
 require 'sidekiq/testing'
 Sidekiq::Logging.logger = nil
 
-Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
-Dir["./spec/shared_contexts/**/*.rb"].each { |f| require f }
+Dir["./spec/shared_examples/**/*.rb"].sort.each { |f| require f }
+Dir["./spec/shared_contexts/**/*.rb"].sort.each { |f| require f }
 
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
