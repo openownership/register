@@ -116,7 +116,8 @@ RSpec.describe Relationship do
   end
 
   describe '#upsert' do
-    let(:relationship) { build(:relationship) }
+    let!(:source) { create(:natural_person) }
+    let(:relationship) { build(:relationship, source: source) }
 
     it 'upserts the document' do
       relationship.upsert

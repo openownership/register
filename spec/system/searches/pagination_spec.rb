@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Search pagination' do
   include SearchHelpers
 
-  let!(:companies) { FactoryGirl.create_list(:legal_entity, 20) }
-  let!(:people) { FactoryGirl.create_list(:natural_person, 20) }
+  let!(:companies) { FactoryBot.create_list(:legal_entity, 20) }
+  let!(:people) { FactoryBot.create_list(:natural_person, 20) }
 
   before do
     Entity.import(force: true, refresh: true)

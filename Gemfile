@@ -22,7 +22,6 @@ gem 'countries', '~> 3.0'
 gem 'iso8601'
 gem 'devise'
 gem 'roadie-rails', '~> 1.3.0'
-gem 'factory_girl_rails'
 gem 'aws-sdk-s3', '~> 1.105.1'
 gem 'rubyzip', '~> 1.3', require: false
 gem 'twitter_cldr', '~> 4.4', '>= 4.4.2'
@@ -50,6 +49,7 @@ group :development, :test do
   gem 'webmock'
   gem 'launchy'
   gem 'pry-byebug'
+  gem 'factory_bot_rails'
 end
 
 group :development do

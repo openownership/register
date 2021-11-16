@@ -68,7 +68,7 @@ RSpec.describe 'Entity pages' do
     let!(:relationships) do
       relationships = []
       (1...13).each do |i|
-        relationships << FactoryGirl.create(:relationship, source: company, started_date: i.day.ago.to_date.iso8601)
+        relationships << FactoryBot.create(:relationship, source: company, started_date: i.day.ago.to_date.iso8601)
       end
       relationships
     end
@@ -535,7 +535,7 @@ RSpec.describe 'Entity pages' do
     let!(:relationships) do
       relationships = []
       (1...13).each do |i|
-        relationships << FactoryGirl.create(:relationship, source: person, started_date: i.day.ago.to_date.iso8601)
+        relationships << FactoryBot.create(:relationship, source: person, started_date: i.day.ago.to_date.iso8601)
       end
       relationships
     end

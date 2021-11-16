@@ -3,10 +3,10 @@ require 'rails_helper'
 RSpec.describe 'Filtering search results' do
   include SearchHelpers
 
-  let!(:uk_company) { FactoryGirl.create(:legal_entity) }
-  let!(:australian_company) { FactoryGirl.create(:legal_entity, jurisdiction_code: 'au') }
-  let!(:uk_person) { FactoryGirl.create(:natural_person) }
-  let!(:australian_person) { FactoryGirl.create(:natural_person, nationality: 'au') }
+  let!(:uk_company) { FactoryBot.create(:legal_entity) }
+  let!(:australian_company) { FactoryBot.create(:legal_entity, jurisdiction_code: 'au') }
+  let!(:uk_person) { FactoryBot.create(:natural_person) }
+  let!(:australian_person) { FactoryBot.create(:natural_person, nationality: 'au') }
 
   before do
     Entity.import(force: true, refresh: true)

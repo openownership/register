@@ -13,9 +13,9 @@ class DevelopmentDataCreator
 
     DataSourceLoader.new.call
 
-    FactoryGirl.create_list(:draft_submission, 3)
-    FactoryGirl.create_list(:submitted_submission, 3)
-    FactoryGirl.create_list(:approved_submission, 3)
+    FactoryBot.create_list(:draft_submission, 3)
+    FactoryBot.create_list(:submitted_submission, 3)
+    FactoryBot.create_list(:approved_submission, 3)
 
     password = ENV.fetch('ADMIN_BASIC_AUTH').split(":").last
     ENV.fetch('DEFAULT_USERS').split(",").each do |email|
@@ -44,7 +44,7 @@ class DevelopmentDataCreator
     records = open(uk_data).readlines.map do |line|
       data = JSON.parse(line)
       etag = data['data']['etag']
-      FactoryGirl.create(:raw_data_record, raw_data: line, etag: etag, imports: [uk_import])
+      FactoryBot.create(:raw_data_record, raw_data: line, etag: etag, imports: [uk_import])
     end
     retrieved_at = Time.zone.parse('2016-12-06 06:15:37')
     importer = PscImporter.new

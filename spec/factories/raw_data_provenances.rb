@@ -1,8 +1,8 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :raw_data_provenance do
     association :entity_or_relationship, factory: :legal_entity
     association :import
-    raw_data_records { [FactoryGirl.build_list(:raw_data_record, 2)] }
+    raw_data_records { [FactoryBot.build_list(:raw_data_record, 2)] }
 
     after(:build) do |provenance|
       provenance.raw_data_records.each do |r|

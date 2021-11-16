@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'My account' do
   include UserHelpers
 
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   let(:new_email) { 'new-email@example.com' }
 
   it 'can change email address' do
@@ -32,9 +32,9 @@ RSpec.describe 'My account' do
   end
 
   it 'can delete an account' do
-    draft = FactoryGirl.create(:draft_submission, user: user)
-    submitted = FactoryGirl.create(:submitted_submission, user: user)
-    approved = FactoryGirl.create(:approved_submission, user: user)
+    draft = FactoryBot.create(:draft_submission, user: user)
+    submitted = FactoryBot.create(:submitted_submission, user: user)
+    approved = FactoryBot.create(:approved_submission, user: user)
 
     visit '/'
     click_link 'Sign in'

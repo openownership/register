@@ -4,7 +4,7 @@ RSpec.shared_context 'basic entity with one owner' do
   let!(:company) { create(:legal_entity) }
   let!(:person) { create(:natural_person) }
   let!(:relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: person,
       target: company,
@@ -23,7 +23,7 @@ RSpec.shared_context 'entity with two owners' do
   let!(:person1) { create(:natural_person) }
   let!(:person2) { create(:natural_person) }
   let!(:relationship1) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: person1,
       target: company,
@@ -31,7 +31,7 @@ RSpec.shared_context 'entity with two owners' do
     )
   end
   let!(:relationship2) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: person2,
       target: company,
@@ -57,7 +57,7 @@ RSpec.shared_context 'entity with intermediate ownership' do
   let!(:ultimate_owner) { create(:natural_person, name: 'Ultimate owner') }
 
   let!(:start_to_intermediate_1_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: intermediate_company1,
       target: start_company,
@@ -65,7 +65,7 @@ RSpec.shared_context 'entity with intermediate ownership' do
     )
   end
   let!(:intermediate_1_to_intermediate_2_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: intermediate_company2,
       target: intermediate_company1,
@@ -73,7 +73,7 @@ RSpec.shared_context 'entity with intermediate ownership' do
     )
   end
   let!(:intermediate_2_to_owner_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: ultimate_owner,
       target: intermediate_company2,
@@ -113,7 +113,7 @@ RSpec.shared_context 'entity with ownership at different levels' do
   let!(:ultimate_owner) { create(:natural_person, name: 'Ultimate owner') }
 
   let!(:start_to_direct_owner_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: direct_owner,
       target: start_company,
@@ -121,7 +121,7 @@ RSpec.shared_context 'entity with ownership at different levels' do
     )
   end
   let!(:start_to_intermediate_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: intermediate_company,
       target: start_company,
@@ -129,7 +129,7 @@ RSpec.shared_context 'entity with ownership at different levels' do
     )
   end
   let!(:intermediate_to_ultimate_owner_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: ultimate_owner,
       target: intermediate_company,
@@ -155,7 +155,7 @@ RSpec.shared_context 'entity with no ultimate ownership' do
   let!(:start_company) { create(:legal_entity, name: 'Start company') }
   let!(:intermediate_company) { create(:legal_entity, name: 'Intermediate company') }
   let!(:start_to_intermediate_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: intermediate_company,
       target: start_company,
@@ -163,7 +163,7 @@ RSpec.shared_context 'entity with no ultimate ownership' do
     )
   end
   let!(:intermediate_owner_statement) do
-    FactoryGirl.create(:statement, entity: intermediate_company)
+    FactoryBot.create(:statement, entity: intermediate_company)
   end
   let!(:no_owner) do
     UnknownPersonsEntity.new_for_statement(intermediate_owner_statement)
@@ -190,7 +190,7 @@ RSpec.shared_context 'entity with unknown ultimate ownership' do
   let!(:start_company) { create(:legal_entity, name: 'Start company') }
   let!(:intermediate_company) { create(:legal_entity, name: 'Intermediate company') }
   let!(:start_to_intermediate_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: intermediate_company,
       target: start_company,
@@ -223,7 +223,7 @@ RSpec.shared_context 'entity with circular ownership' do
   let!(:company2) { create(:legal_entity, name: 'Second company') }
 
   let!(:company1_to_company2_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: company2,
       target: company1,
@@ -231,7 +231,7 @@ RSpec.shared_context 'entity with circular ownership' do
     )
   end
   let!(:company2_to_company1_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: company1,
       target: company2,
@@ -252,7 +252,7 @@ RSpec.shared_context 'entity with circular ownership and an ultimate owner' do
   let!(:ultimate_owner) { create(:natural_person, name: 'Ultimate owner') }
 
   let!(:start_to_intermediate_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: intermediate_company,
       target: start_company,
@@ -260,7 +260,7 @@ RSpec.shared_context 'entity with circular ownership and an ultimate owner' do
     )
   end
   let!(:intermediate_to_start_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: start_company,
       target: intermediate_company,
@@ -268,7 +268,7 @@ RSpec.shared_context 'entity with circular ownership and an ultimate owner' do
     )
   end
   let!(:intermediate_to_ultimate_owner_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: ultimate_owner,
       target: intermediate_company,
@@ -303,7 +303,7 @@ RSpec.shared_context 'entity with diamond ownership' do
   let!(:ultimate_owner) { create(:natural_person, name: 'Ultimate owner') }
 
   let!(:start_to_intermediate_1_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: intermediate_company1,
       target: start_company,
@@ -311,7 +311,7 @@ RSpec.shared_context 'entity with diamond ownership' do
     )
   end
   let!(:start_to_intermediate_2_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: intermediate_company2,
       target: start_company,
@@ -319,7 +319,7 @@ RSpec.shared_context 'entity with diamond ownership' do
     )
   end
   let!(:intermediate_1_to_owner_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: ultimate_owner,
       target: intermediate_company1,
@@ -327,7 +327,7 @@ RSpec.shared_context 'entity with diamond ownership' do
     )
   end
   let!(:intermediate_2_to_owner_relationship) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :relationship,
       source: ultimate_owner,
       target: intermediate_company2,
