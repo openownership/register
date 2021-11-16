@@ -34,4 +34,6 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.action_view.raise_on_missing_translations = true
   config.action_mailer.preview_path = Rails.root.join('app', 'mailers', 'previews')
+
+  config.s3_adapter_klass = "::S3Adapter"
 end

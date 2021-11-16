@@ -1,7 +1,7 @@
 class DevelopmentDataCreator
   def initialize
     @tmp_dir = Rails.root.join('tmp', 'dev-data')
-    @s3_client = Aws::S3::Client.new(
+    @s3_adapter = Rails.application.config.s3_adapter.new(
       region: 'eu-west-1',
       access_key_id: ENV['DEV_DATA_AWS_ACCESS_KEY_ID'],
       secret_access_key: ENV['DEV_DATA_AWS_SECRET_ACCESS_KEY'],
@@ -62,14 +62,11 @@ class DevelopmentDataCreator
 
   private
 
+  attr_reader :s3_adapter
+
   def download_from_s3_to_tmp(filename)
     tmp_file = File.join(@tmp_dir, filename)
-    s3 = Aws::S3::Object.new(
-      ENV['DEV_DATA_S3_BUCKET_NAME'],
-      filename,
-      client: @s3_client,
-    )
-    s3.download_file(tmp_file)
+    s3_adapter.download_from_s3(s3_bucket: ENV['DEV_DATA_S3_BUCKET_NAME'], s3_path: filename, local_path: tmp_file)
     tmp_file
   end
 end

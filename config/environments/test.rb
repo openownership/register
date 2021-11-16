@@ -14,4 +14,6 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
   config.action_view.raise_on_missing_translations = true
   Rack::Attack.enabled = false
+
+  config.s3_adapter_klass = "::S3FakeAdapter"
 end

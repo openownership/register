@@ -6,9 +6,20 @@ RSpec.describe 'BODS Export' do
   let(:exporter) { BodsExporter.new(incremental: true) }
   let(:export) { exporter.export }
   let(:uploader) { BodsExportUploader.new(export.id, incremental: true) }
+  let(:bucket) { ENV['BODS_EXPORT_S3_BUCKET_NAME'] }
   let(:latest_statements_url) { "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz" }
   let(:latest_ids_url) { "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statement-ids.latest.txt.gz" }
   let(:redis) { Redis.new }
+
+  let(:s3_adapter) { Rails.application.config.s3_adapter.new }
+
+  before do
+    expect(Rails.application.config.s3_adapter).to(
+      receive(:new)
+        .with(hash_including(:access_key_id, :secret_access_key))
+        .and_return(s3_adapter)
+    )
+  end
 
   def export_statements_url(export)
     "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statements.#{export.created_at.iso8601}.jsonl.gz"
@@ -16,31 +27,6 @@ RSpec.describe 'BODS Export' do
 
   def export_ids_url(export)
     "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3.eu-west-1.amazonaws.com/public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz"
-  end
-
-  def stub_s3_client_initialisation
-    stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials/")
-      .to_return(status: 200, body: "")
-  end
-
-  def stub_upload_of_latest_files
-    stub_request(:put, latest_statements_url).to_return(status: 200, body: "")
-    stub_request(:put, latest_ids_url).to_return(status: 200, body: "")
-  end
-
-  def stub_copy_to_export_files(export)
-    stub_request(:head, latest_statements_url).to_return(status: 200, body: "")
-    stub_request(:head, latest_ids_url).to_return(status: 200, body: "")
-
-    stub_request(:post, export_statements_url(export)).with(query: "uploads")
-      .to_return(status: 200, body: "")
-    stub_request(:post, export_ids_url(export)).with(query: "uploads")
-      .to_return(status: 200, body: "")
-
-    stub_request(:put, export_statements_url(export))
-      .to_return(status: 200, body: "")
-    stub_request(:put, export_ids_url(export))
-      .to_return(status: 200, body: "")
   end
 
   def run_export(export)
@@ -72,14 +58,6 @@ RSpec.describe 'BODS Export' do
 
   context "exporting initial data" do
     include_context 'BODS: company that is part of a chain of relationships'
-
-    before do
-      stub_s3_client_initialisation
-      stub_request(:head, latest_statements_url).with(query: "partNumber=1").to_return(status: 404, body: "")
-      stub_request(:head, latest_ids_url).with(query: "partNumber=1").to_return(status: 404, body: "")
-      stub_upload_of_latest_files
-      stub_copy_to_export_files(export)
-    end
 
     subject { run_export(export) }
 
@@ -256,22 +234,6 @@ RSpec.describe 'BODS Export' do
     let(:exporter) { BodsExporter.new(existing_ids: existing_statement_ids, incremental: true) }
 
     before do
-      sio = StringIO.new
-      sio.binmode
-      gz = Zlib::GzipWriter.new(sio)
-      # rubocop:disable Style/StringConcatenation
-      gz.write existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n"
-      # rubocop:enable Style/StringConcatenation
-      gz.close
-      existing_statements_file = sio.string
-
-      sio = StringIO.new
-      sio.binmode
-      gz = Zlib::GzipWriter.new(sio)
-      gz.write "#{existing_statement_ids.join("\n")}\n"
-      gz.close
-      existing_ids_file = sio.string
-
       # Update an entity in the middle of the chain
       legal_entity2.name = "Company B Updated"
       legal_entity2.save!
@@ -294,15 +256,18 @@ RSpec.describe 'BODS Export' do
         new_legal_entity2_natural_person_statement,
       ]
 
-      stub_s3_client_initialisation
-      stub_request(:head, latest_statements_url).with(query: "partNumber=1")
-        .to_return(status: 200, headers: { 'content-length' => existing_statements_file.bytesize })
-      stub_request(:head, latest_ids_url).with(query: "partNumber=1")
-        .to_return(status: 200, headers: { 'content-length' => existing_statements_file.bytesize })
-      stub_request(:get, latest_statements_url).to_return(status: 200, body: existing_statements_file)
-      stub_request(:get, latest_ids_url).to_return(status: 200, body: existing_ids_file)
-      stub_upload_of_latest_files
-      stub_copy_to_export_files(export)
+      # rubocop:disable Style/StringConcatenation
+      s3_adapter.upload_to_s3_without_file(
+        s3_bucket: bucket,
+        s3_path: 'public/exports/statements.latest.jsonl.gz',
+        content: existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n"
+      )
+      s3_adapter.upload_to_s3_without_file(
+        s3_bucket: bucket,
+        s3_path: 'public/exports/statement-ids.latest.txt.gz',
+        content: existing_statement_ids.join("\n") + "\n"
+      )
+      # rubocop:enable Style/StringConcatenation
     end
 
     subject do
