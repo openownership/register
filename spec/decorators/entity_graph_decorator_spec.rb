@@ -127,7 +127,7 @@ RSpec.describe EntityGraphDecorator do
       subject { JSON.parse(decorated.cytoscape_data[:elements])['nodes'].last }
 
       it 'uses the right translation string for the label' do
-        expected = I18n.t("entity_graph.labels.#{label_key}", label_data)
+        expected = I18n.t("entity_graph.labels.#{label_key}", **label_data)
         expect(subject['data']['label']).to eq expected
       end
 

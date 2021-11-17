@@ -19,12 +19,12 @@ class BodsImportTrigger
   def records
     return jsonl_records if @jsonl
 
-    Oj.load(open(@download_url).read, mode: :rails).map { |r| Oj.dump(r, mode: :rails) }
+    Oj.load(URI.open(@download_url).read, mode: :rails).map { |r| Oj.dump(r, mode: :rails) }
   end
 
   def jsonl_records
     Enumerator.new do |yielder|
-      open(@download_url) do |f|
+      URI.open(@download_url) do |f|
         f.each { |line| yielder << line.chomp }
       end
     end

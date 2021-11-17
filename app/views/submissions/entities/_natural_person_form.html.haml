@@ -1,4 +1,4 @@
-= form_with form_options_for_entity(entity) do |f|
+= form_with **form_options_for_entity(entity) do |f|
   = render 'submissions/shared/form_errors', errors: entity.errors if entity.errors.any?
   = render 'continue_params'
   = f.hidden_field :type

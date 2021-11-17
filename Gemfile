@@ -42,6 +42,7 @@ gem 'oj'
 gem 'coderay'
 gem 'geokit'
 gem 'invisible_captcha'
+gem 'rexml'
 
 group :development, :test do
   gem 'byebug'

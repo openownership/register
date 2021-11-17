@@ -61,7 +61,7 @@ class EntityGraphDecorator < ApplicationDecorator
 
   def cytoscape_label_node(node)
     entity = node.entity.decorate(context: context)
-    label = I18n.t("entity_graph.labels.#{node.label_key}", node.label_data)
+    label = I18n.t("entity_graph.labels.#{node.label_key}", **node.label_data)
     show_graph_link = node.label_key.start_with? 'max_levels'
     tooltip = h.render(
       partial: 'entity_graphs/error_tooltip',

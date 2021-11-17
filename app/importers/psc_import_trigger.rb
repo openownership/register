@@ -21,7 +21,7 @@ class PscImportTrigger
   private
 
   def parse_snapshot_links(download_page, base_url)
-    document = Nokogiri::HTML(open(download_page).read)
+    document = Nokogiri::HTML(URI.open(download_page).read)
     document.css('a').each_with_object([]) do |el, acc|
       href = el['href']
       if href.present? && href.match(FILENAME_REGEX)
