@@ -141,7 +141,7 @@ RSpec.describe 'Entity pages' do
       visit entity_path(start_company)
 
       expect(page).to have_text "Beneficial owners of #{start_company.name}"
-      expect(page).to have_text "Owned via #{intermediate_company2.name}  → #{intermediate_company1.name} → #{start_company.name}"
+      expect(page).to have_text "Owned via #{intermediate_company2.name} → #{intermediate_company1.name} → #{start_company.name}"
       expect_beneficial_owner_section_for start_to_owner_relationship
 
       expect(page).to have_text "No companies are known to be controlled by #{start_company.name}"
@@ -151,7 +151,7 @@ RSpec.describe 'Entity pages' do
       visit entity_path(intermediate_company1)
 
       expect(page).to have_text "Beneficial owners of #{intermediate_company1.name}"
-      expect(page).to have_text "Owned via #{intermediate_company2.name}  → #{intermediate_company1.name}"
+      expect(page).to have_text "Owned via #{intermediate_company2.name} → #{intermediate_company1.name}"
       expect_beneficial_owner_section_for intermediate_1_to_owner_relationship
 
       expect(page).to have_text "Companies controlled by #{intermediate_company1.name}"

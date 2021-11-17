@@ -92,13 +92,13 @@ RSpec.describe 'Entity raw data page' do
 
   it 'shows the data sources for all the raw records' do
     visit raw_entity_path(entity)
-    expect(page).to have_text('Data source(s) Data Source 1 and Data Source 2')
+    expect(page).to have_text('Data source(s) Data Source 1 and Data Source 2', normalize_ws: true)
   end
 
   it 'shows the newest/oldest dates for all the raw records' do
     visit raw_entity_path(entity)
-    expect(page).to have_text("Oldest #{oldest}")
-    expect(page).to have_text("Newest #{newest}")
+    expect(page).to have_text("Oldest #{oldest}", normalize_ws: true)
+    expect(page).to have_text("Newest #{newest}", normalize_ws: true)
   end
 
   it 'shows the formatted data for each raw record' do
@@ -106,8 +106,8 @@ RSpec.describe 'Entity raw data page' do
 
     raw_records.last(10).each do |record|
       within "#raw_data_record_#{record.etag}" do
-        expected = JSON.pretty_generate(JSON.parse(record.raw_data))
-        expect(page).to have_text(expected)
+        expected = JSON.pretty_generate(JSON.parse(record.raw_data)).gsub(/\s+/, ' ')
+        expect(page).to have_text(expected, normalize_ws: true)
       end
     end
   end
@@ -116,8 +116,8 @@ RSpec.describe 'Entity raw data page' do
     visit raw_entity_path(entity)
     raw_records.last(8).each do |record|
       within "#raw_data_record_#{record.etag}" do
-        expect(page).to have_text("First seen #{record.created_at}")
-        expect(page).to have_text("Last seen #{record.updated_at}")
+        expect(page).to have_text("First seen #{record.created_at}", normalize_ws: true)
+        expect(page).to have_text("Last seen #{record.updated_at}", normalize_ws: true)
       end
     end
   end
@@ -126,8 +126,8 @@ RSpec.describe 'Entity raw data page' do
     visit raw_entity_path(entity)
     raw_records.last(10).each do |record|
       within "#raw_data_record_#{record.etag}" do
-        expect(page).to have_text("First seen #{record.created_at}")
-        expect(page).to have_text("Last seen #{record.updated_at}")
+        expect(page).to have_text("First seen #{record.created_at}", normalize_ws: true)
+        expect(page).to have_text("Last seen #{record.updated_at}", normalize_ws: true)
       end
     end
   end
@@ -149,12 +149,12 @@ RSpec.describe 'Entity raw data page' do
     visit raw_entity_path(entity)
 
     within "#raw_data_record_#{raw_records.last.etag}" do
-      expect(page).to have_text("Seen in most recent import? Yes")
+      expect(page).to have_text("Seen in most recent import? Yes", normalize_ws: true)
     end
 
     raw_records.last(10).first(9).each do |record|
       within "#raw_data_record_#{record.etag}" do
-        expect(page).to have_text("Seen in most recent import? No")
+        expect(page).to have_text("Seen in most recent import? No", normalize_ws: true)
       end
     end
   end

@@ -105,10 +105,10 @@ RSpec.describe 'DK Import' do
     expect(page).to have_text "#{I18n.t('relationships.provenance.imported_at')} #{Time.zone.today}"
 
     visit raw_entity_path(person1)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(person1_raw_data))
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(person1_raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
 
     visit raw_entity_path(person1_companies.first)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(person1_raw_data))
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(person1_raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
 
     search_for 'Danish Person 2'
     click_link 'Danish Person 2'
@@ -117,9 +117,9 @@ RSpec.describe 'DK Import' do
     expect(page).to have_text "#{I18n.t('relationships.provenance.imported_at')} #{Time.zone.today}"
 
     visit raw_entity_path(person2)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(person2_raw_data))
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(person2_raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
 
     visit raw_entity_path(person2_company)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(person2_raw_data))
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(person2_raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
   end
 end

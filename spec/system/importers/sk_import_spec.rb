@@ -83,18 +83,18 @@ RSpec.describe 'SK Import' do
     expect(page).to have_text "#{I18n.t('relationships.provenance.imported_at')} #{Time.zone.today}"
 
     visit raw_entity_path(company)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(raw_data))
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
 
     search_for person1.name
     expect(page).to have_link person1.name
 
     visit raw_entity_path(person1)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(raw_data))
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
 
     search_for person2.name
     expect(page).to have_link person2.name
 
     visit raw_entity_path(person2)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(raw_data))
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
   end
 end
