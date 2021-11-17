@@ -9,7 +9,7 @@ RSpec.describe OpencorporatesClient do
       'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
       'Connection' => 'keep-alive',
       'Keep-Alive' => '30',
-      'User-Agent' => 'Faraday v0.15.4',
+      'User-Agent' => 'Faraday v1.8.0',
     }
   end
 
@@ -68,7 +68,7 @@ RSpec.describe OpencorporatesClient do
 
       it 'logs response errors' do
         allow(Rails.logger).to receive(:info)
-        expect(Rails.logger).to receive(:info).with(/Faraday::ConnectionFailed.*#{log_text}/)
+        expect(Rails.logger).to receive(:info).with(/Faraday::TimeoutError.*#{log_text}/)
         subject
       end
 

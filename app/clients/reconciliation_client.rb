@@ -7,7 +7,7 @@ class ReconciliationClient
   end
 
   def initialize
-    @http = Net::HTTP::Persistent.new(self.class.name)
+    @http = Net::HTTP::Persistent.new(name: self.class.name)
   end
 
   def reconcile(jurisdiction_code, search_query)

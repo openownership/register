@@ -1,7 +1,7 @@
 module ApplicationHelper
   def asset_present?(path)
     if Rails.configuration.assets.compile
-      Rails.application.precompiled_assets.include?(path)
+      Rails.application.assets.find_asset(path) != nil
     else
       Rails.application.assets_manifest.assets[path].present?
     end

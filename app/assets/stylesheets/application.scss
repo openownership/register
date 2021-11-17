@@ -1,14 +1,9 @@
-@import "tippy.themes.light";
-@import "variables";
-@import "bootstrap";
-@import "font-awesome-sprockets";
-@import "font-awesome";
-@import "fonts";
+@import "shared";
+
 @import "grid-and-containers";
 @import "main";
 @import "site-header";
 @import "site-footer";
-@import "helpers";
 @import "tree";
 @import "submissions";
 @import "pages";

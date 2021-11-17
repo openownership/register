@@ -170,7 +170,7 @@ module FixOCIdentifiersOrderingHelper
     deleted.add(to_remove._id.to_s)
 
     true
-  rescue PotentiallyBadEntityMergeDetectedAndStopped => e
+  rescue EntityMerger::PotentiallyBadEntityMergeDetectedAndStopped => e
     e_id = entity._id.to_s
 
     Rails.logger.warn "Failed to handle an entity merge - a potentially bad merge has been detected and stopped: #{e.message} - triggered by trying to fix entity #{e_id}"

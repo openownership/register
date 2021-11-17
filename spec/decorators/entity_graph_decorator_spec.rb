@@ -29,7 +29,7 @@ RSpec.describe EntityGraphDecorator do
       expect(subject.first['data']['label']).to eq entity.name
     end
 
-    it "adds a flag for the entity's country", type: :helper do
+    it "adds a flag for the entity's country" do
       expect(subject.first['data']['flag']).to eq h.country_flag_path(ISO3166::Country[:GB])
     end
 

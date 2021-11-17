@@ -46,7 +46,7 @@ class Entity
   index(dissolution_date: 1)
   index(last_resolved_at: 1)
 
-  index_name "#{Rails.application.class.parent_name.underscore}_entities_#{Rails.env}"
+  index_name "#{Rails.application.class.module_parent_name.underscore}_entities_#{Rails.env}"
 
   settings index: {
     number_of_shards: 1,

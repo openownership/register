@@ -5,7 +5,7 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
   config.read_encrypted_secrets = false # We don't use encrypted secrets
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  config.assets.js_compressor = :uglifier
+  config.assets.resolve_with = %i[manifest]
   config.assets.compile = false
   config.log_level = :info
   config.log_tags = [:request_id]

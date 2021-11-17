@@ -34,7 +34,7 @@ class PscImporter
         relationship = relationship!(child_entity, parent_entity, record['data'])
 
         [child_entity, parent_entity, relationship]
-      rescue PotentiallyBadEntityMergeDetectedAndStopped => e
+      rescue EntityMerger::PotentiallyBadEntityMergeDetectedAndStopped => e
         msg = "[#{self.class.name}] Failed to handle a required entity merge " \
               "as a potentially bad merge has been detected and stopped: " \
               "#{e.message} - will not complete the import of this raw " \

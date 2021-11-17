@@ -157,7 +157,7 @@ RSpec.describe EntityMerger do
 
       it 'should raise an error when trying to merge and not merge anything' do
         set_up_search_index_not_updated_expectations
-        expect { subject.call }.to raise_error(PotentiallyBadEntityMergeDetectedAndStopped, 'differing OC identifiers detected')
+        expect { subject.call }.to raise_error(EntityMerger::PotentiallyBadEntityMergeDetectedAndStopped, 'differing OC identifiers detected')
         expect_not_merged
       end
     end
