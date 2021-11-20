@@ -12,18 +12,18 @@ RSpec.describe BodsExportUploader do
   let(:existing_statements_dump) do
     existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n" # rubocop:disable Style/StringConcatenation
   end
-  let(:existing_statement_ids) { existing_statements.map { |s| s[:statementID] } }
+  let(:existing_statement_ids) { existing_statements.pluck(:statementID) }
   let(:existing_statement_ids_dump) { "#{existing_statement_ids.join("\n")}\n" }
 
   let(:new_relationship) { create(:relationship) }
   let(:new_statements) { BodsSerializer.new([new_relationship], mapper).statements.flatten }
-  let(:new_statement_ids) { new_statements.map { |s| s[:statementID] } }
+  let(:new_statement_ids) { new_statements.pluck(:statementID) }
 
   let(:s3_adapter) { Rails.application.config.s3_adapter.new }
 
   before do
     expect(Rails.application.config.s3_adapter).to receive(:new).with(
-      hash_including(:access_key_id, :secret_access_key)
+      hash_including(:access_key_id, :secret_access_key),
     ).and_return(s3_adapter)
   end
 
@@ -52,45 +52,45 @@ RSpec.describe BodsExportUploader do
       s3_adapter.upload_to_s3_without_file(
         s3_bucket: bucket,
         s3_path: 'public/exports/statements.latest.jsonl.gz',
-        content: existing_statements_dump
+        content: existing_statements_dump,
       )
       s3_adapter.upload_to_s3_without_file(
         s3_bucket: bucket,
         s3_path: 'public/exports/statement-ids.latest.txt.gz',
-        content: existing_statement_ids_dump
+        content: existing_statement_ids_dump,
       )
 
       expect(s3_adapter).to receive(:download_from_s3).with(
         s3_bucket: bucket,
         s3_path: 'public/exports/statements.latest.jsonl.gz',
-        local_path: File.join(dir, 'statements.latest.jsonl.gz')
+        local_path: File.join(dir, 'statements.latest.jsonl.gz'),
       ).and_call_original
       expect(s3_adapter).to receive(:download_from_s3).with(
         s3_bucket: bucket,
         s3_path: 'public/exports/statement-ids.latest.txt.gz',
-        local_path: File.join(dir, 'statement-ids.latest.txt.gz')
+        local_path: File.join(dir, 'statement-ids.latest.txt.gz'),
       ).and_call_original
 
       expect(s3_adapter).to receive(:upload_to_s3).with(
         s3_bucket: bucket,
         s3_path: "public/exports/statements.latest.jsonl.gz",
-        local_path: File.join(dir, 'statements.latest.jsonl.gz')
+        local_path: File.join(dir, 'statements.latest.jsonl.gz'),
       ).and_call_original
       expect(s3_adapter).to receive(:upload_to_s3).with(
         s3_bucket: bucket,
         s3_path: "public/exports/statement-ids.latest.txt.gz",
-        local_path: File.join(dir, 'statement-ids.latest.txt.gz')
+        local_path: File.join(dir, 'statement-ids.latest.txt.gz'),
       ).and_call_original
 
       expect(s3_adapter).to receive(:copy_file_in_s3).with(
         s3_bucket: bucket,
         s3_path_from: "public/exports/statements.latest.jsonl.gz",
-        s3_path_to: "public/exports/statements.#{export.created_at.iso8601}.jsonl.gz"
+        s3_path_to: "public/exports/statements.#{export.created_at.iso8601}.jsonl.gz",
       ).and_call_original
       expect(s3_adapter).to receive(:copy_file_in_s3).with(
         s3_bucket: bucket,
         s3_path_from: "public/exports/statement-ids.latest.txt.gz",
-        s3_path_to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz"
+        s3_path_to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz",
       ).and_call_original
 
       BodsExportUploader.new(export.id, incremental: true).call
@@ -130,45 +130,45 @@ RSpec.describe BodsExportUploader do
         s3_adapter.upload_to_s3_without_file(
           s3_bucket: bucket,
           s3_path: 'public/exports/statements.latest.jsonl.gz',
-          content: existing_statements_dump
+          content: existing_statements_dump,
         )
         s3_adapter.upload_to_s3_without_file(
           s3_bucket: bucket,
           s3_path: 'public/exports/statement-ids.latest.txt.gz',
-          content: existing_statement_ids_dump
+          content: existing_statement_ids_dump,
         )
- 
+
         expect(s3_adapter).to receive(:download_from_s3).with(
           s3_bucket: bucket,
           s3_path: 'public/exports/statements.latest.jsonl.gz',
-          local_path: File.join(dir, 'statements.latest.jsonl.gz')
+          local_path: File.join(dir, 'statements.latest.jsonl.gz'),
         ).and_call_original
         expect(s3_adapter).to receive(:download_from_s3).with(
           s3_bucket: bucket,
           s3_path: 'public/exports/statement-ids.latest.txt.gz',
-          local_path: File.join(dir, 'statement-ids.latest.txt.gz')
+          local_path: File.join(dir, 'statement-ids.latest.txt.gz'),
         ).and_call_original
 
         expect(s3_adapter).to receive(:upload_to_s3).with(
           s3_bucket: bucket,
           s3_path: "public/exports/statements.latest.jsonl.gz",
-          local_path: File.join(dir, 'statements.latest.jsonl.gz')
+          local_path: File.join(dir, 'statements.latest.jsonl.gz'),
         ).and_call_original
         expect(s3_adapter).to receive(:upload_to_s3).with(
           s3_bucket: bucket,
           s3_path: "public/exports/statement-ids.latest.txt.gz",
-          local_path: File.join(dir, 'statement-ids.latest.txt.gz')
+          local_path: File.join(dir, 'statement-ids.latest.txt.gz'),
         ).and_call_original
 
         expect(s3_adapter).to receive(:copy_file_in_s3).with(
           s3_bucket: bucket,
           s3_path_from: "public/exports/statements.latest.jsonl.gz",
-          s3_path_to: "public/exports/statements.#{export.created_at.iso8601}.jsonl.gz"
+          s3_path_to: "public/exports/statements.#{export.created_at.iso8601}.jsonl.gz",
         ).and_call_original
         expect(s3_adapter).to receive(:copy_file_in_s3).with(
           s3_bucket: bucket,
           s3_path_from: "public/exports/statement-ids.latest.txt.gz",
-          s3_path_to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz"
+          s3_path_to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz",
         ).and_call_original
 
         BodsExportUploader.new(export.id, incremental: true).call
@@ -194,12 +194,12 @@ RSpec.describe BodsExportUploader do
       expect(s3_adapter).to receive(:download_from_s3).with(
         s3_bucket: bucket,
         s3_path: 'public/exports/statements.latest.jsonl.gz',
-        local_path: File.join(dir, 'statements.latest.jsonl.gz')
+        local_path: File.join(dir, 'statements.latest.jsonl.gz'),
       ).and_call_original
       expect(s3_adapter).to receive(:download_from_s3).with(
         s3_bucket: bucket,
         s3_path: 'public/exports/statement-ids.latest.txt.gz',
-        local_path: File.join(dir, 'statement-ids.latest.txt.gz')
+        local_path: File.join(dir, 'statement-ids.latest.txt.gz'),
       ).and_call_original
       expect do
         BodsExportUploader.new(export.id, incremental: true).call
@@ -214,45 +214,45 @@ RSpec.describe BodsExportUploader do
       s3_adapter.upload_to_s3_without_file(
         s3_bucket: bucket,
         s3_path: 'public/exports/statements.latest.jsonl.gz',
-        content: existing_statements_dump
+        content: existing_statements_dump,
       )
       s3_adapter.upload_to_s3_without_file(
         s3_bucket: bucket,
         s3_path: 'public/exports/statement-ids.latest.txt.gz',
-        content: existing_statement_ids_dump
+        content: existing_statement_ids_dump,
       )
- 
+
       expect(s3_adapter).to receive(:download_from_s3).with(
         s3_bucket: bucket,
         s3_path: 'public/exports/statements.latest.jsonl.gz',
-        local_path: File.join(dir, 'statements.latest.jsonl.gz')
+        local_path: File.join(dir, 'statements.latest.jsonl.gz'),
       ).and_call_original
       expect(s3_adapter).to receive(:download_from_s3).with(
         s3_bucket: bucket,
         s3_path: 'public/exports/statement-ids.latest.txt.gz',
-        local_path: File.join(dir, 'statement-ids.latest.txt.gz')
+        local_path: File.join(dir, 'statement-ids.latest.txt.gz'),
       ).and_call_original
 
       expect(s3_adapter).to receive(:upload_to_s3).with(
         s3_bucket: bucket,
         s3_path: "public/exports/statements.latest.jsonl.gz",
-        local_path: File.join(dir, 'statements.latest.jsonl.gz')
+        local_path: File.join(dir, 'statements.latest.jsonl.gz'),
       ).and_call_original
       expect(s3_adapter).to receive(:upload_to_s3).with(
         s3_bucket: bucket,
         s3_path: "public/exports/statement-ids.latest.txt.gz",
-        local_path: File.join(dir, 'statement-ids.latest.txt.gz')
+        local_path: File.join(dir, 'statement-ids.latest.txt.gz'),
       ).and_call_original
 
       expect(s3_adapter).to receive(:copy_file_in_s3).with(
         s3_bucket: bucket,
         s3_path_from: "public/exports/statements.latest.jsonl.gz",
-        s3_path_to: "public/exports/statements.#{export.created_at.iso8601}.jsonl.gz"
+        s3_path_to: "public/exports/statements.#{export.created_at.iso8601}.jsonl.gz",
       ).and_call_original
       expect(s3_adapter).to receive(:copy_file_in_s3).with(
         s3_bucket: bucket,
         s3_path_from: "public/exports/statement-ids.latest.txt.gz",
-        s3_path_to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz"
+        s3_path_to: "public/exports/statement-ids.#{export.created_at.iso8601}.txt.gz",
       ).and_call_original
 
       BodsExportUploader.new(export.id, incremental: true).call

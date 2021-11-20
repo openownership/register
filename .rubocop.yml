@@ -198,3 +198,72 @@ Style/StringChars:
 
 Style/SwapValues:
   Enabled: true
+
+Rails/ActiveRecordCallbacksOrder:
+  Enabled: true
+
+Rails/AddColumnIndex:
+  Enabled: true
+
+Rails/AfterCommitOverride:
+  Enabled: true
+
+Rails/AttributeDefaultBlockValue:
+  Enabled: true
+
+Rails/EagerEvaluationLogMessage:
+  Enabled: true
+
+Rails/ExpandedDateRange:
+  Enabled: true
+
+Rails/FindById:
+  Enabled: true
+
+Rails/I18nLocaleAssignment:
+  Enabled: true
+
+Rails/Inquiry:
+  Enabled: true
+
+Rails/MailerName:
+  Enabled: true
+
+Rails/MatchRoute:
+  Enabled: true
+
+Rails/NegateInclude:
+  Enabled: true
+
+Rails/Pluck:
+  Enabled: true
+
+Rails/PluckInWhere:
+  Enabled: true
+
+Rails/RedundantTravelBack:
+  Enabled: true
+
+Rails/RenderInline:
+  Enabled: true
+
+Rails/RenderPlainText:
+  Enabled: true
+
+Rails/ShortI18n:
+  Enabled: true
+
+Rails/SquishedSQLHeredocs:
+  Enabled: true
+
+Rails/TimeZoneAssignment:
+  Enabled: true
+
+Rails/UnusedIgnoredColumns:
+  Enabled: true
+
+Rails/WhereEquals:
+  Enabled: true
+
+Rails/WhereNot:
+  Enabled: true

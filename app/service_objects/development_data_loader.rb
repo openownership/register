@@ -1,6 +1,6 @@
 class DevelopmentDataLoader
   def initialize
-    @tmp_dir = Rails.root.join('tmp', 'dev-data', 'generated')
+    @tmp_dir = Rails.root.join('tmp/dev-data/generated')
     @s3_adapter = Rails.application.config.s3_adapter.new(
       region: 'eu-west-1',
       access_key_id: ENV['DEV_DATA_AWS_ACCESS_KEY_ID'],
@@ -57,8 +57,8 @@ class DevelopmentDataLoader
     s3_adapter.download_from_s3(
       s3_bucket: ENV['DEV_DATA_S3_BUCKET_NAME'],
       s3_path: "generated/#{filename}",
-      local_path: tmp_file
-     )
+      local_path: tmp_file,
+    )
     tmp_file
   end
 end

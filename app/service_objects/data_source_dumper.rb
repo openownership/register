@@ -1,7 +1,7 @@
 class DataSourceDumper
   def call
     DataSource.all.each do |ds|
-      folder = Rails.root.join('content', 'data_sources', ds.slug)
+      folder = Rails.root.join('content/data_sources', ds.slug)
       FileUtils.mkdir_p folder
       metadata_file = folder.join('_metadata.yml')
       File.open(metadata_file, 'w') do |f|

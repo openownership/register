@@ -20,7 +20,7 @@ RSpec.describe S3FakeAdapter do
       s3_bucket: s3_bucket,
       s3_path: existing_s3_path,
       content: existing_content,
-      compress: false
+      compress: false,
     )
   end
 
@@ -55,7 +55,7 @@ RSpec.describe S3FakeAdapter do
 
   describe '#upload_to_s3' do
     context 'when uploading existing local file' do
-      let(:local_path) { File.join(@temp_dir, 'local_path')  }
+      let(:local_path) { File.join(@temp_dir, 'local_path') }
 
       before do
         File.open(local_path, 'w') { |f| f.write existing_content }
@@ -73,7 +73,7 @@ RSpec.describe S3FakeAdapter do
 
   describe '#copy_file_in_s3' do
     context 'when uploading existing local file' do
-      let(:local_path) { File.join(@temp_dir, 'local_path')  }
+      let(:local_path) { File.join(@temp_dir, 'local_path') }
 
       before do
         File.open(local_path, 'w') { |f| f.write existing_content }
@@ -99,7 +99,7 @@ RSpec.describe S3FakeAdapter do
           s3_bucket: s3_bucket,
           s3_path: new_s3_path,
           content: new_content,
-          compress: true
+          compress: true,
         )
 
         subject.download_from_s3(s3_bucket: s3_bucket, s3_path: new_s3_path, local_path: new_local_path)
@@ -115,7 +115,7 @@ RSpec.describe S3FakeAdapter do
           s3_bucket: s3_bucket,
           s3_path: new_s3_path,
           content: new_content,
-          compress: false
+          compress: false,
         )
 
         subject.download_from_s3(s3_bucket: s3_bucket, s3_path: new_s3_path, local_path: new_local_path)

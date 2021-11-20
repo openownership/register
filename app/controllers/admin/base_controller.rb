@@ -1,5 +1,5 @@
 module Admin
-  class BaseController < ActionController::Base
+  class BaseController < ApplicationController
     protect_from_forgery with: :exception
 
     http_basic_authenticate_with(

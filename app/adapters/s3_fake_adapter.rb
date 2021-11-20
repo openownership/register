@@ -3,13 +3,14 @@ class S3FakeAdapter
     NoSuchKey = Class.new(StandardError)
   end
 
-  def initialize(**kwargs)
+  def initialize(**_kwargs)
     @files = {}
   end
 
   def download_from_s3(s3_bucket:, s3_path:, local_path:)
     file_key = generate_file_key(s3_bucket, s3_path)
     raise Errors::NoSuchKey unless files.key?(file_key)
+
     File.open(local_path, 'wb') { |f| f.write(files[file_key]) }
   end
 

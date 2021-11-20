@@ -24,8 +24,8 @@ Sidekiq.configure_server do |config|
   config.log_formatter = nil
 end
 
-Dir["./spec/shared_examples/**/*.rb"].sort.each { |f| require f }
-Dir["./spec/shared_contexts/**/*.rb"].sort.each { |f| require f }
+Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
+Dir["./spec/shared_contexts/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!

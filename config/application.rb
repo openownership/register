@@ -40,7 +40,7 @@ module OpenOwnershipRegister
     config.action_mailer.default_url_options = { host: host_uri.hostname }
     config.action_mailer.default_url_options[:port] = host_uri.port if host_uri.port != host_uri.default_port
     config.action_mailer.asset_host = host_uri.to_s
-    config.assets.precompile += %w(.svg)
+
     self.default_url_options = config.action_mailer.default_url_options
   end
 end

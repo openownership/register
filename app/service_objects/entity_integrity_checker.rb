@@ -30,8 +30,8 @@ class EntityIntegrityChecker
       no_company_number_at_all
       multiple_company_numbers
       no_relationships
-    ].each_with_object({}) do |c, acc|
-      acc[c] = send("check_#{c}", entity)
+    ].index_with do |c|
+      send("check_#{c}", entity)
     end.compact
 
     unless result.empty?

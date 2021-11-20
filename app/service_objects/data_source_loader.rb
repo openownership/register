@@ -1,6 +1,6 @@
 class DataSourceLoader
   def call
-    folder = Rails.root.join('content', 'data_sources')
+    folder = Rails.root.join('content/data_sources')
     Dir.chdir(folder)
     data_source_folders = Dir.glob('*').select { |f| File.directory? f }
 

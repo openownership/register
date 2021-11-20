@@ -17,7 +17,7 @@ RSpec.describe 'BODS Export' do
     expect(Rails.application.config.s3_adapter).to(
       receive(:new)
         .with(hash_including(:access_key_id, :secret_access_key))
-        .and_return(s3_adapter)
+        .and_return(s3_adapter),
     )
   end
 
@@ -260,12 +260,12 @@ RSpec.describe 'BODS Export' do
       s3_adapter.upload_to_s3_without_file(
         s3_bucket: bucket,
         s3_path: 'public/exports/statements.latest.jsonl.gz',
-        content: existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n"
+        content: existing_statements.map { |s| Oj.dump(s, mode: :rails) }.join("\n") + "\n",
       )
       s3_adapter.upload_to_s3_without_file(
         s3_bucket: bucket,
         s3_path: 'public/exports/statement-ids.latest.txt.gz',
-        content: existing_statement_ids.join("\n") + "\n"
+        content: existing_statement_ids.join("\n") + "\n",
       )
       # rubocop:enable Style/StringConcatenation
     end

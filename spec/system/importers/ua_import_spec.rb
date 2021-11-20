@@ -29,7 +29,7 @@ RSpec.describe 'UA Import' do
     "https://api.opencorporates.com/v0.4.6/companies/ua/#{company_number}"
   end
   let(:oc_query) { 'api_token=&sparse=true' }
-  let(:data_fixture) { Rails.root.join('spec', 'fixtures', 'files', 'ua_data.zip') }
+  let(:data_fixture) { Rails.root.join('spec/fixtures/files/ua_data.zip') }
   let(:company) { Entity.find_by(company_number: company_number) }
   # Vasya Pupkyn is a Russian 'John Smith', i.e. a generic name.
   # We need a real-looking name (not Example Person X) because we have to pass

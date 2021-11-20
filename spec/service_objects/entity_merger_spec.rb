@@ -121,8 +121,8 @@ RSpec.describe EntityMerger do
       end
 
       let! :merged_fields do
-        (Entity.fields.keys - EntityMerger::PROTECTED_FIELDS).each_with_object({}) do |f, h|
-          h[f] = to_keep[f]
+        (Entity.fields.keys - EntityMerger::PROTECTED_FIELDS).index_with do |f|
+          to_keep[f]
         end.merge(
           'name' => to_remove_name,
         )

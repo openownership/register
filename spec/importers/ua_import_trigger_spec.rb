@@ -19,13 +19,13 @@ RSpec.describe 'UaImportTrigger' do
     }.to_json
   end
   let(:ner_models_fixture) do
-    Rails.root.join('spec', 'fixtures', 'files', 'ua_ner_models.tar.gz')
+    Rails.root.join('spec/fixtures/files/ua_ner_models.tar.gz')
   end
   let(:data_fixture) do
-    Rails.root.join('spec', 'fixtures', 'files', 'ua_data.zip')
+    Rails.root.join('spec/fixtures/files/ua_data.zip')
   end
   let(:extracted_data_fixture) do
-    Rails.root.join('spec', 'fixtures', 'files', 'ua_extracted_bo_data.json')
+    Rails.root.join('spec/fixtures/files/ua_extracted_bo_data.json')
   end
 
   before do

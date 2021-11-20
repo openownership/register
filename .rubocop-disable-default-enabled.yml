@@ -39,3 +39,6 @@ Style/StringLiterals:
 
 Style/WhileUntilModifier:
   Enabled: false
+
+Rails/WhereExists:
+  Enabled: false

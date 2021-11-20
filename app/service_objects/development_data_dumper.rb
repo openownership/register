@@ -1,6 +1,6 @@
 class DevelopmentDataDumper
   def initialize
-    @tmp_dir = Rails.root.join('tmp', 'dev-data', 'generated')
+    @tmp_dir = Rails.root.join('tmp/dev-data/generated')
     @s3_adapter = Rails.application.config.s3_adapter.new(
       region: 'eu-west-1',
       access_key_id: ENV['DEV_DATA_AWS_ACCESS_KEY_ID'],

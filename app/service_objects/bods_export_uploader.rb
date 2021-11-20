@@ -13,7 +13,7 @@ class BodsExportUploader
     @s3_adapter = Rails.application.config.s3_adapter.new(
       region: 'eu-west-1',
       access_key_id: ENV['BODS_EXPORT_AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['BODS_EXPORT_AWS_SECRET_ACCESS_KEY']
+      secret_access_key: ENV['BODS_EXPORT_AWS_SECRET_ACCESS_KEY'],
     )
 
     @local_folder = @export.output_folder
