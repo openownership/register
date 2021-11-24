@@ -1,13 +1,20 @@
-@import "shared";
+@import "tippy.themes.light";
+@import "variables";
+@import "bootstrap";
+@import "font-awesome-sprockets";
+@import "font-awesome";
+@import "fonts";
+@import "helpers";
 
+@import "entity-graph";
+@import "site-header"; // Has bootstrap overrides
+@import "site-footer";
 @import "grid-and-containers";
 @import "main";
-@import "site-header";
-@import "site-footer";
+
 @import "tree";
 @import "submissions";
 @import "pages";
 @import "data-sources";
-@import "entity-graph";
 @import "raw-data-records";
 @import "home";
