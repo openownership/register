@@ -67,7 +67,7 @@ class EitiImporter
   def child_entity!(record)
     jurisdiction = record.child_jurisdiction
 
-    jurisdiction_code = jurisdiction && @opencorporates_client.get_jurisdiction_code(jurisdiction) || source_jurisdiction_code
+    jurisdiction_code = (jurisdiction && @opencorporates_client.get_jurisdiction_code(jurisdiction)) || source_jurisdiction_code
 
     entity = Entity.new(
       identifiers: [

@@ -18,7 +18,7 @@ RSpec.describe BodsExportWorker do
     let(:statements) do
       BodsSerializer.new([relationship], BodsMapper.instance).statements
     end
-    let(:statement_ids) { statements.map { |s| s[:statementID] } }
+    let(:statement_ids) { statements.pluck(:statementID) }
     let(:redis) { Redis.new }
 
     after(:each) do

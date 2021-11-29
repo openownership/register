@@ -1,6 +1,6 @@
 module SubmissionHelper
   def submissions_section?
-    controller.class.parent == Submissions
+    controller.class.module_parent == Submissions
   end
 
   def link_to_edit_submission_entity(entity, options = {}, &block)

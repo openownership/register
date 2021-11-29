@@ -83,11 +83,11 @@ RSpec.describe 'PSC Import' do
     expect(page).to have_text "#{I18n.t('relationships.provenance.retrieved_at')} #{Time.zone.today}"
     expect(page).to have_text "#{I18n.t('relationships.provenance.imported_at')} #{Time.zone.today}"
 
-    expected_json = JSON.pretty_generate JSON.parse(record)
+    expected_json = JSON.pretty_generate(JSON.parse(record)).gsub(/\s+/, ' ')
     visit raw_entity_path(company)
-    expect(page).to have_text expected_json
+    expect(page).to have_text(expected_json, normalize_ws: true)
 
     visit raw_entity_path(person)
-    expect(page).to have_text expected_json
+    expect(page).to have_text(expected_json, normalize_ws: true)
   end
 end

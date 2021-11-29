@@ -16,8 +16,8 @@ RSpec.describe 'Additional entity info from OpenCorporates' do
   context "when the OC api doesn't have any data for an entity" do
     before do
       oc_url = "https://api.opencorporates.com/" \
-      "#{OpencorporatesClient::API_VERSION}/companies/" \
-      "#{company.jurisdiction_code}/#{company.company_number}"
+               "#{OpencorporatesClient::API_VERSION}/companies/" \
+               "#{company.jurisdiction_code}/#{company.company_number}"
       oc_url_regex = /#{Regexp.quote(oc_url)}/
       stub_request(:get, oc_url_regex).to_return(status: 404)
     end

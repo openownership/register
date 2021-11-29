@@ -1,8 +1,8 @@
 require 'webmock/rspec'
-require 'factory_girl'
+require 'factory_bot'
 
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -22,8 +22,8 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.before(:suite) do
-    DatabaseCleaner[:mongoid].strategy = :truncation
-    DatabaseCleaner[:mongoid].clean_with(:truncation)
+    DatabaseCleaner[:mongoid].strategy = [:deletion]
+    DatabaseCleaner[:mongoid].clean_with(:deletion)
   end
 
   config.around(:each) do |example|

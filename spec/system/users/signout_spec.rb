@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'User signout' do
   include UserHelpers
 
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
 
   it 'can signout' do
     visit '/'

@@ -48,10 +48,12 @@ class BodsImporter
     return if Entity.where('identifiers.statement_id' => record['statementID']).exists?
 
     entity = Entity.new(
-      identifiers: [{
-        'document_id' => document_id,
-        'statement_id' => record['statementID'],
-      }] + entity_identifiers(record['identifiers']),
+      identifiers: [
+        {
+          'document_id' => document_id,
+          'statement_id' => record['statementID'],
+        },
+      ] + entity_identifiers(record['identifiers']),
       type: Entity::Types::NATURAL_PERSON,
       name: first_individual_name(record['names']),
       nationality: country_code_from_nationalities(record['nationalities']),
@@ -101,7 +103,7 @@ class BodsImporter
     statement.save!
   rescue Mongo::Error::OperationFailure => e
     # Make sure it's a duplicate key error "E11000 duplicate key error collection"
-    raise unless e.message.start_with?('E11000')
+    raise unless /E11000/.match(e.message)
     # Make sure it's the _id that is duplicated
     raise unless Statement.where('_id' => statement._id).exists?
     # Ignore this attempt to save, the record already exists
@@ -129,7 +131,7 @@ class BodsImporter
     relationship.save!
   rescue Mongo::Error::OperationFailure => e
     # Make sure it's a duplicate key error "E11000 duplicate key error collection"
-    raise unless e.message.start_with?('E11000')
+    raise unless /E11000/.match(e.message)
     # Make sure it's the _id that is duplicated
     raise unless Relationship.where('_id' => relationship._id).exists?
     # Ignore this attempt to save, the record already exists
@@ -145,10 +147,12 @@ class BodsImporter
     return existing.first unless existing.empty?
 
     attributes = {
-      identifiers: [{
-        'document_id' => document_id,
-        'statement_id' => record["statementID"],
-      }] + entity_identifiers(record["identifiers"]),
+      identifiers: [
+        {
+          'document_id' => document_id,
+          'statement_id' => record["statementID"],
+        },
+      ] + entity_identifiers(record["identifiers"]),
       type: Entity::Types::LEGAL_ENTITY,
 
       name: record["name"],
@@ -164,7 +168,7 @@ class BodsImporter
 
   def skip_saving_duplicate_identifiers(entity, exception)
     # Make sure it's a duplicate key error "E11000 duplicate key error collection"
-    raise unless exception.message.start_with?('E11000')
+    raise unless /E11000/.match(exception.message)
     # Make sure it's the identifiers that are duplicated
     raise unless Entity.where('identifiers' => entity.identifiers).exists?
     # Ignore this attempt to save, the record already exists
@@ -178,10 +182,10 @@ class BodsImporter
       raise "No identifier scheme or schemeName given in #{i}" if scheme_id.blank?
 
       {
-        'scheme': i['scheme'],
-        'scheme_name': i['schemeName'],
-        'id': i['id'],
-        'uri': i['uri'],
+        scheme: i['scheme'],
+        scheme_name: i['schemeName'],
+        id: i['id'],
+        uri: i['uri'],
       }.compact
     end
   end

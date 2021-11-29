@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'User signup' do
   include UserHelpers
 
-  let(:user) { FactoryGirl.build(:user) }
+  let(:user) { FactoryBot.build(:user) }
 
   it 'can sign up for an account and sign in' do
     visit '/'

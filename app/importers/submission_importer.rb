@@ -18,10 +18,12 @@ class SubmissionImporter
   def upsert_entity!(submission_entity)
     entity = Entity.new(
       submission_entity.attributes_for_submission.merge(
-        identifiers: [{
-          'submission_id' => @submission.id,
-          'entity_id' => submission_entity.id,
-        }],
+        identifiers: [
+          {
+            'submission_id' => @submission.id,
+            'entity_id' => submission_entity.id,
+          },
+        ],
       ),
     )
     @entity_resolver.resolve!(entity) if entity.legal_entity?

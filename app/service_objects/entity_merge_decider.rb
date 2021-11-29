@@ -10,8 +10,11 @@ class EntityMergeDecider
       [@e2, @e1]
     elsif @e2.oc_identifier
       [@e1, @e2]
+
+    # rubocop:disable Lint/DuplicateBranch
     else
       [@e2, @e1]
     end
+    # rubocop:enable Lint/DuplicateBranch
   end
 end

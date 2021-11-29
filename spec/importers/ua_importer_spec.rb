@@ -37,11 +37,13 @@ RSpec.describe UaImporter do
 
     it 'resolves the child company' do
       subject.parse(file_fixture(fixture))
-      expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
-        jurisdiction_code: 'ua',
-        company_number: company_number,
-        name: company_name,
-      ))
+      expect(entity_resolver).to have_received(:resolve!).with(
+        having_attributes(
+          jurisdiction_code: 'ua',
+          company_number: company_number,
+          name: company_name,
+        ),
+      )
     end
 
     it 'creates the child company entity' do

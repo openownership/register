@@ -21,14 +21,14 @@ RSpec.describe 'the data download page' do
 
     exports.take(5).each do |export|
       expected_href = "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.#{export.created_at.iso8601}.jsonl.gz"
-      expect(page).to have_link(export.created_at.to_date, href: expected_href)
+      expect(page).to have_link(export.created_at.to_date.to_s, href: expected_href)
     end
 
     expected_href = "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.#{exports.last.created_at.iso8601}.jsonl.gz"
-    expect(page).not_to have_link(exports.last.created_at.to_date, href: expected_href)
+    expect(page).not_to have_link(exports.last.created_at.to_date.to_s, href: expected_href)
 
     expected_href = "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.#{export_in_progress.created_at.iso8601}.jsonl.gz"
-    expect(page).not_to have_link(export_in_progress.created_at.to_date, href: expected_href)
+    expect(page).not_to have_link(export_in_progress.created_at.to_date.to_s, href: expected_href)
 
     expect(page).to have_link 'Download', href: 'https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz'
   end

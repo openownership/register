@@ -1,7 +1,7 @@
 require 'open-uri'
 
 class PscImportTrigger
-  FILENAME_REGEX = /^psc-snapshot-\d{4}-\d{2}-\d{2}_\d+of\d+.zip$/.freeze
+  FILENAME_REGEX = /^psc-snapshot-\d{4}-\d{2}-\d{2}_\d+of\d+.zip$/
 
   def call(data_source, chunk_size)
     import = Import.create! data_source: data_source
@@ -21,7 +21,7 @@ class PscImportTrigger
   private
 
   def parse_snapshot_links(download_page, base_url)
-    document = Nokogiri::HTML(open(download_page).read)
+    document = Nokogiri::HTML(URI.open(download_page).read)
     document.css('a').each_with_object([]) do |el, acc|
       href = el['href']
       if href.present? && href.match(FILENAME_REGEX)

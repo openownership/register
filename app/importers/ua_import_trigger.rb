@@ -32,9 +32,9 @@ class UaImportTrigger
   def download_data
     # The CKAN api version of the page listed as the source_url
     ckan_url = 'https://data.gov.ua/api/3/action/package_show?id=1c7f3815-3259-45e0-bdf1-64dca07ddc10'
-    data_url = open(ckan_url) { |f| JSON.parse(f.read) }['result']['resources'].first['url']
+    data_url = URI.open(ckan_url) { |f| JSON.parse(f.read) }['result']['resources'].first['url']
     zip_download = File.join(@working_dir, 'data.zip')
-    IO.copy_stream(open(data_url), zip_download)
+    IO.copy_stream(URI.open(data_url), zip_download)
     system_or_raise_exception("cd #{@working_dir} && unzip -o #{zip_download}")
     Dir.glob("#{@working_dir}/*UFOP*/*XML_EDR_UO*.xml").first
   end

@@ -5,7 +5,7 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
   config.read_encrypted_secrets = false # We don't use encrypted secrets
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  config.assets.js_compressor = :uglifier
+  config.assets.resolve_with = %i[manifest]
   config.assets.compile = false
   config.log_level = :info
   config.log_tags = [:request_id]
@@ -15,8 +15,10 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.force_ssl = true
 
+  config.s3_adapter_klass = "::S3Adapter"
+
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end

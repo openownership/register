@@ -53,39 +53,39 @@ RSpec.describe NaturalPersonsDuplicatesMerger do
 
     context 'with some groups of duplicates' do
       let(:index_entity_service) { instance_double('IndexEntityService') }
-      let(:dup_name_1) { 'name 1' }
-      let(:dup_name_2) { 'name 2' }
-      let(:dup_address_1) { 'address 1' }
-      let(:dup_address_2) { 'address 2' }
-      let(:dup_dob_1) { 10.years.ago.to_date.to_s }
-      let(:dup_dob_2) { 10.years.ago.to_date.to_s }
+      let(:dup_name1) { 'name 1' }
+      let(:dup_name2) { 'name 2' }
+      let(:dup_address1) { 'address 1' }
+      let(:dup_address2) { 'address 2' }
+      let(:dup_dob1) { 10.years.ago.to_date.to_s }
+      let(:dup_dob2) { 10.years.ago.to_date.to_s }
 
-      let! :dup_entities_1 do
+      let! :dup_entities1 do
         create_list(
           :natural_person,
           3,
-          name: dup_name_1,
-          address: dup_address_1,
-          dob: dup_dob_1,
+          name: dup_name1,
+          address: dup_address1,
+          dob: dup_dob1,
         )
       end
 
-      let! :dup_entities_2 do
+      let! :dup_entities2 do
         create_list(
           :natural_person,
           2,
-          name: dup_name_2,
-          address: dup_address_2,
-          dob: dup_dob_2,
+          name: dup_name2,
+          address: dup_address2,
+          dob: dup_dob2,
         )
       end
 
       let! :similar_but_not_quite_dup_entities do
-        e1 = create :natural_person, name: dup_name_1, dob: dup_dob_1, address: 'foo'
-        e2 = create :natural_person, name: dup_name_1, dob: dup_dob_1, address: nil
-        e3 = create :natural_person, name: dup_name_1
-        e4 = create :natural_person, name: dup_name_1, dob: nil, address: nil
-        e5 = create :natural_person, name: dup_name_2, address: dup_address_1, dob: dup_dob_2
+        e1 = create :natural_person, name: dup_name1, dob: dup_dob1, address: 'foo'
+        e2 = create :natural_person, name: dup_name1, dob: dup_dob1, address: nil
+        e3 = create :natural_person, name: dup_name1
+        e4 = create :natural_person, name: dup_name1, dob: nil, address: nil
+        e5 = create :natural_person, name: dup_name2, address: dup_address1, dob: dup_dob2
         [e1, e2, e3, e4, e5]
       end
 
@@ -101,23 +101,23 @@ RSpec.describe NaturalPersonsDuplicatesMerger do
       end
 
       let :expected_stats do
-        size = dup_entities_1.size + dup_entities_2.size + similar_but_not_quite_dup_entities.size + non_dup_entities.size
+        size = dup_entities1.size + dup_entities2.size + similar_but_not_quite_dup_entities.size + non_dup_entities.size
 
         {
           processed: size,
           candidates: 1 + 1,
-          merges: (dup_entities_1.size + dup_entities_2.size) - 2,
+          merges: (dup_entities1.size + dup_entities2.size) - 2,
         }
       end
 
-      let(:expected_dup_1_merged) { [dup_entities_1[1], dup_entities_1[2]] }
-      let(:expected_dup_2_merged) { [dup_entities_2[1]] }
+      let(:expected_dup_1_merged) { [dup_entities1[1], dup_entities1[2]] }
+      let(:expected_dup_2_merged) { [dup_entities2[1]] }
 
       it 'processes the entities, finds merge candidates and merges them' do
         expect(index_entity_service).to receive(:delete).exactly(expected_stats[:merges]).times
         expect(subject.run).to eq expected_stats
-        expect(dup_entities_1[0].merged_entities).to match_array(expected_dup_1_merged)
-        expect(dup_entities_2[0].merged_entities).to match_array(expected_dup_2_merged)
+        expect(dup_entities1[0].merged_entities).to match_array(expected_dup_1_merged)
+        expect(dup_entities2[0].merged_entities).to match_array(expected_dup_2_merged)
       end
     end
   end

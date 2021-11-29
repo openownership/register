@@ -4,8 +4,8 @@ namespace :migrations do
     DataSource.create!(
       name: 'UK PSC Register',
       url: 'http://download.companieshouse.gov.uk/en_pscdata.html',
-      overview: File.read(Rails.root.join('db', 'psc_register_overview.md')),
-      data_availability: File.read(Rails.root.join('db', 'psc_register_data_availability.md')),
+      overview: File.read(Rails.root.join('db/psc_register_overview.md')),
+      data_availability: File.read(Rails.root.join('db/psc_register_data_availability.md')),
       timeline_url: 'https://twitter.com/sheislaurence/timelines/1107584066134654976?ref_src=twsrc%5Etfw',
       current_statistic_types: [
         DataSourceStatistic::Types::PSC_NO_OWNER,

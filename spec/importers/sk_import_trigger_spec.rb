@@ -5,9 +5,9 @@ RSpec.describe SkImportTrigger do
   let(:sk_client) { instance_double('SkClient') }
   let(:dummy_data) do
     [
-      { "test": "test1" },
-      { "test": "test2" },
-      { "test": "test3" },
+      { test: "test1" },
+      { test: "test2" },
+      { test: "test3" },
     ]
   end
 
@@ -39,7 +39,7 @@ RSpec.describe SkImportTrigger do
     it 'only queues up RawDataRecordsImportWorkers for new or changed records' do
       subject
       updated_dummy_data = dummy_data
-      updated_dummy_data << { "test": "test4" }
+      updated_dummy_data << { test: "test4" }
       allow(sk_client).to receive(:all_records).and_return(updated_dummy_data)
       RawDataRecordsImportWorker.jobs.clear
       expect do
@@ -47,7 +47,7 @@ RSpec.describe SkImportTrigger do
       end.to change(RawDataRecordsImportWorker.jobs, :size).by(1)
       record_id = RawDataRecordsImportWorker.jobs.first['args'].first.first
       raw_record = RawDataRecord.find(record_id)
-      expect(raw_record.raw_data).to eq({ "test": "test4" }.to_json)
+      expect(raw_record.raw_data).to eq({ test: "test4" }.to_json)
     end
   end
 end

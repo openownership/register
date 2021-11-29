@@ -1,7 +1,7 @@
 class SearchesController < ApplicationController
   def show
     @legal_entity_count = Entity.legal_entities.count
-    @data_sources = DataSource.all.map { |ds| [ds.slug, ds] }.to_h
+    @data_sources = DataSource.all.index_by(&:slug)
 
     return if params[:q].blank?
 

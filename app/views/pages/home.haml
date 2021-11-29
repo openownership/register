@@ -21,7 +21,7 @@
           %span.home-hero-subhead--inner
             Search by company
         %ul.list-unstyled
-          %li Disclosures from over 6 million companies.
+          %li Disclosures from over 7 million companies.
           %li Search by company name or number.
           %li Cleaned company data, matched against OpenCorporates.
       .col-lg-2.hidden-md-down.home-hero-or
@@ -45,7 +45,7 @@
         %p <strong>Investigators</strong> can use beneficial ownership to recover proceeds of crime.
         %p
           = link_to "Read our primer", "http://standard.openownership.org/en/latest/primer/whatisbo.html", class: 'btn btn-primary'
-          = link_to "Impact stories", "https://www.openownership.org/news/what-graph-visualisation-teaches-us-about-beneficial-ownership/", class: 'btn btn-primary'
+          = link_to "Impact stories", "https://www.openownership.org/resources/?category=impact", class: 'btn btn-primary'
       .col-md-6.floating-card
         .card-right
           = image_tag('screenshot-network.png')
@@ -58,7 +58,7 @@
         %p We additionally de-duplicate multiple disclosures from the same people, to ensure you see everything in one place.
         %p All of this data is browsable via interactive graph visualisations, showing you an entire network at a glance.
         %p
-          = link_to "Explore the example", "/entities/59b978b167e4ebf340844101", class: 'btn btn-primary'
+          = link_to "Explore the example", "/entities/#{ENV.fetch('EXAMPLE_ENTITY_ID', '59b978b167e4ebf340844101')}", class: 'btn btn-primary'
           = link_to "Our data sources", data_sources_path, class: 'btn btn-primary'
       .col-md-6.floating-card.flex-first
         .card-left
@@ -69,7 +69,7 @@
         %h2 Freely licensed data, in bulk
         %p We release all of our data as an open ledger, formatted using the Beneficial Ownership Data Standard (BODS).
         %p This data is updated monthly, and made available as a free download under the Open Data Commons Attribution License.
-        %p Currently containing nearly 20 million BODS statements, in a 10GB JSONLines file.
+        %p Currently containing over 20 million BODS statements, in a 21GB JSONLines file.
         %p
           = link_to "Download our data", download_path, class: 'btn btn-primary'
       .col-md-6.floating-card
@@ -83,7 +83,7 @@
         %p Where we can, we include full provenance information - so you can see where our data has come from, and how it has changed. And if you see something that needs updating - you can go back to the source to ask for those changes.
         %p
           = link_to "Why is history important?", "https://www.openownership.org/uploads/oo-characteristics-effective-bo-data.pdf", class: 'btn btn-primary'
-          = link_to "Example raw data", "/entities/59b978b167e4ebf340844101/raw", class: 'btn btn-primary'
+          = link_to "Example raw data", "/entities/#{ENV.fetch('EXAMPLE_ENTITY_ID', '59b978b167e4ebf340844101')}/raw", class: 'btn btn-primary'
       .col-md-6.floating-card.flex-first
         .card-left
           = image_tag('collection-forms.png')

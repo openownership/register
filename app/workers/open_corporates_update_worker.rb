@@ -10,7 +10,7 @@ class OpenCorporatesUpdateWorker
     else
       entity.touch(:last_resolved_at)
     end
-  rescue PotentiallyBadEntityMergeDetectedAndStopped => e
+  rescue EntityMerger::PotentiallyBadEntityMergeDetectedAndStopped => e
     log_message = "#{self.class.name} Failed to handle a required entity " \
                   "merge as a potentially bad merge has been detected " \
                   "and stopped: #{e.message} - will not complete the " \

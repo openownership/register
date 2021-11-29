@@ -12,20 +12,20 @@ RSpec.describe 'UaImportTrigger' do
       'result' => {
         'resources' => [
           {
-            'url': data_url,
+            url: data_url,
           },
         ],
       },
     }.to_json
   end
   let(:ner_models_fixture) do
-    Rails.root.join('spec', 'fixtures', 'files', 'ua_ner_models.tar.gz')
+    Rails.root.join('spec/fixtures/files/ua_ner_models.tar.gz')
   end
   let(:data_fixture) do
-    Rails.root.join('spec', 'fixtures', 'files', 'ua_data.zip')
+    Rails.root.join('spec/fixtures/files/ua_data.zip')
   end
   let(:extracted_data_fixture) do
-    Rails.root.join('spec', 'fixtures', 'files', 'ua_extracted_bo_data.json')
+    Rails.root.join('spec/fixtures/files/ua_extracted_bo_data.json')
   end
 
   before do
@@ -35,7 +35,7 @@ RSpec.describe 'UaImportTrigger' do
     allow(UaImporter).to receive(:new).and_return(importer)
 
     stub_request(:get, ckan_url).to_return(body: ckan_data)
-    stub_request(:get, data_url).to_return(body: IO.binread(data_fixture))
+    stub_request(:get, data_url).to_return(body: File.binread(data_fixture))
 
     allow(ENV).to receive(:[]).and_call_original
     allow(ENV).to receive(:[]).with('UA_NER_MODELS').and_return(ner_models_fixture.to_s)

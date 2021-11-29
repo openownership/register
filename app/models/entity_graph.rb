@@ -96,7 +96,7 @@ class EntityGraph
   class LabelEdge < Edge
     attr_accessor :entity, :node
 
-    def initialize(entity, node, direction)
+    def initialize(entity, node, direction) # rubocop:disable Lint/MissingSuper
       @entity = entity
       @node = node
       if direction == :from
