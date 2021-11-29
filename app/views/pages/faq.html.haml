@@ -9,7 +9,7 @@
           %h1 FAQ
 
         .page-text
-          %h2 What is OpenOwnership?
+          %h2 What is Open Ownership?
           %p
             Open Ownership’s goal is to increase beneficial ownership
             transparency across the world by making it easier to access
@@ -84,9 +84,9 @@
 
           %h2 How often is the data updated?
           %p
-            You can see when an ownership record was last ingested by the
-            Open Ownership Register by looking up the ‘Provenance’ box
-            (<a href="/entities/59b9a44b67e4ebf34030fe40">an example here</a>).
+            You can see when an ownership record was last ingested by the Open Ownership Register by looking up the ‘Provenance’ box
+            (<a href="/entities/#{ENV.fetch('EXAMPLE_ENTITY_ID', '59b978b167e4ebf340844101')}">an example here</a>).
+          %p
             Provenance date is available on relationship, company and person
             records.
           %p

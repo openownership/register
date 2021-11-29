@@ -11,7 +11,7 @@ class SkClient
     # records for each result, expanding all their sub-properties in turn.
     @record_expansion_param = '$expand=PartneriVerejnehoSektora($expand=*),KonecniUzivateliaVyhod($expand=*)'
 
-    @http = Net::HTTP::Persistent.new(self.class.name)
+    @http = Net::HTTP::Persistent.new(name: self.class.name)
   end
 
   def all_records

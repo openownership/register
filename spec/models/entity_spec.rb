@@ -280,17 +280,21 @@ RSpec.describe Entity do
         it "matches existing document with any of them" do
           @entity.set(identifiers: [identifier])
           subject.upsert
-          expect(@entity.reload.identifiers).to match_array([
-            identifier,
-            other_identifier,
-          ])
+          expect(@entity.reload.identifiers).to match_array(
+            [
+              identifier,
+              other_identifier,
+            ],
+          )
 
           @entity.set(identifiers: [other_identifier])
           subject.upsert
-          expect(@entity.reload.identifiers).to match_array([
-            identifier,
-            other_identifier,
-          ])
+          expect(@entity.reload.identifiers).to match_array(
+            [
+              identifier,
+              other_identifier,
+            ],
+          )
         end
 
         context "when a second document with one of the other identifiers exists in the database" do
@@ -314,10 +318,12 @@ RSpec.describe Entity do
         it "keeps both identifiers" do
           subject.upsert
 
-          expect(@entity.reload.identifiers).to match_array([
-            identifier,
-            other_identifier,
-          ])
+          expect(@entity.reload.identifiers).to match_array(
+            [
+              identifier,
+              other_identifier,
+            ],
+          )
         end
       end
 
@@ -532,14 +538,14 @@ RSpec.describe Entity do
 
     context 'when the entity has merged entities' do
       let(:entity) { create(:natural_person) }
-      let(:merged_entity_1) { create(:natural_person, master_entity: entity) }
-      let(:merged_entity_2) { create(:natural_person, master_entity: entity) }
+      let(:merged_entity1) { create(:natural_person, master_entity: entity) }
+      let(:merged_entity2) { create(:natural_person, master_entity: entity) }
 
       it 'returns an array with the entity id and its merged entity ids in it' do
         expected = [
           entity.id,
-          merged_entity_1.id,
-          merged_entity_2.id,
+          merged_entity1.id,
+          merged_entity2.id,
         ]
         expect(entity.all_ids).to match_array(expected)
       end

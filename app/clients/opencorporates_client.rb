@@ -44,7 +44,7 @@ class OpencorporatesClient
                   interval: 2,
                   interval_randomness: 1,
                   backoff_factor: 5,
-                  exceptions: [Errno::ETIMEDOUT, Net::OpenTimeout, 'Timeout::Error', Faraday::Error::RetriableResponse, Faraday::TimeoutError]
+                  exceptions: [Errno::ETIMEDOUT, Net::OpenTimeout, 'Timeout::Error', Faraday::RetriableResponse, Faraday::TimeoutError]
       end
 
       c.response :json,

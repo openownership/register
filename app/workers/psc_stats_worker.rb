@@ -48,7 +48,7 @@ class PscStatsWorker
   def perform(entity_id, data_source_id, stat_ids)
     entity = Entity.find(entity_id)
     data_source = DataSource.find(data_source_id)
-    stats = stat_ids.map { |t, id| [t, data_source.statistics.draft.find(id)] }.to_h
+    stats = stat_ids.transform_values { |id| data_source.statistics.draft.find(id) }
 
     if entity.dissolution_date.present?
       increment(stats, STAT_TYPES::DISSOLVED)

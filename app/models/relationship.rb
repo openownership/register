@@ -15,7 +15,7 @@ class Relationship
   field :sample_date, type: ISO8601::Date
   field :started_date, type: ISO8601::Date
   field :ended_date, type: ISO8601::Date
-  field :is_indirect, type: Boolean
+  field :is_indirect, type: TrueClass
 
   belongs_to :source, class_name: 'Entity', inverse_of: :_relationships_as_source, touch: true
   belongs_to :target, class_name: 'Entity', inverse_of: :_relationships_as_target, touch: true
@@ -46,7 +46,7 @@ class Relationship
     begin
       super
     rescue Mongo::Error::OperationFailure => e
-      raise unless e.message.start_with?('E11000') && !retried
+      raise unless /E11000/.match(e.message) && !retried
 
       # MongoDB can get a race condition with multiple upserts.
       # In newer versions of Mongo (4.2+), errors like this are retried

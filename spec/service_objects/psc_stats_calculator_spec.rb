@@ -4,8 +4,6 @@ RSpec.describe PscStatsCalculator do
   include PscStatsHelpers
   let!(:data_source) { create(:psc_data_source) }
 
-  STAT_TYPES = DataSourceStatistic::Types
-
   describe 'calculating the total companies in the register' do
     let!(:company) { uk_psc_company }
 
@@ -14,7 +12,7 @@ RSpec.describe PscStatsCalculator do
         PscStatsCalculator.new.call
       end
       data_source.reload
-      data_source.statistics.draft.where(type: STAT_TYPES::REGISTER_TOTAL)
+      data_source.statistics.draft.where(type: DataSourceStatistic::Types::REGISTER_TOTAL)
     end
 
     it 'creates a draft DataSourceStatistic for the total' do
@@ -59,7 +57,7 @@ RSpec.describe PscStatsCalculator do
         PscStatsCalculator.new.call
       end
       data_source.reload
-      data_source.statistics.draft.where(type: STAT_TYPES::DISSOLVED)
+      data_source.statistics.draft.where(type: DataSourceStatistic::Types::DISSOLVED)
     end
 
     it 'creates a DataSourceStatistic for the total number of dissolved companies' do
@@ -91,7 +89,7 @@ RSpec.describe PscStatsCalculator do
         PscStatsCalculator.new.call
       end
       data_source.reload
-      data_source.statistics.draft.where(type: STAT_TYPES::PSC_UNKNOWN_OWNER)
+      data_source.statistics.draft.where(type: DataSourceStatistic::Types::PSC_UNKNOWN_OWNER)
     end
 
     it 'creates a DataSourceStatistic for the number of unknown owners' do
@@ -170,7 +168,7 @@ RSpec.describe PscStatsCalculator do
         PscStatsCalculator.new.call
       end
       data_source.reload
-      data_source.statistics.draft.where(type: STAT_TYPES::PSC_NO_OWNER)
+      data_source.statistics.draft.where(type: DataSourceStatistic::Types::PSC_NO_OWNER)
     end
 
     it 'creates a DataSourceStatistic for the number of missing owners' do
@@ -238,7 +236,7 @@ RSpec.describe PscStatsCalculator do
         PscStatsCalculator.new.call
       end
       data_source.reload
-      data_source.statistics.draft.where(type: STAT_TYPES::PSC_OFFSHORE_RLE)
+      data_source.statistics.draft.where(type: DataSourceStatistic::Types::PSC_OFFSHORE_RLE)
     end
 
     it 'creates a DataSourceStatistic for the number of non-UK RLEs' do
@@ -319,7 +317,7 @@ RSpec.describe PscStatsCalculator do
         PscStatsCalculator.new.call
       end
       data_source.reload
-      data_source.statistics.draft.where(type: STAT_TYPES::PSC_NON_LEGIT_RLE)
+      data_source.statistics.draft.where(type: DataSourceStatistic::Types::PSC_NON_LEGIT_RLE)
     end
 
     it 'creates a DataSourceStatistic for the number of non-legit RLEs' do
@@ -352,7 +350,7 @@ RSpec.describe PscStatsCalculator do
         PscStatsCalculator.new.call
       end
       data_source.reload
-      data_source.statistics.draft.where(type: STAT_TYPES::PSC_SECRECY_RLE)
+      data_source.statistics.draft.where(type: DataSourceStatistic::Types::PSC_SECRECY_RLE)
     end
 
     it 'creates a DataSourceStatistic for the number of secrecy RLEs' do
@@ -391,9 +389,9 @@ RSpec.describe PscStatsCalculator do
     stats = data_source.statistics.draft.where(
       type: {
         "$in" => [
-          STAT_TYPES::PSC_OFFSHORE_RLE,
-          STAT_TYPES::PSC_NON_LEGIT_RLE,
-          STAT_TYPES::PSC_SECRECY_RLE,
+          DataSourceStatistic::Types::PSC_OFFSHORE_RLE,
+          DataSourceStatistic::Types::PSC_NON_LEGIT_RLE,
+          DataSourceStatistic::Types::PSC_SECRECY_RLE,
         ],
       },
     )

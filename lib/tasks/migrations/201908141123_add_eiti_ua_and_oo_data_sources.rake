@@ -15,7 +15,7 @@ namespace :migrations do
     # EITI Pilot data
     # We create one data_source for each spreadsheet tab since they all have
     # different document ids
-    eiti_file = Rails.root.join('db', 'data', 'eiti-data.txt')
+    eiti_file = Rails.root.join('db/data/eiti-data.txt')
     File.readlines(eiti_file).each do |line|
       data = JSON.parse(line)
       country_name = data['document_id'].gsub('EITI Structured Data - ', '')

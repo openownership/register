@@ -1,7 +1,7 @@
 class DevelopmentDataCreator
   def initialize
-    @tmp_dir = Rails.root.join('tmp', 'dev-data')
-    @s3_client = Aws::S3::Client.new(
+    @tmp_dir = Rails.root.join('tmp/dev-data')
+    @s3_adapter = Rails.application.config.s3_adapter.new(
       region: 'eu-west-1',
       access_key_id: ENV['DEV_DATA_AWS_ACCESS_KEY_ID'],
       secret_access_key: ENV['DEV_DATA_AWS_SECRET_ACCESS_KEY'],
@@ -13,9 +13,9 @@ class DevelopmentDataCreator
 
     DataSourceLoader.new.call
 
-    FactoryGirl.create_list(:draft_submission, 3)
-    FactoryGirl.create_list(:submitted_submission, 3)
-    FactoryGirl.create_list(:approved_submission, 3)
+    FactoryBot.create_list(:draft_submission, 3)
+    FactoryBot.create_list(:submitted_submission, 3)
+    FactoryBot.create_list(:approved_submission, 3)
 
     password = ENV.fetch('ADMIN_BASIC_AUTH').split(":").last
     ENV.fetch('DEFAULT_USERS').split(",").each do |email|
@@ -44,7 +44,7 @@ class DevelopmentDataCreator
     records = open(uk_data).readlines.map do |line|
       data = JSON.parse(line)
       etag = data['data']['etag']
-      FactoryGirl.create(:raw_data_record, raw_data: line, etag: etag, imports: [uk_import])
+      FactoryBot.create(:raw_data_record, raw_data: line, etag: etag, imports: [uk_import])
     end
     retrieved_at = Time.zone.parse('2016-12-06 06:15:37')
     importer = PscImporter.new
@@ -62,14 +62,11 @@ class DevelopmentDataCreator
 
   private
 
+  attr_reader :s3_adapter
+
   def download_from_s3_to_tmp(filename)
     tmp_file = File.join(@tmp_dir, filename)
-    s3 = Aws::S3::Object.new(
-      ENV['DEV_DATA_S3_BUCKET_NAME'],
-      filename,
-      client: @s3_client,
-    )
-    s3.download_file(tmp_file)
+    s3_adapter.download_from_s3(s3_bucket: ENV['DEV_DATA_S3_BUCKET_NAME'], s3_path: filename, local_path: tmp_file)
     tmp_file
   end
 end

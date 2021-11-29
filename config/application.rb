@@ -12,7 +12,7 @@ Bundler.require(*Rails.groups)
 
 module OpenOwnershipRegister
   class Application < Rails::Application
-    config.load_defaults 5.2
+    config.load_defaults 6.0
 
     config.middleware.use Rack::Attack
 

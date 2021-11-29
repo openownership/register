@@ -1,9 +1,8 @@
 Rails.application.config.assets.version = '1.0'
 
-Rails.application.config.assets.paths << Rails.root.join('node_modules')
+Rails.application.config.assets.paths << Rails.root.join('node_modules').to_s
 
-Rails.application.config.assets.precompile << proc do |_filename, path|
-  path =~ %r{/vendor/assets/images/[A-Z]+\.svg$}
-end
+svg_imgs = Dir[Rails.root.join('vendor/assets/images/*.svg').to_s].map { |filepath| File.basename(filepath) }
+Rails.application.config.assets.precompile += svg_imgs
 
-Rails.application.config.assets.precompile += %w[admin.css]
+Rails.application.config.assets.precompile += ['admin.css']

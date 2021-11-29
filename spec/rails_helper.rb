@@ -19,7 +19,10 @@ require 'support/bods_export_helpers'
 require 'support/search_helpers'
 
 require 'sidekiq/testing'
-Sidekiq::Logging.logger = nil
+
+Sidekiq.configure_server do |config|
+  config.log_formatter = nil
+end
 
 Dir["./spec/shared_examples/**/*.rb"].each { |f| require f }
 Dir["./spec/shared_contexts/**/*.rb"].each { |f| require f }

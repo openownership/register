@@ -13,8 +13,8 @@ RSpec.describe 'DK Import' do
   let(:oc_query) { 'api_token=&sparse=true' }
 
   # Expected entities and relationships
-  let(:person_1) { Entity.find_by(name: 'Danish Person 1') }
-  let(:person_1_companies) do
+  let(:person1) { Entity.find_by(name: 'Danish Person 1') }
+  let(:person1_companies) do
     companies = []
     [
       "Renamed Danish Company 1",
@@ -25,8 +25,8 @@ RSpec.describe 'DK Import' do
     companies
   end
 
-  let(:person_2) { Entity.find_by(name: 'Danish Person 2') }
-  let(:person_2_company) { Entity.find_by(name: 'Danish Company 3') }
+  let(:person2) { Entity.find_by(name: 'Danish Person 2') }
+  let(:person2_company) { Entity.find_by(name: 'Danish Company 3') }
 
   let(:company_numbers) do
     %i[
@@ -39,19 +39,19 @@ RSpec.describe 'DK Import' do
   let(:api_response) { file_fixture('dk_bo_api_response.json').read }
   let(:end_api_response) { file_fixture('dk_bo_api_response_end.json').read }
 
-  let(:person_1_raw_data) do
+  let(:person1_raw_data) do
     file_fixture('dk_bo_datum_with_real_owners_complex.json').read
   end
-  let(:person_2_raw_data) do
+  let(:person2_raw_data) do
     file_fixture('dk_bo_datum_with_real_owners_simple.json').read
   end
 
-  let(:person_1_raw_record) do
+  let(:person1_raw_record) do
     etag = RawDataRecord.etag("2015-01-02T00:00:00.000+01:00_1")
     RawDataRecord.find_by(etag: etag)
   end
 
-  let(:person_2_raw_record) do
+  let(:person2_raw_record) do
     etag = RawDataRecord.etag("2015-01-01T00:00:00.000+02:00_2")
     RawDataRecord.find_by(etag: etag)
   end
@@ -83,43 +83,43 @@ RSpec.describe 'DK Import' do
   end
 
   it 'imports the data and links it up correctly' do
-    expect(person_1).not_to be_nil
-    expect(person_2).not_to be_nil
-    person_1_companies.each { |c| expect(c).not_to be_nil }
-    expect(person_2_company).not_to be_nil
-    person_1_companies.each do |company|
-      relationship = Relationship.find_by(source: person_1, target: company)
+    expect(person1).not_to be_nil
+    expect(person2).not_to be_nil
+    person1_companies.each { |c| expect(c).not_to be_nil }
+    expect(person2_company).not_to be_nil
+    person1_companies.each do |company|
+      relationship = Relationship.find_by(source: person1, target: company)
       expect(relationship).not_to be_nil
     end
-    person_2_relationship = Relationship.find_by(source: person_2, target: person_2_company)
-    expect(person_2_relationship).not_to be_nil
-    expect(person_1_raw_record).not_to be_nil
-    expect(person_2_raw_record).not_to be_nil
+    person2_relationship = Relationship.find_by(source: person2, target: person2_company)
+    expect(person2_relationship).not_to be_nil
+    expect(person1_raw_record).not_to be_nil
+    expect(person2_raw_record).not_to be_nil
 
     search_for 'Danish Person 1'
     click_link 'Danish Person 1'
-    person_1_companies.each { |c| expect(page).to have_link(c.name) }
-    first_relationship = Relationship.find_by(source: person_1, target: person_1_companies.first)
+    person1_companies.each { |c| expect(page).to have_link(c.name) }
+    first_relationship = Relationship.find_by(source: person1, target: person1_companies.first)
     click_link "", href: relationship_href(first_relationship)
     expect(page).to have_text "#{I18n.t('relationships.provenance.retrieved_at')} #{Time.zone.today}"
     expect(page).to have_text "#{I18n.t('relationships.provenance.imported_at')} #{Time.zone.today}"
 
-    visit raw_entity_path(person_1)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(person_1_raw_data))
+    visit raw_entity_path(person1)
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(person1_raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
 
-    visit raw_entity_path(person_1_companies.first)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(person_1_raw_data))
+    visit raw_entity_path(person1_companies.first)
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(person1_raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
 
     search_for 'Danish Person 2'
     click_link 'Danish Person 2'
-    click_link "", href: relationship_href(person_2_relationship)
+    click_link "", href: relationship_href(person2_relationship)
     expect(page).to have_text "#{I18n.t('relationships.provenance.retrieved_at')} #{Time.zone.today}"
     expect(page).to have_text "#{I18n.t('relationships.provenance.imported_at')} #{Time.zone.today}"
 
-    visit raw_entity_path(person_2)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(person_2_raw_data))
+    visit raw_entity_path(person2)
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(person2_raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
 
-    visit raw_entity_path(person_2_company)
-    expect(page).to have_text JSON.pretty_generate(JSON.parse(person_2_raw_data))
+    visit raw_entity_path(person2_company)
+    expect(page).to have_text(JSON.pretty_generate(JSON.parse(person2_raw_data)).gsub(/\s+/, ' '), normalize_ws: true)
   end
 end

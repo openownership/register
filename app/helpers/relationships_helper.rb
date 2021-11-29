@@ -1,7 +1,7 @@
 module RelationshipsHelper
   SUBMISSION_INTEREST_MATCHERS = [
-    /^Ownership of shares - [\d\.]+%$/,
-    /^Ownership of voting rights - ([\d\.]+)%$/,
+    /^Ownership of shares - [\d.]+%$/,
+    /^Ownership of voting rights - ([\d.]+)%$/,
     /^Right to appoint and remove directors$/,
     /^Other \(.+\)$/,
   ].freeze

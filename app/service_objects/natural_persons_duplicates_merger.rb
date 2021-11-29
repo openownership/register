@@ -71,8 +71,8 @@ class NaturalPersonsDuplicatesMerger
   def build_key(entity)
     # If any of the fields are null/empty then no valid key can be generated
 
-    data = FIELDS_TO_MATCH.each_with_object({}) do |field, acc|
-      acc[field] = entity.send(field).to_s.presence
+    data = FIELDS_TO_MATCH.index_with do |field|
+      entity.send(field).to_s.presence
     end.freeze
 
     contains_empty_values = data.values.any?(&:nil?)

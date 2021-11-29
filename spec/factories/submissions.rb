@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :submission, class: Submissions::Submission do
     user
 
@@ -9,7 +9,7 @@ FactoryGirl.define do
     end
 
     factory :submitted_submission do
-      submitted_at 5.minutes.ago
+      submitted_at { 5.minutes.ago }
       after(:create) do |submission|
         target = create(:submission_legal_entity, submission: submission)
         source = create(:submission_natural_person, submission: submission)
@@ -18,7 +18,7 @@ FactoryGirl.define do
     end
 
     factory :approved_submission, parent: :submitted_submission do
-      approved_at 2.minutes.ago
+      approved_at { 2.minutes.ago }
 
       after(:create) do |submission|
         entities = {}
@@ -35,10 +35,12 @@ FactoryGirl.define do
           entities[entity.id] = create(
             :entity,
             entity.attributes_for_submission.merge(
-              identifiers: [{
-                'submission_id' => submission.id,
-                'entity_id' => entity.id,
-              }],
+              identifiers: [
+                {
+                  'submission_id' => submission.id,
+                  'entity_id' => entity.id,
+                },
+              ],
             ),
           )
         end

@@ -21,7 +21,7 @@ class EntityResolver
       unless response.empty?
         log_reconciliation_changes(entity, response.first.fetch(:company))
         merge(entity, response.first.fetch(:company))
-        return
+        nil
       end
     else
       response = @reconciliation_client.reconcile(entity.jurisdiction_code, entity.name)
@@ -78,11 +78,11 @@ class EntityResolver
   def normalise_company_number(original_number)
     number = original_number.nil? ? "" : original_number.dup
     # Strip leading zeroes
-    number.sub!(/^[0]+/, '')
+    number.sub!(/^0+/, '')
     # Remove spaces
     number.gsub!(/\s/, '')
     # Turn various separators into dashes
-    number.gsub!(%r{[/\.]}, '-')
+    number.gsub!(%r{[/.]}, '-')
     # Uppercase everything
     number.upcase!
     number

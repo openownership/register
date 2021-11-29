@@ -30,18 +30,18 @@ RSpec.describe Submissions::EntitiesHelper do
     end
 
     it 'includes jurisdictions' do
-      expect(subject).to match(/<option value=\"ar\">Argentina/)
-      expect(subject).to match(/<option value=\"ca\">Canada/)
+      expect(subject).to match(/<option value="ar">Argentina/)
+      expect(subject).to match(/<option value="ca">Canada/)
     end
 
     it 'groups subjurisdictions' do
-      expect(subject).to match(/<optgroup label=\"Canada\">/)
-      expect(subject).to match(/<optgroup label=\"United States\">/)
+      expect(subject).to match(/<optgroup label="Canada">/)
+      expect(subject).to match(/<optgroup label="United States">/)
     end
 
     it 'includes subjurisdictions' do
-      expect(subject).to match(/<option value=\"ca_qc\">/)
-      expect(subject).to match(/<option value=\"us_ny\">/)
+      expect(subject).to match(/<option value="ca_qc">/)
+      expect(subject).to match(/<option value="us_ny">/)
     end
 
     it "sets default value" do

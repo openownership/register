@@ -46,7 +46,7 @@ class Entity
   index(dissolution_date: 1)
   index(last_resolved_at: 1)
 
-  index_name "#{Rails.application.class.parent_name.underscore}_entities_#{Rails.env}"
+  index_name "#{Rails.application.class.module_parent_name.underscore}_entities_#{Rails.env}"
 
   settings index: {
     number_of_shards: 1,
@@ -122,7 +122,7 @@ class Entity
 
     reload
   rescue Mongo::Error::OperationFailure => e
-    raise unless e.message.start_with?('E11000')
+    raise unless /E11000/.match(e.message)
 
     criteria = Entity.where(selector)
     if criteria.count > 1

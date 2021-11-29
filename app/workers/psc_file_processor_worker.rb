@@ -33,7 +33,7 @@ class PscFileProcessorWorker
   private
 
   def with_file(source_url)
-    open(source_url) do |file|
+    URI.open(source_url) do |file|
       case File.extname(source_url)
       when ".gz"
         file = Zlib::GzipReader.new(file)
