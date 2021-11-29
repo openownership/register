@@ -24,7 +24,7 @@ class BodsExport
   end
 
   def output_folder
-    Rails.root.join('tmp', 'exports', id.to_s)
+    Rails.root.join('tmp/exports', id.to_s)
   end
 
   def statements_folder

@@ -1,6 +1,6 @@
 module OpencorporatesHelper
   def previous_names(company_hash)
-    company_hash[:previous_names].map { |hash| hash[:company_name] }.join(', ')
+    company_hash[:previous_names].pluck(:company_name).join(', ')
   end
 
   def industry_codes(company_hash)
@@ -8,7 +8,7 @@ module OpencorporatesHelper
   end
 
   def officers(company_hash)
-    company_hash[:officers].map { |hash| hash[:officer] }.reject { |hash| hash[:inactive] }
+    company_hash[:officers].pluck(:officer).reject { |hash| hash[:inactive] }
   end
 
   def officer_attributes_snippet(officer_hash)

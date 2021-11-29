@@ -49,26 +49,26 @@ RSpec.describe TreeNode do
     end
 
     context "has nodes" do
-      let(:entity_1) { instance_double('Entity') }
-      let(:entity_2) { instance_double('Entity') }
-      let(:relationship_1) { instance_double('Relationship', id: 'test-id-1') }
-      let(:relationship_2) { instance_double('Relationship', id: 'test-id-2') }
+      let(:entity1) { instance_double('Entity') }
+      let(:entity2) { instance_double('Entity') }
+      let(:relationship1) { instance_double('Relationship', id: 'test-id-1') }
+      let(:relationship2) { instance_double('Relationship', id: 'test-id-2') }
 
       before do
-        allow(entity).to receive(:relationships_as_target).and_return([relationship_1])
-        allow(relationship_1).to receive(:source).and_return(entity_1)
-        allow(entity_1).to receive(:relationships_as_target).and_return([relationship_2])
-        allow(relationship_2).to receive(:source).and_return(entity_2)
-        allow(entity_2).to receive(:relationships_as_target).and_return([])
+        allow(entity).to receive(:relationships_as_target).and_return([relationship1])
+        allow(relationship1).to receive(:source).and_return(entity1)
+        allow(entity1).to receive(:relationships_as_target).and_return([relationship2])
+        allow(relationship2).to receive(:source).and_return(entity2)
+        allow(entity2).to receive(:relationships_as_target).and_return([])
 
-        mock_relationships_sorter([relationship_1])
-        mock_relationships_sorter([relationship_2])
+        mock_relationships_sorter([relationship1])
+        mock_relationships_sorter([relationship2])
       end
 
       it "returns the leaf nodes" do
         expect(subject.leaf_nodes.size).to eq(1)
-        expect(subject.leaf_nodes.first.entity).to eq(entity_2)
-        expect(subject.leaf_nodes.first.relationship).to eq(relationship_2)
+        expect(subject.leaf_nodes.first.entity).to eq(entity2)
+        expect(subject.leaf_nodes.first.relationship).to eq(relationship2)
       end
     end
   end

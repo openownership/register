@@ -1,14 +1,13 @@
 require 'rails_helper'
 require 'support/fixture_helpers'
 
+TestImporter = Class.new
+
 RSpec.describe RawDataRecordsImportWorker do
   let(:data_source) { create(:data_source) }
   let(:import) { create(:import, data_source: data_source) }
   let(:raw_data_record) { create(:raw_data_record, imports: [import]) }
   let(:retrieved_at) { Time.zone.local(2011, 2, 3, 4, 5, 6) }
-
-  class TestImporter
-  end
 
   subject do
     RawDataRecordsImportWorker.new.perform(

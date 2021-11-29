@@ -8,7 +8,7 @@ RSpec.describe CountryHelper do
 
     it 'returns the corresponding country flag image' do
       expect(subject).to match(/^<img /)
-      expect(subject).to match(%r{src="/assets/GB-.+\.svg"})
+      expect(subject).to match(%r{src="/assets/GB.*\.svg"})
       expect(subject).to match(/alt="United Kingdom/)
     end
 
@@ -18,7 +18,7 @@ RSpec.describe CountryHelper do
       it 'returns a glossary tooltip with unknown flag image' do
         expect(helper).to receive(:glossary_tooltip).and_call_original
         expect(subject).to match(/<img /)
-        expect(subject).to match(%r{src="/assets/flag-unknown-.+\.svg"})
+        expect(subject).to match(%r{src="/assets/flag-unknown.*\.svg"})
         expect(subject).to match(/alt="unknown"/)
       end
     end
@@ -28,14 +28,14 @@ RSpec.describe CountryHelper do
     subject { helper.country_flag_path(country) }
 
     it 'returns the corresponding country flag image path' do
-      expect(subject).to match(%r{/assets/GB-.+\.svg})
+      expect(subject).to match(%r{/assets/GB.*\.svg})
     end
 
     context 'when the country is nil' do
       let(:country) { nil }
 
       it 'returns a glossary tooltip with unknown flag image' do
-        expect(subject).to match(%r{/assets/flag-unknown-.+\.svg})
+        expect(subject).to match(%r{/assets/flag-unknown.*\.svg})
       end
     end
   end

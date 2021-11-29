@@ -168,11 +168,13 @@ RSpec.describe EntityResolver do
 
         it 'retries resolving with returned details' do
           allow(entity_resolver).to receive(:resolve!).and_call_original
-          expect(entity_resolver).to receive(:resolve!).with(having_attributes(
-            jurisdiction_code: 'gb',
-            company_number: '01234567',
-            name: 'EXAMPLE COMPANY LIMITED',
-          )).and_return(nil)
+          expect(entity_resolver).to receive(:resolve!).with(
+            having_attributes(
+              jurisdiction_code: 'gb',
+              company_number: '01234567',
+              name: 'EXAMPLE COMPANY LIMITED',
+            ),
+          ).and_return(nil)
 
           subject
         end
@@ -198,10 +200,10 @@ RSpec.describe EntityResolver do
     let(:updated_company_number) { '89101112' }
     let(:expected_msg) do
       "[EntityResolver] Resolution with OpenCorporates changed the " \
-      "company number of Entity with identifiers: #{entity.identifiers}. " \
-      "Old number: #{@company_number}. " \
-      "New number: #{updated_company_number}. " \
-      "Old name: #{name}. New name: #{name}."
+        "company number of Entity with identifiers: #{entity.identifiers}. " \
+        "Old number: #{@company_number}. " \
+        "New number: #{updated_company_number}. " \
+        "Old name: #{name}. New name: #{name}."
     end
 
     shared_examples "it logs the changes" do

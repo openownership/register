@@ -7,7 +7,7 @@
       .tree-link
         = render 'tree_node', node: child_node
 
-.tree-node{ class: tree_node_classes(node), "data-node": entity.name }
+.tree-node{ class: tree_node_classes(node), 'data-node': entity.name }
   - unless node.leaf?
     - if entity.relationships_as_target.any?
       = link_to search_submission_entities_path(@submission, source_ids: entity.relationships_as_target.map(&:source_id), target_id: entity.id), class: 'tree-node__insert tree-node__insert--above', data: { 'tippy-content' => t('.insert_company_above'), 'tippy-placement' => 'top' } do

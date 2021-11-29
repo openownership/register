@@ -10,7 +10,7 @@ module BooleanParam
   def boolean_param(name, default: false)
     if params.key?(name)
       value = params[name]
-      value.blank? || !FALSE_VALUES.include?(value)
+      value.blank? || FALSE_VALUES.exclude?(value)
     else
       default
     end

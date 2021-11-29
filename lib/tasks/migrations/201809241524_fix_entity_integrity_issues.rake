@@ -15,7 +15,7 @@ end
 
 module FixEntityIntegrityIssuesHelper
   def self.handle_issues(entity, issues, results)
-    issues.keys.each do |issue_type|
+    issues.each_key do |issue_type|
       issue_data = issues[issue_type]
 
       next if issue_data.nil?

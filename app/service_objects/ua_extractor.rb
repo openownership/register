@@ -17,7 +17,7 @@ class UaExtractor
   private
 
   def write_config
-    config_template = Rails.root.join('config', 'ua-edr-extractor.yml.erb')
+    config_template = Rails.root.join('config/ua-edr-extractor.yml.erb')
     config = ERB.new(File.read(config_template)).result(binding)
     File.open(config_file, 'w') { |f| f.write(config) }
   end

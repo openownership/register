@@ -1,14 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Timestamps::UpdatedEvenOnUpsert do
-  class TestModel
-    include Mongoid::Document
-    include Timestamps::UpdatedEvenOnUpsert
+  let(:test_model) do
+    Class.new do
+      def self.name
+        'TestModel'
+      end
 
-    field :test_field, type: String
+      include Mongoid::Document
+      include Timestamps::UpdatedEvenOnUpsert
+
+      field :test_field, type: String
+    end
   end
 
-  let(:test_instance) { TestModel.new(_id: 'test', test_field: 'test') }
+  let(:test_instance) { test_model.new(_id: 'test', test_field: 'test') }
 
   it "doesn't set updated_at until the instance is persisted" do
     expect(test_instance.updated_at).to be nil
@@ -20,7 +26,7 @@ RSpec.describe Timestamps::UpdatedEvenOnUpsert do
 
     it 'persists updated_at on first save' do
       test_instance.save!
-      expect(TestModel.find('test').updated_at).to be_within(1.second).of Time.now.utc
+      expect(test_model.find('test').updated_at).to be_within(1.second).of Time.now.utc
     end
 
     it 'sets updated_at on the instance after first save' do
@@ -41,7 +47,7 @@ RSpec.describe Timestamps::UpdatedEvenOnUpsert do
     context 'and the upsert results in an insert' do
       it 'persists updated_at' do
         test_instance.upsert
-        expect(TestModel.find('test').updated_at).to be_within(1.second).of Time.now.utc
+        expect(test_model.find('test').updated_at).to be_within(1.second).of Time.now.utc
       end
 
       it 'sets updated_at on the instance' do

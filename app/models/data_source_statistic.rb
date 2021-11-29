@@ -4,7 +4,7 @@ class DataSourceStatistic
 
   field :type, type: String
   field :value, type: Integer
-  field :published, type: Boolean
+  field :published, type: TrueClass
 
   embedded_in :data_source
 

@@ -10,7 +10,7 @@ class BodsSerializer
 
     @relationships.reduce([]) do |acc, relationship|
       statements = statements_for(relationship, seen.dup)
-      seen.merge(statements.map { |s| s[:statementID] })
+      seen.merge(statements.pluck(:statementID))
       acc + statements
     end
   end

@@ -29,7 +29,7 @@ RSpec.describe EntityGraphDecorator do
       expect(subject.first['data']['label']).to eq entity.name
     end
 
-    it "adds a flag for the entity's country", type: :helper do
+    it "adds a flag for the entity's country" do
       expect(subject.first['data']['flag']).to eq h.country_flag_path(ISO3166::Country[:GB])
     end
 
@@ -127,7 +127,7 @@ RSpec.describe EntityGraphDecorator do
       subject { JSON.parse(decorated.cytoscape_data[:elements])['nodes'].last }
 
       it 'uses the right translation string for the label' do
-        expected = I18n.t("entity_graph.labels.#{label_key}", label_data)
+        expected = I18n.t("entity_graph.labels.#{label_key}", **label_data)
         expect(subject['data']['label']).to eq expected
       end
 

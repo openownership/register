@@ -41,11 +41,13 @@ RSpec.describe SkImporter do
     it 'resolves the child company' do
       subject.process(sk_json_fixture('sk_bo_datum.json'))
 
-      expect(entity_resolver).to have_received(:resolve!).with(having_attributes(
-        jurisdiction_code: 'sk',
-        company_number: '1234567',
-        name: 'Example Slovak Company',
-      ))
+      expect(entity_resolver).to have_received(:resolve!).with(
+        having_attributes(
+          jurisdiction_code: 'sk',
+          company_number: '1234567',
+          name: 'Example Slovak Company',
+        ),
+      )
     end
 
     it "gets the child company's jurisdiction from geocoding the address" do
@@ -180,15 +182,21 @@ RSpec.describe SkImporter do
     end
 
     it 'indexes all the entities' do
-      expect(IndexEntityService).to receive(:new).with(having_attributes(
-        name: 'Example Slovak Company',
-      ))
-      expect(IndexEntityService).to receive(:new).with(having_attributes(
-        name: 'Example Person 1',
-      ))
-      expect(IndexEntityService).to receive(:new).with(having_attributes(
-        name: 'Example Person 2',
-      ))
+      expect(IndexEntityService).to receive(:new).with(
+        having_attributes(
+          name: 'Example Slovak Company',
+        ),
+      )
+      expect(IndexEntityService).to receive(:new).with(
+        having_attributes(
+          name: 'Example Person 1',
+        ),
+      )
+      expect(IndexEntityService).to receive(:new).with(
+        having_attributes(
+          name: 'Example Person 2',
+        ),
+      )
 
       subject.process(sk_json_fixture('sk_bo_datum.json'))
     end

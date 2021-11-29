@@ -47,12 +47,14 @@ RSpec.describe DataSource do
   describe '#statistics_by_type' do
     subject { source.statistics_by_type }
 
-    it 'returns a Hash with Arrays of stats keyed by type' do
+    it 'returns a Hash with Arrays of stats keyed by type', :aggregate_failures do
       expect(subject).to be_a Hash
       expect(subject.keys.length).to eq statistic_types.length
-      statistic_types.each { |t| expect(subject.keys).to include(t) }
-      statistic_types.each { |t| expect(subject[t]).to be_a Array }
-      statistic_types.each { |t| expect(subject[t].length).to eq(2) }
+      statistic_types.each do |t|
+        expect(subject.keys).to include(t)
+        expect(subject[t]).to be_a Array
+        expect(subject[t].length).to eq(2)
+      end
     end
 
     context 'when statistics is empty' do

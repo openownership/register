@@ -40,13 +40,13 @@ RSpec.describe PscFileProcessorWorker do
       let(:corporate_record) do
         record = JSON.parse(file_fixture('psc_corporate.json').read)
         record['data']['etag'] = corporate_etag
-        record.to_json + "\n"
+        "#{record.to_json}\n"
       end
       let(:individual_etag) { 'etag_2' }
       let(:individual_record) do
         record = JSON.parse(file_fixture('psc_corporate.json').read)
         record['data']['etag'] = individual_etag
-        record.to_json + "\n"
+        "#{record.to_json}\n"
       end
 
       it 'uses those etags for the RawDataRecords' do

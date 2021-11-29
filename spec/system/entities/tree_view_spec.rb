@@ -51,10 +51,10 @@ RSpec.describe 'Tree view' do
     it 'shows both owners' do
       visit tree_entity_path(company)
 
-      expect_person_node_for(person_1)
-      expect_person_node_for(person_2)
-      expect_relationship_link_for(relationship_1)
-      expect_relationship_link_for(relationship_2)
+      expect_person_node_for(person1)
+      expect_person_node_for(person2)
+      expect_relationship_link_for(relationship1)
+      expect_relationship_link_for(relationship2)
       expect_root_node_for(company)
     end
   end
@@ -67,8 +67,8 @@ RSpec.describe 'Tree view' do
 
       expect_person_node_for(ultimate_owner)
 
-      expect_company_node_for(intermediate_company_1)
-      expect_company_node_for(intermediate_company_2)
+      expect_company_node_for(intermediate_company1)
+      expect_company_node_for(intermediate_company2)
 
       expect_relationship_link_for(start_to_intermediate_1_relationship)
       expect_relationship_link_for(intermediate_1_to_intermediate_2_relationship)
@@ -133,16 +133,16 @@ RSpec.describe 'Tree view' do
     include_context 'entity with circular ownership'
 
     it 'shows the circular ownership' do
-      visit tree_entity_path(company_1)
+      visit tree_entity_path(company1)
 
-      expect_company_node_for(company_2)
+      expect_company_node_for(company2)
 
-      expect_relationship_link_for(company_1_to_company_2_relationship)
-      expect_relationship_link_for(company_2_to_company_1_relationship)
+      expect_relationship_link_for(company1_to_company2_relationship)
+      expect_relationship_link_for(company2_to_company1_relationship)
 
       expect(page).to have_css('.tree-node--circular-ownership')
 
-      expect_root_node_for(company_1)
+      expect_root_node_for(company1)
     end
   end
 
@@ -180,8 +180,8 @@ RSpec.describe 'Tree view' do
         end
       end
 
-      expect_company_node_for(intermediate_company_1)
-      expect_company_node_for(intermediate_company_2)
+      expect_company_node_for(intermediate_company1)
+      expect_company_node_for(intermediate_company2)
 
       expect_relationship_link_for(start_to_intermediate_1_relationship)
       expect_relationship_link_for(start_to_intermediate_2_relationship)
@@ -197,42 +197,42 @@ RSpec.describe 'Tree view' do
 
     context 'when both people have the same interests' do
       before do
-        person_1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
-        person_1_relationship.save!
-        person_2_relationship.interests << 'ownership-of-shares-75-to-100-percent'
-        person_2_relationship.save!
+        person1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person1_relationship.save!
+        person2_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person2_relationship.save!
       end
 
       it 'shows a single person as the ultimate owner of the company' do
         visit tree_entity_path(company)
 
-        expect_person_node_for(person_1)
+        expect_person_node_for(person1)
         expect(page).not_to have_css(
-          ".tree-node--natural-person[data-node='#{person_2.name}']",
+          ".tree-node--natural-person[data-node='#{person2.name}']",
         )
-        expect_relationship_link_for(person_1_relationship)
+        expect_relationship_link_for(person1_relationship)
         expect_root_node_for(company)
       end
     end
 
     context "when the people have different interests" do
       before do
-        person_1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
-        person_1_relationship.save!
-        person_2_relationship.interests << 'voting-rights-75-to-100-percent'
-        person_2_relationship.save!
+        person1_relationship.interests << 'ownership-of-shares-75-to-100-percent'
+        person1_relationship.save!
+        person2_relationship.interests << 'voting-rights-75-to-100-percent'
+        person2_relationship.save!
       end
 
       it 'shows the same person twice, once for each interest' do
         visit tree_entity_path(company)
 
-        nodes = all(".tree-node--natural-person[data-node='#{person_1.name}']")
+        nodes = all(".tree-node--natural-person[data-node='#{person1.name}']")
         expect(nodes.length).to eq(2)
         expect(page).not_to have_css(
-          ".tree-node--natural-person[data-node='#{person_2.name}']",
+          ".tree-node--natural-person[data-node='#{person2.name}']",
         )
-        expect_relationship_link_for(person_1_relationship)
-        expect_relationship_link_for(person_2_relationship)
+        expect_relationship_link_for(person1_relationship)
+        expect_relationship_link_for(person2_relationship)
         expect_root_node_for(company)
       end
     end
@@ -242,23 +242,23 @@ RSpec.describe 'Tree view' do
     include_context 'two people owning the two different companies merged into one'
 
     it 'shows the same person as the ultimate owner of both companies' do
-      visit tree_entity_path(company_1)
+      visit tree_entity_path(company1)
 
-      expect_person_node_for(person_1)
+      expect_person_node_for(person1)
       expect(page).not_to have_css(
-        ".tree-node--natural-person[data-node='#{person_2.name}']",
+        ".tree-node--natural-person[data-node='#{person2.name}']",
       )
-      expect_relationship_link_for(person_1_relationship)
-      expect_root_node_for(company_1)
+      expect_relationship_link_for(person1_relationship)
+      expect_root_node_for(company1)
 
-      visit tree_entity_path(company_2)
+      visit tree_entity_path(company2)
 
-      expect_person_node_for(person_1)
+      expect_person_node_for(person1)
       expect(page).not_to have_css(
-        ".tree-node--natural-person[data-node='#{person_2.name}']",
+        ".tree-node--natural-person[data-node='#{person2.name}']",
       )
-      expect_relationship_link_for(person_2_relationship)
-      expect_root_node_for(company_2)
+      expect_relationship_link_for(person2_relationship)
+      expect_root_node_for(company2)
     end
   end
 end

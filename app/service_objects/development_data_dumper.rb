@@ -1,7 +1,7 @@
 class DevelopmentDataDumper
   def initialize
-    @tmp_dir = Rails.root.join('tmp', 'dev-data', 'generated')
-    @s3_client = Aws::S3::Client.new(
+    @tmp_dir = Rails.root.join('tmp/dev-data/generated')
+    @s3_adapter = Rails.application.config.s3_adapter.new(
       region: 'eu-west-1',
       access_key_id: ENV['DEV_DATA_AWS_ACCESS_KEY_ID'],
       secret_access_key: ENV['DEV_DATA_AWS_SECRET_ACCESS_KEY'],
@@ -23,12 +23,9 @@ class DevelopmentDataDumper
 
   private
 
+  attr_reader :s3_adapter
+
   def upload_to_s3(tmp_file, filename)
-    s3 = Aws::S3::Object.new(
-      ENV['DEV_DATA_S3_BUCKET_NAME'],
-      "generated/#{filename}",
-      client: @s3_client,
-    )
-    s3.upload_file(tmp_file)
+    s3_adapter.upload_to_s3(s3_bucket: ENV['DEV_DATA_S3_BUCKET_NAME'], s3_path: "generated/#{filename}", local_path: tmp_file)
   end
 end

@@ -29,8 +29,8 @@ RSpec.describe BodsExporter do
   end
 
   describe '#call' do
-    let!(:legal_entity_1) { create(:legal_entity) }
-    let!(:legal_entity_2) { create(:legal_entity) }
+    let!(:legal_entity1) { create(:legal_entity) }
+    let!(:legal_entity2) { create(:legal_entity) }
 
     subject { BodsExporter.new(chunk_size: 1) }
 
@@ -38,8 +38,8 @@ RSpec.describe BodsExporter do
       expect { subject.call }.to change(BodsExportWorker.jobs, :size).by(2)
       export = subject.export
       expected_args = [
-        [[legal_entity_1.id.to_s], export.id.to_s],
-        [[legal_entity_2.id.to_s], export.id.to_s],
+        [[legal_entity1.id.to_s], export.id.to_s],
+        [[legal_entity2.id.to_s], export.id.to_s],
       ]
       expect(BodsExportWorker.jobs.first['args']).to eq expected_args[0]
       expect(BodsExportWorker.jobs.second['args']).to eq expected_args[1]
@@ -49,12 +49,12 @@ RSpec.describe BodsExporter do
       subject { BodsExporter.new(chunk_size: 1, incremental: true) }
 
       before do
-        legal_entity_1.set(updated_at: '2019-01-01 00:00:00')
-        legal_entity_2.set(updated_at: '2019-01-02 00:00:00')
-        # Note that the export started after legal_entity_1 but finished after
-        # legal_entity_2 was updated. It would have processed legal_entity_1
+        legal_entity1.set(updated_at: '2019-01-01 00:00:00')
+        legal_entity2.set(updated_at: '2019-01-02 00:00:00')
+        # Note that the export started after legal_entity1 but finished after
+        # legal_entity2 was updated. It would have processed legal_entity1
         # but since it builds the list of ids to process at the beginning it
-        # wouldn't have seen legal_entity_2.
+        # wouldn't have seen legal_entity2.
         create(
           :bods_export,
           created_at: '2019-01-01 01:00:00',
@@ -65,7 +65,7 @@ RSpec.describe BodsExporter do
       it "only enqueues jobs for entities which have changed since" do
         expect { subject.call }.to change(BodsExportWorker.jobs, :size).by(1)
         export = subject.export
-        expected_args = [[legal_entity_2.id.to_s], export.id.to_s]
+        expected_args = [[legal_entity2.id.to_s], export.id.to_s]
         expect(BodsExportWorker.jobs.first['args']).to eq expected_args
       end
     end

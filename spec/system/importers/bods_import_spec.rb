@@ -85,7 +85,11 @@ RSpec.describe 'BODS Import' do
 
       # Mock the github download we use for example data
       records = Oj.load(file_fixture('bods_single_direct_example.json').read)
+
+      # rubocop:disable Style/StringConcatenation
       jsonl_data = records.map { |r| Oj.dump(r, mode: :rails) }.join("\n") + "\n"
+      # rubocop:enable Style/StringConcatenation
+
       stub_request(:get, bods_api_url).to_return(body: jsonl_data)
 
       BodsImportTrigger.new(bods_api_url, ['GB-COH'], 100, jsonl: true).call

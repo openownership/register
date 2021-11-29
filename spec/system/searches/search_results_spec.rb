@@ -4,17 +4,17 @@ RSpec.describe 'Search results' do
   include EntityHelpers
   include SearchHelpers
 
-  let!(:company) { FactoryGirl.create(:legal_entity) }
-  let!(:holding_company) { FactoryGirl.create(:legal_entity) }
+  let!(:company) { FactoryBot.create(:legal_entity) }
+  let!(:holding_company) { FactoryBot.create(:legal_entity) }
   let!(:ceased_company) do
-    FactoryGirl.create(:legal_entity, dissolution_date: '2019-01-01')
+    FactoryBot.create(:legal_entity, dissolution_date: '2019-01-01')
   end
-  let!(:person) { FactoryGirl.create(:natural_person) }
+  let!(:person) { FactoryBot.create(:natural_person) }
   let!(:holding_relationship) do
-    FactoryGirl.create(:relationship, source: holding_company, target: company)
+    FactoryBot.create(:relationship, source: holding_company, target: company)
   end
   let!(:relationship) do
-    FactoryGirl.create(:relationship, source: person, target: holding_company)
+    FactoryBot.create(:relationship, source: person, target: holding_company)
   end
 
   before do

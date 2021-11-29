@@ -40,15 +40,15 @@ RSpec.describe EntitiesController do
     end
 
     context 'when the entity has raw data provenance' do
-      let(:data_source_1) { create(:data_source, name: 'Data Source 1') }
-      let(:data_source_2) { create(:data_source, name: 'Data Source 2') }
-      let(:import_1) { create(:import, data_source: data_source_1) }
-      let(:import_2) { create(:import, data_source: data_source_2) }
+      let(:data_source1) { create(:data_source, name: 'Data Source 1') }
+      let(:data_source2) { create(:data_source, name: 'Data Source 2') }
+      let(:import1) { create(:import, data_source: data_source1) }
+      let(:import2) { create(:import, data_source: data_source2) }
 
       let!(:raw_provenances) do
         [
-          create(:raw_data_provenance, entity_or_relationship: entity, import: import_1),
-          create(:raw_data_provenance, entity_or_relationship: entity, import: import_2),
+          create(:raw_data_provenance, entity_or_relationship: entity, import: import1),
+          create(:raw_data_provenance, entity_or_relationship: entity, import: import2),
         ]
       end
 

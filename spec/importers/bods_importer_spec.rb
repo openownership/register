@@ -463,11 +463,13 @@ RSpec.describe BodsImporter do
         relationship = Relationship.find_by('_id.statement_id' => statement_id)
         expect(relationship.source).to eq source
         expect(relationship.target).to eq target
-        expected_interests = [{
-          'type' => 'shareholding',
-          'share_min' => 100,
-          'share_max' => 100,
-        }]
+        expected_interests = [
+          {
+            'type' => 'shareholding',
+            'share_min' => 100,
+            'share_max' => 100,
+          },
+        ]
         expect(relationship.interests).to eq expected_interests
         expect(relationship.started_date).to eq ISO8601::Date.new('2015-01-01')
         expect(relationship.ended_date).to be_nil

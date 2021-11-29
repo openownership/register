@@ -162,12 +162,12 @@ RSpec.describe RawDataRecord do
 
   describe '.newest_for_entity' do
     let!(:entity) { create(:legal_entity) }
-    let!(:raw_data_record_1) do
+    let!(:raw_data_record1) do
       record = create(:raw_data_record)
       record.timeless.update_attribute(:updated_at, 1.day.ago)
       record
     end
-    let!(:raw_data_record_2) do
+    let!(:raw_data_record2) do
       record = create(:raw_data_record)
       record.timeless.update_attribute(:updated_at, 2.days.ago)
       record
@@ -175,24 +175,24 @@ RSpec.describe RawDataRecord do
     let!(:provenance) do
       create(
         :raw_data_provenance,
-        raw_data_records: [raw_data_record_1, raw_data_record_2],
+        raw_data_records: [raw_data_record1, raw_data_record2],
         entity_or_relationship: entity,
       )
     end
 
     it 'returns the newest record by updated_at' do
-      expect(RawDataRecord.newest_for_entity(entity)).to eq(raw_data_record_1)
+      expect(RawDataRecord.newest_for_entity(entity)).to eq(raw_data_record1)
     end
   end
 
   describe '.oldest_for_entity' do
     let!(:entity) { create(:legal_entity) }
-    let!(:raw_data_record_1) do
+    let!(:raw_data_record1) do
       record = create(:raw_data_record)
       record.timeless.update_attribute(:created_at, 1.day.ago)
       record
     end
-    let!(:raw_data_record_2) do
+    let!(:raw_data_record2) do
       record = create(:raw_data_record)
       record.timeless.update_attribute(:created_at, 2.days.ago)
       record
@@ -200,26 +200,26 @@ RSpec.describe RawDataRecord do
     let!(:provenance) do
       create(
         :raw_data_provenance,
-        raw_data_records: [raw_data_record_1, raw_data_record_2],
+        raw_data_records: [raw_data_record1, raw_data_record2],
         entity_or_relationship: entity,
       )
     end
 
     it 'returns the oldest record by created_at' do
-      expect(RawDataRecord.newest_for_entity(entity)).to eq(raw_data_record_2)
+      expect(RawDataRecord.newest_for_entity(entity)).to eq(raw_data_record2)
     end
   end
 
   describe '#raw_data' do
     it 'transparently decompresses compressed raw data' do
-      data = { "test": "test" }.to_json
+      data = { test: "test" }.to_json
       compressed_data = Base64.encode64 Zlib::Deflate.deflate(data)
       raw_record = create(:raw_data_record, raw_data: compressed_data, compressed: true)
       expect(raw_record.raw_data).to eq data
     end
 
     it 'returns uncompressed raw data as-is' do
-      data = { "test": "test" }.to_json
+      data = { test: "test" }.to_json
       raw_record = create(:raw_data_record, raw_data: data)
       expect(raw_record.raw_data).to eq data
     end

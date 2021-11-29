@@ -1,4 +1,6 @@
 class EntityMerger
+  PotentiallyBadEntityMergeDetectedAndStopped = Class.new(StandardError)
+
   PROTECTED_FIELDS = %w[_id type identifiers updated_at self_updated_at].freeze
 
   def initialize(entity_to_remove, entity_to_keep)
@@ -75,7 +77,4 @@ class EntityMerger
   def reindex_entity_to_keep_for_search
     IndexEntityService.new(@to_keep).index
   end
-end
-
-class PotentiallyBadEntityMergeDetectedAndStopped < StandardError
 end

@@ -276,10 +276,12 @@ RSpec.describe BodsMapper do
       context 'Org-Id identifiers' do
         context 'GB-COH identifiers' do
           it 'adds a GB-COH identifier for child UK companies from the PSC register' do
-            entity.identifiers = [{
-              'document_id' => 'GB PSC Snapshot',
-              'company_number' => '1234567',
-            }]
+            entity.identifiers = [
+              {
+                'document_id' => 'GB PSC Snapshot',
+                'company_number' => '1234567',
+              },
+            ]
             entity.jurisdiction_code = 'gb'
             expected_identifier = {
               scheme: 'GB-COH',
@@ -292,10 +294,12 @@ RSpec.describe BodsMapper do
 
         context 'DK-CVR identifiers' do
           it 'adds a DK-CVR identifier for DK companies from the CVR register' do
-            entity.identifiers = [{
-              'document_id' => 'Denmark CVR',
-              'company_number' => '1234567',
-            }]
+            entity.identifiers = [
+              {
+                'document_id' => 'Denmark CVR',
+                'company_number' => '1234567',
+              },
+            ]
             entity.jurisdiction_code = 'dk'
             expected_identifier = {
               scheme: 'DK-CVR',
@@ -306,10 +310,12 @@ RSpec.describe BodsMapper do
           end
 
           it "doesn't add a DK-CVR identifier for non-DK companies from the CVR" do
-            entity.identifiers = [{
-              'document_id' => 'DK CVR',
-              'company_number' => '1234567',
-            }]
+            entity.identifiers = [
+              {
+                'document_id' => 'DK CVR',
+                'company_number' => '1234567',
+              },
+            ]
             entity.jurisdiction_code = 'gb'
             non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
             expect(non_register_identifiers.size).to eq(1)
@@ -319,10 +325,12 @@ RSpec.describe BodsMapper do
 
         context 'SK-ORSR identifiers' do
           it 'adds a SK-ORSR identifier for SK companies from the PSP register' do
-            entity.identifiers = [{
-              'document_id' => 'Slovakia PSP Register',
-              'company_number' => '1234567',
-            }]
+            entity.identifiers = [
+              {
+                'document_id' => 'Slovakia PSP Register',
+                'company_number' => '1234567',
+              },
+            ]
             entity.jurisdiction_code = 'sk'
             expected_identifier = {
               scheme: 'SK-ORSR',
@@ -333,10 +341,12 @@ RSpec.describe BodsMapper do
           end
 
           it "doesn't add a SK-ORSR identifier for non-SK companies from the CVR" do
-            entity.identifiers = [{
-              'document_id' => 'Slovakia PSP Register',
-              'company_number' => '1234567',
-            }]
+            entity.identifiers = [
+              {
+                'document_id' => 'Slovakia PSP Register',
+                'company_number' => '1234567',
+              },
+            ]
             entity.jurisdiction_code = 'gb'
             non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
             expect(non_register_identifiers.size).to eq(1)
@@ -346,10 +356,12 @@ RSpec.describe BodsMapper do
 
         context 'UA-EDR identifiers' do
           it 'adds a UA-EDR identifier for UA companies from the EDR register' do
-            entity.identifiers = [{
-              'document_id' => 'Ukraine EDR',
-              'company_number' => '1234567',
-            }]
+            entity.identifiers = [
+              {
+                'document_id' => 'Ukraine EDR',
+                'company_number' => '1234567',
+              },
+            ]
             entity.jurisdiction_code = 'ua'
             expected_identifier = {
               scheme: 'UA-EDR',
@@ -360,10 +372,12 @@ RSpec.describe BodsMapper do
           end
 
           it "doesn't add a UA-EDR identifier for non-UA companies from the EDR" do
-            entity.identifiers = [{
-              'document_id' => 'Ukraine EDR',
-              'company_number' => '1234567',
-            }]
+            entity.identifiers = [
+              {
+                'document_id' => 'Ukraine EDR',
+                'company_number' => '1234567',
+              },
+            ]
             entity.jurisdiction_code = 'gb'
             non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
             expect(non_register_identifiers.size).to eq(1)
@@ -372,10 +386,12 @@ RSpec.describe BodsMapper do
         end
 
         it "doesn't add any Org-Id identifiers for EITI data" do
-          entity.identifiers = [{
-            'document_id' => 'EITI Structured Data - Mauritania',
-            'company_number' => '1234567',
-          }]
+          entity.identifiers = [
+            {
+              'document_id' => 'EITI Structured Data - Mauritania',
+              'company_number' => '1234567',
+            },
+          ]
           entity.jurisdiction_code = 'gb'
           non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
           expect(non_register_identifiers.size).to eq(1)
@@ -385,11 +401,13 @@ RSpec.describe BodsMapper do
 
       context 'less official identifiers' do
         it 'adds self-link and registration number identifiers for parent UK companies from the PSC register' do
-          entity.identifiers = [{
-            'document_id' => 'GB PSC Snapshot',
-            'company_number' => '56789',
-            'link' => 'https://example.com/1234567/56789',
-          }]
+          entity.identifiers = [
+            {
+              'document_id' => 'GB PSC Snapshot',
+              'company_number' => '56789',
+              'link' => 'https://example.com/1234567/56789',
+            },
+          ]
           entity.jurisdiction_code = 'gb'
           expected_identifiers = [
             {
@@ -406,11 +424,13 @@ RSpec.describe BodsMapper do
         end
 
         it "adds self-link and registration number identifiers for non-UK companies from the PSC register" do
-          entity.identifiers = [{
-            'document_id' => 'GB PSC Snapshot',
-            'company_number' => '56789',
-            'link' => 'https://example.com/1234567/56789',
-          }]
+          entity.identifiers = [
+            {
+              'document_id' => 'GB PSC Snapshot',
+              'company_number' => '56789',
+              'link' => 'https://example.com/1234567/56789',
+            },
+          ]
           entity.jurisdiction_code = 'de'
           expected_identifiers = [
             {
@@ -427,10 +447,12 @@ RSpec.describe BodsMapper do
         end
 
         it 'adds named-scheme identifiers for foreign companies in SK data' do
-          entity.identifiers = [{
-            'document_id' => 'SK Register Partnerov Verejného Sektora',
-            'company_number' => '56789',
-          }]
+          entity.identifiers = [
+            {
+              'document_id' => 'SK Register Partnerov Verejného Sektora',
+              'company_number' => '56789',
+            },
+          ]
           entity.jurisdiction_code = 'gb'
           expected_identifier = {
             schemeName: 'SK Register Partnerov Verejného Sektora',
@@ -440,10 +462,12 @@ RSpec.describe BodsMapper do
         end
 
         it 'adds a named scheme identifier for other less-official identifiers' do
-          entity.identifiers = [{
-            'document_id' => 'EITI Structured Data - Mauritania',
-            'company_number' => '1234567',
-          }]
+          entity.identifiers = [
+            {
+              'document_id' => 'EITI Structured Data - Mauritania',
+              'company_number' => '1234567',
+            },
+          ]
           entity.jurisdiction_code = 'gb'
           expected_identifier = {
             schemeName: 'MR EITI 2013-2015 beneficial ownership pilot',
@@ -612,10 +636,12 @@ RSpec.describe BodsMapper do
         end
 
         it 'adds historical identifiers for DK people to maintain compatibility' do
-          person.identifiers = [{
-            'document_id' => 'Denmark CVR',
-            'beneficial_owner_id' => '1234567',
-          }]
+          person.identifiers = [
+            {
+              'document_id' => 'Denmark CVR',
+              'beneficial_owner_id' => '1234567',
+            },
+          ]
           expected_identifier = {
             scheme: 'MISC-Denmark CVR',
             schemeName: 'Not a valid Org-Id scheme, provided for backwards compatibility',
@@ -625,11 +651,13 @@ RSpec.describe BodsMapper do
         end
 
         it 'adds historical identifiers for SK people to maintain compatibility' do
-          person.identifiers = [{
-            'document_id' => 'Slovakia PSP Register',
-            # Note this is numeric but gets coerced
-            'beneficial_owner_id' => 1_234_567,
-          }]
+          person.identifiers = [
+            {
+              'document_id' => 'Slovakia PSP Register',
+              # Note this is numeric but gets coerced
+              'beneficial_owner_id' => 1_234_567,
+            },
+          ]
           expected_identifier = {
             scheme: 'MISC-Slovakia PSP Register',
             schemeName: 'Not a valid Org-Id scheme, provided for backwards compatibility',
@@ -640,10 +668,12 @@ RSpec.describe BodsMapper do
 
         context 'less official identifiers' do
           it 'adds a beneficial owner id for people from DK data' do
-            person.identifiers = [{
-              'document_id' => 'Denmark CVR',
-              'beneficial_owner_id' => '1234567',
-            }]
+            person.identifiers = [
+              {
+                'document_id' => 'Denmark CVR',
+                'beneficial_owner_id' => '1234567',
+              },
+            ]
             expected_identifier = {
               schemeName: 'DK Centrale Virksomhedsregister',
               id: '1234567',
@@ -652,11 +682,13 @@ RSpec.describe BodsMapper do
           end
 
           it 'adds a beneficial owner id for people from SK data' do
-            person.identifiers = [{
-              'document_id' => 'Slovakia PSP Register',
-              # Note this is numeric but gets coerced
-              'beneficial_owner_id' => 1_234_567,
-            }]
+            person.identifiers = [
+              {
+                'document_id' => 'Slovakia PSP Register',
+                # Note this is numeric but gets coerced
+                'beneficial_owner_id' => 1_234_567,
+              },
+            ]
             expected_identifier = {
               schemeName: 'SK Register Partnerov Verejného Sektora',
               id: '1234567',
@@ -665,11 +697,13 @@ RSpec.describe BodsMapper do
           end
 
           it 'add a composite name/company_number id for people from UA data' do
-            person.identifiers = [{
-              'document_id' => 'Ukraine EDR',
-              'company_number' => '1234567',
-              'name' => 'Test Person',
-            }]
+            person.identifiers = [
+              {
+                'document_id' => 'Ukraine EDR',
+                'company_number' => '1234567',
+                'name' => 'Test Person',
+              },
+            ]
             expected_identifier = {
               schemeName: 'UA Edinyy Derzhavnyj Reestr',
               id: '1234567-Test Person',
@@ -678,10 +712,12 @@ RSpec.describe BodsMapper do
           end
 
           it 'adds a self link id for people from PSC data' do
-            person.identifiers = [{
-              'document_id' => 'GB PSC Snapshot',
-              'link' => '/company/0123456/persons-with-significant-control/individual/hijklmn12343',
-            }]
+            person.identifiers = [
+              {
+                'document_id' => 'GB PSC Snapshot',
+                'link' => '/company/0123456/persons-with-significant-control/individual/hijklmn12343',
+              },
+            ]
             expected_identifier = {
               schemeName: 'GB Persons Of Significant Control Register',
               id: '/company/0123456/persons-with-significant-control/individual/hijklmn12343',
@@ -690,10 +726,12 @@ RSpec.describe BodsMapper do
           end
 
           it 'adds a named scheme identifier for other less-official identifiers' do
-            person.identifiers = [{
-              'document_id' => 'EITI Structured Data - Madagascar',
-              'name' => 'Test Person',
-            }]
+            person.identifiers = [
+              {
+                'document_id' => 'EITI Structured Data - Madagascar',
+                'name' => 'Test Person',
+              },
+            ]
             expected_identifier = {
               schemeName: 'MG EITI 2013-2015 beneficial ownership pilot',
               id: 'Test Person',
@@ -1021,11 +1059,13 @@ RSpec.describe BodsMapper do
 
       context 'when the interests are a Hash' do
         before do
-          relationship.interests = [{
-            'type' => 'shareholding',
-            'share_min' => 10,
-            'share_max' => 20,
-          }]
+          relationship.interests = [
+            {
+              'type' => 'shareholding',
+              'share_min' => 10,
+              'share_max' => 20,
+            },
+          ]
         end
 
         it 'maps the type from the interest' do

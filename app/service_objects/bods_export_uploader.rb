@@ -10,7 +10,7 @@ class BodsExportUploader
 
     @bucket = ENV['BODS_EXPORT_S3_BUCKET_NAME']
     @s3_folder = 'public/exports'
-    @s3_client = Aws::S3::Client.new(
+    @s3_adapter = Rails.application.config.s3_adapter.new(
       region: 'eu-west-1',
       access_key_id: ENV['BODS_EXPORT_AWS_ACCESS_KEY_ID'],
       secret_access_key: ENV['BODS_EXPORT_AWS_SECRET_ACCESS_KEY'],
@@ -43,11 +43,11 @@ class BodsExportUploader
   end
 
   def download_from_s3(filename)
-    local_file = File.join(@local_folder, filename)
-    s3 = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{filename}", client: @s3_client)
-    s3.download_file(local_file)
-  rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::NotFound
-    Rails.logger.warn("[#{self.class.name}] File #{@s3_folder}/#{filename} does not existing in #{@bucket}, skipping")
+    local_path = File.join(@local_folder, filename)
+    s3_path = "#{@s3_folder}/#{filename}"
+    s3_adapter.download_from_s3(s3_bucket: @bucket, s3_path: s3_path, local_path: local_path)
+  rescue Rails.application.config.s3_adapter::Errors::NoSuchKey
+    Rails.logger.warn("[#{self.class.name}] File #{s3_path} does not existing in #{@bucket}, skipping")
   end
 
   def append_new_statements
@@ -77,14 +77,12 @@ class BodsExportUploader
   end
 
   def upload_to_s3(filename)
-    s3 = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{filename}", client: @s3_client)
-    s3.upload_file(File.join(@local_folder, filename))
+    local_path = File.join(@local_folder, filename)
+    s3_adapter.upload_to_s3(s3_bucket: @bucket, s3_path: "#{@s3_folder}/#{filename}", local_path: local_path)
   end
 
   def copy_file_in_s3(from, to)
-    s3_from = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{from}", client: @s3_client)
-    s3_to = Aws::S3::Object.new(@bucket, "#{@s3_folder}/#{to}", client: @s3_client)
-    s3_from.copy_to(s3_to)
+    s3_adapter.copy_file_in_s3(s3_bucket: @bucket, s3_path_from: "#{@s3_folder}/#{from}", s3_path_to: "#{@s3_folder}/#{to}")
   end
 
   def complete_export
@@ -92,6 +90,8 @@ class BodsExportUploader
   end
 
   private
+
+  attr_reader :s3_adapter
 
   def seen_statement_id?(statement_id)
     @redis.sismember(@appended_statements_set, statement_id)

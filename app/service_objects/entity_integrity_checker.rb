@@ -13,7 +13,7 @@ class EntityIntegrityChecker
 
       result = check entity, &block
 
-      result.keys.each { |k| stats[k] += 1 }
+      result.each_key { |k| stats[k] += 1 }
     end
 
     Rails.logger.info "[#{self.class.name}] check_all finished with stats: #{stats.to_json}"
@@ -30,8 +30,8 @@ class EntityIntegrityChecker
       no_company_number_at_all
       multiple_company_numbers
       no_relationships
-    ].each_with_object({}) do |c, acc|
-      acc[c] = send("check_#{c}", entity)
+    ].index_with do |c|
+      send("check_#{c}", entity)
     end.compact
 
     unless result.empty?

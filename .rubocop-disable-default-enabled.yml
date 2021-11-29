@@ -13,7 +13,7 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 
 Metrics/MethodLength:
@@ -38,4 +38,7 @@ Style/StringLiterals:
   Enabled: false
 
 Style/WhileUntilModifier:
+  Enabled: false
+
+Rails/WhereExists:
   Enabled: false
