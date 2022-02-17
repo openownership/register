@@ -3,7 +3,7 @@ The CVR Register data is publicly and freely available in two formats:
 - [Searchable online](https://datacvr.virk.dk/data/) by company name, number,
   address, person name, etc
 - [API access](https://datacvr.virk.dk/artikel/system-til-system-adgang-til-cvr-data)
-  via ElasticSearch.
+  via ElasticSearch
 
 The Danish Business Authority withholds API data relating to ‘entities protected
 against unsolicited advertising’. This data is only available to API users if
