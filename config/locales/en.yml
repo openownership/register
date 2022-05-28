@@ -47,7 +47,7 @@ en:
       grouping_note: "These owners have been grouped together because they have exactly the same name."
       grouping_note_html: "<span class='grouping-note-label'>Note:</span> These owners have been grouped together because they have exactly the same name. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
       view_as_graph: View as graph
-      download_bods: Download BODS json
+      download_bods: Download BODS JSON
       company_name_missing: ‹Company name missing›
       person_name_missing: ‹Person name missing›
       merged_people: Merged people
@@ -69,7 +69,7 @@ en:
       data_availability_title: Data availability and license
       links_title: Links
       news_title: News
-      news_fallback_text: Tweets curated by OpenOwnership
+      news_fallback_text: Tweets curated by Open Ownership
       overview_title: Overview, definitions, thresholds
       source_url_link: 'Original source data'
       statistics_title: Ownership transparency performance monitoring
@@ -83,7 +83,7 @@ en:
       footnote_html: '<a href="https://www.gov.uk/government/publications/incorporated-companies-in-the-uk-january-to-march-2019/incorporated-companies-in-the-uk-january-to-march-2019">Companies House statistics, March 2019</a>: The total number includes active and dormant companies (‘effective’), as well as those in the process of dissolution (non-effective). It excludes dissolved companies.'
     register_total:
       title: Total non-dissolved companies from the national UBO Register in the OpenOwnership register
-      footnote_html: The OpenOwnership Register only contains data on companies that are registered on the PSC Register.
+      footnote_html: The Open Ownership Register only contains data on companies that are registered on the PSC Register.
     psc_no_owner:
       title: Companies with missing UBO declaration
     psc_unknown_owner:
@@ -98,7 +98,7 @@ en:
       title: Companies with RLE in a secrecy jurisdiction
       footnote_html: Countries scoring 60 or above on the <a href="https://www.financialsecrecyindex.com/introduction/fsi-2018-results">Financial Secrecy Index 2018</a>
     dissolved:
-      title: Total dissolved companies from the national UBO Register in the OpenOwnership register
+      title: Total dissolved companies from the national UBO Register in the Open Ownership register
   devise:
     confirmations:
       new:
@@ -205,7 +205,7 @@ en:
       title_html: "%{source} to %{target}"
   searches:
     show:
-      blurb_html: OpenOwnership is a new platform to collect and publish %{bo_link} to fight corruption and crime and improve business integrity.<br />%{more_info_link}
+      blurb_html: Open Ownership is a new platform to collect and publish %{bo_link} to fight corruption and crime and improve business integrity.<br />%{more_info_link}
       bo_link_text: beneficial ownership
       more_info_link_text: More info
       legal-entity_count: Currently showing %{count} companies
@@ -261,11 +261,11 @@ en:
   submission_mailer:
     submission_approved:
       subject: Your submission was approved
-      approval: "Thank you for submitting your information to the OpenOwnership Register. We're pleased to notify you that your submission has been approved and is now available on the Register."
+      approval: "Thank you for submitting your information to the Open Ownership Register. We're pleased to notify you that your submission has been approved and is now available on the Register."
       view: View your data here
     submission_approval_requested:
       subject: A user has requested approval for their submission
-      approval: "A user on the OpenOwnership Register has requested that you approve their submission."
+      approval: "A user on the Open Ownership Register has requested that you approve their submission."
       view: View the submission here
 
   # From https://github.com/companieshouse/api-enumerations/blob/develop/psc_descriptions.yml
