@@ -43,6 +43,9 @@ gem 'coderay'
 gem 'geokit'
 gem 'invisible_captcha'
 gem 'rexml'
+gem 'net-smtp', require: false
+gem 'net-imap', require: false
+gem 'net-pop', require: false
 
 group :development, :test do
   gem 'byebug'
