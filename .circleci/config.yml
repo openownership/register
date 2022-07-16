@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.3.0
 jobs:
   build:
     parallelism: 1
@@ -6,7 +8,7 @@ jobs:
 
     docker:
 
-      - image: circleci/ruby:3.0.2-node-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
@@ -15,13 +17,21 @@ jobs:
 
       - image: mongo:4.4.1
 
-      - image: elasticsearch:6.6.0
+      - image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+        environment:
+          - 'discovery.type=single-node'
+          - 'cluster.name=register-elasticsearch'
+          - 'bootstrap.memory_lock=true'
+          - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
 
       - image: circleci/redis:4.0.9-alpine
 
     steps:
 
       - checkout
+      
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
 
       # Which version of bundler?
       - run:
@@ -74,6 +84,7 @@ jobs:
           command: |
               python3 -m venv venv
               source ./venv/bin/activate
+              pip3 install wheel
               pip3 install -r requirements.txt
               deactivate
 

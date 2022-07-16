@@ -1,0 +1,17 @@
+{
+  "name" : "eu-north-1c-i-0c6d95142a84652a4",
+  "cluster_name" : "Erst.Distribution.AWS.Prod.Cluster",
+  "cluster_uuid" : "yASCdAbSQsC0iP5f6tG2mg",
+  "version" : {
+    "number" : "6.8.16",
+    "build_flavor" : "default",
+    "build_type" : "zip",
+    "build_hash" : "1f62092",
+    "build_date" : "2021-05-21T19:27:57.985321Z",
+    "build_snapshot" : false,
+    "lucene_version" : "7.7.3",
+    "minimum_wire_compatibility_version" : "5.6.0",
+    "minimum_index_compatibility_version" : "5.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}

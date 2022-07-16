@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe DkClient do
-  let(:elasticsearch_client) { instance_double('Elasticsearch::Transport::Client') }
+  let(:elasticsearch_client) { instance_double('Elasticsearch::Client') }
 
   before do
     allow(Elasticsearch::Client).to receive(:new).and_return(elasticsearch_client)

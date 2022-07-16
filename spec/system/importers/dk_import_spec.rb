@@ -6,6 +6,7 @@ RSpec.describe 'DK Import' do
 
   let(:data_source) { create(:dk_data_source) }
 
+  let(:dk_base_api_url) { 'http://distribution.virk.dk/' }
   let(:dk_api_url) { 'http://distribution.virk.dk/cvr-permanent/deltager/_search?scroll=10m' }
   let(:dk_api_scroll_url) { "http://distribution.virk.dk/_search/scroll" }
 
@@ -36,6 +37,7 @@ RSpec.describe 'DK Import' do
     ]
   end
 
+  let(:base_api_response) { file_fixture('dk_bo_api_base_response.json').read }
   let(:api_response) { file_fixture('dk_bo_api_response.json').read }
   let(:end_api_response) { file_fixture('dk_bo_api_response_end.json').read }
 
@@ -59,13 +61,19 @@ RSpec.describe 'DK Import' do
   before do
     Entity.__elasticsearch__.create_index! force: true
 
-    stub_request(:get, dk_api_url)
+    stub_request(:get, dk_base_api_url)
+      .to_return(
+        body: base_api_response,
+        headers: { 'Content-Type': 'application/json' },
+      )
+
+    stub_request(:post, dk_api_url)
       .to_return(
         body: api_response,
         headers: { 'Content-Type': 'application/json' },
       )
 
-    stub_request(:get, dk_api_scroll_url)
+    stub_request(:post, dk_api_scroll_url)
       .to_return(
         body: end_api_response,
         headers: { 'Content-Type': 'application/json' },
