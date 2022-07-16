@@ -1,6 +1,6 @@
 {
   "name": "openownership-register",
-  "stack": "heroku-18",
+  "stack": "heroku-22",
   "env": {
     "ADMIN_BASIC_AUTH": {
       "required": true
@@ -84,7 +84,7 @@
     {
       "plan": "searchbox:starter",
       "options": {
-        "es_version": "6"
+        "es_version": "7"
       }
     },
     "heroku-redis:hobby-dev",
