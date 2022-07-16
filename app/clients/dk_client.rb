@@ -3,7 +3,9 @@ class DkClient
   SCROLL_DURATION = '10m'.freeze
 
   def initialize(username, password)
-    @client = Elasticsearch::Client.new url: "http://#{username}:#{password}@distribution.virk.dk"
+    @client = Elasticsearch::Client.new(
+      url: "http://#{username}:#{password}@distribution.virk.dk:80",
+    )
   end
 
   def all_records

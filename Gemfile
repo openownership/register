@@ -16,7 +16,8 @@ gem 'webpacker'
 gem 'mongoid'
 gem 'kaminari'
 gem 'kaminari-mongoid'
-gem 'elasticsearch-model', '~> 6.1.1'
+gem 'elasticsearch-model', '=7.1'
+gem 'elasticsearch', '=7.10.1'
 gem 'net-http-persistent', '~> 4.0.1'
 gem 'parallel'
 gem 'rollbar'
@@ -43,6 +44,9 @@ gem 'coderay'
 gem 'geokit'
 gem 'invisible_captcha'
 gem 'rexml'
+gem 'net-smtp', require: false
+gem 'net-imap', require: false
+gem 'net-pop', require: false
 
 group :development, :test do
   gem 'byebug'

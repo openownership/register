@@ -11,7 +11,7 @@ services:
     restart: always
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
     volumes:
       - 'es_data:/usr/share/elasticsearch/data'
     environment:
@@ -19,6 +19,7 @@ services:
       - 'cluster.name=register-elasticsearch'
       - 'bootstrap.memory_lock=true'
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - 'xpack.security.enabled=false'
     ports:
       - 9200:9200
     restart: always
