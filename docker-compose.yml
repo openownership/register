@@ -19,6 +19,7 @@ services:
       - 'cluster.name=register-elasticsearch'
       - 'bootstrap.memory_lock=true'
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - 'xpack.security.enabled=false'
     ports:
       - 9200:9200
     restart: always
