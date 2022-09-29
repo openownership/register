@@ -1,3 +1,38 @@
+GIT
+  remote: git@github.com:openownership/register-common.git
+  revision: c124210c203b85157e1dd0cb58037a420fec4c0f
+  specs:
+    register_common (0.1.0)
+      activesupport (>= 6, < 8)
+      aws-sdk-athena
+      aws-sdk-firehose
+      aws-sdk-kinesis
+      aws-sdk-s3
+      dotenv
+      faraday (>= 1, < 2)
+      faraday_middleware (>= 1, < 2)
+      net-http-persistent
+      nokogiri
+      redis (>= 3)
+      rubyzip (>= 2, < 3)
+
+GIT
+  remote: git@github.com:openownership/register-sources-oc.git
+  revision: 2629879b378542632c81a65030c2e86890c5cfd2
+  specs:
+    register_sources_oc (0.1.0)
+      activesupport (>= 6, < 8)
+      countries (>= 4, < 5)
+      dotenv
+      dry-struct (>= 1, < 2)
+      dry-types (>= 1, < 2)
+      elasticsearch (>= 7.10, < 8)
+      faraday (>= 1, < 2)
+      faraday_middleware (>= 1, < 2)
+      iso8601
+      net-http-persistent
+      rexml
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -71,11 +106,20 @@ GEM
       execjs (~> 2)
     aws-eventstream (1.2.0)
     aws-partitions (1.640.0)
+    aws-sdk-athena (1.56.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-core (3.158.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1, >= 1.6.1)
+    aws-sdk-firehose (1.48.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-kinesis (1.41.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-kms (1.58.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
@@ -144,6 +188,24 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
       ruby2_keywords
+    dry-container (0.11.0)
+      concurrent-ruby (~> 1.0)
+    dry-core (0.8.1)
+      concurrent-ruby (~> 1.0)
+    dry-inflector (0.3.0)
+    dry-logic (1.2.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.5, >= 0.5)
+    dry-struct (1.4.0)
+      dry-core (~> 0.5, >= 0.5)
+      dry-types (~> 1.5)
+      ice_nine (~> 0.11)
+    dry-types (1.5.1)
+      concurrent-ruby (~> 1.0)
+      dry-container (~> 0.3)
+      dry-core (~> 0.5, >= 0.5)
+      dry-inflector (~> 0.1, >= 0.1.2)
+      dry-logic (~> 1.0, >= 1.0.2)
     elasticsearch (7.10.1)
       elasticsearch-api (= 7.10.1)
       elasticsearch-transport (= 7.10.1)
@@ -220,6 +282,7 @@ GEM
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     i18n_data (0.13.1)
+    ice_nine (0.11.2)
     invisible_captcha (2.0.0)
       rails (>= 5.0)
     iso8601 (0.13.0)
@@ -528,6 +591,8 @@ DEPENDENCIES
   rails (~> 6.1.4)
   rails-controller-testing (~> 1.0)
   redcarpet (~> 3.5)
+  register_common!
+  register_sources_oc!
   rexml (~> 3.2)
   roadie-rails (~> 2.2.0)
   rollbar (~> 3.3)
