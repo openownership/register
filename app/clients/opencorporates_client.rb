@@ -28,7 +28,7 @@ class OpencorporatesClient
       services: [
         { name: "bulk", service: RegisterSourcesOc::Services::BulkDataCompanyService.new },
         { name: "api", service: api_service },
-      ]
+      ],
     )
   end
 
