@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-oc.git
-  revision: 2629879b378542632c81a65030c2e86890c5cfd2
+  revision: 7b2af45a1533304f640c41d7fc1be3cfb39b36fc
   specs:
     register_sources_oc (0.1.0)
       activesupport (>= 6, < 8)
