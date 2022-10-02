@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:openownership/register-common.git
+  remote: https://github.com/openownership/register-common.git
   revision: c124210c203b85157e1dd0cb58037a420fec4c0f
   specs:
     register_common (0.1.0)
@@ -17,7 +17,7 @@ GIT
       rubyzip (>= 2, < 3)
 
 GIT
-  remote: git@github.com:openownership/register-sources-oc.git
+  remote: https://github.com/openownership/register-sources-oc.git
   revision: 2629879b378542632c81a65030c2e86890c5cfd2
   specs:
     register_sources_oc (0.1.0)
