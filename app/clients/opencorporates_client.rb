@@ -1,6 +1,10 @@
 require 'net/http/persistent'
 require 'json'
 
+if ENV['OC_BULK_DATA_ENABLED']
+  require 'register_sources_oc/services/company_service'
+end
+
 class OpencorporatesClient
   API_VERSION = 'v0.4.6'.freeze
 
@@ -10,12 +14,21 @@ class OpencorporatesClient
   end
 
   def self.new_for_imports
-    new(
+    api_service = new(
       api_token: Rails.application.config.oc_api.token_protected,
       open_timeout: 30.0,
       read_timeout: 60.0,
       enable_retries: true,
       raise_timeouts: false,
+    )
+
+    return api_service unless ENV['OC_BULK_DATA_ENABLED']
+
+    RegisterSourcesOc::Services::CompanyService.new(
+      services: [
+        { name: "bulk", service: RegisterSourcesOc::Services::BulkDataCompanyService.new },
+        { name: "api", service: api_service },
+      ],
     )
   end
 
