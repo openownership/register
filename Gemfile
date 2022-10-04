@@ -3,7 +3,7 @@ ruby File.read(".ruby-version").strip
 
 gem 'addressable', '~> 2.8'
 gem 'rails', '~> 6.1.4'
-gem 'puma', '~> 5.5.2'
+gem 'puma', '~> 5.6.4'
 gem 'sprockets-rails', '~> 3.4'
 gem 'sprockets', '~> 4.1'
 gem 'sass-rails', '~> 6.0.0'
