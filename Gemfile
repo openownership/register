@@ -30,7 +30,7 @@ gem 'aws-sdk-s3', '~> 1.105.1'
 gem 'rubyzip', '~> 2.3.2', require: false
 gem 'twitter_cldr', '~> 6.7.0'
 gem 'draper', '~> 4.0.2'
-gem 'sidekiq', '~> 6.3.1'
+gem 'sidekiq', '~> 6.4.0'
 gem 'memoist', '~> 0.16.2'
 gem 'rack-attack', '~> 6.5.0'
 gem 'faraday', '~> 1.9.3'
