@@ -12,7 +12,8 @@
     "rails-ujs": "^5.2.6",
     "serialize-javascript": "^6.0.0",
     "string-to-color": "^2.2.2",
-    "tippy.js": "^4.3.5"
+    "tippy.js": "^4.3.5",
+    "webpack": "~4.46.0"
   },
   "devDependencies": {
     "bootstrap.native": "^4.0.7",
@@ -23,7 +24,6 @@
     "jest": "^27.3.1",
     "jest-canvas-mock": "^2.3.1",
     "jest-environment-jsdom": "^27.3.1",
-    "webpack": "~4.37.0",
     "webpack-dev-server": "^4.5.0"
   },
   "scripts": {
