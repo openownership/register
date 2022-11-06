@@ -250,7 +250,7 @@ RSpec.describe PscImporter do
       expect(Relationship.count).to eq(0)
     end
 
-    ['individual', 'corporate-entity', 'legal-person', 'super-secure'].each do |bo_kind|
+    %w[individual corporate-entity legal-person super-secure].each do |bo_kind|
       it "ignores #{bo_kind}-beneficial-owner entries" do
         subject.process_records(psc_json_fixture("psc_#{bo_kind}-beneficial-owner.json"))
 
