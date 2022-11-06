@@ -41,6 +41,10 @@ class PscImporter
               "record: #{raw_record.id}"
         Rails.logger.warn msg
       end
+    when /(individual|corporate-entity|legal-person|super-secure)-beneficial-owner/
+      msg = "Skipping PSC record kind: #{record['data']['kind']} for #{raw_record.id}"
+      Rails.logger.warn msg
+      :ignore
     else
       raise "unexpected kind: #{record['data']['kind']}"
     end
