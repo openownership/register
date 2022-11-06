@@ -3,27 +3,27 @@
     "node": "18.x"
   },
   "dependencies": {
-    "@rails/webpacker": "~5.4.3",
-    "acorn": "~8.5.0",
-    "cytoscape": "~3.20.0",
-    "cytoscape-dagre": "~2.3.2",
-    "cytoscape-popper": "~2.0.0",
-    "minimist": "~1.2.5",
-    "rails-ujs": "~5.2.6",
-    "serialize-javascript": "~6.0.0",
-    "string-to-color": "~2.2.2",
-    "tippy.js": "~4.3.5"
+    "@rails/webpacker": "^5.4.3",
+    "acorn": "^8.5.0",
+    "cytoscape": "^3.20.0",
+    "cytoscape-dagre": "^2.3.2",
+    "cytoscape-popper": "^2.0.0",
+    "minimist": "^1.2.5",
+    "rails-ujs": "^5.2.6",
+    "serialize-javascript": "^6.0.0",
+    "string-to-color": "^2.2.2",
+    "tippy.js": "^4.3.5"
   },
   "devDependencies": {
-    "bootstrap.native": "~4.0.7",
-    "eslint": "~8.2.0",
-    "eslint-config-airbnb-base": "~15.0.0",
-    "eslint-plugin-import": "~2.25.3",
-    "eslint-plugin-jest": "~25.2.4",
-    "jest": "~27.3.1",
-    "jest-canvas-mock": "~2.3.1",
-    "jest-environment-jsdom": "~27.3.1",
-    "webpack-dev-server": "~4.5.0"
+    "bootstrap.native": "^4.0.7",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^25.2.4",
+    "jest": "^27.3.1",
+    "jest-canvas-mock": "^2.3.1",
+    "jest-environment-jsdom": "^27.3.1",
+    "webpack-dev-server": "^4.5.0"
   },
   "scripts": {
     "test": "jest",
