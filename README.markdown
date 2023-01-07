@@ -7,7 +7,7 @@ runs on Heroku.
 
 This README mainly provides instructions for running and maintaining the
 live website. If you want to reuse the code for other projects, please feel
-free to contact us on: register@openownership.org and we'd be happy to advise.
+free to contact us on: tech@openownership.org and we'd be happy to advise.
 
 ## Contents
 
