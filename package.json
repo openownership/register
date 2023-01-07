@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "@rails/webpacker": "^5.4.3",
     "acorn": "^8.5.0",
