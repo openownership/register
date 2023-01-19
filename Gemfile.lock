@@ -254,7 +254,7 @@ GEM
     font-awesome-sass (4.7.0)
       sass (>= 3.2)
     geokit (1.13.1)
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     haml (5.2.2)
       temple (>= 0.8.0)
@@ -311,7 +311,7 @@ GEM
     memoist (0.16.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    minitest (5.16.3)
+    minitest (5.17.0)
     mongo (2.17.3)
       bson (>= 4.8.2, < 5.0.0)
     mongoid (7.5.1)
@@ -529,7 +529,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     xxhash (0.5.0)
-    zeitwerk (2.6.1)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   x86_64-linux
