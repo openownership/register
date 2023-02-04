@@ -384,19 +384,6 @@ RSpec.describe BodsMapper do
             expect(non_register_identifiers.first[:scheme]).to be_nil
           end
         end
-
-        it "doesn't add any Org-Id identifiers for EITI data" do
-          entity.identifiers = [
-            {
-              'document_id' => 'EITI Structured Data - Mauritania',
-              'company_number' => '1234567',
-            },
-          ]
-          entity.jurisdiction_code = 'gb'
-          non_register_identifiers = subject[:identifiers].reject { |i| i[:schemeName] == 'OpenOwnership Register' }
-          expect(non_register_identifiers.size).to eq(1)
-          expect(non_register_identifiers.first[:scheme]).to be_nil
-        end
       end
 
       context 'less official identifiers' do
@@ -457,21 +444,6 @@ RSpec.describe BodsMapper do
           expected_identifier = {
             schemeName: 'SK Register Partnerov Verejného Sektora',
             id: '56789',
-          }
-          expect(subject[:identifiers]).to include(expected_identifier)
-        end
-
-        it 'adds a named scheme identifier for other less-official identifiers' do
-          entity.identifiers = [
-            {
-              'document_id' => 'EITI Structured Data - Mauritania',
-              'company_number' => '1234567',
-            },
-          ]
-          entity.jurisdiction_code = 'gb'
-          expected_identifier = {
-            schemeName: 'MR EITI 2013-2015 beneficial ownership pilot',
-            id: '1234567',
           }
           expect(subject[:identifiers]).to include(expected_identifier)
         end
@@ -696,21 +668,6 @@ RSpec.describe BodsMapper do
             expect(subject[:identifiers]).to include(expected_identifier)
           end
 
-          it 'add a composite name/company_number id for people from UA data' do
-            person.identifiers = [
-              {
-                'document_id' => 'Ukraine EDR',
-                'company_number' => '1234567',
-                'name' => 'Test Person',
-              },
-            ]
-            expected_identifier = {
-              schemeName: 'UA Edinyy Derzhavnyj Reestr',
-              id: '1234567-Test Person',
-            }
-            expect(subject[:identifiers]).to include(expected_identifier)
-          end
-
           it 'adds a self link id for people from PSC data' do
             person.identifiers = [
               {
@@ -721,20 +678,6 @@ RSpec.describe BodsMapper do
             expected_identifier = {
               schemeName: 'GB Persons Of Significant Control Register',
               id: '/company/0123456/persons-with-significant-control/individual/hijklmn12343',
-            }
-            expect(subject[:identifiers]).to include(expected_identifier)
-          end
-
-          it 'adds a named scheme identifier for other less-official identifiers' do
-            person.identifiers = [
-              {
-                'document_id' => 'EITI Structured Data - Madagascar',
-                'name' => 'Test Person',
-              },
-            ]
-            expected_identifier = {
-              schemeName: 'MG EITI 2013-2015 beneficial ownership pilot',
-              id: 'Test Person',
             }
             expect(subject[:identifiers]).to include(expected_identifier)
           end

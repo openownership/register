@@ -6,7 +6,7 @@ end
 
 class Relationship
   include Mongoid::Document
-  include Timestamps::UpdatedEvenOnUpsert
+  include Mongoid::Timestamps::Updated
   prepend SourceWithMasterEntity
 
   field :_id, type: Hash
@@ -39,22 +39,5 @@ class Relationship
       end
     end
     [source.id.to_s, target.id.to_s] + interest_types.sort
-  end
-
-  def upsert(options = {})
-    retried = false
-    begin
-      super
-    rescue Mongo::Error::OperationFailure => e
-      raise unless /E11000/.match(e.message) && !retried
-
-      # MongoDB can get a race condition with multiple upserts.
-      # In newer versions of Mongo (4.2+), errors like this are retried
-      # automatically, see: https://jira.mongodb.org/browse/SERVER-14322, but we
-      # have to do it manually for now.
-      retried = true
-      Rails.logger.info "[#{self.class.name}] Duplicate key exception found for #{id}, retrying"
-      retry
-    end
   end
 end

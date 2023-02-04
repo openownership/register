@@ -1,10 +1,12 @@
 class DataSourcesController < ApplicationController
+  DATA_SOURCE_REPOSITORY = Rails.application.config.data_source_repository
+
   def index
-    @data_sources = decorate DataSource.where(:overview.ne => nil)
+    @data_sources = decorate DATA_SOURCE_REPOSITORY.where_overview_present
   end
 
   def show
-    @data_source = DataSource.find(params[:id])
+    @data_source = DATA_SOURCE_REPOSITORY.find(params[:id])
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
     @overview_html = markdown.render(@data_source.overview || "")
     @data_availability_html = markdown.render(@data_source.data_availability || "")

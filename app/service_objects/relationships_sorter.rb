@@ -12,8 +12,6 @@ class RelationshipsSorter
     case first_obj
     when Relationship, InferredRelationship
       @relationships.sort_by { |r| [ended_time(r), r.target.name.to_s] }
-    when Submissions::Relationship
-      @relationships
     else
       raise ArgumentError, "Unexpected object detected - class: #{first_obj.class.name}"
     end

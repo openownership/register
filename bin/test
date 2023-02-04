@@ -4,9 +4,7 @@ set -e -o pipefail
 bin_folder=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$bin_folder/.."
 
-source ./venv/bin/activate
 bundle exec rspec --color --require spec_helper --format documentation spec
-deactivate
 yarn test
 bundle exec rubocop
 bundle exec haml-lint .

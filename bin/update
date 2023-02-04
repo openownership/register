@@ -10,11 +10,6 @@ bundle check || bundle install
 
 bin/yarn
 
-python3 -m venv venv
-source ./venv/bin/activate
-pip install -q -r requirements.txt
-deactivate
-
 echo "== Removing old logs and tempfiles =="
 bin/rails log:clear tmp:clear
 

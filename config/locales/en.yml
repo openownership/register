@@ -99,58 +99,6 @@ en:
       footnote_html: Countries scoring 60 or above on the <a href="https://www.financialsecrecyindex.com/introduction/fsi-2018-results">Financial Secrecy Index 2018</a>
     dissolved:
       title: Total dissolved companies from the national UBO Register in the Open Ownership register
-  devise:
-    confirmations:
-      new:
-        title: Resend confirmation instructions
-        header: Resend confirmation instructions
-        submit: Resend confirmation instructions
-    passwords:
-      edit:
-        title: Change your password
-        header: Change your password
-        minimum_password_length: (%{length} characters minimum)
-        new_password: New password
-        submit: Change my password
-      new:
-        title: Forgot your password?
-        header: Forgot your password?
-        submit: Send me reset password instructions
-    registrations:
-      edit:
-        title: My account
-        current_password_help: (we need your current password to confirm your changes)
-        header: My account
-        new_password:
-          leave_blank: (leave blank if you don't want to change it)
-          minimum_length: "%{length} characters minimum"
-        pending_reconfirmation: "Currently waiting confirmation for: %{email}"
-        submit: Update
-        destroy:
-          header: Delete your account
-          intro_html: If you want to delete your account you can do so here. We will remove all record of your submissions, draft and approved, but any data that has already included in the register will remain there, in accordance with <a href="/privacy#personal-information">our data retention policy</a>.
-          retention_html: If you would like your submitted data to be removed also, please consult <a href="/privacy#redaction">our privacy policy</a> to understand when we will do so and how to ask for us to remove it.
-          warning_html: Warning! There is no going back. Once you click this button all your data is gone and your account will be removed. We cannot retrieve it.
-          submit: Delete my account and all my submissions
-      new:
-        title: Sign up
-        email_help: (Please use your company email address)
-        header: Sign up
-        minimum_password_length: (%{length} characters minimum)
-        submit: Sign up
-        errors:
-          captcha: must be completed to prove you're not a robot
-    sessions:
-      new:
-        title: Sign in
-        header: Sign in
-        submit: Sign in
-    shared:
-      links:
-        new_session: Sign in
-        new_registration: Sign up
-        new_password: Forgot your password?
-        new_confirmation: Didn't receive confirmation instructions?
   helpers:
     entities:
       entity_attributes_snippet:
@@ -171,11 +119,6 @@ en:
         follow: Follow our work on
         home: Home
         feedback: Feedback
-        new_user_session: Sign in
-        destroy_user_session: Sign out
-        new_user_registration: Sign up
-        edit_user_registration: My account
-        submissions: Submit your data
   pages:
     terms_and_conditions:
       title: Terms & Conditions
@@ -253,20 +196,6 @@ en:
 
   circular_ownership_entity:
     name: circular ownership
-
-  tree:
-    help: Click and drag anywhere to change the view
-    zoom: Zoom in or out
-
-  submission_mailer:
-    submission_approved:
-      subject: Your submission was approved
-      approval: "Thank you for submitting your information to the Open Ownership Register. We're pleased to notify you that your submission has been approved and is now available on the Register."
-      view: View your data here
-    submission_approval_requested:
-      subject: A user has requested approval for their submission
-      approval: "A user on the Open Ownership Register has requested that you approve their submission."
-      view: View the submission here
 
   # From https://github.com/companieshouse/api-enumerations/blob/develop/psc_descriptions.yml
   statement-descriptions:

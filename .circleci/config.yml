@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     parallelism: 1
-    working_directory: ~/openownership/register
+    working_directory: ~/openownership/register-v2
 
     docker:
 
@@ -20,7 +20,7 @@ jobs:
       - image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
         environment:
           - 'discovery.type=single-node'
-          - 'cluster.name=register-elasticsearch'
+          - 'cluster.name=register-v2-elasticsearch'
           - 'bootstrap.memory_lock=true'
           - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
 
@@ -69,48 +69,6 @@ jobs:
             - ~/.cache/yarn
 
       - run:
-          name: Install python
-          command: |
-              sudo apt update
-              sudo apt-get install python3-pip python3-venv
-
-      # Restore pip cache
-      - restore_cache:
-          keys:
-            - app-pip-v4-{{ checksum "requirements.txt" }}
-
-      - run:
-          name: 'Pip Install'
-          command: |
-              python3 -m venv venv
-              source ./venv/bin/activate
-              pip3 install wheel
-              pip3 install -r requirements.txt
-              deactivate
-
-      # Store pip cache
-      - save_cache:
-          key: app-pip-v4-{{ checksum "requirements.txt" }}
-          paths:
-            - ./venv
-
-      # Restore NER models cache
-      - restore_cache:
-          keys:
-            - ua-edr-extractor-v2-{{ checksum "config/ua-edr-extractor.yml.erb" }}
-
-      - run:
-          name: Download NER models
-          command: '[[ -f /home/circleci/openownership/test-models.tar.gz ]] || wget --output-document=/home/circleci/openownership/test-models.tar.gz --quiet https://oo-register-production.s3-eu-west-1.amazonaws.com/ner-models/test-models.tar.gz'
-
-
-      # Store NER models cache
-      - save_cache:
-          key: ua-edr-extractor-v2-{{ checksum "config/ua-edr-extractor.yml.erb" }}
-          paths:
-            - /home/circleci/openownership/test-models.tar.gz
-
-      - run:
           name: Wait for MongoDB
           command: dockerize -wait tcp://localhost:27017 -timeout 1m
 
@@ -127,4 +85,3 @@ jobs:
           environment:
             RAILS_ENV: test
             RACK_ENV: test
-            UA_NER_MODELS: /home/circleci/openownership/test-models.tar.gz

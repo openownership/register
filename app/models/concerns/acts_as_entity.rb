@@ -8,7 +8,7 @@ module ActsAsEntity
 
   included do
     include Mongoid::Document
-    include Timestamps::UpdatedEvenOnUpsert
+    include Mongoid::Timestamps::Updated
 
     field :type, type: String
 

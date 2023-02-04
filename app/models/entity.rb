@@ -62,17 +62,6 @@ class Entity
     indexes :company_number, type: :keyword
   end
 
-  set_callback :update, :before, :set_self_updated_at
-  set_callback :upsert, :before, :set_self_updated_at
-
-  def self.find_or_unknown(id)
-    if id.to_s.include?('statement') || id.to_s.include?(UNKNOWN_ID_MODIFIER)
-      UnknownPersonsEntity.new(id: id)
-    else
-      find(id)
-    end
-  end
-
   def relationships_as_target
     if type == Types::NATURAL_PERSON
       []
@@ -91,73 +80,6 @@ class Entity
     end
   end
 
-  # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
-  # are found using their embeddeded identifiers instead of the _id field.
-  def upsert(options: {})
-    prepare_upsert(options) do
-      _upsert
-    end
-  end
-
-  def _upsert
-    selector = Entity.with_identifiers(identifiers).selector
-
-    attributes = as_document.except('_id', 'identifiers')
-
-    document = collection.find_one_and_update(
-      selector,
-      {
-        :$addToSet => {
-          identifiers: {
-            :$each => identifiers,
-          },
-        },
-        :$set => attributes,
-      },
-      upsert: true,
-      return_document: :after,
-    )
-
-    self.id = document.fetch('_id')
-
-    reload
-  rescue Mongo::Error::OperationFailure => e
-    raise unless /E11000/.match(e.message)
-
-    criteria = Entity.where(selector)
-    if criteria.count > 1
-      raise DuplicateEntitiesDetected.new(
-        "Unable to upsert entity due to #{identifiers} matching multiple documents",
-        criteria,
-      )
-    end
-
-    retry
-  end
-
-  def upsert_and_merge_duplicates!
-    upsert
-  rescue DuplicateEntitiesDetected => e
-    handle_duplicates!(e.criteria)
-    retry
-  end
-
-  def handle_duplicates!(criteria)
-    entities = criteria.entries
-
-    to_remove, to_keep = EntityMergeDecider.new(*entities).call
-
-    log_message = "Duplicate entities detected for selector: " \
-                  "#{criteria.selector} - attempting to merge entity A into " \
-                  "entity B. A = ID: #{to_remove._id}, name: " \
-                  "#{to_remove.name}, identifiers: #{to_remove.identifiers}; " \
-                  "B = ID: #{to_keep._id}, name: #{to_keep.name}, " \
-                  "identifiers: #{to_keep.identifiers};"
-    Rails.logger.info log_message
-
-    EntityMerger.new(to_remove, to_keep).call
-  end
-
   def as_indexed_json(_options = {})
     as_json(only: %i[name type lang_code company_number], methods: %i[name_transliterated country_code])
   end
@@ -169,55 +91,11 @@ class Entity
   OC_IDENTIFIER_KEYS = %w[jurisdiction_code company_number].freeze
   OC_IDENTIFIER_KEYS_SET = OC_IDENTIFIER_KEYS.to_set.freeze
 
-  def self.build_oc_identifier(data)
-    OC_IDENTIFIER_KEYS.each_with_object({}) do |k, h|
-      k_sym = k.to_sym
-      raise "Cannot build OC identifier - data is missing required key '#{k}' - data = #{data.inspect}" unless data.key?(k_sym)
-
-      h[k] = data[k_sym]
-    end
-  end
-
-  def add_oc_identifier(data)
-    identifiers << Entity.build_oc_identifier(data)
-  end
-
-  def oc_identifiers
-    identifiers.select { |i| oc_identifier? i }
-  end
-
-  def oc_identifier
-    identifiers.find { |i| oc_identifier? i }
-  end
-
   def oc_identifier?(identifier)
     identifier.keys.map(&:to_s).to_set == OC_IDENTIFIER_KEYS_SET
   end
 
-  def psc_self_link_identifier?(identifier)
-    identifier['document_id'] == 'GB PSC Snapshot' && identifier.key?('link')
-  end
-
-  def psc_self_link_identifiers
-    identifiers.select do |i|
-      psc_self_link_identifier? i
-    end
-  end
-
-  def set_self_updated_at
-    self.self_updated_at = Time.zone.now
-  end
-
   def all_ids
     [id] + merged_entity_ids
-  end
-end
-
-class DuplicateEntitiesDetected < StandardError
-  attr_reader :criteria
-
-  def initialize(msg, criteria)
-    super(msg)
-    @criteria = criteria
   end
 end

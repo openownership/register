@@ -34,26 +34,12 @@
                 %ul.nav.navbar-nav
                   %li.nav-item{ class: ("active" if current_page?(root_path)) }
                     = link_to t(".nav.home"), root_path, class: "nav-link"
-                  - if user_signed_in?
-                    %li.nav-item{ class: ("active" if submissions_section?) }
-                      = link_to t(".nav.submissions"), submissions_path, class: "nav-link"
                   %li.nav-item
                     %a.nav-link.external{ href: "https://www.openownership.org/", target: "_blank" }
                       = t(".nav.back_to_oo")
                   %li.nav-item
                     %a.nav-link.external{ href: feedback_form_url, target: "_blank" }
                       = t(".nav.feedback")
-                  .float-lg-right.sign-up-nav
-                    - if user_signed_in?
-                      %li.nav-item
-                        = link_to t(".nav.edit_user_registration"), edit_user_registration_path, class: "nav-link"
-                      %li.nav-item
-                        = link_to t(".nav.destroy_user_session"), destroy_user_session_path, method: :delete, class: "nav-link"
-                    - else
-                      %li.nav-item
-                        = link_to t(".nav.new_user_session"), new_user_session_path, class: "nav-link"
-                      %li.nav-item
-                        = link_to t(".nav.new_user_registration"), new_user_registration_path, class: "nav-link"
                   %span.float-lg-right.follow-nav
                     %li.nav-item.follow-label
                       = t(".nav.follow")
@@ -66,7 +52,7 @@
             .brand-header
               = link_to root_path do
                 = image_tag('OpenOwnership-Logo-Beta.svg', class: 'logo')
-            = render partial: 'shared/search_bar' unless submissions_section?
+            = render partial: 'shared/search_bar'
 
     .content-wrapper
       = render 'shared/messages'

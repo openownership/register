@@ -9,48 +9,21 @@ class BodsMapper
 
   SOURCE_TYPES_MAP = {
     'Denmark Central Business Register (Centrale Virksomhedsregister [CVR])' => %w[officialRegister],
-    'EITI pilot data' => %w[thirdParty primaryResearch],
     'OpenOwnership Register' => %w[thirdParty selfDeclaration],
     'Slovakia Public Sector Partners Register (Register partnerov verejného sektora)' => %w[officialRegister],
     'UK PSC Register' => %w[officialRegister],
-    'Ukraine Consolidated State Registry (Edinyy Derzhavnyj Reestr [EDR])' => %w[officialRegister],
   }.freeze
 
   SOURCE_NAMES_MAP = {
     'Denmark Central Business Register (Centrale Virksomhedsregister [CVR])' => 'DK Centrale Virksomhedsregister',
-    'EITI pilot data' => 'EITI 2013-2015 beneficial ownership pilot',
     'Slovakia Public Sector Partners Register (Register partnerov verejného sektora)' => 'SK Register Partnerov Verejného Sektora',
     'UK PSC Register' => 'GB Persons Of Significant Control Register',
-    'Ukraine Consolidated State Registry (Edinyy Derzhavnyj Reestr [EDR])' => 'UA Edinyy Derzhavnyj Reestr',
   }.freeze
 
   DOCUMENT_IDS_MAP = {
     'Denmark CVR' => 'DK Centrale Virksomhedsregister',
     'Slovakia PSP Register' => 'SK Register Partnerov Verejného Sektora',
     'GB PSC Snapshot' => 'GB Persons Of Significant Control Register',
-    'Ukraine EDR' => 'UA Edinyy Derzhavnyj Reestr',
-    "EITI Structured Data - Mauritania" => "MR EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Zambia" => "ZM EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Madagascar" => "MG EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Burkina Faso" => "BF EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Mali" => "ML EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Democratic Republic of Congo" => "CD EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Norway" => "NO EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Myanmar" => "MM EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Indonesia" => "ID EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Tanzania" => "TZ EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Liberia" => "LR EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Honduras" => "HN EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Nigeria" => "NG EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Seychelles" => "SC EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - UK" => "GB EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Ghana" => "GH EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Trinidad and Tobago" => "TT EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Afghanistan" => "AF EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Kyrgyz Republic" => "KG EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - CÃ´te d'Ivoire" => "CI EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Togo" => "TG EITI 2013-2015 beneficial ownership pilot",
-    "EITI Structured Data - Cameroon" => "CM EITI 2013-2015 beneficial ownership pilot",
   }.freeze
 
   REASONS_FOR_UNKNOWN_PERSON_STATEMENT = %w[
@@ -273,7 +246,7 @@ class BodsMapper
     return identifier['statement_id'] if identifier['statement_id']
 
     # These remaining ones (if not caught above) have to be combined with each
-    # other to make things fully unique. This applies to UA and EITI data.
+    # other to make things fully unique.
     id_parts = [
       identifier['company_number'],
       identifier['beneficial_owner_id'],

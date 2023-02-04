@@ -62,15 +62,6 @@
             %li= link_to('The UK’s Persons of Significant Control (PSC) Register', 'http://download.companieshouse.gov.uk/en_pscdata.html', target: '_blank', rel: 'noopener')
             %li= link_to('Denmark Central Business Register (CVR)', 'https://cvr.dk', target: '_blank', rel: 'noopener')
             %li= link_to('Slovakia Public Sector Partners Register', 'https://rpvs.gov.sk/', target: '_blank', rel: 'noopener')
-            %li= link_to('Ukraine Unified States Register (EDR)', 'https://data.gov.ua/dataset/1c7f3815-3259-45e0-bdf1-64dca07ddc10', target: '_blank', rel: 'noopener')
-            %li
-              We have also imported data from an initial
-              <a href="https://eiti.org/beneficial-ownership#eiti-guidance-and-publications-on-beneficial-ownership" target="_blank">Extractive Industries Transparency Initiative beneficial ownership report</a>,
-              sampling data from 23 countries between 2013 and 2015.
-          %p
-            We’re also very excited that several companies have submitted their
-            own beneficial ownership to the platform, helping test and provide
-            feedback in the process.
 
           %h2 Can I download the data?
           %p
@@ -90,15 +81,7 @@
             Provenance date is available on relationship, company and person
             records.
           %p
-            All of our data is currently updated every three weeks, with the
-            exception of EITI data, which was provided as a one-off dump in
-            2017. The dataset itself was harvested between 2013 and 2015.
-
-          %h2 How do I add my company’s ownership information?
-          %p
-            #{link_to 'Click here', submissions_path} and follow the process as
-            directed. Any issues?
-            #{mail_to 'tech@openownership.org', 'Email us'}.
+            All of our data is currently updated every month.
 
           %h2 I found an issue with the Register. How do I report it?
           %p
@@ -129,18 +112,6 @@
           %p
             Second, we include data from other sources, allowing us to surface
             cross-jurisdictional connections between people and companies.
-          %p
-            On the submission side, the Open Ownership Register form has
-            additional features currently missing in the PSC register:
-          %ul
-            %li
-              Extra validation on date of birth, so it cannot be in the future.
-            %li
-              A step towards verification of RLEs (companies declared as
-              beneficial owners): we are using an international lookup (powered
-              by OpenCorporates), so that the company number and the
-              jurisdiction is set from the source register, rather that input as
-              a free-text field, as it is on the PSC form.
 
           %h2 What will Open Ownership change?
           %p

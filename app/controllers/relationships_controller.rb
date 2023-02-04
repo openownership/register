@@ -1,7 +1,9 @@
 class RelationshipsController < ApplicationController
+  ENTITY_REPOSITORY = Rails.application.config.entity_repository
+
   def show
-    target_entity = Entity.find(params[:entity_id])
-    source_entity = resolve_master_entity(Entity.find_or_unknown(params[:id]))
+    target_entity = ENTITY_REPOSITORY.find(params[:entity_id])
+    source_entity = resolve_master_entity(ENTITY_REPOSITORY.find_or_unknown(params[:id]))
 
     relationships = InferredRelationshipGraph
       .new(target_entity)

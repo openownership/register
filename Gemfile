@@ -24,7 +24,6 @@ gem 'parallel', '~> 1.22'
 gem 'rollbar', '~> 3.3'
 gem 'countries', '~> 4.2'
 gem 'iso8601', '~> 0.13'
-gem 'devise', '~> 4.8'
 gem 'roadie-rails', '~> 2.3'
 gem 'aws-sdk-s3', '~> 1.114'
 gem 'rubyzip', '~> 2.3', require: false

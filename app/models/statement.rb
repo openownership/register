@@ -1,6 +1,6 @@
 class Statement
   include Mongoid::Document
-  include Timestamps::UpdatedEvenOnUpsert
+  include Mongoid::Timestamps::Updated
 
   field :_id, type: Hash
 

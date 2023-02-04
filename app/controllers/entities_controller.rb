@@ -1,6 +1,10 @@
 class EntitiesController < ApplicationController
+  ENTITY_REPOSITORY = Rails.application.config.entity_repository
+  DATA_SOURCE_REPOSITORY = Rails.application.config.data_source_repository
+  RAW_DATA_RECORD_REPOSITORY = Rails.application.config.raw_data_record_repository
+
   def show
-    entity = Entity.includes(:master_entity).find(params[:id])
+    entity = ENTITY_REPOSITORY.find_with_master_entity(params[:id])
     redirect_to_master_entity?(:show, entity) && return
 
     @merged_entities = entity.merged_entities.page(params[:merged_page]).per(10)
@@ -19,10 +23,10 @@ class EntitiesController < ApplicationController
       @similar_people = entity.natural_person? ? decorate(similar_people(entity)) : nil
     end
 
-    @data_source_names = DataSource.all_for_entity(entity).pluck(:name)
+    @data_source_names = DATA_SOURCE_REPOSITORY.data_source_names_for_entity(entity)
     unless @data_source_names.empty?
-      @newest_raw_record = RawDataRecord.newest_for_entity(entity).updated_at
-      @raw_record_count = RawDataRecord.all_for_entity(entity).size
+      @newest_raw_record = RAW_DATA_RECORD_REPOSITORY.newest_for_entity(entity).updated_at
+      @raw_record_count = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity).size
     end
 
     @entity = decorate(entity)
@@ -62,38 +66,27 @@ class EntitiesController < ApplicationController
     end
   end
 
-  def tree
-    entity = Entity.find(params[:id])
-    redirect_to_master_entity?(:tree, entity) && return
-    @node = decorate_with(TreeNode.new(entity), TreeNodeDecorator)
-    @entity = decorate(entity)
-  end
-
   def graph
-    entity = Entity.find(params[:id])
+    entity = ENTITY_REPOSITORY.find(params[:id])
     redirect_to_master_entity?(:graph, entity) && return
     @graph = decorate(EntityGraph.new(entity))
     @entity = decorate(entity)
   end
 
   def raw
-    entity = Entity.find(params[:id])
+    entity = ENTITY_REPOSITORY.find(params[:id])
     redirect_to_master_entity?(:raw, entity) && return
     @entity = decorate(entity)
-    @raw_data_records = RawDataRecord.all_for_entity(entity)
-      .includes(:imports)
-      .order_by(updated_at: :desc, created_at: :desc)
-      .page(params[:page])
-      .per(10)
+    @raw_data_records = RAW_DATA_RECORD_REPOSITORY.all_for_entity_with_imports(entity).page(params[:page]).per(10)
     return if @raw_data_records.empty?
 
-    @newest = RawDataRecord.newest_for_entity(entity).updated_at
-    @oldest = RawDataRecord.oldest_for_entity(entity).created_at
-    @data_sources = DataSource.all_for_entity(entity)
+    @newest = RAW_DATA_RECORD_REPOSITORY.newest_for_entity(entity).updated_at
+    @oldest = RAW_DATA_RECORD_REPOSITORY.oldest_for_entity(entity).created_at
+    @data_sources = DATA_SOURCE_REPOSITORY.all_for_entity(entity)
   end
 
   def opencorporates_additional_info
-    entity = Entity.find(params[:id])
+    entity = ENTITY_REPOSITORY.find(params[:id])
     begin
       @opencorporates_company_hash = get_opencorporates_company_hash(entity)
     rescue OpencorporatesClient::TimeoutError
@@ -133,7 +126,7 @@ class EntitiesController < ApplicationController
   end
 
   def similar_people(entity)
-    Entity.search(
+    ENTITY_REPOSITORY.search(
       query: Search.query(q: entity.name, type: 'natural-person'),
       aggs: Search.aggregations,
     ).limit(11).records.to_a
