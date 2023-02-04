@@ -55,16 +55,6 @@
 
             %hr
 
-            - if user_signed_in?
-              %p
-                = link_to "Add your company’s beneficial ownership", submissions_path, class: 'btn btn-primary'
-            - else
-              %p
-                = link_to "Sign up to add your company’s beneficial ownership", new_user_registration_path, class: 'btn btn-primary'
-              %p
-                Already signed up?
-                = link_to "Sign in here", new_user_session_path
-
       - elsif @response.results.total.zero?
         .col-lg-6.offset-lg-3
           .no-results

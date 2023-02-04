@@ -115,13 +115,12 @@ The register is a fairly typical Ruby on Rails project, the main distinguishing 
 are:
 
 - We use MongoDB as our database, and heavily rely on a customised `upsert` method in our models for data addition/modification/de-duplication
-- We write custom Ruby classes for importing data in `app/importers`
 - We write custom Ruby classes for interacting with data sources in `app/clients`
 - We write custom Ruby classes for performing other tasks, particularly data manipulation, in `app/service_objects`
 - We use Sidekiq extensively to run tasks as a series of small asynchronous jobs, with custom workers in `app/workers`
 
 
-Importers, Clients and Service Object are where we think the most useful code to others is likely to be found.
+Clients and Service Object are where we think the most useful code to others is likely to be found.
 
 ### Data model
 

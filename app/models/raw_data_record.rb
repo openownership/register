@@ -22,52 +22,8 @@ class RawDataRecord
   class << self
     extend Memoist
 
-    def bulk_upsert_for_import(records, import)
-      now = Time.zone.now
-      bulk_operations = records.map do |record|
-        raw_data, compressed = compress_if_needed record[:raw_data]
-        etag = record[:etag].presence || etag(raw_data)
-        if raw_data.bytesize > MONGODB_MAX_DOC_SIZE
-          Rollbar.error "[#{self.class.name}] Raw data is too large for MongoDB even when compressed, skipping record with etag: #{etag}"
-          next
-        end
-        {
-          update_one: {
-            upsert: true,
-            filter: { etag: etag },
-            update: {
-              '$setOnInsert' => {
-                etag: etag,
-                raw_data: raw_data,
-                compressed: compressed,
-                created_at: now,
-              },
-              '$set' => { updated_at: now },
-              '$addToSet' => { import_ids: import.id },
-            },
-          },
-        }
-      end.compact
-
-      collection.bulk_write(bulk_operations, ordered: false)
-    end
-
     def etag(data)
       XXhash.xxh64(data).to_s
-    end
-
-    def compress_if_needed(raw_data)
-      compressed = false
-      compressed_raw_data = raw_data
-      if raw_data.bytesize > RAW_DATA_COMPRESSION_LIMIT
-        compressed_raw_data = compress_raw_data(raw_data)
-        compressed = true
-      end
-      [compressed_raw_data, compressed]
-    end
-
-    def compress_raw_data(raw_data)
-      Base64.encode64 Zlib::Deflate.deflate(raw_data)
     end
 
     def decompress_raw_data(raw_data)

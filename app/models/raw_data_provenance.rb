@@ -14,38 +14,6 @@ class RawDataProvenance
     import_id: 1,
   )
 
-  def self.bulk_upsert_for_import(import, provenances)
-    bulk_operations = provenances.map do |raw_record_id, entities_and_relationships|
-      next unless entities_and_relationships.is_a? Array
-
-      now = Time.zone.now
-      entities_and_relationships.map do |entity_or_relationship|
-        {
-          update_one: {
-            upsert: true,
-            filter: {
-              entity_or_relationship_id: entity_or_relationship.id,
-              entity_or_relationship_type: entity_or_relationship.class.name,
-              import_id: import.id,
-            },
-            update: {
-              '$setOnInsert' => {
-                entity_or_relationship_id: entity_or_relationship.id,
-                entity_or_relationship_type: entity_or_relationship.class.name,
-                import_id: import.id,
-                created_at: now,
-              },
-              '$set' => { updated_at: now },
-              '$addToSet' => { raw_data_record_ids: raw_record_id },
-            },
-          },
-        }
-      end
-    end.flatten.compact
-
-    collection.bulk_write(bulk_operations, ordered: false)
-  end
-
   def self.all_for_entity(entity)
     where(
       'entity_or_relationship_id' => { '$in' => entity.all_ids },

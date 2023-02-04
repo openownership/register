@@ -1,8 +1,0 @@
-.admin-entity{ id: "entity-#{entity.id}" }
-  .admin-entity__header
-    = render 'submissions/entities/long_snippet', entity: entity
-  %table.table.table-sm
-    - entity.attributes_for_submission.each do |key, value|
-      %tr
-        %th= key
-        %td= value

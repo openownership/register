@@ -62,9 +62,6 @@ class Entity
     indexes :company_number, type: :keyword
   end
 
-  set_callback :update, :before, :set_self_updated_at
-  set_callback :upsert, :before, :set_self_updated_at
-
   def self.find_or_unknown(id)
     if id.to_s.include?('statement') || id.to_s.include?(UNKNOWN_ID_MODIFIER)
       UnknownPersonsEntity.new(id: id)
@@ -89,73 +86,6 @@ class Entity
       self_and_merged_entity_ids = [id] + merged_entities.only(:_id)
       Relationship.includes(:target, :source, :raw_data_provenances).in(source_id: self_and_merged_entity_ids)
     end
-  end
-
-  # Similar to Mongoid::Persistable::Upsertable#upsert except that entities
-  # are found using their embeddeded identifiers instead of the _id field.
-  def upsert(options: {})
-    prepare_upsert(options) do
-      _upsert
-    end
-  end
-
-  def _upsert
-    selector = Entity.with_identifiers(identifiers).selector
-
-    attributes = as_document.except('_id', 'identifiers')
-
-    document = collection.find_one_and_update(
-      selector,
-      {
-        :$addToSet => {
-          identifiers: {
-            :$each => identifiers,
-          },
-        },
-        :$set => attributes,
-      },
-      upsert: true,
-      return_document: :after,
-    )
-
-    self.id = document.fetch('_id')
-
-    reload
-  rescue Mongo::Error::OperationFailure => e
-    raise unless /E11000/.match(e.message)
-
-    criteria = Entity.where(selector)
-    if criteria.count > 1
-      raise DuplicateEntitiesDetected.new(
-        "Unable to upsert entity due to #{identifiers} matching multiple documents",
-        criteria,
-      )
-    end
-
-    retry
-  end
-
-  def upsert_and_merge_duplicates!
-    upsert
-  rescue DuplicateEntitiesDetected => e
-    handle_duplicates!(e.criteria)
-    retry
-  end
-
-  def handle_duplicates!(criteria)
-    entities = criteria.entries
-
-    to_remove, to_keep = EntityMergeDecider.new(*entities).call
-
-    log_message = "Duplicate entities detected for selector: " \
-                  "#{criteria.selector} - attempting to merge entity A into " \
-                  "entity B. A = ID: #{to_remove._id}, name: " \
-                  "#{to_remove.name}, identifiers: #{to_remove.identifiers}; " \
-                  "B = ID: #{to_keep._id}, name: #{to_keep.name}, " \
-                  "identifiers: #{to_keep.identifiers};"
-    Rails.logger.info log_message
-
-    EntityMerger.new(to_remove, to_keep).call
   end
 
   def as_indexed_json(_options = {})
@@ -210,14 +140,5 @@ class Entity
 
   def all_ids
     [id] + merged_entity_ids
-  end
-end
-
-class DuplicateEntitiesDetected < StandardError
-  attr_reader :criteria
-
-  def initialize(msg, criteria)
-    super(msg)
-    @criteria = criteria
   end
 end

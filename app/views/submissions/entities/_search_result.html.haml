@@ -1,6 +1,0 @@
-- if entity.persisted?
-  = button_to use_submission_entity_path(@submission, entity, continue_params), class: 'submission-search-result' do
-    = render 'submissions/entities/long_snippet', entity: entity
-- else
-  = button_to submission_entities_path(continue_params.merge(entity: entity.attributes)), class: 'submission-search-result' do
-    = render 'submissions/entities/long_snippet', entity: entity
