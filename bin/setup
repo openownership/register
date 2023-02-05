@@ -10,11 +10,6 @@ bundle check || bundle install
 
 bin/yarn
 
-python3 -m venv venv
-source ./venv/bin/activate
-pip install -q -r requirements.txt
-deactivate
-
 echo "== Preparing database =="
 bin/rails db:setup
 
