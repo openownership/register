@@ -3,7 +3,7 @@
 .item{ class: ('ended' if ended_date) }
   = render partial: 'shared/entity_title', locals: { entity: relationship.source }
 
-  = link_to entity_relationship_path(relationship.target, relationship.source), class: 'relationship-link' do
+  = link_to entity_relationship_path(relationship.target&.id, relationship.source&.id), class: 'relationship-link' do
     - if relationship.intermediate_entities.any?
       %span.via
         = t(".controls_via")
@@ -16,8 +16,8 @@
           = country_flag(entity.country)
           &rarr;
         %span.target
-          = @entity.name
-        = country_flag(@entity.country)
+          = @sentity.name
+        = country_flag(@sentity.country)
         - if relationship.is_indirect
           .indirect
             = t("shared.relationship_interests.also_indirect")

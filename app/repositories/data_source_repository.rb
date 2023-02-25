@@ -1,31 +1,31 @@
 class DataSourceRepository
   def all
-    DataSource.all
+    path = File.join(File.dirname(__FILE__), 'datasources.json')
+    sources = JSON.parse(File.read(path), symbolize_names: true)
+    
+    sources[:datasources].map { |source|
+      DataSource.new source.merge(id: source[:'_id'][:'$oid'])
+    }
   end
 
   def find(id)
-    DataSource.find(id)
+    find_many([id])[0]
+  end
+
+  def find_many(ids)
+    all.filter { |data_source| ids.include? data_source.id }
   end
 
   def where_overview_present
-    DataSource.where(:overview.ne => nil)
+    all.filter { |data_source| data_source.overview.present? }
   end
 
   def data_source_names_for_entity(entity)
-    DataSource.where('id' => { '$in' => data_source_ids_for_entity(entity) }).pluck(:name)
+    ["UK PSC Register"] # TODO: generate from sources of entity (or identifiers)
   end
 
-  def data_sources_for_entity(entity)
-    DataSource.where('id' => { '$in' => data_source_ids_for_entity(entity) })
-  end
-
-  private
-
-  def data_source_ids_for_entity(entity)
-    import_repository.data_source_ids_for_entity(entity)
-  end
-
-  def import_repository
-    Rails.application.config.import_repository
+  def all_for_entity(entity)
+    data_source_names = data_source_names_for_entity(entity)
+    all.filter { |data_source| data_source_names.include? data_source.name }
   end
 end

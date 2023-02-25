@@ -13,16 +13,12 @@ gem 'font-awesome-sass', '~> 4.7.0'
 
 gem 'webpacker', '~> 5.4'
 
-gem 'mongoid', '~> 7.4'
-gem 'mongo', '~> 2.17.1'
 gem 'kaminari', '~> 1.2'
-gem 'kaminari-mongoid', '~> 1.0'
-gem 'elasticsearch-model', '=7.1'
 gem 'elasticsearch', '=7.10.1'
 gem 'net-http-persistent', '~> 4.0'
 gem 'parallel', '~> 1.22'
 gem 'rollbar', '~> 3.3'
-gem 'countries', '~> 4.2'
+gem 'countries'
 gem 'iso8601', '~> 0.13'
 gem 'roadie-rails', '~> 2.3'
 gem 'aws-sdk-s3', '~> 1.114'
@@ -37,7 +33,6 @@ gem 'faraday_middleware', '~> 1.2'
 gem 'dalli', '~> 3.2'
 gem 'bootsnap', '~> 1.13', require: false
 gem 'redcarpet', '~> 3.5'
-gem 'mongoid-slug', '~> 6.0'
 gem 'xxhash', '~> 0.5'
 gem 'oj', '~> 3.13'
 gem 'coderay', '~> 1.1'
@@ -50,6 +45,8 @@ gem 'net-pop', '~> 0.1', require: false
 
 gem 'register_common', git: 'https://github.com/openownership/register-common.git'
 gem 'register_sources_oc', git: 'https://github.com/openownership/register-sources-oc.git'
+gem 'register_sources_psc', git: 'https://github.com/openownership/register-sources-psc.git', branch: 'raw-records-from-bods-identifiers'
+gem 'register_sources_bods', path: '../register-sources-bods' # git: 'https://github.com/openownership/register-sources-bods.git', branch: 'performance-improvements-v2'
 
 group :development, :test do
   gem 'byebug', '~> 11.1'

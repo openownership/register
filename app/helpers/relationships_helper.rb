@@ -1,3 +1,5 @@
+require 'register_sources_bods/structs/interest'
+
 module RelationshipsHelper
   SUBMISSION_INTEREST_MATCHERS = [
     /^Ownership of shares - [\d.]+%$/,
@@ -29,7 +31,7 @@ module RelationshipsHelper
   private
 
   def known_interest?(interest)
-    return true if interest.is_a?(Hash)
+    return true if interest.is_a?(Hash) || interest.is_a?(RegisterSourcesBods::Interest)
 
     I18n.exists?("relationship_interests.#{interest}") || SUBMISSION_INTEREST_MATCHERS.any? { |r| r =~ interest }
   end

@@ -52,7 +52,7 @@
 
             %hr
 
-      - elsif @response.results.total.zero?
+      - elsif @response.empty?
         .col-lg-6.offset-lg-3
           .no-results
             %p= t(".no_results")
@@ -64,24 +64,23 @@
                 - if @fallback
                   %em= t(".fallback", query: params[:q])
                   %br
-                = page_entries_info @response.records, entry_name: 'result'
+                = page_entries_info @response, entry_name: 'result'
               .options
                 .option-transliterate
                   = transliteration_action(@should_transliterate)
 
               %ul.list-unstyled.list-entities
-                - @response.records.to_a.each do |record|
+                - @response.each do |record|
                   %li.item
-                    = render "shared/entity_title", entity: decorate(record), with_company: true
+                    = render "shared/entity_title", entity: record, with_company: true
                     - if record.natural_person?
                       .result-controls
                         = render partial: 'shared/entity_controlled_companies', locals: { entity: record }
                     - if record.merged_entities_count&.positive?
                       .result-merged-people
                         = t('.merged_people', count: record.merged_entities_count)
-              = paginate @response.records
+              = paginate @response
 
       .col-lg-3
-        - unless params[:q].blank? || @response.results.empty?
+        - unless params[:q].blank? || @response.empty?
           = render partial: 'filter', locals: { key: 'type', helper: method(:search_filter_type) }
-          = render partial: 'filter', locals: { key: 'country', helper: method(:search_filter_country) }

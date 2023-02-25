@@ -1,58 +1,35 @@
-class DataSource
-  include Mongoid::Document
-  include Mongoid::Timestamps
-  include Mongoid::Slug
+require 'dry-types'
+require 'dry-struct'
 
-  TYPES = %w[
-    selfDeclaration
-    officialRegister
-    thirdParty
-    primaryResearch
-    verified
-  ].freeze
-
-  field :url, type: String
-  field :name, type: String
-  slug :name
-  field :document_id, type: String
-  field :overview, type: String, localize: true
-  field :data_availability, type: String, localize: true
-  field :timeline_url, type: String
-  field :current_statistic_types, type: Array, default: []
-  field :types, type: Array, default: []
-
-  embeds_many :statistics, class_name: 'DataSourceStatistic'
-  has_many :raw_data_records
-  has_many :imports
-
-  validate :validate_types
-
-  index({ name: 1 }, unique: true)
-
-  def statistics_by_type
-    statistics.published.to_a.group_by(&:type)
+class DataSource < Dry::Struct
+  module Types
+    include Dry.Types()
   end
 
-  def current_statistics
-    # Pull out the latest stat for each type we want, preserving the
-    # order of current_statistic_types
-    stats_by_type = statistics_by_type
-    return [] if stats_by_type.empty?
+  DataSourceTypes = Types::String.enum(
+    'selfDeclaration',
+    'officialRegister',
+    'thirdParty',
+    'primaryResearch',
+    'verified'
+  )
 
-    current_statistic_types
-      .map { |type| stats_by_type[type]&.max_by(&:created_at) }
-      .compact
-  end
+  transform_keys(&:to_sym)
 
-  def validate_types
-    types.each do |type|
-      unless TYPES.include? type
-        errors.add :types, "#{type} is not a valid DataSource type"
-      end
-    end
-  end
+  attribute :id, Types::String # Mongo BSON ID as string
+  attribute? :_slugs, Types::Array(Types::String)
+  attribute? :created_at, Types::String
+  attribute? :current_statistic_types, Types::Array(Types::String)
+  attribute? :document_id, Types::String.optional
+  attribute :name, Types::String
+  attribute? :overview, Types::String.optional # localize: true
+  attribute? :data_availability, Types::String.optional # localize: true
+  attribute? :timeline_url, Types::String.optional
+  attribute? :types, Types::Array(DataSourceTypes)
+  attribute? :updated_at, Types::String
+  attribute? :url, Types::String.optional
 
-  def most_recent_import
-    imports.desc(:created_at)&.first
+  def slug
+    _slugs[0]
   end
 end

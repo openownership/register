@@ -1,4 +1,4 @@
-class InferredRelationshipGraph
+class InferredRelationshipGraph2
   def initialize(entity)
     @entity = entity
   end
@@ -11,7 +11,7 @@ class InferredRelationshipGraph
 
   def relationships_to(source_entity)
     select_relationships do |entity, _immediate_relationships|
-      entity == source_entity
+      entity.id == source_entity.id
     end
   end
 
@@ -35,12 +35,14 @@ class InferredRelationshipGraph
     stop_condition:, seen_entities: [],
     seen_relationships: []
   )
+    return unless entity
+
     immediate_relationships = entity.relationships_as_target
 
     if stop_condition.call(entity, immediate_relationships) \
        && !seen_relationships.empty?
 
-      inferred_relationship = InferredRelationship.new(
+      inferred_relationship = InferredRelationship2.new(
         source: entity,
         target: @entity,
         sourced_relationships: seen_relationships,

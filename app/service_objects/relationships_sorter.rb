@@ -10,8 +10,8 @@ class RelationshipsSorter
 
     first_obj = @relationships.first
     case first_obj
-    when Relationship, InferredRelationship
-      @relationships.sort_by { |r| [ended_time(r), r.target.name.to_s] }
+    when InferredRelationship2, RegisterSourcesBods::Register::Relationship
+      @relationships.sort_by { |r| [ended_time(r), r.target&.name.to_s] }
     else
       raise ArgumentError, "Unexpected object detected - class: #{first_obj.class.name}"
     end

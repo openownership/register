@@ -5,8 +5,8 @@ en:
     show:
       controlled_entities_html: Companies controlled by %{entity}
       controlled_entities_none:
-        legal-entity_html: No companies are known to be controlled by %{entity}
-        natural-person_html: No companies are known to be beneficially owned by %{entity}
+        entityStatement_html: No companies are known to be controlled by %{entity}
+        personStatement_html: No companies are known to be beneficially owned by %{entity}
       controlling_entities:
         text_html: "%{beneficial_owners} of %{entity}"
         beneficial_owners: Beneficial owners
@@ -72,33 +72,6 @@ en:
       news_fallback_text: Tweets curated by Open Ownership
       overview_title: Overview, definitions, thresholds
       source_url_link: 'Original source data'
-      statistics_title: Ownership transparency performance monitoring
-      statistics:
-        companies: Number of companies
-        percentage: Percentage of companies
-        footnotes: Footnotes
-  data_source_statistics:
-    total:
-      title: Total non-dissolved companies on the national commerce register
-      footnote_html: '<a href="https://www.gov.uk/government/publications/incorporated-companies-in-the-uk-january-to-march-2019/incorporated-companies-in-the-uk-january-to-march-2019">Companies House statistics, March 2019</a>: The total number includes active and dormant companies (‘effective’), as well as those in the process of dissolution (non-effective). It excludes dissolved companies.'
-    register_total:
-      title: Total non-dissolved companies from the national UBO Register in the OpenOwnership register
-      footnote_html: The Open Ownership Register only contains data on companies that are registered on the PSC Register.
-    psc_no_owner:
-      title: Companies with missing UBO declaration
-    psc_unknown_owner:
-      title: Companies with 'No UBO' declaration
-      footnote_html: <a href="https://github.com/companieshouse/api-enumerations/blob/master/psc_descriptions.yml#L126">Enumeration of reasons for declarations with no UBO</a>.
-    psc_offshore_rle:
-      title: Companies with RLE outside of the UK
-    psc_non_legit_rle:
-      title: Companies with RLE not in a regulated market country
-      footnote_html: UK, EEA state, USA, Japan, Switzerland or Israel
-    psc_secrecy_rle:
-      title: Companies with RLE in a secrecy jurisdiction
-      footnote_html: Countries scoring 60 or above on the <a href="https://www.financialsecrecyindex.com/introduction/fsi-2018-results">Financial Secrecy Index 2018</a>
-    dissolved:
-      title: Total dissolved companies from the national UBO Register in the Open Ownership register
   helpers:
     entities:
       entity_attributes_snippet:
@@ -184,8 +157,8 @@ en:
     no_controlled_companies: "Does not currently control any companies"
   entity_types:
     default: entity
-    legal-entity: legal entity
-    natural-person: person
+    entityStatement: legal entity
+    personStatement: person
 
   unknown_persons_entity:
     names:

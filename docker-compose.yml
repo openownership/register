@@ -1,29 +1,6 @@
 version: '3.7'
 
 services:
-
-  mongodb:
-    image: mongo:4.4.1
-    volumes:
-      - 'mongodb_data:/data/db'
-    ports:
-      - 27017:27017
-    restart: always
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
-    volumes:
-      - 'es_data:/usr/share/elasticsearch/data'
-    environment:
-      - 'discovery.type=single-node'
-      - 'cluster.name=register-elasticsearch'
-      - 'bootstrap.memory_lock=true'
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-      - 'xpack.security.enabled=false'
-    ports:
-      - 9200:9200
-    restart: always
-
   redis:
     image: redis:4.0.9-alpine
     volumes:
@@ -31,12 +8,6 @@ services:
     command: ["redis-server", "--appendonly", "yes"]
     ports:
       - 6379:6379
-    restart: always
-
-  memcached:
-    image: memcached:1.5-alpine
-    ports:
-      - 11211:11211
     restart: always
 
   mailcatcher:
@@ -47,6 +18,4 @@ services:
     restart: always
 
 volumes:
-  mongodb_data:
-  es_data:
   redis_data:
