@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-bods.git
-  revision: 3265eb51bc33ffed8e1403d40e28b902c0c87885
+  revision: 35153ee98ebc189bee41cdea452442f839de8d05
   branch: bods-v2-prototype
   specs:
     register_sources_bods (0.1.0)
@@ -286,7 +286,7 @@ GEM
       rubocop (>= 0.50.0)
       sysexits (~> 1.1)
     hashdiff (1.0.1)
-    i18n (1.12.0)
+    i18n (1.13.0)
       concurrent-ruby (~> 1.0)
     i18n_data (0.13.1)
     ice_nine (0.11.2)
@@ -517,7 +517,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     xxhash (0.5.0)
-    zeitwerk (2.6.7)
+    zeitwerk (2.6.8)
 
 PLATFORMS
   x86_64-linux
