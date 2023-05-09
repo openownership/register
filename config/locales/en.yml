@@ -159,6 +159,8 @@ en:
     default: entity
     entityStatement: legal entity
     personStatement: person
+    legal-entity: legal entity
+    natural-person: person
 
   unknown_persons_entity:
     names:
