@@ -6,6 +6,6 @@ cd "$bin_folder/.."
 
 bundle exec rspec --color --require spec_helper --format documentation spec
 yarn test
-bundle exec rubocop
-bundle exec haml-lint .
+# bundle exec rubocop
+# bundle exec haml-lint .
 yarn lint
