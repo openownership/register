@@ -41,20 +41,6 @@ class OpencorporatesClient
                  content_type: /\bjson$/,
                  parser_options: { symbolize_names: true }
 
-      if ENV['CACHE_OC_API'] == 'true'
-        c.response :caching, ignore_params: %w[api_token] do
-          ActiveSupport::Cache::MemCacheStore.new(
-            *ENV.fetch('MEMCACHE_SERVERS').split(','),
-            username: ENV.fetch('MEMCACHE_USERNAME'),
-            password: ENV.fetch('MEMCACHE_PASSWORD'),
-            namespace: "OpencorporatesClient_#{Rails.env}",
-            expires_in: CACHE_EXPIRY_SECS,
-            race_condition_ttl: 10,
-            compress: true,
-          )
-        end
-      end
-
       c.adapter :net_http_persistent do |http|
         http.open_timeout = open_timeout
         http.read_timeout = read_timeout

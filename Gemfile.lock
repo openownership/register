@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-bods.git
-  revision: 35153ee98ebc189bee41cdea452442f839de8d05
+  revision: e475c09f08a49c22ba6d0af058738009d085e14e
   branch: bods-v2-prototype
   specs:
     register_sources_bods (0.1.0)
@@ -286,6 +286,7 @@ GEM
       rubocop (>= 0.50.0)
       sysexits (~> 1.1)
     hashdiff (1.0.1)
+    hashie (3.6.0)
     i18n (1.13.0)
       concurrent-ruby (~> 1.0)
     i18n_data (0.13.1)
@@ -543,6 +544,7 @@ DEPENDENCIES
   geokit (~> 1.13)
   haml-rails (~> 2.1)
   haml_lint (~> 0.37.1)
+  hashie (~> 3.4, >= 3.4.4)
   invisible_captcha (~> 2.0)
   iso8601 (~> 0.13)
   kaminari (~> 1.2)

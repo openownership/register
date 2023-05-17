@@ -41,6 +41,7 @@ gem 'rexml', '~> 3.2'
 gem 'net-smtp', '~> 0.3', require: false
 gem 'net-imap', '~> 0.3', require: false
 gem 'net-pop', '~> 0.1', require: false
+gem 'hashie', '~> 3.4', '>= 3.4.4'
 
 gem 'register_common', git: 'https://github.com/openownership/register-common.git'
 gem 'register_sources_oc', git: 'https://github.com/openownership/register-sources-oc.git'
