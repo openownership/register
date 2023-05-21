@@ -16,7 +16,7 @@ class BodsSerializer
         relationship.source&.relationships_as_target,
         relationship.target&.relationships_as_source,
         relationship.target&.relationships_as_target
-      ].flatten.compact.map(&:bods_statement)
+      ].flatten.compact.map(&:all_bods_statements).flatten
     end.uniq
   end
 end
