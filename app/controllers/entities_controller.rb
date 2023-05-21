@@ -99,7 +99,8 @@ class EntitiesController < ApplicationController
         statements = [
           BodsSerializer.new(relationships).statements,
           entity.bods_statement,
-          entity.master_entity&.bods_statement
+          entity.master_entity&.bods_statement,
+          entity.merged_entities.map(&:bods_statement)
         ].compact.flatten.uniq { |s| s.statementID }
 
         render json: JSON.pretty_generate(statements.as_json)

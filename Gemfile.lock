@@ -18,20 +18,6 @@ GIT
       xxhash
 
 GIT
-  remote: https://github.com/openownership/register-sources-bods.git
-  revision: b365f8f3602b224bab381c53315e915e1329ea7a
-  branch: bods-v2-prototype
-  specs:
-    register_sources_bods (0.1.0)
-      activesupport (>= 6, < 8)
-      countries (~> 4.0.1)
-      dry-struct (>= 1, < 2)
-      dry-types (>= 1, < 2)
-      elasticsearch (>= 7.10, < 8)
-      iso8601
-      xxhash
-
-GIT
   remote: https://github.com/openownership/register-sources-oc.git
   revision: ab0239b2caecc56af869b9787c4a6b59b40675bc
   specs:
@@ -55,6 +41,18 @@ GIT
   branch: raw-records-from-bods-identifiers
   specs:
     register_sources_psc (0.1.0)
+      activesupport (>= 6, < 8)
+      countries (~> 4.0.1)
+      dry-struct (>= 1, < 2)
+      dry-types (>= 1, < 2)
+      elasticsearch (>= 7.10, < 8)
+      iso8601
+      xxhash
+
+PATH
+  remote: ../register-sources-bods
+  specs:
+    register_sources_bods (0.1.0)
       activesupport (>= 6, < 8)
       countries (~> 4.0.1)
       dry-struct (>= 1, < 2)
