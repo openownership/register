@@ -13,6 +13,6 @@ class ApplicationController < ActionController::Base
   attr_reader :should_transliterate
 
   def parse_should_transliterate_param
-    @should_transliterate = boolean_param(:transliterated)
+    @should_transliterate = false # boolean_param(:transliterated)
   end
 end

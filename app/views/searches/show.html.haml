@@ -66,8 +66,6 @@
                   %br
                 = page_entries_info @response, entry_name: 'result'
               .options
-                .option-transliterate
-                  = transliteration_action(@should_transliterate)
 
               %ul.list-unstyled.list-entities
                 - @response.each do |record|

@@ -4,8 +4,6 @@
   .graph-help
     = t('entity_graph.help')
   .options
-    .option-transliterate
-      = transliteration_action(@should_transliterate)
   .graph-zoom-control
     %span.fa.fa-search-minus
     %input.graph-zoom{ type: "range", 'data-tippy-content' => t('entity_graph.zoom') }
