@@ -50,7 +50,7 @@ class EntitiesController < ApplicationController
   def show
     entity_id = params[:id]
 
-    @sentity = ENTITY_SERVICE.find(entity_id)
+    @sentity = ENTITY_SERVICE.find_by_entity_id(entity_id)
     entity = @sentity
 
     unless entity
@@ -109,7 +109,7 @@ class EntitiesController < ApplicationController
   end
 
   def graph
-    entity = ENTITY_SERVICE.find(params[:id])
+    entity = ENTITY_SERVICE.find_by_entity_id(params[:id])
     unless entity
       raise ActionController::RoutingError.new('Not Found')
     end
@@ -119,7 +119,7 @@ class EntitiesController < ApplicationController
   end
 
   def raw
-    entity = ENTITY_SERVICE.find(params[:id])
+    entity = ENTITY_SERVICE.find_by_entity_id(params[:id])
     unless entity
       raise ActionController::RoutingError.new('Not Found')
     end
@@ -134,7 +134,7 @@ class EntitiesController < ApplicationController
   end
 
   def opencorporates_additional_info
-    entity = ENTITY_SERVICE.find(params[:id])
+    entity = ENTITY_SERVICE.find_by_entity_id(params[:id])
     unless entity
       raise ActionController::RoutingError.new('Not Found')
     end
