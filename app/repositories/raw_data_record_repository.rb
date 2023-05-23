@@ -11,7 +11,6 @@ class RawDataRecordRepository
 
     return [] if bods_identifiers.empty?
 
-    print "Retrieving for bods_identifiers: ", bods_identifiers, "\n"
     get_by_bods_identifiers(bods_identifiers) # .order_by(updated_at: :desc, created_at: :desc)
   end
 
