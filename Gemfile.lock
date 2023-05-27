@@ -19,8 +19,8 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-bods.git
-  revision: 05b79b1f5a2860b1225992401bc2a6dee0094704
-  branch: bods-v2-prototype-merges
+  revision: 49853c7f785bd04ac72f2c6b8f336a31a8997cc4
+  branch: bods-v2-prototype-fix-identifiers
   specs:
     register_sources_bods (0.1.0)
       activesupport (>= 6, < 8)
@@ -467,7 +467,7 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     semantic_range (3.0.0)
-    sixarm_ruby_unaccent (1.2.0)
+    sixarm_ruby_unaccent (1.2.2)
     spring (2.1.1)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
