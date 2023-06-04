@@ -19,8 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-bods.git
-  revision: 49853c7f785bd04ac72f2c6b8f336a31a8997cc4
-  branch: bods-v2-prototype-fix-identifiers
+  revision: d57dc61474506b1bbc390a303927edba329e2ab1
   specs:
     register_sources_bods (0.1.0)
       activesupport (>= 6, < 8)
@@ -51,8 +50,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-psc.git
-  revision: 341ee042c0f6ad62516e3121d581daa29e9498db
-  branch: raw-records-from-bods-identifiers
+  revision: be9ffd1c7fc836753f1a1c014e051dac88ab19cb
   specs:
     register_sources_psc (0.1.0)
       activesupport (>= 6, < 8)
