@@ -35,7 +35,7 @@
                   %p= country_of_residence
                 - @sentity.date_of_birth.presence.try do |date_of_birth|
                   %h6= t(".fields.date_of_birth")
-                  %p= date_of_birth
+                  %p= date_of_birth(@sentity)
               - else
                 - @sentity.company_number.try do |company_number|
                   %h6= t(".fields.company_number")
