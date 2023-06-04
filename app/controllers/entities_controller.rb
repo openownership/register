@@ -180,7 +180,7 @@ class EntitiesController < ApplicationController
   end
 
   def similar_people(entity)
-    ENTITY_SERVICE.search({ q: entity.name, type: 'personStatement' })
+    ENTITY_SERVICE.search({ q: entity.name, type: 'personStatement' }, exclude_identifiers: entity.identifiers)
   end
 
   def get_opencorporates_company_hash(entity)

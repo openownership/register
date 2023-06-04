@@ -185,7 +185,7 @@
                         = render partial: 'shared/entity_controlled_companies', locals: { entity: merged_entity }
                 = paginate @merged_entities, param_name: :merged_page
 
-    - if @similar_people && @similar_people.length > 1
+    - if @similar_people && @similar_people.length >= 1
       .row
         .col-lg-8
           .frame
