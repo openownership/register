@@ -17,10 +17,10 @@
                     = image_tag "icon-natural-person.svg"
                     = t("entity_types.natural-person").capitalize
               - else
-                - @sentity.jurisdiction_code.try do |entity_jurisdiction|
+                - @sentity.country.try do |country|
                   .jurisdiction
-                    = country_flag(@sentity.country)
-                    = entity_jurisdiction
+                    = country_flag(country)
+                    = entity_jurisdiction(@sentity)
                   .type-icon.legal-entity
                     = image_tag "icon-legal-entity.svg"
                     = glossary_tooltip(t("entity_types.legal-entity").capitalize, :'legal-entity', :right)
@@ -37,7 +37,7 @@
                 - @sentity.company_number.try do |company_number|
                   %h6= t("entities.show.fields.company_number")
                   %p= company_number
-                - @sentity.company_type.try do |company_type|
+                - @oc_data[:company_type].try do |company_type|
                   %h6= t("entities.show.fields.company_type")
                   %p= company_type
 

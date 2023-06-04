@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-bods.git
-  revision: d57dc61474506b1bbc390a303927edba329e2ab1
+  revision: a707aa4d510ce564a13fb5c1095486a446601e42
   specs:
     register_sources_bods (0.1.0)
       activesupport (>= 6, < 8)
@@ -285,7 +285,7 @@ GEM
       sysexits (~> 1.1)
     hashdiff (1.0.1)
     hashie (3.6.0)
-    i18n (1.13.0)
+    i18n (1.14.0)
       concurrent-ruby (~> 1.0)
     i18n_data (0.13.1)
     ice_nine (0.11.2)
