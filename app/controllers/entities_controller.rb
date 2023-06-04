@@ -128,6 +128,7 @@ class EntitiesController < ApplicationController
     @raw_data_records = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity) # .page(params[:page]).per(10)
     return if @raw_data_records.empty?
 
+    @oc_data = get_opencorporates_company_hash(entity) || {}
     @newest = RAW_DATA_RECORD_REPOSITORY.newest_for_entity(entity).data.notified_on # .updated_at
     @oldest = RAW_DATA_RECORD_REPOSITORY.oldest_for_entity(entity).data.notified_on # created_at
     @data_sources = DATA_SOURCE_REPOSITORY.all_for_entity(entity)

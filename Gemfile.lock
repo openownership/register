@@ -19,8 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-bods.git
-  revision: 49853c7f785bd04ac72f2c6b8f336a31a8997cc4
-  branch: bods-v2-prototype-fix-identifiers
+  revision: a707aa4d510ce564a13fb5c1095486a446601e42
   specs:
     register_sources_bods (0.1.0)
       activesupport (>= 6, < 8)
@@ -51,8 +50,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-psc.git
-  revision: 341ee042c0f6ad62516e3121d581daa29e9498db
-  branch: raw-records-from-bods-identifiers
+  revision: be9ffd1c7fc836753f1a1c014e051dac88ab19cb
   specs:
     register_sources_psc (0.1.0)
       activesupport (>= 6, < 8)
@@ -287,7 +285,7 @@ GEM
       sysexits (~> 1.1)
     hashdiff (1.0.1)
     hashie (3.6.0)
-    i18n (1.13.0)
+    i18n (1.14.0)
       concurrent-ruby (~> 1.0)
     i18n_data (0.13.1)
     ice_nine (0.11.2)

@@ -45,8 +45,8 @@ gem 'hashie', '~> 3.4', '>= 3.4.4'
 
 gem 'register_common', git: 'https://github.com/openownership/register-common.git'
 gem 'register_sources_oc', git: 'https://github.com/openownership/register-sources-oc.git'
-gem 'register_sources_psc', git: 'https://github.com/openownership/register-sources-psc.git', branch: 'raw-records-from-bods-identifiers'
-gem 'register_sources_bods', git: 'https://github.com/openownership/register-sources-bods.git', branch: 'bods-v2-prototype-fix-identifiers'
+gem 'register_sources_psc', git: 'https://github.com/openownership/register-sources-psc.git'
+gem 'register_sources_bods', git: 'https://github.com/openownership/register-sources-bods.git'
 
 group :development, :test do
   gem 'byebug', '~> 11.1'
