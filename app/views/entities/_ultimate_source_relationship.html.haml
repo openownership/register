@@ -7,7 +7,7 @@
     - if relationship.intermediate_entities.any?
       %span.via
         = t(".controls_via")
-        - if relationship.source.legal_entity?
+        - if !relationship.source.natural_person?
           = relationship.source.name
           = country_flag(relationship.source.country)
           &rarr;
