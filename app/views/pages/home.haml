@@ -58,7 +58,7 @@
         %p We additionally de-duplicate multiple disclosures from the same people, to ensure you see everything in one place.
         %p All of this data is browsable via interactive graph visualisations, showing you an entire network at a glance.
         %p
-          = link_to "Explore the example", "/entities/#{ENV.fetch('EXAMPLE_ENTITY_ID', '12393130509952234896')}", class: 'btn btn-primary'
+          = link_to "Explore the example", "/entities/12393130509952234896/graph')}", class: 'btn btn-primary'
           = link_to "Our data sources", data_sources_path, class: 'btn btn-primary'
       .col-md-6.floating-card.flex-first
         .card-left
@@ -82,7 +82,7 @@
         %p We keep track of changes where possible and show you a copy of the raw data as well as its source.
         %p
           = link_to "Why is history important?", "https://www.openownership.org/en/publications/building-an-auditable-record-of-beneficial-ownership/", class: 'btn btn-primary'
-          = link_to "Example raw data", "/entities/#{ENV.fetch('EXAMPLE_ENTITY_ID', '12393130509952234896')}/raw", class: 'btn btn-primary'
+          = link_to "Example raw data", "/entities/12393130509952234896/raw", class: 'btn btn-primary'
       .col-md-6.floating-card.flex-first
         .card-left
           = image_tag('collection-forms.png')
