@@ -5,6 +5,8 @@ services:
       context: .
       target: dev
     env_file: .env
+    environment:
+      RAILS_DEVELOPMENT_HOSTS: $HOSTNAME
     networks:
       - web
     ports:
