@@ -3,11 +3,23 @@
 #===============================================================================
 FROM docker.io/library/ruby@sha256:7681a3d37560dbe8ff7d0a38f3ce35971595426f0fe2f5709352d7f7a5679255 AS dev
 
+RUN tmp="$(mktemp -d)" && \
+    cd "$tmp" && \
+    # SYNC: package.json
+    curl -fsSL -o setup.x https://deb.nodesource.com/setup_16.x && \
+    echo 'c4e4cdfc60d2de5610cfa03741e95f34c8df040acca6593a92d4d50949d66c45  setup.x' | sha256sum -c && \
+    bash setup.x && \
+    rm -rf "$tmp"
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        nodejs \
         shellcheck \
         && \
     rm -rf /var/lib/apt/lists/*
+
+RUN corepack enable && \
+    corepack prepare yarn@stable --activate
 
 RUN useradd x -m && \
     mkdir /home/x/r && \
@@ -21,9 +33,13 @@ COPY --chown=x:x Gemfile Gemfile.lock .ruby-version ./
 
 RUN bundle install
 
+COPY --chown=x:x package.json yarn.lock ./
+
+RUN yarn install
+
 COPY --chown=x:x . .
 #-------------------------------------------------------------------------------
-ENV PATH=/home/x/r/bin:$PATH
+ENV PATH=$PATH:/home/x/r/bin
 
 CMD ["run-dev"]
 
