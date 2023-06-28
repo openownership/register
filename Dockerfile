@@ -39,7 +39,7 @@ RUN yarn install
 
 COPY --chown=x:x . .
 #-------------------------------------------------------------------------------
-ENV PATH=$PATH:/home/x/r/bin
+ENV PATH=/home/x/r/bin:$PATH
 
 CMD ["run-dev"]
 
