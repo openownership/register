@@ -16,28 +16,10 @@ services:
       - ./app:/home/x/r/app
       - ./bin:/home/x/r/bin
       - ./config:/home/x/r/config
-      - ./content:/home/x/r/content
-      - ./lib:/home/x/r/lib
-      - ./public:/home/x/r/public
-      - ./spec:/home/x/r/spec
-      - ./vendor:/home/x/r/vendor
-      #
-      - ./app.json:/home/x/r/app.json
-      - ./babel.config.js:/home/x/r/babel.config.js
-      - ./config.ru:/home/x/r/config.ru
       - ./Gemfile.lock:/home/x/r/Gemfile.lock
       - ./Gemfile:/home/x/r/Gemfile
       - ./package.json:/home/x/r/package.json
-      - ./postcss.config.js:/home/x/r/postcss.config.js
-      - ./Rakefile:/home/x/r/Rakefile
+      - ./spec:/home/x/r/spec
       - ./yarn.lock:/home/x/r/yarn.lock
-      #
-      - ./.browserslistrc:/home/x/r/.browserslistrc
-      - ./.eslintrc.json:/home/x/r/.eslintrc.json
-      - ./.haml-lint.yml:/home/x/r/.haml-lint.yml
-      - ./.rspec:/home/x/r/.rspec
-      - ./.rubocop-disable-default-enabled.yml:/home/x/r/.rubocop-disable-default-enabled.yml
-      - ./.rubocop-enable-default-disabled.yml:/home/x/r/.rubocop-enable-default-disabled.yml
-      - ./.rubocop.yml:/home/x/r/.rubocop.yml
 networks:
   web: {}
