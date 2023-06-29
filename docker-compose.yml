@@ -1,21 +1,25 @@
-version: '3.7'
-
+version: "3.8"
 services:
-  redis:
-    image: redis:4.0.9-alpine
+  web:
+    build:
+      context: .
+      target: dev
+    env_file: .env
+    environment:
+      RAILS_DEVELOPMENT_HOSTS: $HOSTNAME
+    networks:
+      - web
+    ports:
+      - ${WEB_PORT:-14972}:$PORT
+    restart: on-failure
     volumes:
-      - 'redis_data:/data'
-    command: ["redis-server", "--appendonly", "yes"]
-    ports:
-      - 6379:6379
-    restart: always
-
-  mailcatcher:
-    image: schickling/mailcatcher
-    ports:
-      - 1080:1080
-      - 1025:1025
-    restart: always
-
-volumes:
-  redis_data:
+      - ./app:/home/x/r/app
+      - ./bin:/home/x/r/bin
+      - ./config:/home/x/r/config
+      - ./Gemfile.lock:/home/x/r/Gemfile.lock
+      - ./Gemfile:/home/x/r/Gemfile
+      - ./package.json:/home/x/r/package.json
+      - ./spec:/home/x/r/spec
+      - ./yarn.lock:/home/x/r/yarn.lock
+networks:
+  web: {}
