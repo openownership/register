@@ -11,8 +11,8 @@ free to contact us on: tech@openownership.org and we'd be happy to advise.
 
 ## Contents
 
-- [Setting up local development](#setting-up-local-development)
-- [Running tests](#running-tests)
+- [Installation](#installation)
+- [Testing](#testing)
 - [Code overview](#code-overview)
 - [A note on issue tracking](#a-note-on-issue-tracking)
 - [A note on Git history](#a-note-on-git-history)
@@ -25,51 +25,87 @@ normal (but not automated) production usage, or for one-off events.
 - [Migrating to a new ElasticSearch host](#migrating-to-a-new-elasticsearch-host)
 - [Adding new data source pages](adding-new-data-source-pages)
 
-## Setting up local development
+## Installation
 
-Note: Most of our development has been done on Mac machines running OSX, so whilst we
-expect things to work ok on Linux as well, the same may not be true for Windows.
+Installation can be accomplished either using Docker or without. The newer installation method uses Docker for both the web app and any service dependencies, whereas the older installation method doesn't use Docker for the web app and leaves service dependencies using Docker optional.
 
-- Install the version of ruby specified in `.ruby-version` using your favourite ruby version manager.
-- Install yarn (see: https://yarnpkg.com/en/docs/install)
+### Docker
 
-Create an `.env.local` and add in the various required env vars from `.env` – generally, you can use config values from the Heroku app `openownership-register-v2-staging`.
+Configure your environment using the example file; these variables can be taken from the Heroku `openownership-register-v2-stag` app:
 
-For data stores and other local services, you can use Docker Compose:
-
-```bash
-docker-compose up -d
+```sh
+cp .env.example .env
 ```
 
-Alternatively, you can use your own local method for running these services. See the `docker-compose.yml` file for the required services and versions, and the `.env` file for expected config.
+Install and boot:
 
-Run the setup command, which will check dependencies and set up the DB
+```sh
+docker compose up
+```
 
-```bash
+Wait for the healthchecks to become `healthy`:
+
+```sh
+watch docker ps
+```
+
+Visit the app in your browser (for a different port, override `WEB_PORT`):
+
+<http://localhost:14972>
+
+If you need to run Rails commands (e.g. to get a Rails console), there's no need to prefix with `bundle exec` or `bin/`; e.g.
+
+```sh
+docker compose exec web rails c
+```
+
+### Non-Docker
+
+Install the Ruby version specified in `.ruby-version`.
+
+Install the Node.js version specified in `package.json` `engines.node`.
+
+Install Yarn stable as detailed in <https://yarnpkg.com/getting-started/install>.
+
+Configure your environment using the example file; these variables can be taken from the Heroku `openownership-register-v2-stag` app:
+
+```sh
+cp .env.example .env
+```
+
+Install any service dependencies specified in `docker-compose.yml` (apart from `web`).
+
+Run the setup script:
+
+```sh
 bin/setup
 ```
 
-Then you're ready to use the usual `rails` commands (like `rails serve`) to run / work with the app.
+Start the app using the usual Rails commands (e.g. `rails server`).
 
-### Updates
+Visit the app in your browser (for a different port, override `PORT`):
 
-`bin/update` will bring your dependencies up to date.
+<http://localhost:3000>
 
-## Running tests
+## Testing
 
-To run all the tests and linters, as the CI service would, run:
+Testing can be accomplished either using Docker or without.
 
-```bash
-bin/test
+### Docker
+
+Run the tests:
+
+```sh
+docker compose exec web test
 ```
 
-Or, you can run individual language tests or linters directly:
+### Non-Docker
 
-Ruby tests: `bundle exec rspec`
-Javascript tests: `yarn test`
-Ruby lint: `bundle exec rubocop`
-Haml lint: `bundle exec haml-lint .`
-Javascript lint: `yarn lint`
+Run the tests:
+
+```sh
+bin/test
+```
 
 ## Code overview
 
