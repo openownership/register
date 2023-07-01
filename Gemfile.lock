@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-bods.git
-  revision: d412479d9c2dc0c106ad68dcc8fffca96bf35aad
+  revision: ef85e0a06f6c3e87672694554b1343e50f810cc9
   specs:
     register_sources_bods (0.1.0)
       activesupport (>= 6, < 8)
@@ -323,7 +323,7 @@ GEM
     memoist (0.16.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    minitest (5.18.0)
+    minitest (5.18.1)
     msgpack (1.6.0)
     multi_json (1.15.0)
     multipart-post (2.3.0)
