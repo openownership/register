@@ -21,5 +21,9 @@ services:
       - ./package.json:/home/x/r/package.json
       - ./spec:/home/x/r/spec
       - ./yarn.lock:/home/x/r/yarn.lock
+      #- ../register-common:/home/x/r/lib/register-common
+      #- ../register-sources-bods:/home/x/r/lib/register-sources-bods
+      #- ../register-sources-oc:/home/x/r/lib/register-sources-oc
+      #- ../register-sources-psc:/home/x/r/lib/register-sources-psc
 networks:
   web: {}
