@@ -4,13 +4,17 @@ services:
     build:
       context: .
       target: dev
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
     env_file: .env
     environment:
       RAILS_DEVELOPMENT_HOSTS: $HOSTNAME
     networks:
       - web
+      - elasticsearch
     ports:
-      - ${WEB_PORT:-14972}:$PORT
+      - ${DC_WEB_PORT:-14972}:$PORT
     restart: on-failure
     volumes:
       - ./app:/home/x/r/app
@@ -25,5 +29,47 @@ services:
       #- ../register-sources-bods:/home/x/r/lib/register-sources-bods
       #- ../register-sources-oc:/home/x/r/lib/register-sources-oc
       #- ../register-sources-psc:/home/x/r/lib/register-sources-psc
+  elasticsearch:
+    environment:
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      discovery.type: single-node
+    healthcheck:
+      interval: 5s
+      retries: 6
+      start_period: 60s
+      test:
+        - CMD
+        - curl
+        - -fs
+        - http://localhost:9200/_cluster/health
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.6
+    networks:
+      - elasticsearch
+    ports:
+      - ${DC_ELASTICSEARCH_PORT:-15489}:9200
+    restart: on-failure
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+  kibana:
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_PROTOCOL:-http}://elastic:${ELASTICSEARCH_PASSWORD}@${ELASTICSEARCH_HOST:-elasticsearch}:${ELASTICSEARCH_PORT:-9200}
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -fs
+        - http://localhost:5601/api/status
+    image: docker.elastic.co/kibana/kibana:7.17.6
+    networks:
+      - elasticsearch
+    ports:
+      - ${DC_KIBANA_PORT:-16492}:5601
+    restart: on-failure
 networks:
+  elasticsearch: {}
   web: {}
+volumes:
+  elasticsearch: {}
