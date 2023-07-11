@@ -1,10 +1,20 @@
 require 'ostruct'
 require 'register_sources_psc/repositories/company_record_repository'
+require 'register_sources_sk/repositories/record_repository'
+require 'register_sources_dk/repositories/deltagerperson_repository'
 require 'register_sources_bods/structs/identifier'
 
 class RawDataRecordRepository
   def initialize
-    @repository = RegisterSourcesPsc::Repositories::CompanyRecordRepository.new
+    @psc_repository = RegisterSourcesPsc::Repositories::CompanyRecordRepository.new
+    @sk_repository = RegisterSourcesSk::Repositories::RecordRepository.new
+    @dk_repository = RegisterSourcesDk::Repositories::DeltagerpersonRepository.new
+
+    @repositories = [
+      @psc_repository,
+      @sk_repository,
+      #@dk_repository
+    ]
   end
 
   def all_for_entity(main_entity)
@@ -50,9 +60,12 @@ class RawDataRecordRepository
 
   private
 
-  attr_reader :repository
+  attr_reader :psc_repository, :dk_repository, :sk_repository, :repositories
 
   def get_by_bods_identifiers(identifiers)
-    repository.get_by_bods_identifiers(identifiers)
+    repositories.map do |repository|
+      print "Searching for: ", identifiers, "\n"
+      repository.get_by_bods_identifiers(identifiers)
+    end.flatten.compact
   end
 end
