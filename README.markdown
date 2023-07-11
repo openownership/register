@@ -13,6 +13,7 @@ free to contact us on: tech@openownership.org and we'd be happy to advise.
 
 - [Installation](#installation)
 - [Testing](#testing)
+- [Development](#development)
 - [Code overview](#code-overview)
 - [A note on issue tracking](#a-note-on-issue-tracking)
 - [A note on Git history](#a-note-on-git-history)
@@ -106,6 +107,24 @@ Run the tests:
 ```sh
 bin/test
 ```
+
+## Development
+
+### Docker
+
+The app depends on a number of [Open Ownership](https://github.com/openownership) libraries which are included as Ruby gems in `Gemfile`. If working on code which spans multiple repositories, it can be convenient to be able to override the libraries and mount your latest code. To do so:
+
+Uncomment the extra lib volumes in `docker-compose.yml`, pointing to the libraries' repositories.
+
+Execute the `configure-dev-lib` script to configure Bundler:
+
+```sh
+docker compose exec web configure-dev-lib
+```
+
+Restart the services. Note that changes to local gem libraries do not get automatically detected, so if you need them to update, restart the services on demand.
+
+If you want to restore things to their clean state, simply rebuild and restart the services.
 
 ## Code overview
 

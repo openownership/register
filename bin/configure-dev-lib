@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+bundle config disable_local_branch_check true
+
+bundle config local.register_common       lib/register-common
+bundle config local.register_sources_bods lib/register-sources-bods
+bundle config local.register_sources_oc   lib/register-sources-oc
+bundle config local.register_sources_psc  lib/register-sources-psc
