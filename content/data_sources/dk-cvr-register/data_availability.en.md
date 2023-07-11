@@ -12,3 +12,7 @@ they formally commit to respect those same protections
 
 The CVR Register data is
 [licensed by statute](https://datafordeler.dk/vejledning/hent-data/).
+
+Open Ownership [ingests, maps and transforms the CVR data](https://bods-data.openownership.org/source/denmark) in line with [version 0.2 of our Beneficial Ownership Data Standard](https://standard.openownership.org/en/0.2.0/) before making it available for anyone to reuse in a range of formats.
+
+We also reconcile and enrich this using bulk data from OpenCorporates. These mappings are currently a work in progress and should be treated with caution. The dataset is published under the [Open Data Commons Attribution License](https://opendatacommons.org/licenses/by/1-0/).

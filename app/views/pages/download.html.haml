@@ -37,10 +37,9 @@
             <strong>Each file contains a complete snapshot of all of the data in this
             register</strong>. That includes data from:
           %ul
-            %li <a href="/data_sources/uk-psc-register">UK PSC Register</a> (regularly updated)
+            %li <a href="/data_sources/uk-psc-register">UK People with significant control (PSC) Register</a> (regularly updated)
             %li <a href="/data_sources/dk-cvr-register">Denmark Central Business Register (CVR)</a> (regularly updated)
             %li <a href="/data_sources/sk-rpvs-register">Slovakia Public Sector Partners Register</a> (regularly updated)
-            %li User submitted data
           %p
             <strong>The raw data from each of these sources has been imported, the
             companies <strong>reconciled with
@@ -50,24 +49,19 @@
             refreshed with reconciliations with OpenCorporates database to
             collect company name changes, dissolutions, etc.
           %p
-            <strong>The data is formatted in version 0.1 of
-            <a href="https://standard.openownership.org/en/0.1.0/">Open Ownership's
-            Beneficial Ownership Data Standard</a></strong>. All source data has been
+            <strong>The data is formatted in version 0.2 of
+            <a href="https://standard.openownership.org/en/0.2.0/">Open Ownership's
+            Beneficial Ownership Data Standard</a> (BODS) </strong>. All source data has been
             standardised on export, attempting to keep as much source-specific
             information as possible, but prioritising consistency across
             sources.
           %p
-            We are in the process of updating the Open Ownership Register to export data in line with
-            <a href="https://standard.openownership.org/en/0.2.0/"version 0.2 of the data standard</a>. Data
-            from individual source registries mapped to v0.2 so far can be found and reused in a variety of
-            formats via our <a href="https://bods-data.openownership.org/">BODS data analysis tools</a>.
-          %p
-            We have <a href="http://standard.openownership.org/en/v0-1/">
+            We have <a href="https://standard.openownership.org/en/0.2.0/">
             extensive documentation on the standard</a>, in particular we
-            recommend understanding the <a href="http://standard.openownership.org/en/v0-1/schema/concepts.html">
+            recommend understanding the <a href="https://standard.openownership.org/en/0.2.0/schema/concepts.html">
             key concepts in the data model</a> and then referring to the
             specifics using the
-            <a href="http://standard.openownership.org/en/v0-1/schema/schema-browser.html">
+            <a href="https://standard.openownership.org/en/0.2.0/schema/schema-browser.html">
             interactive schema browser</a>.
           %p
             <strong>The file is in <a href="http://jsonlines.org/">JSONLines</a> format</strong>,
@@ -77,11 +71,10 @@
             usually already available on MacOS and Linux systems, and is easily
             readable with a variety of compression programs on Windows.
           %p
-            <strong>Our regular data updates occur every three weeks</strong>, and we will
-            endeavour to make a new export after each update. This page will be
-            updated as soon as that happens, but you can also rely on the
-            "latest" link at the top of the page to always point to the most
-            recent data.
+            <strong>Our regular data updates at least every month</strong>, and we will
+            make a new export after each update. This page will be updated as soon as 
+            that happens, but you can also rely on the "latest" link at the top of the 
+            page to always point to the most recent data.
 
           %h2{ id: 'what-isnt-it' } What is this data not?
           %p
@@ -106,78 +99,20 @@
             individuals in these roles may also be beneficial owners, the
             inverse is not always true. The people in our data are only those
             who meet the definition of a beneficial owner in their respective
-            jurisdiction. There are often thresholds of share-holding (for
+            jurisdiction. There are often thresholds of shareholding (for
             example) which must be exceeded to qualify. Conversely,
-            share-holding is not the only way one becomes a beneficial owner.
-          %p
-            <strong>A complete BODS representation of the Register's dataset</strong>. As you'll see
-            from <a href="http://standard.openownership.org/en/v0-1/schema/schema-browser.html">
-            the documentation</a>, BODS' schema provides fields for lots of
-            data. We try to map the Register's data to this model as fully as
-            possible, but there is data we don't have because it's not
-            provided in our sources and data we haven't mapped fully yet.
+            shareholding is not the only way one becomes a beneficial owner.
 
           %p
-            In particular, we're aware of the following omissions and issues:
-          %p
-            %button.btn.btn-primary{ data: { toggle: "collapse", target: "#caveats" } }
-              Expand issues &nbsp;<i class="fa fa-plus"></i>
-          %ul.collapse{ id: 'caveats' }
-            %li
-              The data is in v0.1 of the data standard, not the most recent
-              v0.2. We're working on updating this.
-            %li
-              We're not making incremental updates and marking old statements
-              via <code>replacesStatements</code> fields. Each update is a
-              standalone snapshot of the entire data set, although our
-              <code>statementIDs</code> should be consistent where data
-              doesn't change. See our documentation on <a href="#identifiers">
-              identifiers</a> for more information on the ways you can link data
-              across releases.
-            %li
-              Because we try to reconcile every company with OpenCorporates, the
-              data you see may not have actually come from the source. If we can
-              match a company to OpenCorporates we prefer their data because it
-              is normalised, cleaned and derived from more sources than ours. In
-              particular this affects the <code>company name</code>,
-              <code>address</code>, <code>jurisdiction</code>,
-              <code>company number</code>, <code>incorporation date</code>,
-              <code>dissolution date</code> and <code>company type</code>.
-              We're aware of some issues where this causes a loss of data
-              from the source and are working on plans to make the process more
-              granular and transparent.
-            %li
-              We're not marking what type of <code>address</code> a person's address is,
-              as this information is not available in our sources.
-            %li
-              We're not marking which specific <code>Interests</code>
-              constitute beneficial ownership and which don't. We need to do
-              more analysis on our sources to understand when it's possible
-              to determine this.
-            %li
-              We only set <code>source</code> fields to report provenance on
-              <code>ownershipOrControlStatements</code>, not
-              <code>entityStatements</code> or <code>personStatements</code>.
-              This is because of how, historically, the register has stored
-              provenance information, but we're working on it.
-            %li
-              We don't set <code>statementDate</code>, because we don't have
-              dates available across our sources that is consistent with BODS'
-              meaning of this field. We need to do more work to understand when
-              we can report this accurately.
-            %li
-              We currently report all entities as <code>registeredEntity</code>
-              even when they're obviously not, such as the state which owns
-              state-owned entities.
-            %li
-              We don't have any data to be able to report <code>placeOfBirth</code>,
-              <code>placeOfResidence</code>, <code>pepStatus</code> or
-              <code>deathDate</code> for people, nor <code>alternateNames</code>
-              for companies.
+            The Register is a work-in-progress and there are a number of issues that
+            we are working to resolve. Please check the <a href="https://github.com/openownership/register-v2">
+            list of issues on Github</a>, report any <a href="https://github.com/openownership/register-v2/issues/new">
+            additional issues</a> or visit our <a href="https://github.com/orgs/openownership/projects/7/views/1">
+            project board</a>.
 
           %h2{ id: 'how-to-use-it' } How do I use it?
           %p
-            While we suggest you read the <a href="http://standard.openownership.org/en/v0-1/">
+            While we suggest you read the <a href="https://standard.openownership.org/en/0.2.0/">
             Beneficial Ownership Data Standard documentation</a>, here's a very
             brief overview of how the data is structured and how we suggest
             you can use it:
@@ -198,36 +133,19 @@
             revisiting statements which you see out of order.
           %h3{ id: 'examples' } Example data
           %p
-            An entity statement for an example company, registered with the UK's
-            Companies House register:
-          .card
-            .card-block
-              = @example_entity
-          %p An example person who will own the example company:
-          .card
-            .card-block
-              = @example_person
-          %p Their relationship (Jane owns all the shares in Example Ltd):
-          .card
-            .card-block
-              = @example_ownership
+            Find <a href="https://standard.openownership.org/en/0.3.0/examples/index.html">
+            example data</a> in the BODS documentation.
+
           %h3{ id: 'identifiers' } Identifying and linking entities
           %p
             The primary identifier in BODS is the <code>statementID</code>. This uniquely
             identifies a particular statement about a person, legal entity or
-            relationship between them. Every time details about one of those
-            things changes, a new statement is needed, which has a new id.
-            With our current data, we are only providing a 'snapshot', i.e.
-            the most recent set of statements, but you may want to link these
-            statements to older releases to see what changes. You may also want
-            to link our data to other datasets that have company numbers or
-            other identifiers in them. You may even want to link your project
-            back to us (which would be very nice, thank you!).
+            relationship between them. You may also want to link our data to other 
+            datasets that have company numbers or other identifiers in them.
           %p
-            The <code>identifiers</code> field is the way you can do all of these
-            things.
+            The <code>identifiers</code> field is the way you can do this.
           %p
-            The <a href="http://standard.openownership.org/en/v0-1/schema/reference.html#schema-identifier">
+            The <a href="https://standard.openownership.org/en/0.2.0/schema/reference.html#schema-identifier">
             BODS schema</a> allows for an array of identifiers to help users of
             the data link people and companies to other data sources. We make
             use of this feature to provide several of our own identifiers as well
@@ -238,35 +156,32 @@
             Here are some examples of identifiers you might see and an
             explanation of how to interpret them:
           %p
-            %strong An official identifier using an Org-Id scheme
+            %strong An official identifier using an org-id scheme
           .card
             .card-block
               = @example_official_identifier
           %p
             We will give these identifiers when we're sure that the id we have is
-            from the <a href="http://org-id.guide">Org-Id.guide</a>
+            from the <a href="http://org-id.guide">org-id.guide</a>
             <code>scheme</code> given. For example, we'll give
             company numbers under the <code>GB-COH</code> scheme for
-            companies declaring their beneficial owners in the Companies House
-            Persons of Significant Control register. However, we won't use it for
-            companies listed as beneficial owners in the same dataset, because
-            the company numbers given in that case aren't verified by Companies
-            House. Likewise, we won't give identifiers under that scheme for UK
-            companies from other countries' registers, as we assume they haven't
-            been validated or verified.
+            companies declaring their beneficial owners in the UK People with 
+            significant control (PSC) Register.
           %p
             If entities have identifiers from a register that we matched in
-            Org-Id, you should be able to uniquely identify them and connect
+            org-id, you should be able to uniquely identify them and connect
             them to other data sources. For example, you can match companies to
-            a national register or match them to other datasets like Open
-            Contracting which uses the same identifiers.
+            a national register or match them to other datasets like those from the 
+            <a href="https://data.open-contracting.org/">Open Contracting Partnership</a> 
+            which use the <a href="https://standard.open-contracting.org/latest/en/guidance/map/beneficial_ownership/">
+            same identifiers</a>.
           %p
-            All of the identifiers we currently match to Org-Id schemes are for
-            company numbers. Org-Id has many other identifier schemes available,
+            All of the identifiers we currently match to org-id schemes are for
+            company numbers. Org-id has many other identifier schemes available,
             such as for charities or educational institutions, however none of
             our data sources have verified data which we can link to them, so we
             do not use them. Similarly, BODS allows for schemes to declare
-            official identifiers for people, such as tax ids or passport numbers,
+            official identifiers for people, such as tax IDs or passport numbers,
             but none of our data sources report these either.
           %p
             %strong Unofficial identifiers
@@ -280,19 +195,18 @@
             .card-block
               = @example_composite_unofficial_person_identifier
           %p
-            In cases where we can't give an official Org-Id <code>scheme</code>,
+            In cases where we can't give an official org-id <code>scheme</code>,
             we'll give an identifier with just a <code>schemeName</code>.
             These names will always start with the ISO-3166-1 alpha2
             country code for the country the register is in, followed by the
-            original language name for the register. For example: <i>GB Persons
-            Of Significant Control Register</i> or <i>UA Edinyy Derzhavnyj
-            Reestr</i>.
+            original language name for the register. For example: <i>UK People with 
+            significant control (PSC) Register</i>.
           %p
             The intention is that these identifiers can be used to
             uniquely identify a person/company record within that data source,
             though not necessarily outside of it. Likewise, they will identify
             the record but may not uniquely identify the entity. For example,
-            for beneficial owners from the <i>GB Persons Of Significant Control
+            for beneficial owners from the <i>UK Persons with significant control
             Register</i> we give the value of the 'self link', a path-like string
             which uniquely identifies a beneficial owner record, but doesn't
             identify a specific person or company across records.
@@ -324,9 +238,9 @@
               = @example_register_identifier
           %p
             Every single known person and company will have an identifier that
-            gives their url on the register. Unknown companies are declared
+            gives their URL on the register. Unknown companies are declared
             explicitly in BODS, but don't have a corresponding page in the
-            register so we cannot give a url for them. Again the value is in
+            register so we cannot give a URL for them. Again the value is in
             both the <code>id</code> and <code>uri</code>.
 
           %h2{ id: 'license' } License
