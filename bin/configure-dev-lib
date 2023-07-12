@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+libs=(register-common register-sources-bods register-sources-oc register-sources-psc)
+
+echo -e "\n=== Configuring dev libs"
+
 bundle config disable_local_branch_check true
 
-bundle config local.register_common       lib/register-common
-bundle config local.register_sources_bods lib/register-sources-bods
-bundle config local.register_sources_oc   lib/register-sources-oc
-bundle config local.register_sources_psc  lib/register-sources-psc
+for lib in "${libs[@]}"; do
+    gem=${lib//-/_}
+    path=../lib/$lib
+    if [ -d "$path" ]; then
+        echo "    $gem => $path"
+        bundle config "local.$gem" "$path"
+    fi
+done
