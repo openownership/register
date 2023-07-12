@@ -112,15 +112,7 @@ bin/test
 
 ### Docker
 
-The app depends on a number of [Open Ownership](https://github.com/openownership) libraries which are included as Ruby gems in `Gemfile`. If working on code which spans multiple repositories, it can be convenient to be able to override the libraries and mount your latest code. To do so:
-
-Uncomment the extra lib volumes in `docker-compose.yml`, pointing to the libraries' repositories.
-
-Execute the `configure-dev-lib` script to configure Bundler:
-
-```sh
-docker compose exec web configure-dev-lib
-```
+The app depends on a number of [Open Ownership](https://github.com/openownership) libraries which are included as Ruby gems in `Gemfile`. If working on code which spans multiple repositories, it can be convenient to be able to override the libraries and mount your latest code. To do so, use the `DC_WEB_LIB_*` env vars (see `.env.example`).
 
 Restart the services. Note that changes to local gem libraries do not get automatically detected, so if you need them to update, restart the services on demand.
 

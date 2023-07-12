@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+bin/configure-dev-lib
+
 echo -e "\n=== Boot"
 rm -f tmp/pids/server.pid
 exec rails server --binding 0.0.0.0 --port "$PORT"
