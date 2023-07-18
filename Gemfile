@@ -46,8 +46,8 @@ gem 'hashie', '~> 3.4', '>= 3.4.4'
 gem 'register_common', git: 'https://github.com/openownership/register-common.git'
 gem 'register_sources_oc', git: 'https://github.com/openownership/register-sources-oc.git'
 gem 'register_sources_psc', git: 'https://github.com/openownership/register-sources-psc.git'
-gem 'register_sources_bods', git: 'https://github.com/openownership/register-sources-bods.git'
-gem 'register_sources_sk', path: '../register-sources-sk' # git: 'https://github.com/openownership/register-sources-sk.git', branch: 'raw-records'
+gem 'register_sources_bods', path: '../register-sources-bods' #git: 'https://github.com/openownership/register-sources-bods.git'
+gem 'register_sources_sk', git: 'https://github.com/openownership/register-sources-sk.git', branch: 'raw-records'
 gem 'register_sources_dk', git: 'https://github.com/openownership/register-sources-dk.git', branch: 'raw-records'
 
 group :development, :test do

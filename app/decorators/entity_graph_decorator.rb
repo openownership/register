@@ -42,7 +42,7 @@ class EntityGraphDecorator < ApplicationDecorator
     entity = node.entity #.decorate(context: context)
     classes = entity.dissolution_date ? ['dissolved'] : []
     tooltip = nil
-    unless false # entity.is_a? UnknownPersonsEntity
+    unless entity.is_unknown?
       tooltip = h.render(
         partial: 'entities/graph_tooltip',
         locals: { entity: entity },

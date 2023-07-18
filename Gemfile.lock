@@ -31,20 +31,6 @@ GIT
       xxhash
 
 GIT
-  remote: https://github.com/openownership/register-sources-dk.git
-  revision: 5b6ef2d32a478e190f7fd4c8530a8550962382e6
-  branch: raw-records
-  specs:
-    register_sources_dk (0.1.0)
-      activesupport (>= 6, < 8)
-      countries (~> 4.0.1)
-      dry-struct (>= 1, < 2)
-      dry-types (>= 1, < 2)
-      elasticsearch (>= 7.10, < 8)
-      iso8601
-      xxhash
-
-GIT
   remote: https://github.com/openownership/register-sources-oc.git
   revision: 04ef5f2991164717d90f9f0499d082c296335e89
   specs:
@@ -67,18 +53,6 @@ GIT
   revision: 7dcd200bddca4c99497d0676a9fd5bcacf807939
   specs:
     register_sources_psc (0.1.0)
-      activesupport (>= 6, < 8)
-      countries (~> 4.0.1)
-      dry-struct (>= 1, < 2)
-      dry-types (>= 1, < 2)
-      elasticsearch (>= 7.10, < 8)
-      iso8601
-      xxhash
-
-PATH
-  remote: ../register-sources-sk
-  specs:
-    register_sources_sk (0.1.0)
       activesupport (>= 6, < 8)
       countries (~> 4.0.1)
       dry-struct (>= 1, < 2)
@@ -592,10 +566,8 @@ DEPENDENCIES
   redcarpet (~> 3.5)
   register_common!
   register_sources_bods!
-  register_sources_dk!
   register_sources_oc!
   register_sources_psc!
-  register_sources_sk!
   rexml (~> 3.2)
   roadie-rails (~> 2.3)
   rollbar (~> 3.3)

@@ -1,6 +1,6 @@
 module EntityHelper
   def entity_link(entity, &block)
-    if entity.master_entity.present? #entity.is_a?(CircularOwnershipEntity) || entity.is_a?(UnknownPersonsEntity) || entity.master_entity.present?
+    if entity.master_entity.present? || entity.is_unknown? #entity.is_a?(CircularOwnershipEntity)
       capture(&block)
     else
       link_to(entity_path(entity.id), &block)
