@@ -80,7 +80,7 @@ class EntitiesController < ApplicationController
     @data_source_names = DATA_SOURCE_REPOSITORY.data_source_names_for_raw_records(raw_records)
 
     unless @data_source_names.empty?
-      @newest_raw_record = Date.current # nil #RAW_DATA_RECORD_REPOSITORY.newest_for_entity(entity).data.notified_on # .updated_at
+      @newest_raw_record = RAW_DATA_RECORD_REPOSITORY.newest_for_entity_date(entity)
       @raw_record_count = raw_records.size
     end
 
@@ -127,12 +127,12 @@ class EntitiesController < ApplicationController
     end
     redirect_to_master_entity?(:raw, entity) && return
     @sentity = entity
-    @raw_data_records = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity) # .page(params[:page]).per(10)
+    @raw_data_records = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity)
     return if @raw_data_records.empty?
 
     @oc_data = get_opencorporates_company_hash(entity) || {}
-    @newest = Date.current # RAW_DATA_RECORD_REPOSITORY.newest_for_entity(entity).data.notified_on # .updated_at
-    @oldest = Date.current # RAW_DATA_RECORD_REPOSITORY.oldest_for_entity(entity).data.notified_on # created_at
+    @newest = RAW_DATA_RECORD_REPOSITORY.newest_for_entity_date(entity)
+    @oldest = RAW_DATA_RECORD_REPOSITORY.oldest_for_entity_date(entity)
     @data_sources = DATA_SOURCE_REPOSITORY.all_for_raw_records(@raw_data_records)
   end
 
