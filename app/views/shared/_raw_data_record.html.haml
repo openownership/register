@@ -1,4 +1,4 @@
-.row.raw_data_record{ id: "raw_data_record_#{raw_record.etag}" }
+.row.raw_data_record{ id: "raw_data_record_#{raw_record.respond_to?(:etag) ? raw_record.etag : raw_record.data.etag}" }
   .col-lg-8
     .raw-data-records
       %pre.pre-scrollable= JSON.pretty_generate(raw_record.to_h)
@@ -7,4 +7,4 @@
       .frame-wrap
         %h6= t("raw_data_records.show.fields.etag")
         %p
-          %code= raw_record.etag
+          %code= raw_record.respond_to?(:etag) ? raw_record.etag : raw_record.data.etag

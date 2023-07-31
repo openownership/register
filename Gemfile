@@ -47,8 +47,8 @@ gem 'register_common', git: 'https://github.com/openownership/register-common.gi
 gem 'register_sources_oc', git: 'https://github.com/openownership/register-sources-oc.git'
 gem 'register_sources_psc', git: 'https://github.com/openownership/register-sources-psc.git'
 gem 'register_sources_bods', path: '../register-sources-bods' #git: 'https://github.com/openownership/register-sources-bods.git'
-gem 'register_sources_sk', git: 'https://github.com/openownership/register-sources-sk.git', branch: 'raw-records'
-gem 'register_sources_dk', git: 'https://github.com/openownership/register-sources-dk.git', branch: 'raw-records'
+gem 'register_sources_sk', git: 'https://github.com/openownership/register-sources-sk.git'
+gem 'register_sources_dk', path: '../register-sources-dk' # git: 'https://github.com/openownership/register-sources-dk.git'
 
 group :development, :test do
   gem 'byebug', '~> 11.1'

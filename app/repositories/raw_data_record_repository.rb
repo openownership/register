@@ -13,7 +13,7 @@ class RawDataRecordRepository
     @repositories = [
       @psc_repository,
       @sk_repository,
-      #@dk_repository
+      @dk_repository
     ]
   end
 
@@ -64,7 +64,6 @@ class RawDataRecordRepository
 
   def get_by_bods_identifiers(identifiers)
     repositories.map do |repository|
-      print "Searching for: ", identifiers, "\n"
       repository.get_by_bods_identifiers(identifiers)
     end.flatten.compact
   end
