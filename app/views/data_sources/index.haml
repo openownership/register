@@ -9,4 +9,4 @@
           - @data_sources.each do |data_source|
             %h2= data_source.name
             = sanitize data_source.short_overview
-            = link_to "Read more", "data_sources/#{data_source.id}", class: 'btn btn-primary'
+            = link_to "Read more", "data_sources/#{data_source.slug}", class: 'btn btn-primary'

@@ -22,9 +22,11 @@ module EntityHelper
     parts = []
     if entity.natural_person?
       parts << entity.country.try(:nationality)
-      date_of_birth(entity).presence.try do |date_of_birth|
-        parts << t("helpers.entities.entity_attributes_snippet.date_of_birth", date_of_birth: date_of_birth)
-      end
+      date_of_birth(entity).presence
+      #date_of_birth(entity).presence.try do |date_of_birth|
+      #  print("I'm trying date_of_birth #{date_of_birth}\n")
+      #  parts << t("helpers.entities.entity_attributes_snippet.date_of_birth", date_of_birth: date_of_birth)
+      #end
     else
       parts << entity_jurisdiction(entity, short: true)
       parts << "(#{entity.incorporation_date} – #{entity.dissolution_date})" if entity.incorporation_date?

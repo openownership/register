@@ -17,7 +17,7 @@ class DataSourceRepository
   end
 
   def find_many(ids)
-    all.filter { |data_source| ids.include? data_source.id }
+    all.filter { |data_source| ids.include?(data_source.id) || ids.include?(data_source.slug)  }
   end
 
   def where_overview_present
