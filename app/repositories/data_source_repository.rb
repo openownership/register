@@ -26,7 +26,6 @@ class DataSourceRepository
 
   def data_source_names_for_raw_records(raw_records)
     datasource_names = raw_records.map do |raw_record|
-      print "DEBUG RAW RECORD: ", raw_record, "\n\n"
       case raw_record
       when RegisterSourcesDk::Deltagerperson
         "Denmark Central Business Register (Centrale Virksomhedsregister [CVR])"

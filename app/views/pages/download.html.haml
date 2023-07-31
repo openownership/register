@@ -30,7 +30,7 @@
           %p Links to the most recent files we've exported:
           %ul
             - @exports.each do |export|
-              %li= link_to export.created_at.to_date, "https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.#{export.created_at.iso8601}.jsonl.gz", rel: 'nofollow'
+              %li= link_to export.created_at.to_date, "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3-eu-west-1.amazonaws.com/#{export.s3_path}", rel: 'nofollow'
 
           %h2{ id: 'what-is-it' } What is this data?
           %p
@@ -260,7 +260,7 @@
               %h5.card-title Latest data
               %p Exported: #{@exports.first.created_at.to_date}
               %p
-                = link_to 'https://oo-register-production.s3-eu-west-1.amazonaws.com/public/exports/statements.latest.jsonl.gz', rel: 'nofollow', class: 'btn btn-primary', id: 'latest-data' do
+                = link_to "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3-eu-west-1.amazonaws.com/#{@exports.first.s3_path}", rel: 'nofollow', class: 'btn btn-primary', id: 'latest-data' do
                   Download &nbsp;<i class='fa fa-download'></i>
         .card
           .card-block
