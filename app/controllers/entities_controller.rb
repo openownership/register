@@ -105,6 +105,8 @@ class EntitiesController < ApplicationController
           entity.merged_entities.map(&:bods_statement)
         ].compact.flatten.uniq { |s| s.statementID }
 
+        statements = BodsStatementSorter.new.sort_statements(statements)
+
         render json: JSON.pretty_generate(statements.as_json)
       end
     end
