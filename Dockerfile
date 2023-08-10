@@ -7,7 +7,7 @@ RUN tmp="$(mktemp -d)" && \
     cd "$tmp" && \
     # SYNC: package.json
     curl -fsSL -o setup.x https://deb.nodesource.com/setup_16.x && \
-    echo 'c4e4cdfc60d2de5610cfa03741e95f34c8df040acca6593a92d4d50949d66c45  setup.x' | sha256sum -c && \
+    echo 'de093cd0d0a2e5754b2e1a4ba06e6624437776b7ee5ede8036a48c6d319eb209  setup.x' | sha256sum -c && \
     bash setup.x && \
     rm -rf "$tmp"
 
