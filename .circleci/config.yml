@@ -29,7 +29,6 @@ jobs:
       - checkout
       
       - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
 
       # Which version of bundler?
       - run:
