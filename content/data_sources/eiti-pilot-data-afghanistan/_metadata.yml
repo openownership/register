@@ -1,9 +1,0 @@
----
-name: EITI pilot data - Afghanistan
-slugs:
-- eiti-pilot-data-afghanistan
-document_id: EITI Structured Data - Afghanistan
-current_statistic_types: []
-types:
-- thirdParty
-- primaryResearch

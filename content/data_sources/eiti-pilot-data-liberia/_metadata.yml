@@ -1,9 +1,0 @@
----
-name: EITI pilot data - Liberia
-slugs:
-- eiti-pilot-data-liberia
-document_id: EITI Structured Data - Liberia
-current_statistic_types: []
-types:
-- thirdParty
-- primaryResearch

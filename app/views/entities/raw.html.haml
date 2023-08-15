@@ -1,4 +1,4 @@
-- content_for(:title, @entity.name)
+- content_for(:title, @sentity.name)
 
 .entity-header
   .container-fluid
@@ -7,37 +7,37 @@
         .row
           .col-lg-8.header-sep
             .entity-name-wrap.clearfix
-              %h1.entity-name= @entity.name
-              - if @entity.natural_person?
-                - @entity.country.try(:nationality).try do |nationality|
+              %h1.entity-name= @sentity.name
+              - if @sentity.natural_person?
+                - @sentity.country.try(:nationality).try do |nationality|
                   .jurisdiction
-                    = country_flag(@entity.country)
+                    = country_flag(@sentity.country)
                     = nationality
                   .type-icon.natural-person
                     = image_tag "icon-natural-person.svg"
                     = t("entity_types.natural-person").capitalize
               - else
-                - entity_jurisdiction(@entity).try do |entity_jurisdiction|
+                - @sentity.country.try do |country|
                   .jurisdiction
-                    = country_flag(@entity.country)
-                    = entity_jurisdiction
+                    = country_flag(country)
+                    = entity_jurisdiction(@sentity)
                   .type-icon.legal-entity
                     = image_tag "icon-legal-entity.svg"
                     = glossary_tooltip(t("entity_types.legal-entity").capitalize, :'legal-entity', :right)
           .col-lg-4.header-sep
             .entity-header-meta.meta
-              - if @entity.natural_person?
-                - @entity.country_of_residence.try do |country_of_residence|
+              - if @sentity.natural_person?
+                - @sentity.country_of_residence.try do |country_of_residence|
                   %h6= t("entities.show.fields.country_of_residence")
                   %p= country_of_residence
-                - date_of_birth(@entity).presence.try do |date_of_birth|
+                - @sentity.date_of_birth.presence.try do |date_of_birth|
                   %h6= t("entities.show.fields.date_of_birth")
                   %p= date_of_birth
               - else
-                - @entity.company_number.try do |company_number|
+                - @sentity.company_number.try do |company_number|
                   %h6= t("entities.show.fields.company_number")
                   %p= company_number
-                - @entity.company_type.try do |company_type|
+                - @oc_data[:company_type].try do |company_type|
                   %h6= t("entities.show.fields.company_type")
                   %p= company_type
 
@@ -48,8 +48,6 @@
           .options
             %h6 Options
             %ul.list-unstyled
-              %li.option-transliterate
-                = transliteration_action(@should_transliterate)
               %li.option-report.last
                 = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank', rel: 'noopener'
 
@@ -57,7 +55,7 @@
   .container-fluid
     .row.raw_data_records_title
       .col-lg-12
-        %h2= page_entries_info @raw_data_records, entry_name: 'raw record'
+        %h2 Raw Records
     - if @raw_data_records.any?
       .row.raw_data_records_summary
         .col-lg-8
@@ -76,6 +74,3 @@
         .col-lg-12
           - @raw_data_records.each do |raw_record|
             = render(partial: 'shared/raw_data_record', locals: { raw_record: raw_record })
-          = paginate @raw_data_records
-
-

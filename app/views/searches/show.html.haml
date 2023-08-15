@@ -28,25 +28,17 @@
                 - if @data_sources['uk-psc-register'].present?
                   %li= link_to('UK PSC Register', data_source_path(@data_sources['uk-psc-register']))
                 - else
-                  %li= link_to('UK PSC Register', 'http://download.companieshouse.gov.uk/en_pscdata.html', target: '_blank', rel: 'noopener')
+                  %li= link_to('UK PSC Register', 'https://find-and-update.company-information.service.gov.uk/', target: '_blank', rel: 'noopener')
 
                 - if @data_sources['dk-cvr-register'].present?
                   %li= link_to('Denmark Central Business Register (CVR)', data_source_path(@data_sources['dk-cvr-register']))
                 - else
-                  %li= link_to('Denmark Central Business Register (CVR)', 'https://cvr.dk', target: '_blank', rel: 'noopener')
+                  %li= link_to('Denmark Central Business Register (CVR)', 'https://datacvr.virk.dk/', target: '_blank', rel: 'noopener')
 
                 - if @data_sources['sk-rpvs-register'].present?
                   %li= link_to('Slovakia Public Sector Partners Register', data_source_path(@data_sources['sk-rpvs-register']))
                 - else
-                  %li= link_to('Slovakia Public Sector Partners Register', 'https://rpvs.gov.sk/', target: '_blank', rel: 'noopener')
-
-                - if @data_sources['ua-edr-register'].present?
-                  %li= link_to('Ukraine Unified States Register (EDR)', data_source_path(@data_sources['ua-edr-register']))
-                - else
-                  %li= link_to('Ukraine Unified States Register (EDR)', 'https://data.gov.ua/dataset/1c7f3815-3259-45e0-bdf1-64dca07ddc10', target: '_blank', rel: 'noopener')
-
-                %li EITI pilot data
-                %li User submissions
+                  %li= link_to('Slovakia Public Sector Partners Register', 'https://rpvs.gov.sk/rpvs', target: '_blank', rel: 'noopener')
 
             %hr
 
@@ -55,17 +47,7 @@
 
             %hr
 
-            - if user_signed_in?
-              %p
-                = link_to "Add your company’s beneficial ownership", submissions_path, class: 'btn btn-primary'
-            - else
-              %p
-                = link_to "Sign up to add your company’s beneficial ownership", new_user_registration_path, class: 'btn btn-primary'
-              %p
-                Already signed up?
-                = link_to "Sign in here", new_user_session_path
-
-      - elsif @response.results.total.zero?
+      - elsif @response.empty?
         .col-lg-6.offset-lg-3
           .no-results
             %p= t(".no_results")
@@ -77,24 +59,21 @@
                 - if @fallback
                   %em= t(".fallback", query: params[:q])
                   %br
-                = page_entries_info @response.records, entry_name: 'result'
+                = page_entries_info @response, entry_name: 'result'
               .options
-                .option-transliterate
-                  = transliteration_action(@should_transliterate)
 
               %ul.list-unstyled.list-entities
-                - @response.records.to_a.each do |record|
+                - @response.each do |record|
                   %li.item
-                    = render "shared/entity_title", entity: decorate(record), with_company: true
+                    = render "shared/entity_title", entity: record, with_company: true
                     - if record.natural_person?
                       .result-controls
                         = render partial: 'shared/entity_controlled_companies', locals: { entity: record }
                     - if record.merged_entities_count&.positive?
                       .result-merged-people
                         = t('.merged_people', count: record.merged_entities_count)
-              = paginate @response.records
+              = paginate @response
 
       .col-lg-3
-        - unless params[:q].blank? || @response.results.empty?
+        - unless params[:q].blank? || @response.empty?
           = render partial: 'filter', locals: { key: 'type', helper: method(:search_filter_type) }
-          = render partial: 'filter', locals: { key: 'country', helper: method(:search_filter_country) }

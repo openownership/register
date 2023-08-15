@@ -1,7 +1,7 @@
 The regulation on registration of beneficial owners in Denmark entered into
 effect in May 2017. Data is collected by the Danish Business Authority in the
 Danish Central Business Register (aka CVR —
-[Det Centrale Virksomhedsregister](https://datacvr.virk.dk/data/)).
+[Det Centrale Virksomhedsregister](https://datacvr.virk.dk/artikel/system-til-system-adgang-til-cvr-data)).
 
 ## Direct ownership
 

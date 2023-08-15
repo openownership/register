@@ -1,9 +1,0 @@
----
-name: EITI pilot data - Norway
-slugs:
-- eiti-pilot-data-norway
-document_id: EITI Structured Data - Norway
-current_statistic_types: []
-types:
-- thirdParty
-- primaryResearch

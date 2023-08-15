@@ -1,9 +1,0 @@
----
-name: EITI pilot data - Cameroon
-slugs:
-- eiti-pilot-data-cameroon
-document_id: EITI Structured Data - Cameroon
-current_statistic_types: []
-types:
-- thirdParty
-- primaryResearch

@@ -1,9 +1,0 @@
----
-name: EITI pilot data - Togo
-slugs:
-- eiti-pilot-data-togo
-document_id: EITI Structured Data - Togo
-current_statistic_types: []
-types:
-- thirdParty
-- primaryResearch

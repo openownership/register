@@ -6,8 +6,6 @@
 !/tmp/.keep
 
 .byebug_history
-.env.local
-.env.test.local
 
 /spec/examples.txt
 
@@ -23,3 +21,6 @@ yarn-debug.log*
 .vscode
 
 venv
+
+/.env*
+/docker-compose.*.yml

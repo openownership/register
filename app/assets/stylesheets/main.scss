@@ -583,7 +583,7 @@ a, button {
   }
 }
 
-.search-content, .tree-controls {
+.search-content {
   .options {
     position: absolute;
     top: 19px;
@@ -612,14 +612,6 @@ a, button {
       width: 100%;
       text-align: right;
     }
-  }
-}
-
-.tree-controls {
-  .options {
-    position: absolute;
-    top: 28px;
-    right: 0px;
   }
 }
 
@@ -921,31 +913,6 @@ span.tooltip-helper {
 
   .result-merged-people {
     margin-top: 7px;
-  }
-
-  .view-as-tree {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    color: white;
-    background: $greyBlue;
-    border-color: $greyBlue;
-
-    @include media-breakpoint-down(sm) {
-      position: relative;
-      top: auto;
-      right: auto;
-      display: block;
-    }
-
-    &:hover {
-      background: $darkBlue;
-      border-color: $darkBlue;
-    }
-
-    i {
-      transform: rotate(180deg);
-    }
   }
 }
 

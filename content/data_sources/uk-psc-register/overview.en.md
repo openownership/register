@@ -1,5 +1,5 @@
 The United Kingdom’s beneficial ownership register was launched in April 2016 as
-the Persons with significant control (PSC) Register.
+the People with significant control (PSC) Register.
 
 ### Direct ownership
 

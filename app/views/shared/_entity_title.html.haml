@@ -1,20 +1,21 @@
-.entity-title
-  .entity-link
-    = entity_link(entity) do
-      %span.flag-wrap
-        = country_flag(entity.country)
-      = entity.name
-      - if entity.respond_to?(:unknown_reason) && entity.unknown_reason
-        %span.entity-unknown-reason
-          = entity.unknown_reason
-      - if entity.natural_person?
-        .type-icon.natural-person
-          = image_tag "icon-natural-person.svg"
-      - else
-        .type-icon.legal-entity
-          = image_tag "icon-legal-entity.svg"
-      %small
-        = entity_attributes_snippet(entity)
-        - entity.address.try do |address|
-          %br
-          = address
+- if entity
+  .entity-title
+    .entity-link
+      = entity_link(entity) do
+        %span.flag-wrap
+          = country_flag(entity.country)
+        = entity.name
+        - if entity.respond_to?(:unknown_reason) && entity.unknown_reason
+          %span.entity-unknown-reason
+            = entity.unknown_reason
+        - if entity.natural_person?
+          .type-icon.natural-person
+            = image_tag "icon-natural-person.svg"
+        - else
+          .type-icon.legal-entity
+            = image_tag "icon-legal-entity.svg"
+        %small
+          = entity_attributes_snippet(entity)
+          - entity.address.try do |address|
+            %br
+            = address

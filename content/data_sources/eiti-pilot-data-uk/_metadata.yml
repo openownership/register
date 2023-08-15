@@ -1,9 +1,0 @@
----
-name: EITI pilot data - UK
-slugs:
-- eiti-pilot-data-uk
-document_id: EITI Structured Data - UK
-current_statistic_types: []
-types:
-- thirdParty
-- primaryResearch

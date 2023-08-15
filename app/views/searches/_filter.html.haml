@@ -7,14 +7,14 @@
           %span.filtered
             - helper.call(search_params[key]).each do |element|
               = element
-            %span.document-count= @response.results.total
+            %span.document-count= @response.total_count
             = link_to t('.remove_filter'), search_path(search_params.to_h.without(key)), class: "remove"
     - else
       %h6= t('.filter_by', key: key)
       %ul.list-unstyled
-        - @response.response[:aggregations][key][:buckets].each do |bucket|
+        - @response&.aggs.to_h[key].to_h["buckets"].to_a.each do |bucket|
           %li
-            = link_to search_path(search_params.merge(key => bucket[:key])) do
-              - helper.call(bucket[:key]).each do |element|
+            = link_to search_path(search_params.merge(key => bucket['key'])) do
+              - helper.call(bucket['key']).each do |element|
                 = element
-              %span.document-count= bucket[:doc_count]
+              %span.document-count= bucket['doc_count']

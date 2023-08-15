@@ -1,99 +1,145 @@
 class EntitiesController < ApplicationController
+  DATA_SOURCE_REPOSITORY = Rails.application.config.data_source_repository
+  RAW_DATA_RECORD_REPOSITORY = Rails.application.config.raw_data_record_repository
+  ENTITY_SERVICE = Rails.application.config.entity_service
+
+  class PaginatedArray < Array
+    def initialize(source_array, current_page: 0, records_per_page: 10, limit_value: nil, total_count: nil)
+      @source_array = source_array
+
+      @current_page = current_page
+      @records_per_page = records_per_page
+      @limit_value = limit_value
+      @total_count = total_count || source_array.count
+
+      super(source_array)
+    end
+
+    attr_reader :current_page, :limit_value, :total_count
+  
+    def limit(n)
+      new_limit = [limit_value, n].compact.min
+      PaginatedArray.new(source_array[0...new_limit], current_page: current_page, records_per_page: records_per_page, limit_value: new_limit, total_count: total_count)
+    end
+  
+    def page(page_num)
+      PaginatedArray.new(source_array[0...n], current_page: page_num, records_per_page: records_per_page, limit_value: limit_value, total_count: total_count)
+    end
+
+    def per(max_per_page)
+      PaginatedArray.new(source_array[0...n], current_page: current_page, records_per_page: max_per_page, limit_value: limit_value, total_count: total_count)
+    end
+
+    def total_pages
+      (total_count / records_per_page).ceil
+    end
+
+    def order_by(**args)
+      self
+    end
+
+    def offset_value
+      current_page * records_per_page
+    end
+
+    private
+
+    attr_reader :records_per_page, :source_array
+  end
+
   def show
-    entity = Entity.includes(:master_entity).find(params[:id])
+    entity_id = params[:id]
+
+    @sentity = ENTITY_SERVICE.find_by_entity_id(entity_id)
+    entity = @sentity
+
+    unless entity
+      raise ActionController::RoutingError.new('Not Found')
+    end
+    
     redirect_to_master_entity?(:show, entity) && return
 
-    @merged_entities = entity.merged_entities.page(params[:merged_page]).per(10)
+    @merged_entities = entity.merged_entities # .page(params[:merged_page]).per(10)
 
-    @source_relationships = entity
-      .relationships_as_source
-      .order_by(started_date: :desc)
-      .page(params[:source_page]).per(10)
+    @source_relationships = PaginatedArray.new(entity.relationships_as_source)
+      # .order_by(started_date: :desc)
+      # .page(params[:source_page]).per(10)
 
-    @ultimate_source_relationship_groups = decorate_with(
-      ultimate_source_relationship_groups(entity),
-      UltimateSourceRelationshipGroupDecorator,
-    )
+    @ultimate_source_relationship_groups = # decorate_with(
+      ultimate_source_relationship_groups2(entity)#,
+      # UltimateSourceRelationshipGroupDecorator,
+    # )
+
+    @ultimate_source_relationship_groups.map! { |group| OpenStruct.new(group) }
 
     unless request.format.json?
-      @similar_people = entity.natural_person? ? decorate(similar_people(entity)) : nil
+      @similar_people = entity.natural_person? ? similar_people(entity) : nil
     end
 
-    @data_source_names = DataSource.all_for_entity(entity).pluck(:name)
+    @data_source_names = DATA_SOURCE_REPOSITORY.data_source_names_for_entity(entity)
     unless @data_source_names.empty?
-      @newest_raw_record = RawDataRecord.newest_for_entity(entity).updated_at
-      @raw_record_count = RawDataRecord.all_for_entity(entity).size
+      @newest_raw_record = RAW_DATA_RECORD_REPOSITORY.newest_for_entity(entity).data.notified_on # .updated_at
+      @raw_record_count = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity).size
     end
 
-    @entity = decorate(entity)
+    # Conversion
+    @oc_data = get_opencorporates_company_hash(entity) || {}
 
     respond_to do |format|
       format.html
       format.json do
-        # We cache some large JSON output to reduce load, but we're selective
-        # so we can't do the usual Rails.cache.fetch with a block
-        cache_key = "#{entity.cache_key}/bods_statements"
-        statements = Rails.cache.read(cache_key)
-        if statements.blank?
-          relationships = (
-            # Not just the paginated ones we show in HTML, all of them
-            entity.relationships_as_source +
-            @ultimate_source_relationship_groups.map do |g|
-              g[:relationships].map(&:sourced_relationships)
-            end.flatten.compact
-          )
+        relationships = (
+          # Not just the paginated ones we show in HTML, all of them
+          @sentity.relationships_as_source +
+          @ultimate_source_relationship_groups.map do |g|
+            g[:relationships].map(&:sourced_relationships)
+          end.flatten.compact
+        )
 
-          serializer = BodsSerializer.new(
-            relationships,
-            BodsMapper.instance,
-          )
+        statements = [
+          BodsSerializer.new(relationships).statements,
+          entity.bods_statement,
+          entity.master_entity&.bods_statement,
+          entity.merged_entities.map(&:bods_statement)
+        ].compact.flatten.uniq { |s| s.statementID }
 
-          # It's only worth caching large entities which are expensive to
-          # traverse all the relationships for
-          if serializer.statements.size > 20
-            Rails.cache.write(cache_key, serializer.statements.to_json)
-          end
-
-          statements = serializer.statements.to_json
-        end
-
-        render json: statements
+        render json: JSON.pretty_generate(statements.as_json)
       end
     end
   end
 
-  def tree
-    entity = Entity.find(params[:id])
-    redirect_to_master_entity?(:tree, entity) && return
-    @node = decorate_with(TreeNode.new(entity), TreeNodeDecorator)
-    @entity = decorate(entity)
-  end
-
   def graph
-    entity = Entity.find(params[:id])
+    entity = ENTITY_SERVICE.find_by_entity_id(params[:id])
+    unless entity
+      raise ActionController::RoutingError.new('Not Found')
+    end
     redirect_to_master_entity?(:graph, entity) && return
     @graph = decorate(EntityGraph.new(entity))
-    @entity = decorate(entity)
+    @sentity = entity
   end
 
   def raw
-    entity = Entity.find(params[:id])
+    entity = ENTITY_SERVICE.find_by_entity_id(params[:id])
+    unless entity
+      raise ActionController::RoutingError.new('Not Found')
+    end
     redirect_to_master_entity?(:raw, entity) && return
-    @entity = decorate(entity)
-    @raw_data_records = RawDataRecord.all_for_entity(entity)
-      .includes(:imports)
-      .order_by(updated_at: :desc, created_at: :desc)
-      .page(params[:page])
-      .per(10)
+    @sentity = entity
+    @raw_data_records = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity) # .page(params[:page]).per(10)
     return if @raw_data_records.empty?
 
-    @newest = RawDataRecord.newest_for_entity(entity).updated_at
-    @oldest = RawDataRecord.oldest_for_entity(entity).created_at
-    @data_sources = DataSource.all_for_entity(entity)
+    @oc_data = get_opencorporates_company_hash(entity) || {}
+    @newest = RAW_DATA_RECORD_REPOSITORY.newest_for_entity(entity).data.notified_on # .updated_at
+    @oldest = RAW_DATA_RECORD_REPOSITORY.oldest_for_entity(entity).data.notified_on # created_at
+    @data_sources = DATA_SOURCE_REPOSITORY.all_for_entity(entity)
   end
 
   def opencorporates_additional_info
-    entity = Entity.find(params[:id])
+    entity = ENTITY_SERVICE.find_by_entity_id(params[:id])
+    unless entity
+      raise ActionController::RoutingError.new('Not Found')
+    end
+    @sentity = entity
     begin
       @opencorporates_company_hash = get_opencorporates_company_hash(entity)
     rescue OpencorporatesClient::TimeoutError
@@ -115,10 +161,11 @@ class EntitiesController < ApplicationController
     true
   end
 
-  def ultimate_source_relationship_groups(entity)
-    label_for = ->(r) { r.source.is_a?(UnknownPersonsEntity) || r.source.name.blank? ? rand : r.source.name }
+  def ultimate_source_relationship_groups2(entity)
+    # label_for = ->(r) { r.source.is_a?(UnknownPersonsEntity) || r.source.name.blank? ? rand : r.source.name }
+    label_for = ->(r) { r.source.name.blank? ? rand : r.source.name }
 
-    relationships = InferredRelationshipGraph.new(entity).ultimate_source_relationships
+    relationships = InferredRelationshipGraph2.new(entity).ultimate_source_relationships
 
     RelationshipsSorter.new(relationships).call
       .uniq { |r| r.sourced_relationships.first.keys_for_uniq_grouping }
@@ -133,10 +180,7 @@ class EntitiesController < ApplicationController
   end
 
   def similar_people(entity)
-    Entity.search(
-      query: Search.query(q: entity.name, type: 'natural-person'),
-      aggs: Search.aggregations,
-    ).limit(11).records.to_a
+    ENTITY_SERVICE.search({ q: entity.name, type: 'personStatement' }, exclude_identifiers: entity.identifiers)
   end
 
   def get_opencorporates_company_hash(entity)

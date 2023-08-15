@@ -8,6 +8,7 @@ en:
     undefined_interest: There is no data available on how the person benefits from this company
     unknown_persons: There is no data available on who owns this company
     legal-entity: A company, government, or other legal construct
+    entityStatement: A company, government, or other legal construct
     interest: The means through which control is exercised or benefit is gained.
     provenance: The source of the data and any relevant timestamps
     unknown_jurisdiction: We can’t tell, based on the underlying data set, where this legal entity is domiciled or what the nationality of this beneficial owner is

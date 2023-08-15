@@ -1,24 +1,31 @@
 class SearchesController < ApplicationController
+  ENTITY_SERVICE = Rails.application.config.entity_service
+  DATA_SOURCE_REPOSITORY = Rails.application.config.data_source_repository
+
   def show
-    @legal_entity_count = Entity.legal_entities.count
-    @data_sources = DataSource.all.index_by(&:slug)
+    statement_repository = Rails.application.config.entity_service
+
+    @legal_entity_count = ENTITY_SERVICE.count_legal_entities
+    @data_sources = DATA_SOURCE_REPOSITORY.all.index_by(&:slug)
 
     return if params[:q].blank?
 
     @fallback = false
 
-    @response = Entity.search(query: Search.query(search_params), aggs: Search.aggregations).page(params[:page]).per(10)
+    page = params[:page].to_i
 
-    if @response.results.total.zero? # rubocop:disable Style/GuardClause
+    @response = ENTITY_SERVICE.search(search_params, page: page, per_page: 10)
+
+    if @response.count.zero? # rubocop:disable Style/GuardClause
       @fallback = true
-      @response = Entity.search(query: Search.fallback_query(search_params), aggs: Search.aggregations).page(params[:page]).per(10)
+      @response = ENTITY_SERVICE.fallback_search(search_params, page: page, per_page: 10)
     end
   end
 
   protected
 
   def search_params
-    params.permit(:q, :type, :country)
+    params.permit(:q, :type, :country, :page)
   end
 
   helper_method :search_params

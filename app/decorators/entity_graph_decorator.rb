@@ -1,7 +1,7 @@
 class EntityGraphDecorator < ApplicationDecorator
   delegate_all
 
-  decorates_association :entity
+  # decorates_association :entity
 
   def cytoscape_data
     {
@@ -39,10 +39,10 @@ class EntityGraphDecorator < ApplicationDecorator
   end
 
   def cytoscape_entity_node(node)
-    entity = node.entity.decorate(context: context)
+    entity = node.entity #.decorate(context: context)
     classes = entity.dissolution_date ? ['dissolved'] : []
     tooltip = nil
-    unless entity.is_a? UnknownPersonsEntity
+    unless false # entity.is_a? UnknownPersonsEntity
       tooltip = h.render(
         partial: 'entities/graph_tooltip',
         locals: { entity: entity },
@@ -60,7 +60,7 @@ class EntityGraphDecorator < ApplicationDecorator
   end
 
   def cytoscape_label_node(node)
-    entity = node.entity.decorate(context: context)
+    entity = node.entity #.decorate(context: context)
     label = I18n.t("entity_graph.labels.#{node.label_key}", **node.label_data)
     show_graph_link = node.label_key.start_with? 'max_levels'
     tooltip = h.render(
@@ -79,7 +79,7 @@ class EntityGraphDecorator < ApplicationDecorator
 
   def cytoscape_relationship_edge(edge)
     classes = edge.source_id == edge.target_id ? ['circular'] : []
-    relationship = edge.relationship.decorate(context: context)
+    relationship = edge.relationship #.decorate(context: context)
     classes << 'ended' if relationship.ended_date
     {
       data: {
