@@ -55,8 +55,6 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
-    environment:
-      ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_PROTOCOL:-http}://elastic:${ELASTICSEARCH_PASSWORD}@${ELASTICSEARCH_HOST:-elasticsearch}:${ELASTICSEARCH_PORT:-9200}
     healthcheck:
       test:
         - CMD
