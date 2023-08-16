@@ -30,7 +30,7 @@
           %p Links to the most recent files we've exported:
           %ul
             - @exports.each do |export|
-              %li= link_to export.created_at.to_date, "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3-eu-west-1.amazonaws.com/#{export.s3_path}", rel: 'nofollow'
+              %li= link_to export.created_at.to_date, "https://#{ENV.fetch('BODS_EXPORT_S3_BUCKET_NAME')}.s3-eu-west-1.amazonaws.com/#{export.s3_path}", rel: 'nofollow'
 
           %h2{ id: 'what-is-it' } What is this data?
           %p

@@ -6,7 +6,7 @@ class BodsStatementSorter
   def sort_statements(statements)
     statements = statements.sort_by { |statement| statement.publicationDetails&.publicationDate }
 
-    statements_by_id = statements.map { |statement| [statement.statementID, statement] }.to_h
+    statements_by_id = statements.to_h { |statement| [statement.statementID, statement] }
 
     used_ids = Set.new
     new_statements = []
