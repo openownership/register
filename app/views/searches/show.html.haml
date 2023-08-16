@@ -26,17 +26,17 @@
               %p= t(".data_sources_preface", count: number_with_delimiter(@legal_entity_count))
               %ul.list-unstyled
                 - if @data_sources['uk-psc-register'].present?
-                  %li= link_to('UK PSC Register', data_source_path(@data_sources['uk-psc-register']))
+                  %li= link_to('UK PSC Register', data_source_path(@data_sources['uk-psc-register'].slug))
                 - else
                   %li= link_to('UK PSC Register', 'https://find-and-update.company-information.service.gov.uk/', target: '_blank', rel: 'noopener')
 
                 - if @data_sources['dk-cvr-register'].present?
-                  %li= link_to('Denmark Central Business Register (CVR)', data_source_path(@data_sources['dk-cvr-register']))
+                  %li= link_to('Denmark Central Business Register (CVR)', data_source_path(@data_sources['dk-cvr-register'].slug))
                 - else
                   %li= link_to('Denmark Central Business Register (CVR)', 'https://datacvr.virk.dk/', target: '_blank', rel: 'noopener')
 
                 - if @data_sources['sk-rpvs-register'].present?
-                  %li= link_to('Slovakia Public Sector Partners Register', data_source_path(@data_sources['sk-rpvs-register']))
+                  %li= link_to('Slovakia Public Sector Partners Register', data_source_path(@data_sources['sk-rpvs-register'].slug))
                 - else
                   %li= link_to('Slovakia Public Sector Partners Register', 'https://rpvs.gov.sk/rpvs', target: '_blank', rel: 'noopener')
 

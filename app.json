@@ -17,6 +17,9 @@
     "BODS_EXPORT_AWS_SECRET_ACCESS_KEY": {
       "required": true
     },
+    "BODS_EXPORT_AWS_REGION": {
+      "required": true
+    },
     "BODS_EXPORT_S3_BUCKET_NAME": {
       "required": true
     },

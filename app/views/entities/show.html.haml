@@ -30,7 +30,7 @@
           .col-lg-4.header-sep
             .entity-header-meta.meta
               - if @sentity.natural_person?
-                - @sentity.country.try do |country_of_residence|
+                - @sentity.country_of_residence.try do |country_of_residence|
                   %h6= t(".fields.country_of_residence")
                   %p= country_of_residence
                 - @sentity.date_of_birth.presence.try do |date_of_birth|
