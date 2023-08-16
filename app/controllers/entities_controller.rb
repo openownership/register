@@ -85,7 +85,7 @@ class EntitiesController < ApplicationController
     end
 
     # Conversion
-    @oc_data = get_opencorporates_company_hash(entity) || {}
+    @oc_data = get_opencorporates_company_hash(entity, sparse: true) || {}
 
     respond_to do |format|
       format.html
@@ -132,7 +132,7 @@ class EntitiesController < ApplicationController
     @raw_data_records = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity)
     return if @raw_data_records.empty?
 
-    @oc_data = get_opencorporates_company_hash(entity) || {}
+    @oc_data = get_opencorporates_company_hash(entity, sparse: true) || {}
     @newest = RAW_DATA_RECORD_REPOSITORY.newest_for_entity_date(entity)
     @oldest = RAW_DATA_RECORD_REPOSITORY.oldest_for_entity_date(entity)
     @data_sources = DATA_SOURCE_REPOSITORY.all_for_raw_records(@raw_data_records)
@@ -187,10 +187,10 @@ class EntitiesController < ApplicationController
     ENTITY_SERVICE.search({ q: entity.name, type: 'personStatement' }, exclude_identifiers: entity.identifiers)
   end
 
-  def get_opencorporates_company_hash(entity)
+  def get_opencorporates_company_hash(entity, sparse: false)
     return unless entity.jurisdiction_code? && entity.company_number?
 
-    client = OpencorporatesClient.new_for_app timeout: 2.0
-    client.get_company(entity.jurisdiction_code, entity.company_number, sparse: false)
+    client = OpencorporatesClient.new_for_app timeout: 5.0
+    client.get_company(entity.jurisdiction_code, entity.company_number, sparse:)
   end
 end
