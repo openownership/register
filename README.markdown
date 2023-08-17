@@ -411,3 +411,5 @@ some other `types` you'll define in `DataSourceStatistic::Types` for whatever yo
 other stats are. At the moment, it's assumed that stats are a count of companies
 that meet some criteria. If this cannot be expressed as a percentage of the
 total you should update the method `show_as_percentage?` to exclude it.
+
+.
