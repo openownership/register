@@ -5,6 +5,8 @@ require 'register_sources_dk/repositories/deltagerperson_repository'
 require 'register_sources_bods/structs/identifier'
 
 class RawDataRecordRepository
+  DEFAULT_PER_PAGE = 20
+
   def initialize
     @psc_repository = RegisterSourcesPsc::Repositories::CompanyRecordRepository.new
     @sk_repository = RegisterSourcesSk::Repositories::RecordRepository.new
@@ -74,7 +76,7 @@ class RawDataRecordRepository
 
   def get_by_bods_identifiers(identifiers)
     repositories.map do |repository|
-      repository.get_by_bods_identifiers(identifiers)
+      repository.get_by_bods_identifiers(identifiers, per_page: DEFAULT_PER_PAGE)
     end.flatten.compact
   end
 
