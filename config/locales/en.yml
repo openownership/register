@@ -63,7 +63,7 @@ en:
       latest_data: 'Latest data: %{date}'
       detail:
         one: 'See the original source record'
-        other: 'See the %{count} original source records'
+        other: 'See the original source records'
   data_sources:
     show:
       data_availability_title: Data availability and license
