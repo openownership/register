@@ -132,10 +132,8 @@
               %ul
                 %li
                   %p= @data_source_names.to_sentence
-                  %p.meta-secondary
-                    = t('entities.provenance.latest_data', date: @newest_raw_record.to_date)
                 %li
-                  = link_to(t('entities.provenance.detail', count: @raw_record_count), raw_entity_path(@sentity.id))
+                  = link_to(t('entities.provenance.detail'), raw_entity_path(@sentity.id))
 
 
         - if @oc_data[:restricted_for_marketing]

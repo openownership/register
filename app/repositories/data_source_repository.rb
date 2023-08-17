@@ -24,6 +24,13 @@ class DataSourceRepository
     all.filter { |data_source| data_source.overview.present? }
   end
 
+  def data_source_names_for_entity(entity)
+    [
+      entity.relationships_as_source,
+      entity.relationships_as_target
+    ].flatten.compact.map(&:provenance).map(&:source_name).uniq.sort
+  end
+
   def data_source_names_for_raw_records(raw_records)
     datasource_names = raw_records.map do |raw_record|
       case raw_record

@@ -76,13 +76,7 @@ class EntitiesController < ApplicationController
       @similar_people = entity.natural_person? ? similar_people(entity) : nil
     end
 
-    raw_records = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity)
-    @data_source_names = DATA_SOURCE_REPOSITORY.data_source_names_for_raw_records(raw_records)
-
-    unless @data_source_names.empty?
-      @newest_raw_record = RAW_DATA_RECORD_REPOSITORY.newest_for_entity_date(entity)
-      @raw_record_count = raw_records.size
-    end
+    @data_source_names = DATA_SOURCE_REPOSITORY.data_source_names_for_entity(entity)
 
     # Conversion
     @oc_data = get_opencorporates_company_hash(entity, sparse: true) || {}
