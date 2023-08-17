@@ -1,2 +1,0 @@
-ID,Reporting Date (Sample date),Start Date (if known),End Date (if known),Child company name,Child Company register identifier,Child company jurisdiction,Parent Entity Name,Parent Entity jurisdiction,Parent Entity register identifier,Parent Entity Type,Mechanism of Control,Direct or Indirect relationship,Ownership share (percentage),Voting percentage,Type of Share,Source URL,"Confidence in this source (HIGH, MEDIUM, LOW)"
-1,2014,2014-12-31,,Example Child,12345,UK,Example Person,,,Individual (shareholder),,,100,,,https://example.com/individual-bo-filing.pdf,MEDIUM

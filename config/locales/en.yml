@@ -5,8 +5,8 @@ en:
     show:
       controlled_entities_html: Companies controlled by %{entity}
       controlled_entities_none:
-        legal-entity_html: No companies are known to be controlled by %{entity}
-        natural-person_html: No companies are known to be beneficially owned by %{entity}
+        entityStatement_html: No companies are known to be controlled by %{entity}
+        personStatement_html: No companies are known to be beneficially owned by %{entity}
       controlling_entities:
         text_html: "%{beneficial_owners} of %{entity}"
         beneficial_owners: Beneficial owners
@@ -63,7 +63,7 @@ en:
       latest_data: 'Latest data: %{date}'
       detail:
         one: 'See the original source record'
-        other: 'See the %{count} original source records'
+        other: 'See the original source records'
   data_sources:
     show:
       data_availability_title: Data availability and license
@@ -72,85 +72,6 @@ en:
       news_fallback_text: Tweets curated by Open Ownership
       overview_title: Overview, definitions, thresholds
       source_url_link: 'Original source data'
-      statistics_title: Ownership transparency performance monitoring
-      statistics:
-        companies: Number of companies
-        percentage: Percentage of companies
-        footnotes: Footnotes
-  data_source_statistics:
-    total:
-      title: Total non-dissolved companies on the national commerce register
-      footnote_html: '<a href="https://www.gov.uk/government/publications/incorporated-companies-in-the-uk-january-to-march-2019/incorporated-companies-in-the-uk-january-to-march-2019">Companies House statistics, March 2019</a>: The total number includes active and dormant companies (‘effective’), as well as those in the process of dissolution (non-effective). It excludes dissolved companies.'
-    register_total:
-      title: Total non-dissolved companies from the national UBO Register in the OpenOwnership register
-      footnote_html: The Open Ownership Register only contains data on companies that are registered on the PSC Register.
-    psc_no_owner:
-      title: Companies with missing UBO declaration
-    psc_unknown_owner:
-      title: Companies with 'No UBO' declaration
-      footnote_html: <a href="https://github.com/companieshouse/api-enumerations/blob/master/psc_descriptions.yml#L126">Enumeration of reasons for declarations with no UBO</a>.
-    psc_offshore_rle:
-      title: Companies with RLE outside of the UK
-    psc_non_legit_rle:
-      title: Companies with RLE not in a regulated market country
-      footnote_html: UK, EEA state, USA, Japan, Switzerland or Israel
-    psc_secrecy_rle:
-      title: Companies with RLE in a secrecy jurisdiction
-      footnote_html: Countries scoring 60 or above on the <a href="https://www.financialsecrecyindex.com/introduction/fsi-2018-results">Financial Secrecy Index 2018</a>
-    dissolved:
-      title: Total dissolved companies from the national UBO Register in the Open Ownership register
-  devise:
-    confirmations:
-      new:
-        title: Resend confirmation instructions
-        header: Resend confirmation instructions
-        submit: Resend confirmation instructions
-    passwords:
-      edit:
-        title: Change your password
-        header: Change your password
-        minimum_password_length: (%{length} characters minimum)
-        new_password: New password
-        submit: Change my password
-      new:
-        title: Forgot your password?
-        header: Forgot your password?
-        submit: Send me reset password instructions
-    registrations:
-      edit:
-        title: My account
-        current_password_help: (we need your current password to confirm your changes)
-        header: My account
-        new_password:
-          leave_blank: (leave blank if you don't want to change it)
-          minimum_length: "%{length} characters minimum"
-        pending_reconfirmation: "Currently waiting confirmation for: %{email}"
-        submit: Update
-        destroy:
-          header: Delete your account
-          intro_html: If you want to delete your account you can do so here. We will remove all record of your submissions, draft and approved, but any data that has already included in the register will remain there, in accordance with <a href="/privacy#personal-information">our data retention policy</a>.
-          retention_html: If you would like your submitted data to be removed also, please consult <a href="/privacy#redaction">our privacy policy</a> to understand when we will do so and how to ask for us to remove it.
-          warning_html: Warning! There is no going back. Once you click this button all your data is gone and your account will be removed. We cannot retrieve it.
-          submit: Delete my account and all my submissions
-      new:
-        title: Sign up
-        email_help: (Please use your company email address)
-        header: Sign up
-        minimum_password_length: (%{length} characters minimum)
-        submit: Sign up
-        errors:
-          captcha: must be completed to prove you're not a robot
-    sessions:
-      new:
-        title: Sign in
-        header: Sign in
-        submit: Sign in
-    shared:
-      links:
-        new_session: Sign in
-        new_registration: Sign up
-        new_password: Forgot your password?
-        new_confirmation: Didn't receive confirmation instructions?
   helpers:
     entities:
       entity_attributes_snippet:
@@ -171,11 +92,6 @@ en:
         follow: Follow our work on
         home: Home
         feedback: Feedback
-        new_user_session: Sign in
-        destroy_user_session: Sign out
-        new_user_registration: Sign up
-        edit_user_registration: My account
-        submissions: Submit your data
   pages:
     terms_and_conditions:
       title: Terms & Conditions
@@ -190,7 +106,7 @@ en:
     data_changelog:
       title: Data changelog
     home:
-      title: Search over 23 million beneficial ownership records
+      title: Search over 26 million beneficial ownership records
   relationships:
     provenance:
       unknown: Not yet uploaded
@@ -241,6 +157,8 @@ en:
     no_controlled_companies: "Does not currently control any companies"
   entity_types:
     default: entity
+    entityStatement: legal entity
+    personStatement: person
     legal-entity: legal entity
     natural-person: person
 
@@ -253,20 +171,6 @@ en:
 
   circular_ownership_entity:
     name: circular ownership
-
-  tree:
-    help: Click and drag anywhere to change the view
-    zoom: Zoom in or out
-
-  submission_mailer:
-    submission_approved:
-      subject: Your submission was approved
-      approval: "Thank you for submitting your information to the Open Ownership Register. We're pleased to notify you that your submission has been approved and is now available on the Register."
-      view: View your data here
-    submission_approval_requested:
-      subject: A user has requested approval for their submission
-      approval: "A user on the Open Ownership Register has requested that you approve their submission."
-      view: View the submission here
 
   # From https://github.com/companieshouse/api-enumerations/blob/develop/psc_descriptions.yml
   statement-descriptions:

@@ -1,3 +1,0 @@
-git+https://github.com/openownership/ua-edr-extractor.git@v0.1-python-upgrade-3.9#egg=ua_edr_extractor
-libcovebods==0.8.0
-libcove==0.28.0

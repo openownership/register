@@ -1,6 +1,8 @@
 class PagesController < ApplicationController
+  BODS_EXPORT_REPOSITORY = Rails.application.config.bods_export_repository
+
   def download
-    @exports = BodsExport.where(:completed_at.ne => nil).desc(:created_at).take(5)
+    @exports = BODS_EXPORT_REPOSITORY.completed_exports(limit: 5)
 
     @example_entity = formatted_json(example_entity)
     @example_person = formatted_json(example_person)
@@ -15,7 +17,7 @@ class PagesController < ApplicationController
   end
 
   def data_changelog
-    @exports = BodsExport.where(:completed_at.ne => nil).desc(:created_at).take(5)
+    @exports = BODS_EXPORT_REPOSITORY.completed_exports(limit: 5)
   end
 
   private

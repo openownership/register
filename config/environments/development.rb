@@ -38,5 +38,5 @@ Rails.application.configure do
   config.i18n.raise_on_missing_translations = true
   config.action_mailer.preview_path = Rails.root.join('app/mailers/previews')
 
-  config.s3_adapter_klass = "::S3Adapter"
+  config.hosts << ENV['RAILS_DEVELOPMENT_HOSTS']
 end

@@ -15,8 +15,6 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.force_ssl = true
 
-  config.s3_adapter_klass = "::S3Adapter"
-
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter

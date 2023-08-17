@@ -1,9 +1,0 @@
----
-name: EITI pilot data - Burkina Faso
-slugs:
-- eiti-pilot-data-burkina-faso
-document_id: EITI Structured Data - Burkina Faso
-current_statistic_types: []
-types:
-- thirdParty
-- primaryResearch

@@ -1,8 +1,8 @@
 {
   "@context":"https://schema.org/",
   "@type":"Dataset",
-  "name":"Open Ownership's Global Register of Beneficial Ownership",
-  "description":"Beneficial ownership data from Open Ownership's Register, an aggregation of data covering more than 8 million companies and 9 million people, linked by 23 million statements of ownership or control.\n\nThe data is regularly sourced from the national beneficial ownership registers of the UK, Denmark and Ukraine, along with sectoral disclosures from Slovakia and The Extractive Industries Transparency Initiative beneficial ownership pilot of 2013-15. In addition to aggregating these sources, company data is standardised and kept up to date via regular matching with OpenCorporates, as well as being de-duplicated by our own internal processes.\n\nThe data is structured according to the [Beneficial Ownership Data Standard](https://standard.openownership.org) and offered as a single JSONLines formatted file, with one statement per line.\n\nPlease see [our documentation](https://register.openownership.org/download) and [changelog](https://register.openownership.org/data-changelog) for more information.",
+  "name":"Open Ownership Register",
+  "description":"Beneficial ownership data from the Open Ownership Register, an aggregation of data covering more than 9 million companies and 10 million people, linked by millions of statements of ownership or control.\n\nThe data is regularly sourced from the national beneficial ownership registers of the UK and Denmark, along with sectoral disclosures from Slovakia. In addition to aggregating these sources, company data is standardised and kept up to date via regular matching with OpenCorporates, as well as being de-duplicated by our own internal processes.\n\nThe data is structured according to the [Beneficial Ownership Data Standard](https://standard.openownership.org) and offered as a single JSONLines formatted file, with one statement per line.\n\nPlease see [our documentation](https://register.openownership.org/download) and [changelog](https://register.openownership.org/data-changelog) for more information.",
   "url":"https://register.openownership.org/download",
   "isBasedOn": [],
   "keywords":[
@@ -13,6 +13,8 @@
       "Final beneficiaries",
       "Transparency",
       "Anti-Corruption"
+      "UBOs"
+      "Ultimate beneficial owners"
   ],
   "license" : "http://opendatacommons.org/licenses/by/1.0/index.html",
   "creator":{

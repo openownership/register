@@ -21,17 +21,6 @@ RSpec.configure do |config|
   config.order = :random
   Kernel.srand config.seed
 
-  config.before(:suite) do
-    DatabaseCleaner[:mongoid].strategy = [:deletion]
-    DatabaseCleaner[:mongoid].clean_with(:deletion)
-  end
-
-  config.around(:each) do |example|
-    DatabaseCleaner[:mongoid].cleaning do
-      example.run
-    end
-  end
-
   WebMock.disable_net_connect!(
     allow_localhost: true,
     allow: 'chromedriver.storage.googleapis.com',

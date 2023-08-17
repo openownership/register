@@ -3,8 +3,6 @@ import 'bootstrap.native.custom';
 import tippy from 'tippy.js';
 import EntityGraph from 'entity-graph';
 import OCAdditionalInfo from 'oc-additional-info';
-import Submissions from 'submissions';
-import Tree from 'tree';
 
 (() => {
   Rails.start();
@@ -28,14 +26,10 @@ import Tree from 'tree';
 
   const entityGraph = new EntityGraph(document);
   const ocAdditionalInfo = new OCAdditionalInfo(window.document);
-  const submissions = new Submissions(window.document);
-  const tree = new Tree(window.document);
 
   ready(() => {
     entityGraph.init();
     ocAdditionalInfo.init();
-    submissions.init();
-    tree.init();
     tippy('[data-tippy-content]');
   });
 })();

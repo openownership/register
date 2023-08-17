@@ -21,7 +21,7 @@
           %span.home-hero-subhead--inner
             Search by company
         %ul.list-unstyled
-          %li Disclosures from over 8 million companies.
+          %li Disclosures from over 9 million companies.
           %li Search by company name or number.
           %li Cleaned company data, matched against OpenCorporates.
       .col-lg-2.hidden-md-down.home-hero-or
@@ -39,13 +39,13 @@
     .row
       .col-md-6
         %h2 What is beneficial ownership?
-        %p Beneficial ownership and control is about the people who ultimately call the shots, or receive the benefits, from a company. Disclosure can help bring an end to the abuse of anonymous companies.
+        %p A beneficial owner is a person who ultimately has the right to some share of a corporate vehicle’s income or assets, or the ability to control its activities. Beneficial ownership transparency reveals how companies and other legal entities or arrangements, such as trusts, are owned and controlled by their beneficial owners.
         %p <strong>Journalists</strong> can use beneficial ownership information to follow the money.
         %p <strong>Businesses can</strong> use beneficial ownership information to reduce risk and know who they are doing business with.
         %p <strong>Investigators</strong> can use beneficial ownership to recover proceeds of crime.
         %p
           = link_to "Read our primer", "http://standard.openownership.org/en/latest/primer/whatisbo.html", class: 'btn btn-primary'
-          = link_to "Impact stories", "https://www.openownership.org/resources/?category=impact", class: 'btn btn-primary'
+          = link_to "Impact stories", "https://www.openownership.org/en/impact/", class: 'btn btn-primary'
       .col-md-6.floating-card
         .card-right
           = image_tag('screenshot-network.png')
@@ -54,11 +54,11 @@
       .col-md-6.flex-last
         %h2 Explore ownership chains, not just owners
         %p We piece together individual disclosures across jurisdictions to show you joined-up ownership structures, all the way to the top of the chain.
-        %p Our companies are standardised and normalised, thanks to matching against the OpenCorporates API.
+        %p Our companies are standardised and normalised, thanks to matching against data from OpenCorporates.
         %p We additionally de-duplicate multiple disclosures from the same people, to ensure you see everything in one place.
         %p All of this data is browsable via interactive graph visualisations, showing you an entire network at a glance.
         %p
-          = link_to "Explore the example", "/entities/#{ENV.fetch('EXAMPLE_ENTITY_ID', '59b978b167e4ebf340844101')}", class: 'btn btn-primary'
+          = link_to "Explore the example", "/entities/12393130509952234896/graph", class: 'btn btn-primary'
           = link_to "Our data sources", data_sources_path, class: 'btn btn-primary'
       .col-md-6.floating-card.flex-first
         .card-left
@@ -67,9 +67,8 @@
     .row
       .col-md-6
         %h2 Freely licensed data, in bulk
-        %p We release all of our data as an open ledger, formatted using the Beneficial Ownership Data Standard (BODS).
-        %p This data is updated monthly, and made available as a free download under the Open Data Commons Attribution License.
-        %p Currently containing over 23 million BODS statements, in a 21GB JSONLines file.
+        %p We release all of our data openly for anyone to reuse, formatted using the Beneficial Ownership Data Standard (BODS).
+        %p This data is updated regularly, and made available as a free download under the Open Data Commons Attribution License.
         %p
           = link_to "Download our data", download_path, class: 'btn btn-primary'
       .col-md-6.floating-card
@@ -79,11 +78,11 @@
     .row
       .col-md-6.flex-last
         %h2 With provenance and history
-        %p The best beneficial ownership data is updated regularly. We keep track of changes in source that you can see not only who controls a company today, but who controlled it last week, or last year too.
-        %p Where we can, we include full provenance information - so you can see where our data has come from, and how it has changed. And if you see something that needs updating - you can go back to the source to ask for those changes.
+        %p The best beneficial ownership data is updated regularly meaning that good auditable records are crucial to understand the data.
+        %p We keep track of changes where possible and show you a copy of the raw data as well as its source.
         %p
-          = link_to "Why is history important?", "https://www.openownership.org/uploads/oo-characteristics-effective-bo-data.pdf", class: 'btn btn-primary'
-          = link_to "Example raw data", "/entities/#{ENV.fetch('EXAMPLE_ENTITY_ID', '59b978b167e4ebf340844101')}/raw", class: 'btn btn-primary'
+          = link_to "Why is history important?", "https://www.openownership.org/en/publications/building-an-auditable-record-of-beneficial-ownership/", class: 'btn btn-primary'
+          = link_to "Example raw data", "/entities/12393130509952234896/raw", class: 'btn btn-primary'
       .col-md-6.floating-card.flex-first
         .card-left
           = image_tag('collection-forms.png')
@@ -92,8 +91,8 @@
       .col-md-8.col-lg-6.offset-md-2.offset-lg-3
         %h2 Always free of charge, 100% open data
         %p We were created by transparency campaigners, journalists and technologists to advance the state of beneficial ownership transparency. As a result, our data is free to use, and always will be.
-        %p We don't only publish open data, we also work with data providers to help them publish open data. The register is a result of combining all of the open data we've found to date.
+        %p We don't only publish open data, we also work with data providers to help them publish open data. This register is a result of combining all of the open data we've found to date.
         %p Our aim is to show the transformative effect of publishing freely and openly.
         %p
-          = link_to "The case for open data", "https://www.openownership.org/uploads/briefing-on-beneficial-ownership-as-open-data.pdf", class: "btn btn-primary"
+          = link_to "The case for public beneficial ownership data", "https://www.openownership.org/en/publications/making-central-beneficial-ownership-registers-public/", class: "btn btn-primary"
           = link_to "More about what we do", "https://www.openownership.org/what-we-do/", class: "btn btn-primary"

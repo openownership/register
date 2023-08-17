@@ -1,11 +1,14 @@
 class RelationshipsController < ApplicationController
-  def show
-    target_entity = Entity.find(params[:entity_id])
-    source_entity = resolve_master_entity(Entity.find_or_unknown(params[:id]))
+  ENTITY_SERVICE = Rails.application.config.entity_service
 
-    relationships = InferredRelationshipGraph
+  def show
+    target_entity = ENTITY_SERVICE.find_by_entity_id(params[:entity_id])
+    source_entity = resolve_master_entity(ENTITY_SERVICE.find_by_entity_id(params[:id]))
+
+    relationships = InferredRelationshipGraph2
       .new(target_entity)
       .relationships_to(source_entity)
+
     relationships = RelationshipsSorter.new(relationships)
       .call
       .uniq { |r| r.sourced_relationships.first.keys_for_uniq_grouping }
@@ -20,8 +23,8 @@ class RelationshipsController < ApplicationController
       end
     end
 
-    @target_entity = decorate(target_entity)
-    @source_entity = decorate(source_entity)
+    @target_entity = target_entity # decorate(target_entity)
+    @source_entity = source_entity # decorate(source_entity)
     @relationships = decorate_with(relationships, InferredRelationshipDecorator)
   end
 

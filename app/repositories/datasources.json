@@ -1,0 +1,230 @@
+{
+    "datasources": [
+      {
+        "_id": {
+          "$oid": "5d4d2f1d07963b0004c00778"
+        },
+        "_slugs": [
+          "sk-rpvs-register"
+        ],
+        "created_at": "2019-08-09T08:30:21.447Z",
+        "current_statistic_types": [
+  
+        ],
+        "data_availability": "The RPVS data is publicly and freely available in two formats:\n\n- [Searchable online](https://rpvs.gov.sk/rpvs) by company/person name, number\n- [API access](https://rpvs.gov.sk/OpenData) with JSON output\n  ([schema overview here](https://rpvs.gov.sk/OpenData/$metadata))\n\nThe RPVS Register data is licensed by statute.\n\nBeneficial ownership data in the Commercial Register is not available for public\nsearch.\n",
+        "document_id": "Slovakia PSP Register",
+        "name": "Slovakia Public Sector Partners Register (Register partnerov verejného sektora)",
+        "overview": "In 2017, the Act on the Register of Public Sector Partners (ARPSP) entered into\nforce in Slovakia. It covers entities benefiting from public funding or\nconducting business with the state, so-called ‘Partners of Public Sector’. Data\nis collected by the Ministry of Justice of the Slovak Republic in the ‘Register\npartnerov verejného sektora’ (RPVS), which is free to use and public. This is\nthe data which is available on the OpenOwnership register.\n\nFollowing an amendment of the Anti-money Laundering Act, and under the\namendments to the Commercial Register Act, all companies are now obliged to\nregister their beneficial owners to the Commercial Register by 31 December 2019.\nUnlike the RPVS, the data will not be made public and access will be limited to\npersons and authorities provided for by law.\n\n## Direct and indirect ownership\n\nSlovak companies and foreign companies operating in Slovakia have to report\nbeneficial owners (‘Konečného užívateľa výhod’) who directly and indirectly\ncontrol a company. Beneficial owners can be Slovak or foreign natural persons.\nDeclarations to the RPVS must be done via an ‘authorized person’, who must be\neither an attorney, notary, bank, auditor or a tax advisor.\n\nA beneficial owner is a natural person who:\n\n- holds (directly or indirectly) at least 25% of the voting rights or a 25%\n  share in the registered capital of the legal entity\n- has the right to appoint or recall a statutory/executive/supervisory body of\n  the legal entity or any of its members\n- controls in practice a legal entity other than as described above\n- has at least a 25% share of the benefits from the legal entity’s business\n  (dividends and similar payments)\n\nIf a beneficial owner’s interests are held indirectly through one or more legal\nentities (whether Slovak or foreign), they have to be declared.\n\nThis is because legal entities, such as companies and trusts, can never be\nbeneficial owners, only natural persons can.\n\nIf there are no persons who meet the above criteria, members of senior\nmanagement of the company are considered to be beneficial owners.\n\n## Exclusions and exemptions\n\nIn the RPVS, information regarding beneficial owners of all entities conducting\nbusiness with the state have to be registered. There are no exemptions such as\nforeign entities acting through branch offices, non-profits or contractual\npartnerships. However since September 2019, any company owned directly or\nindirectly by a listed company (on a regulated market or a market with similar\ndisclosure obligations in accordance with applicable EU regulation) only needs\nto report the executive directors and board members of this parent company.\n\nIn the Commercial Register, listed companies are exempt altogether.\n\nRegistration in the RPVS removes the obligation to register in the Commercial\nRegister, however the opposite is not true.\n",
+        "timeline_url": "https://twitter.com/sheislaurence/timelines/1108422389283635200?ref_src=twsrc%5Etfw",
+        "types": [
+          "officialRegister"
+        ],
+        "updated_at": "2019-11-01T14:21:25.809Z",
+        "url": "https://rpvs.gov.sk/"
+      },
+      {
+        "_id": {
+          "$oid": "5ca49242b51e4f000403da6b"
+        },
+        "_slugs": [
+          "uk-psc-register"
+        ],
+        "created_at": "2019-04-03T11:00:18.552Z",
+        "current_statistic_types": [
+          "total",
+          "register_total",
+          "psc_no_owner",
+          "psc_unknown_owner",
+          "psc_offshore_rle",
+          "psc_non_legit_rle",
+          "psc_secrecy_rle",
+          "dissolved"
+        ],
+        "data_availability": "The Persons with significant control (PSC) Register data is publicly and freely\navailable in three formats:\n\n- Searchable in Companies House’s [main companies register](https://find-and-update.company-information.service.gov.uk/)\n  (searchable by names of individuals or companies)\n- Downloadable via a [daily JSON snapshot](http://download.companieshouse.gov.uk/en_pscdata.html).\n- Available via Application Programming Interface (API) through the [Companies House Public Data API](https://developer-specs.company-information.service.gov.uk/companies-house-public-data-api/reference/persons-with-significant-control) or [Streaming API](https://developer-specs.company-information.service.gov.uk/streaming-api/reference/persons-with-significant-control).\n\nThe PSC Register data is [licensed by statute](http://forum.aws.chdev.org/t/gdpr-and-ico-considerations/1268/2).\n",
+        "document_id": "GB PSC Snapshot",
+        "name": "UK PSC Register",
+        "overview": "The United Kingdom’s beneficial ownership register was launched in April 2016 as\nthe Persons with significant control (PSC) Register.\n\n### Direct ownership\n\nUK Companies have to report PSCs who directly control a company.\n\nA PSC is an individual who meets at least one of the following conditions:\n\n- Holds more than 25% of the company’s shares\n- Holds more than 25% of the company’s voting rights\n- Has the power to appoint or remove a majority of the company’s board\n- Has the right to exercise or actually exercises significant influence or control\n  over the company\n- Has the right to exercise or actually exercises significant influence or control\n  over a trust or a firm that is not a legal entity which itself satisfies any of\n  the first four conditions.\n\n### Indirect ownership\n\nIf a beneficial owner’s shares or rights in a company are all held indirectly\nthrough one or more legal entities (whether UK or foreign), they generally do\nnot need to be recorded on the PSC register.\n\nThis is because the UK requires that companies only record on the Register the\nfirst holding company nearest to them in the ownership chain. These holdings are\ncalled Registrable RLEs, (Relevant Legal Entities). Other holdings further up\nthe chain do not need recording.\n\nA holding company is an RLE:\n\n- if it had been an individual, it would have satisfied one of the PSC\n  conditions, and\n- is either: (i) a UK company subject to the PSC regime, or (ii)\n  a UK or non-UK company subject to ownership disclosure requirements through\n  being listed or traded on a UK or other EEA-regulated market or any of the US,\n  Japanese, Swiss or Israeli exchanges.\n\nIf the holding company doesn’t meet the RLE criteria, then the PSC doesn’t need\nto be declared, unless the PSC holds a ‘majority stake’ in the reporting\ncompany, i.e. a majority control of voting rights, of appointment/removal of\ndirectors or general dominant influence.\n\n### Exclusions and exemptions\n\nUK companies with voting shares admitted to trading on regulated markets in the\nEEA or on certain specified exchanges in the US (including NYSE and NASDAQ),\nJapan, Switzerland and Israel—do not have to keep a PSC register themselves and\nso are excluded from the PSC regime. Their unlisted UK subsidiaries will still\nhave to maintain their own PSC registers.\n\nBranches of non-UK companies are not subject to the requirements to hold a PSC\nregister (subsidiaries are).\n\nMore details from Companies House [here](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/753028/170623_NON-STAT_Guidance_for_PSCs_4MLD.pdf).\n",
+        "statistics": [
+          {
+            "_id": {
+              "$oid": "5ca4eed3091a4d00033e75b4"
+            },
+            "type": "register_total",
+            "value": 4844277,
+            "updated_at": "2019-05-29T09:09:59.816Z",
+            "created_at": "2019-04-03T17:35:15.936Z",
+            "published": true
+          },
+          {
+            "_id": {
+              "$oid": "5ca4eed3091a4d00033e75b5"
+            },
+            "type": "psc_unknown_owner",
+            "value": 434691,
+            "updated_at": "2019-05-29T09:09:59.823Z",
+            "created_at": "2019-04-03T17:35:15.939Z",
+            "published": true
+          },
+          {
+            "_id": {
+              "$oid": "5ca4eed3091a4d00033e75b6"
+            },
+            "type": "psc_no_owner",
+            "value": 26681,
+            "updated_at": "2019-05-29T09:09:59.826Z",
+            "created_at": "2019-04-03T17:35:15.941Z",
+            "published": true
+          },
+          {
+            "_id": {
+              "$oid": "5ca4eed3091a4d00033e75b7"
+            },
+            "type": "psc_offshore_rle",
+            "value": 23948,
+            "updated_at": "2019-05-29T09:09:59.828Z",
+            "created_at": "2019-04-03T17:35:15.942Z",
+            "published": true
+          },
+          {
+            "_id": {
+              "$oid": "5ca4eed3091a4d00033e75b8"
+            },
+            "type": "psc_non_legit_rle",
+            "value": 7854,
+            "updated_at": "2019-05-29T09:09:59.830Z",
+            "created_at": "2019-04-03T17:35:15.944Z",
+            "published": true
+          },
+          {
+            "_id": {
+              "$oid": "5ca4eed3091a4d00033e75b9"
+            },
+            "type": "psc_secrecy_rle",
+            "value": 10318,
+            "updated_at": "2019-05-29T09:09:59.832Z",
+            "created_at": "2019-04-03T17:35:15.945Z",
+            "published": true
+          },
+          {
+            "_id": {
+              "$oid": "5ccc0963fed1240004971077"
+            },
+            "type": "psc_unknown_owner",
+            "value": 350406,
+            "updated_at": "2019-05-29T09:09:59.835Z",
+            "created_at": "2019-05-03T09:26:59.679Z",
+            "published": true
+          },
+          {
+            "_id": {
+              "$oid": "5cee4c40cade3a00046aaeb4"
+            },
+            "type": "total",
+            "value": 4202044,
+            "updated_at": "2019-05-29T09:09:59.837Z",
+            "created_at": "2019-05-29T09:09:20.356Z",
+            "published": true
+          },
+          {
+            "_id": {
+              "$oid": "5cee6e60c9c1bf0004367c34"
+            },
+            "type": "register_total",
+            "value": 4225033,
+            "published": true,
+            "updated_at": "2019-05-29T11:34:56.026Z",
+            "created_at": "2019-05-29T11:34:56.026Z"
+          },
+          {
+            "_id": {
+              "$oid": "5cee6e60c9c1bf0004367c35"
+            },
+            "type": "psc_unknown_owner",
+            "value": 347592,
+            "published": true,
+            "updated_at": "2019-05-29T11:34:56.030Z",
+            "created_at": "2019-05-29T11:34:56.030Z"
+          },
+          {
+            "_id": {
+              "$oid": "5cee6e60c9c1bf0004367c36"
+            },
+            "type": "psc_no_owner",
+            "value": 19141,
+            "published": true,
+            "updated_at": "2019-05-29T11:34:56.033Z",
+            "created_at": "2019-05-29T11:34:56.033Z"
+          },
+          {
+            "_id": {
+              "$oid": "5cee6e60c9c1bf0004367c37"
+            },
+            "type": "psc_offshore_rle",
+            "value": 31655,
+            "published": true,
+            "updated_at": "2019-05-29T11:34:56.036Z",
+            "created_at": "2019-05-29T11:34:56.036Z"
+          },
+          {
+            "_id": {
+              "$oid": "5cee6e60c9c1bf0004367c38"
+            },
+            "type": "psc_non_legit_rle",
+            "value": 9867,
+            "published": true,
+            "updated_at": "2019-05-29T11:34:56.038Z",
+            "created_at": "2019-05-29T11:34:56.038Z"
+          },
+          {
+            "_id": {
+              "$oid": "5cee6e60c9c1bf0004367c39"
+            },
+            "type": "psc_secrecy_rle",
+            "value": 11648,
+            "published": true,
+            "updated_at": "2019-05-29T11:34:56.041Z",
+            "created_at": "2019-05-29T11:34:56.041Z"
+          },
+          {
+            "_id": {
+              "$oid": "5cee6e60c9c1bf0004367c3a"
+            },
+            "type": "dissolved",
+            "value": 838905,
+            "published": true,
+            "updated_at": "2019-05-29T11:34:56.043Z",
+            "created_at": "2019-05-29T11:34:56.043Z"
+          }
+        ],
+        "timeline_url": "https://twitter.com/sheislaurence/timelines/1107584066134654976?ref_src=twsrc%5Etfw",
+        "types": [
+          "officialRegister"
+        ],
+        "updated_at": "2021-12-17T17:55:14.855Z",
+        "url": "http://download.companieshouse.gov.uk/en_pscdata.html"
+      },
+      {
+        "_id": {
+          "$oid": "5d4d2f1d07963b0004c00779"
+        },
+        "_slugs": [
+          "dk-cvr-register"
+        ],
+        "created_at": "2019-08-09T08:30:21.456Z",
+        "current_statistic_types": [
+  
+        ],
+        "data_availability": "The CVR Register data is publicly and freely available in two formats:\n\n- [Searchable online](https://datacvr.virk.dk/data/) by company name, number,\n  address, person name, etc\n- [API access](http://datahub.virk.dk/dataset/system-til-system-adgang-til-cvr-data)\n  via ElasticSearch.\n\nThe Danish Business Authority withholds API data relating to ‘entities protected\nagainst unsolicited advertising’. This data is only available to API users if\nthey formally commit to respect those same protections\n([Clause 7](https://datacvr.virk.dk/data/cvr-help/conditions-use))\n\nThe CVR Register data is\n[licensed by statute](https://datacvr.virk.dk/data/cvr-help/conditions-use).\n",
+        "document_id": "Denmark CVR",
+        "name": "Denmark Central Business Register (Centrale Virksomhedsregister [CVR])",
+        "overview": "The regulation on registration of beneficial owners in Denmark entered into\neffect in May 2017. Data is collected by the Danish Business Authority in the\nDanish Central Business Register (aka CVR —\n[Det Centrale Virksomhedsregister](https://datacvr.virk.dk/data/)).\n\n## Direct ownership\n\nDanish companies have to report beneficial owners (‘reelle ejere’) who directly\ncontrol a company. Beneficial owners can be Danish or foreign natural persons.\n\nThe indication of a 25% threshold is not directly mentioned in the Danish\ndefinition, but it is used to determine presumption of beneficial ownership. Lower\nlevels of ownership of interest in capital and voting rights could also indicate\nbeneficial ownership, when they point to the right to exercise or actually\nexercises significant influence or control over the company. Other factors include\nthe right to appoint members of the board, holding shareholders’ agreements or\nshare pledge agreements, the right to approve payments of dividend or any\ncombination of the above.\n\nAs a result, all these interests should be declared.\n\n## Indirect ownership\n\nIf a beneficial owner’s interests are held indirectly through one or more legal\nentities (whether DK or foreign), they have to be declared.\n\nThis is because legal entities, such as companies and foundations, can never be\nbeneficial owners. They are registered as ‘legal owners’ (or ‘legale ejere’), a\nrequirement that predates that of registering beneficial owners.\n\nIf there are no beneficial owners, or the beneficial owners cannot be defined, the\nregistered members of the company’s executive board must be registered as\nbeneficial owners in the CVR.\n\n## Exclusions and exemptions\n\nThe following entities are exempt from registering beneficial owners:\n\n- Entities listed on a regulated market or a market with similar disclosure\n  obligations in accordance with applicable EU regulation\n- Sole proprietorships and small personally owned businesses\n- Publicly (state/government/regional) owned businesses\n- Branches of non-Danish companies\n- Certain associations not conducting business\n",
+        "timeline_url": "https://twitter.com/sheislaurence/timelines/1110524241500426240?ref_src=twsrc%5Etfw",
+        "types": [
+          "officialRegister"
+        ],
+        "updated_at": "2019-11-01T14:21:27.022Z",
+        "url": "https://cvr.dk"
+      }
+    ]
+  }
+  

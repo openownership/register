@@ -1,35 +1,12 @@
 require 'net/http/persistent'
 require 'json'
 
-if ENV['OC_BULK_DATA_ENABLED']
-  require 'register_sources_oc/services/company_service'
-end
-
 class OpencorporatesClient
   API_VERSION = 'v0.4.6'.freeze
 
   CACHE_EXPIRY_SECS = 31.days.to_i
 
   class TimeoutError < StandardError
-  end
-
-  def self.new_for_imports
-    api_service = new(
-      api_token: Rails.application.config.oc_api.token_protected,
-      open_timeout: 30.0,
-      read_timeout: 60.0,
-      enable_retries: true,
-      raise_timeouts: false,
-    )
-
-    return api_service unless ENV['OC_BULK_DATA_ENABLED']
-
-    RegisterSourcesOc::Services::CompanyService.new(
-      services: [
-        { name: "bulk", service: RegisterSourcesOc::Services::BulkDataCompanyService.new },
-        { name: "api", service: api_service },
-      ],
-    )
   end
 
   def self.new_for_app(timeout:)
@@ -63,20 +40,6 @@ class OpencorporatesClient
       c.response :json,
                  content_type: /\bjson$/,
                  parser_options: { symbolize_names: true }
-
-      if ENV['CACHE_OC_API'] == 'true'
-        c.response :caching, ignore_params: %w[api_token] do
-          ActiveSupport::Cache::MemCacheStore.new(
-            *ENV.fetch('MEMCACHE_SERVERS').split(','),
-            username: ENV.fetch('MEMCACHE_USERNAME'),
-            password: ENV.fetch('MEMCACHE_PASSWORD'),
-            namespace: "OpencorporatesClient_#{Rails.env}",
-            expires_in: CACHE_EXPIRY_SECS,
-            race_condition_ttl: 10,
-            compress: true,
-          )
-        end
-      end
 
       c.adapter :net_http_persistent do |http|
         http.open_timeout = open_timeout

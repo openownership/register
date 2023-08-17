@@ -1,11 +1,9 @@
 module EntityHelper
   def entity_link(entity, &block)
-    if entity.is_a?(CircularOwnershipEntity) \
-      || entity.is_a?(UnknownPersonsEntity) \
-      || entity.master_entity.present?
+    if entity.master_entity.present? || entity.unknown? #entity.is_a?(CircularOwnershipEntity)
       capture(&block)
     else
-      link_to(entity_path(entity), &block)
+      link_to(entity_path(entity.id), &block)
     end
   end
 
@@ -43,20 +41,17 @@ module EntityHelper
     parts.join(" ")
   end
 
-  def from_denmark_cvr?(entity)
-    entity.identifiers.any? { |e| e['document_id'].present? && e['document_id'] == 'Denmark CVR' }
-  end
-
   def controlled_company_links(entity)
     links = entity.relationships_as_source
-      .where(ended_date: nil)
-      .limit(10)
-      .sort_by { |relationship| relationship.target.name }
-      .map { |relationship| link_to relationship.target.name, entity_path(relationship.target) }
-    controlled_count = entity.relationships_as_source.where(ended_date: nil).size
+      .reject(&:ended_date)
+      # .limit(10)
+      # .sort_by { |relationship| relationship.target.name }
+      .map { |relationship| link_to relationship.target.name, entity_path(relationship.target.id) }
+    # controlled_count = entity.relationships_as_source.where(ended_date: nil).size
+    controlled_count = entity.relationships_as_source.reject(&:ended_date).size
     if controlled_count > 10
       remaining = controlled_count - 10
-      links << link_to(I18n.t('searches.show.additional_owned_companies', count: remaining), entity_path(entity))
+      links << link_to(I18n.t('searches.show.additional_owned_companies', count: remaining), entity_path(entity.id))
     end
     links
   end

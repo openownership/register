@@ -20,7 +20,7 @@ class EntityGraph
   # Populates @nodes and @edges with Node and Edge instances for everything it
   # visits, or LabelNode and LabelEdge instances where it bails out.
   def visit(entity, frontier, end_node, seen = Set[], level = 1)
-    return if seen.include?(entity.id.to_s)
+    return if !entity || seen.include?(entity.id.to_s)
 
     seen.add entity.id.to_s
     @nodes.add Node.new(entity)
@@ -81,8 +81,8 @@ class EntityGraph
 
     def initialize(relationship)
       @relationship = relationship
-      @source_id = relationship.source.id.to_s
-      @target_id = relationship.target.id.to_s
+      @source_id = relationship.source&.id.to_s
+      @target_id = relationship.target&.id.to_s
       @id = SecureRandom.uuid
     end
 
@@ -101,10 +101,10 @@ class EntityGraph
       @node = node
       if direction == :from
         @target_id = node.id
-        @source_id = entity.id.to_s
+        @source_id = entity&.id.to_s
       else
         @source_id = node.id
-        @target_id = entity.id.to_s
+        @target_id = entity&.id.to_s
       end
 
       @id = "#{@source_id}_#{@target_id}"
