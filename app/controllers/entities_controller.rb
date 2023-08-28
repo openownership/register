@@ -126,10 +126,10 @@ class EntitiesController < ApplicationController
 
     redirect_to_master_entity?(:raw, entity) && return
     @sentity = entity
-    @raw_data_records = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity)
+    @raw_data_records = RAW_DATA_RECORD_REPOSITORY.all_for_entity(entity, per_page: 4, page: [params[:page].to_i, 1].max)
+    @oc_data = get_opencorporates_company_hash(entity, sparse: true) || {}
     return if @raw_data_records.empty?
 
-    @oc_data = get_opencorporates_company_hash(entity, sparse: true) || {}
     @newest = RAW_DATA_RECORD_REPOSITORY.newest_for_entity_date(entity)
     @oldest = RAW_DATA_RECORD_REPOSITORY.oldest_for_entity_date(entity)
     @data_sources = DATA_SOURCE_REPOSITORY.all_for_raw_records(@raw_data_records)
