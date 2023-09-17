@@ -11,7 +11,9 @@
         = glossary_tooltip(t(".unknown"), :undefined_interest, :right)
     - else
       - known_interests_for(relationship).each do |interest|
-        - if interest.share
+        - if t(interest.details, scope: :relationship_interests, default: '').present?
+          %li= t(interest.details, scope: :relationship_interests)
+        - elsif interest.share
           - if interest.share.minimum == interest.share.maximum
             %li= t("#{interest.type}-exact", scope: :relationship_interests, share: number_with_precision(interest.share.minimum, strip_insignificant_zeros: true), default: interest.type)
           - else
