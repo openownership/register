@@ -1,65 +1,35 @@
 {
   "name": "openownership-register",
-  "stack": "heroku-22",
+  "scripts": {},
   "env": {
-    "ADMIN_BASIC_AUTH": {
-      "required": true
-    },
-    "ADMIN_EMAILS": {
-      "required": true
-    },
-    "BASIC_AUTH": {
-      "required": true
-    },
     "BODS_EXPORT_AWS_ACCESS_KEY_ID": {
-      "required": true
-    },
-    "BODS_EXPORT_AWS_SECRET_ACCESS_KEY": {
       "required": true
     },
     "BODS_EXPORT_AWS_REGION": {
       "required": true
     },
+    "BODS_EXPORT_AWS_SECRET_ACCESS_KEY": {
+      "required": true
+    },
     "BODS_EXPORT_S3_BUCKET_NAME": {
       "required": true
     },
-    "DEFAULT_USERS": {
-      "required": true
-    },
-    "DEV_DATA_AWS_ACCESS_KEY_ID": {
-      "required": true
-    },
-    "DEV_DATA_AWS_SECRET_ACCESS_KEY": {
-      "required": true
-    },
-    "DEV_DATA_S3_BUCKET_NAME": {
+    "BODS_INDEX": {
       "required": true
     },
     "CACHE_OC_API": {
       "required": true
     },
-    "DK_CVR_USERNAME": {
+    "ELASTICSEARCH_URL": {
       "required": true
     },
-    "DK_CVR_PASSWORD": {
+    "ENABLE_ANALYTICS": {
       "required": true
     },
-    "ELASTICSEARCH_URL_ENV_NAME": {
+    "EXAMPLE_ENTITY_ID": {
       "required": true
     },
-    "ERROR_PAGE_URL": {
-      "required": true
-    },
-    "HEROKU_APP_NAME": {
-      "required": true
-    },
-    "GOOGLE_GEOCODE_API_KEY": {
-      "required": true
-    },
-    "MAINTENANCE_PAGE_URL": {
-      "required": true
-    },
-    "MONGODB_URI_ENV_NAME": {
+    "LANG": {
       "required": true
     },
     "OPENCORPORATES_API_TOKEN": {
@@ -68,35 +38,35 @@
     "OPENCORPORATES_API_TOKEN_PROTECTED": {
       "required": true
     },
-    "ROLLBAR_ACCESS_TOKEN": {
+    "RACK_ENV": {
       "required": true
     },
-    "SMTP_ADDRESS": {
+    "RAILS_ENV": {
       "required": true
     },
-    "SMTP_PORT": {
+    "RAILS_LOG_TO_STDOUT": {
       "required": true
     },
-    "SMTP_TOKEN": {
+    "RAILS_SERVE_STATIC_FILES": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
       "required": true
     }
   },
   "formation": {
+    "web": {
+      "quantity": 1
+    }
   },
-  "addons": [
-    {
-      "plan": "searchbox:starter",
-      "options": {
-        "es_version": "7"
-      }
-    },
-    "heroku-redis:hobby-dev",
-    "papertrail:choklad",
-    "memcachier:dev"
-  ],
+  "addons": [],
   "buildpacks": [
-    { "url":  "heroku/nodejs" },
-    { "url": "heroku/python" },
-    { "url": "heroku/ruby" }
-  ]
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/ruby"
+    }
+  ],
+  "stack": "heroku-22"
 }
