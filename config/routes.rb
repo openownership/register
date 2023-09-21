@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get 'faq' => 'pages#faq'
   get 'glossary' => 'pages#glossary'
   get 'download' => 'pages#download'
+  get 'download/latest' => 'pages#download_latest'
   get 'data-changelog' => 'pages#data_changelog'
   resources :data_sources, only: %i[index show]
   root "pages#home"

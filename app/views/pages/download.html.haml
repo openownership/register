@@ -260,7 +260,7 @@
               %h5.card-title Latest data
               %p Exported: #{@exports.first.created_at.to_date}
               %p
-                = link_to "https://#{ENV['BODS_EXPORT_S3_BUCKET_NAME']}.s3-eu-west-1.amazonaws.com/#{@exports.first.s3_path}", rel: 'nofollow', class: 'btn btn-primary', id: 'latest-data' do
+                = link_to download_latest_path, rel: 'nofollow', class: 'btn btn-primary', id: 'latest-data' do
                   Download &nbsp;<i class='fa fa-download'></i>
         .card
           .card-block

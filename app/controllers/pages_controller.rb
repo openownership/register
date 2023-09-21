@@ -16,6 +16,11 @@ class PagesController < ApplicationController
     @example_composite_unofficial_person_identifier = formatted_json(example_composite_unofficial_person_identifier)
   end
 
+  def download_latest
+    exports = BODS_EXPORT_REPOSITORY.completed_exports(limit: 1)
+    redirect_to "https://#{ENV.fetch('BODS_EXPORT_S3_BUCKET_NAME')}.s3-eu-west-1.amazonaws.com/#{exports.first.s3_path}"
+  end
+
   def data_changelog
     @exports = BODS_EXPORT_REPOSITORY.completed_exports(limit: 5)
   end
