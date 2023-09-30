@@ -116,6 +116,9 @@
           - @sentity.dissolution_date.try do |dissolution_date|
             %h6= t(".fields.dissolution_date")
             %p= dissolution_date
+          - @sentity.identifiers_lei.each do |identifier|
+            %h6= t(".fields.lei")
+            %p= link_to identifier.id, identifier.uri
 
       .col-lg-4
         .frame-light.meta
