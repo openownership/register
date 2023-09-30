@@ -30,6 +30,7 @@ en:
         date_of_birth: Born
         jurisdiction: Jurisdiction
         company_number: Company number
+        lei: Legal Entity Identifier (LEI)
         company_type: Type
         incorporation_date: Incorporation date
         dissolution_date: Dissolution date
