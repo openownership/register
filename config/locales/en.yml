@@ -107,7 +107,7 @@ en:
     data_changelog:
       title: Data changelog
     home:
-      title: Search over 27 million beneficial ownership records
+      title: Search over 28 million beneficial ownership records
   relationships:
     provenance:
       unknown: Not yet uploaded
