@@ -1,37 +1,8 @@
-exclude:
-  - vendor/**/*
-
 linters:
-  IdNames:
-    enabled: false
-  InstanceVariables:
-    enabled: false
   LineLength:
-    enabled: false
-  ViewLength:
     enabled: false
   RuboCop:
     ignored_cops:
-      - Layout/AlignHash
-      - Layout/AlignParameters
-      - Layout/CaseIndentation
-      - Layout/ElseAlignment
-      - Layout/EmptyLineAfterGuardClause
-      - Layout/EndOfLine
-      - Layout/IndentationWidth
-      - Layout/TrailingBlankLines
-      - Layout/TrailingEmptyLines
-      - Layout/TrailingWhitespace
-      - Lint/BlockAlignment
-      - Lint/EndAlignment
-      - Lint/Void
-      - Metrics/BlockLength
-      - Metrics/BlockNesting
-      - Metrics/LineLength
-      - Naming/FileName
-      - Style/CaseLikeIf
-      - Style/FrozenStringLiteralComment
       - Style/IfUnlessModifier
-      - Style/Next
-      - Style/StringConcatenation
-      - Style/WhileUntilModifier
+  ViewLength:
+    enabled: false

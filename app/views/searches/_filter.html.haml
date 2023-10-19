@@ -1,18 +1,19 @@
+-# haml-lint:disable InstanceVariables
 .frame.search-filter
   .frame-wrap
     - if search_params[key]
-      %h6= t('.filtered_by', key: key)
+      %h6= t('.filtered_by', key:)
       %ul.list-unstyled
         %li
           %span.filtered
             - helper.call(search_params[key]).each do |element|
               = element
             %span.document-count= @response.total_count
-            = link_to t('.remove_filter'), search_path(search_params.to_h.without(key)), class: "remove"
+            = link_to t('.remove_filter'), search_path(search_params.to_h.without(key)), class: 'remove'
     - else
-      %h6= t('.filter_by', key: key)
+      %h6= t('.filter_by', key:)
       %ul.list-unstyled
-        - @response&.aggs.to_h[key].to_h["buckets"].to_a.each do |bucket|
+        - @response&.aggs.to_h[key].to_h['buckets'].to_a.each do |bucket|
           %li
             = link_to search_path(search_params.merge(key => bucket['key'])) do
               - helper.call(bucket['key']).each do |element|

@@ -9,13 +9,13 @@
       - sample_date = get_most_likely_sample_date(relationship)
       - partial_date_format(sample_date).try do |formatted|
         %p
-          = glossary_tooltip(t(".sample_date"), :sample_date, :right)
+          = glossary_tooltip(t('.sample_date'), :sample_date, :right)
           = formatted
       %p.meta-secondary
-        = glossary_tooltip(t(".retrieved_at"), :retrieved_at, :right)
+        = glossary_tooltip(t('.retrieved_at'), :retrieved_at, :right)
         = relationship.provenance.retrieved_at.to_date
       %p.meta-secondary
-        = glossary_tooltip(t(".imported_at"), :imported_at, :right)
+        = glossary_tooltip(t('.imported_at'), :imported_at, :right)
         = relationship.provenance.imported_at.to_date
     - else
-      %p.unknown= t(".unknown")
+      %p.unknown= t('.unknown')

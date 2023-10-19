@@ -1,29 +1,29 @@
 .graph-tooltip
   - if entity.present?
-    = render(partial: 'entities/graph_tooltip_title', locals: { entity: entity })
+    = render(partial: 'entities/graph_tooltip_title', locals: { entity: })
     .graph-tooltip__body
       - if entity.natural_person?
         - date_of_birth(entity).presence.try do |date_of_birth|
           .graph-tooltip__body__fact
-            %h6= t("entities.show.fields.date_of_birth")
+            %h6= t('entities.show.fields.date_of_birth')
             %p= date_of_birth
       - else
         - entity.company_number.try do |company_number|
           .graph-tooltip__body__fact
-            %h6= t("entities.show.fields.company_number")
+            %h6= t('entities.show.fields.company_number')
             %p= company_number
         - entity.incorporation_date.try do |incorporation_date|
           .graph-tooltip__body__fact
-            %h6= t("entities.show.fields.incorporation_date")
+            %h6= t('entities.show.fields.incorporation_date')
             %p= incorporation_date
         - entity.dissolution_date.try do |dissolution_date|
           .graph-tooltip__body__fact
-            %h6= t("entities.show.fields.dissolution_date")
+            %h6= t('entities.show.fields.dissolution_date')
             %p= dissolution_date
     .graph-tooltip__links
       = link_to entity_path(entity.id), class: 'btn btn-sm btn-primary view-page' do
         %i.fa.fa-file
-        %span= t("entity_graph.entity_page_link")
+        %span= t('entity_graph.entity_page_link')
       = link_to graph_entity_path(entity.id), class: 'btn btn-sm btn-primary view-graph' do
         %i.fa.fa-sitemap
-        %span= t("entity_graph.entity_graph_link")
+        %span= t('entity_graph.entity_graph_link')

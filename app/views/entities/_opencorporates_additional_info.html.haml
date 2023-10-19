@@ -1,17 +1,18 @@
+-# haml-lint:disable InstanceVariables
 .frame-light.meta
   - if @opencorporates_company_hash
     .frame-wrap
       - @opencorporates_company_hash[:current_status].try do |current_status|
-        %h6= t("entities.show.fields.current_status")
+        %h6= t('entities.show.fields.current_status')
         %p= current_status
       - previous_names(@opencorporates_company_hash).presence.try do |previous_names|
-        %h6= t("entities.show.fields.previous_names")
+        %h6= t('entities.show.fields.previous_names')
         %p= previous_names
       - industry_codes(@opencorporates_company_hash).presence.try do |industry_codes|
-        %h6= t("entities.show.fields.industry_codes")
+        %h6= t('entities.show.fields.industry_codes')
         %p= industry_codes
       - officers(@opencorporates_company_hash).presence.try do |officers|
-        %h6= t("entities.show.fields.officers")
+        %h6= t('entities.show.fields.officers')
         %ul
           - officers.each do |officer_hash|
             %li
@@ -19,10 +20,10 @@
               - officer_attributes_snippet(officer_hash).presence.try do |attributes|
                 %span.meta-secondary= attributes
     %a.oo-link{ href: @opencorporates_company_hash[:opencorporates_url], target: '_blank' }
-      = t("entities.show.data_from_opencorporates_html", opencorporates: render_haml("%span OpenCorporates"))
+      = t('entities.show.data_from_opencorporates_html', opencorporates: render_haml('%span OpenCorporates'))
   - elsif @oc_api_timed_out
     .frame-wrap
-      %p.unknown= t("entities.show.opencorporates_api_timed_out")
+      %p.unknown= t('entities.show.opencorporates_api_timed_out')
   - else
     .frame-wrap
-      %p.unknown= t("entities.show.no_data_from_opencorporates")
+      %p.unknown= t('entities.show.no_data_from_opencorporates')

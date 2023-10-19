@@ -17,31 +17,33 @@
                     = country_flag(@sentity.country)
                     = nationality
                   .type-icon.natural-person
-                    = image_tag "icon-natural-person.svg"
-                    = t("entity_types.natural-person").capitalize
+                    = image_tag 'icon-natural-person.svg'
+                    = t('entity_types.natural-person').capitalize
               - else
                 - @sentity.country.try do |country|
                   .jurisdiction
                     = country_flag(country)
                     = entity_jurisdiction(@sentity)
                   .type-icon.legal-entity
-                    = image_tag "icon-legal-entity.svg"
-                    = glossary_tooltip(t("entity_types.legal-entity").capitalize, :'legal-entity', :right)
+                    = image_tag 'icon-legal-entity.svg'
+                    = glossary_tooltip(t('entity_types.legal-entity').capitalize, :'legal-entity', :right)
           .col-lg-4.header-sep
             .entity-header-meta.meta
               - if @sentity.natural_person?
                 - @sentity.country_of_residence.try do |country_of_residence|
-                  %h6= t(".fields.country_of_residence")
+                  %h6= t('.fields.country_of_residence')
                   %p= country_of_residence
+                -# rubocop:disable Lint/UnusedBlockArgument
                 - @sentity.date_of_birth.presence.try do |date_of_birth|
-                  %h6= t(".fields.date_of_birth")
+                  %h6= t('.fields.date_of_birth')
                   %p= date_of_birth(@sentity)
+                -# rubocop:enable Lint/UnusedBlockArgument
               - else
                 - @sentity.company_number.try do |company_number|
-                  %h6= t(".fields.company_number")
+                  %h6= t('.fields.company_number')
                   %p= company_number
                 - @oc_data[:company_type].try do |company_type|
-                  %h6= t(".fields.company_type")
+                  %h6= t('.fields.company_type')
                   %p= company_type
 
   .options-bar
@@ -52,11 +54,11 @@
             %h6 Options
             %ul.list-unstyled
               %li.option-report
-                = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank', rel: 'noopener'
+                = link_to t('shared.report_incorrect_data'), report_incorrect_data_url, target: '_blank', rel: 'noopener'
               %li.option-graph
-                = link_to t(".view_as_graph"), graph_entity_path(@sentity.id), rel: 'nofollow'
+                = link_to t('.view_as_graph'), graph_entity_path(@sentity.id), rel: 'nofollow'
               %li.option-bods.last
-                = link_to t(".download_bods"), entity_path(@sentity.id, format: :json), rel: 'nofollow'
+                = link_to t('.download_bods'), entity_path(@sentity.id, format: :json), rel: 'nofollow'
 
 .content.entity-content
   .container-fluid
@@ -66,19 +68,19 @@
           .ultimate-source-relationships
             - if @ultimate_source_relationship_groups.empty?
               %h2.empty-entities
-                = t(".controlling_entities_none.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities_none.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @sentity.name"))
+                = t('.controlling_entities_none.text_html', beneficial_owners: glossary_tooltip(t('.controlling_entities_none.beneficial_owners'), :beneficial_owner, :top), entity: render_haml('%span.entity-name= @sentity.name'))
             - else
               %h2
-                = t(".controlling_entities.text_html", beneficial_owners: glossary_tooltip(t(".controlling_entities.beneficial_owners"), :beneficial_owner, :top), entity: render_haml("%span.entity-name= @sentity.name"))
+                = t('.controlling_entities.text_html', beneficial_owners: glossary_tooltip(t('.controlling_entities.beneficial_owners'), :beneficial_owner, :top), entity: render_haml('%span.entity-name= @sentity.name'))
               - @ultimate_source_relationship_groups.each do |group|
                 - if group.relationships.size > 1
                   .grouping
-                    %a.grouping-header{ 'aria-controls' => group.label.parameterize, 'aria-expanded' => 'false', 'data-toggle' => 'collapse', 'href' => '#' + group.label.parameterize }
+                    %a.grouping-header{ 'aria-controls' => group.label.parameterize, 'aria-expanded' => 'false', 'data-toggle' => 'collapse', 'href' => "##{group.label.parameterize}" }
                       = group.label
                       %small.grouping-size.pull-right
-                        = t(".instances", count: group.relationships.size)
+                        = t('.instances', count: group.relationships.size)
                     .grouping-note
-                      = t(".grouping_note_html", report_incorrect_data_url: report_incorrect_data_url)
+                      = t('.grouping_note_html', report_incorrect_data_url:)
                     .collapse{ id: group.label.parameterize }
                       = render partial: 'ultimate_source_relationship', collection: group.relationships, as: :relationship
                 - else
@@ -87,37 +89,37 @@
         .source-relationships
           - if @source_relationships.empty?
             %h2.empty-entities
-              = t(".controlled_entities_none.#{@sentity.type}_html", entity: render_haml("%span.entity-name= @sentity.name"))
+              = t(".controlled_entities_none.#{@sentity.type}_html", entity: render_haml('%span.entity-name= @sentity.name'))
           - else
             %h2
-              = t(".controlled_entities_html", entity: render_haml("%span.entity-name= @sentity.name"))
+              = t('.controlled_entities_html', entity: render_haml('%span.entity-name= @sentity.name'))
             = page_entries_info @source_relationships, entry_name: 'company'
             - @source_relationships.each do |relationship|
               .item{ class: ('ended' if relationship.ended_date) }
                 = render partial: 'shared/entity_title', locals: { entity: relationship.target }
                 = link_to entity_relationship_path(relationship.target&.id.to_s, @sentity.id), class: 'relationship-link' do
-                  = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
+                  = render partial: 'shared/relationship_interests', locals: { relationship: }
                   %span.details
-                    = t(".details")
+                    = t('.details')
             = paginate @source_relationships, param_name: :source_page
 
       - content_for(:meta) do
         - if @sentity.natural_person?
           - @sentity.addresses&.first.try do |address|
-            %h6= t(".fields.address")
+            %h6= t('.fields.address')
             %p= address.address
         - else
           - @sentity.addresses&.first.try do |address|
-            %h6= t(".fields.address")
+            %h6= t('.fields.address')
             %p= address.address
           - @sentity.incorporation_date.try do |incorporation_date|
-            %h6= t(".fields.incorporation_date")
+            %h6= t('.fields.incorporation_date')
             %p= incorporation_date
           - @sentity.dissolution_date.try do |dissolution_date|
-            %h6= t(".fields.dissolution_date")
+            %h6= t('.fields.dissolution_date')
             %p= dissolution_date
           - @sentity.identifiers_lei.each do |identifier|
-            %h6= t(".fields.lei")
+            %h6= t('.fields.lei')
             %p= link_to identifier.id, identifier.uri
 
       .col-lg-4
@@ -126,44 +128,43 @@
             - if content_for?(:meta)
               = yield :meta
             - else
-              %p.unknown= t(".no_further_information_known", type: t("entity_types.#{@sentity.type}", default: t("entity_types.default")))
+              %p.unknown= t('.no_further_information_known', type: t("entity_types.#{@sentity.type}", default: t('entity_types.default')))
 
         - if @data_source_names.any?
           .frame-light.meta.provenance
             .frame-wrap
-              %h6= glossary_tooltip(t(".provenance"), :provenance, :right)
+              %h6= glossary_tooltip(t('.provenance'), :provenance, :right)
               %ul
                 %li
                   %p= @data_source_names.to_sentence
                 %li
                   = link_to(t('entities.provenance.detail.other'), raw_entity_path(@sentity.id))
 
-
         - if @oc_data[:restricted_for_marketing]
           .frame-light.meta
             .frame-wrap
-              %h6= t(".advertising_protection.title")
+              %h6= t('.advertising_protection.title')
               %p
-                = t(".advertising_protection.text")
+                = t('.advertising_protection.text')
                 - if @sentity.from_denmark_cvr_v2?
                   = ' - '
-                  = link_to(t(".advertising_protection.terms_of_use"), 'https://datacvr.virk.dk/data/cvr-help/conditions-use', target: '_blank', rel: 'noopener')
+                  = link_to(t('.advertising_protection.terms_of_use'), 'https://datacvr.virk.dk/data/cvr-help/conditions-use', target: '_blank', rel: 'noopener')
 
         - unless @sentity.natural_person?
-          .js-opencorporates-additional-info{ 'data-additional-info-url' => opencorporates_additional_info_entity_path(@sentity.id), 'data-no-data-msg' => t(".no_data_from_opencorporates") }
+          .js-opencorporates-additional-info{ 'data-additional-info-url' => opencorporates_additional_info_entity_path(@sentity.id), 'data-no-data-msg' => t('.no_data_from_opencorporates') }
             .frame-light.meta
               .frame-wrap
-                %p.unknown= t(".loading_data_from_opencorporates")
-                %p.unknown.no-js-message= t("shared.javascript_required")
+                %p.unknown= t('.loading_data_from_opencorporates')
+                %p.unknown.no-js-message= t('shared.javascript_required')
 
         .frame-light.meta.entity-search-links
           .frame-wrap
-            %h6= t(".more_on", name: @sentity.name)
+            %h6= t('.more_on', name: @sentity.name)
             %p= link_to 'Google', google_search_uri(q: @sentity.name), class: 'external', target: '_blank', rel: 'noopener'
             - if @sentity.natural_person?
               %p= link_to 'OpenCorporates', opencorporates_officers_search_uri(q: @sentity.name), class: 'external', target: '_blank', rel: 'noopener'
         = link_to report_incorrect_data_url, class: 'feedback-button', target: '_blank', rel: 'noopener' do
-          = t("shared.report_incorrect_data")
+          = t('shared.report_incorrect_data')
           %i.fa.fa-exclamation-circle.fa-pull-right
 
     - unless @merged_entities.empty?
@@ -173,11 +174,11 @@
             .frame-wrap
               .merged-people
                 %h5
-                  = t(".merged_people")
+                  = t('.merged_people')
                 = page_entries_info @merged_entities, entry_name: 'merged people'
                 .grouping
                   .grouping-note
-                    = t(".merged_note_html", count: @sentity.merged_entities_count, report_incorrect_data_url: report_incorrect_data_url)
+                    = t('.merged_note_html', count: @sentity.merged_entities_count, report_incorrect_data_url:)
                 %ul.list-unstyled.list-entities
                   - @merged_entities.each do |merged_entity|
                     %li.item
@@ -197,9 +198,10 @@
                 %ul.list-unstyled.list-entities
                   - @similar_people.each do |record|
                     - next if record == @sentity
+
                     %li
                       .item
-                        = render "shared/entity_title", entity: record
+                        = render 'shared/entity_title', entity: record
                         - if record.natural_person?
                           .result-controls
                             = render partial: 'shared/entity_controlled_companies', locals: { entity: record }

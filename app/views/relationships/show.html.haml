@@ -1,4 +1,4 @@
-- content_for(:title, [@source_entity.name, @target_entity.name].join(" → "))
+- content_for(:title, [@source_entity.name, @target_entity.name].join(' → '))
 
 .entity-header
   .container-fluid
@@ -6,9 +6,9 @@
       .col-lg-12
         .entity-name-wrap
           %h1
-            = succeed(":") do
-              = glossary_tooltip(t(".beneficial_ownership_chain", count: @relationships.size), :beneficial_ownership_chain, :top)
-            = t(".title_html", source: render_haml("%span.entity-name.source= @source_entity.name"), target: render_haml("%span.entity-name= @target_entity.name"))
+            = succeed(':') do
+              = glossary_tooltip(t('.beneficial_ownership_chain', count: @relationships.size), :beneficial_ownership_chain, :top)
+            = t('.title_html', source: render_haml('%span.entity-name.source= @source_entity.name'), target: render_haml('%span.entity-name= @target_entity.name'))
   .options-bar
     .container-fluid
       .row
@@ -17,7 +17,7 @@
             %h6 Options
             %ul.list-unstyled
               %li.option-report.last
-                = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank', rel: 'noopener'
+                = link_to t('shared.report_incorrect_data'), report_incorrect_data_url, target: '_blank', rel: 'noopener'
 
 .content
   .container-fluid
@@ -35,7 +35,7 @@
         .col-lg-4
           .frame-light.meta.provenance
             .frame-wrap
-              %h6= glossary_tooltip(t(".provenance"), :provenance, :right)
+              %h6= glossary_tooltip(t('.provenance'), :provenance, :right)
               %ol
                 = render partial: 'provenance', collection: relationship.sourced_relationships, as: :relationship
-          = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, class: 'feedback-button', target: '_blank', rel: 'noopener'
+          = link_to t('shared.report_incorrect_data'), report_incorrect_data_url, class: 'feedback-button', target: '_blank', rel: 'noopener'
