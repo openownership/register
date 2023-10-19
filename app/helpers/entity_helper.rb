@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module EntityHelper
-  def entity_link(entity, &block)
-    if entity.master_entity.present? || entity.unknown? #entity.is_a?(CircularOwnershipEntity)
-      capture(&block)
+  def entity_link(entity, &)
+    if entity.master_entity.present? || entity.unknown? # entity.is_a?(CircularOwnershipEntity)
+      capture(&)
     else
-      link_to(entity_path(entity.id), &block)
+      link_to(entity_path(entity.id), &)
     end
   end
 
@@ -23,7 +25,7 @@ module EntityHelper
     if entity.natural_person?
       parts << entity.country.try(:nationality)
       date_of_birth(entity).presence.try do |date_of_birth|
-        parts << t("helpers.entities.entity_attributes_snippet.date_of_birth", date_of_birth: date_of_birth)
+        parts << t('helpers.entities.entity_attributes_snippet.date_of_birth', date_of_birth:)
       end
     else
       parts << entity_jurisdiction(entity, short: true)
@@ -38,15 +40,15 @@ module EntityHelper
     parts = []
     parts << Date::MONTHNAMES[entity.dob.month] if entity.dob.atoms.size > 1
     parts << entity.dob.year
-    parts.join(" ")
+    parts.join(' ')
   end
 
   def controlled_company_links(entity)
     links = entity.relationships_as_source
-      .reject(&:ended_date)
-      # .limit(10)
-      # .sort_by { |relationship| relationship.target.name }
-      .map { |relationship| link_to relationship.target.name, entity_path(relationship.target.id) }
+                  .reject(&:ended_date)
+                  # .limit(10)
+                  # .sort_by { |relationship| relationship.target.name }
+                  .map { |relationship| link_to relationship.target.name, entity_path(relationship.target.id) }
     # controlled_count = entity.relationships_as_source.where(ended_date: nil).size
     controlled_count = entity.relationships_as_source.reject(&:ended_date).size
     if controlled_count > 10

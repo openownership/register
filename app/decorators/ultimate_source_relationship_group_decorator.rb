@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UltimateSourceRelationshipGroupDecorator < ApplicationDecorator
   delegate_all
 
@@ -10,6 +12,6 @@ class UltimateSourceRelationshipGroupDecorator < ApplicationDecorator
   end
 
   def relationships
-    @relationships ||= InferredRelationshipDecorator.decorate_collection(object[:relationships], context: context)
+    @relationships ||= InferredRelationshipDecorator.decorate_collection(object[:relationships], context:)
   end
 end

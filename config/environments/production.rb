@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   config.cache_classes = true
   config.eager_load = true
@@ -12,16 +14,16 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.i18n.fallbacks = [I18n.default_locale]
   config.active_support.deprecation = :notify
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
   config.force_ssl = true
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
-  if ENV["MEMCACHE_SERVERS"].present?
+  if ENV['MEMCACHE_SERVERS'].present?
     memcached_servers = ENV.fetch('MEMCACHE_SERVERS').split(',')
     memcached_config = {
       username: ENV.fetch('MEMCACHE_USERNAME'),
@@ -29,7 +31,7 @@ Rails.application.configure do
       failover: true,
       socket_timeout: 1.5,
       socket_failure_delay: 0.2,
-      down_retry_delay: 60,
+      down_retry_delay: 60
     }
     config.cache_store = :mem_cache_store, *memcached_servers, memcached_config
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_sources_psc/structs/company_record'
 require 'register_sources_dk/structs/record'
 require 'register_sources_sk/structs/record'
@@ -6,10 +8,10 @@ class DataSourceRepository
   def all
     path = File.join(File.dirname(__FILE__), 'datasources.json')
     sources = JSON.parse(File.read(path), symbolize_names: true)
-    
-    sources[:datasources].map { |source|
-      DataSource.new source.merge(id: source[:'_id'][:'$oid'])
-    }
+
+    sources[:datasources].map do |source|
+      DataSource.new source.merge(id: source[:_id][:$oid])
+    end
   end
 
   def find(id)
@@ -17,7 +19,7 @@ class DataSourceRepository
   end
 
   def find_many(ids)
-    all.filter { |data_source| ids.include?(data_source.id) || ids.include?(data_source.slug)  }
+    all.filter { |data_source| ids.include?(data_source.id) || ids.include?(data_source.slug) }
   end
 
   def where_overview_present
@@ -32,14 +34,14 @@ class DataSourceRepository
   end
 
   def data_source_names_for_raw_records(raw_records)
-    datasource_names = raw_records.map do |raw_record|
+    raw_records.map do |raw_record|
       case raw_record
       when RegisterSourcesDk::Deltagerperson
-        "Denmark Central Business Register (Centrale Virksomhedsregister [CVR])"
+        'Denmark Central Business Register (Centrale Virksomhedsregister [CVR])'
       when RegisterSourcesPsc::CompanyRecord
-        "UK PSC Register"
+        'UK PSC Register'
       when RegisterSourcesSk::Record
-        "Slovakia Public Sector Partners Register (Register partnerov verejného sektora)"
+        'Slovakia Public Sector Partners Register (Register partnerov verejného sektora)'
       end
     end.compact.uniq.sort
   end

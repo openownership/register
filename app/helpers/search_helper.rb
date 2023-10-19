@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SearchHelper
   def search_filter_type(value)
     if value == RegisterSourcesBods::StatementTypes['personStatement']

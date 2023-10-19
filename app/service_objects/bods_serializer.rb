@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BodsSerializer
   def initialize(relationships)
     @relationships = relationships
@@ -5,8 +7,8 @@ class BodsSerializer
 
   def statements
     @relationships.reduce([]) do |acc, relationship|
-      entity_source = relationship.source
-      entity_target = relationship.target
+      relationship.source
+      relationship.target
 
       acc + [
         relationship,

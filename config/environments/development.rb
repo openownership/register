@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Enable 10.0.2.2 for development to enable using NAT port forwarding through a VM
   config.web_console.permissions = '10.0.2.2'
@@ -9,9 +11,9 @@ Rails.application.configure do
   if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
     config.public_file_server.headers = {
-      'Cache-Control' => "public, max-age=#{2.days.to_i}",
+      'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
-    if ENV["MEMCACHE_SERVERS"].present?
+    if ENV['MEMCACHE_SERVERS'].present?
       memcached_servers = ENV.fetch('MEMCACHE_SERVERS').split(',')
       memcached_config = {
         username: ENV.fetch('MEMCACHE_USERNAME'),
@@ -19,7 +21,7 @@ Rails.application.configure do
         failover: true,
         socket_timeout: 1.5,
         socket_failure_delay: 0.2,
-        down_retry_delay: 60,
+        down_retry_delay: 60
       }
       config.cache_store = :mem_cache_store, *memcached_servers, memcached_config
     else
@@ -38,5 +40,5 @@ Rails.application.configure do
   config.i18n.raise_on_missing_translations = true
   config.action_mailer.preview_path = Rails.root.join('app/mailers/previews')
 
-  config.hosts << ENV['RAILS_DEVELOPMENT_HOSTS']
+  config.hosts << ENV.fetch('RAILS_DEVELOPMENT_HOSTS', nil)
 end

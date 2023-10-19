@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class TransliterationService
   LANG_CODE_TO_RULE_SETS = {
-    'uk' => 'Ukrainian-Latin/BGN',
+    'uk' => 'Ukrainian-Latin/BGN'
   }.freeze
 
   def self.for(lang_code)
@@ -14,10 +16,9 @@ class TransliterationService
   end
 
   def transliterate(value)
-    # Return the original value if we have a blank value, blank lang code or the lang code is not currently supported for transliteration
-    if value.blank? || @lang_code.blank? || !LANG_CODE_TO_RULE_SETS.key?(@lang_code)
-      return value
-    end
+    # Return the original value if we have a blank value, blank lang code or the
+    # lang code is not currently supported for transliteration
+    return value if value.blank? || @lang_code.blank? || !LANG_CODE_TO_RULE_SETS.key?(@lang_code)
 
     rule_set.transform(value)
   rescue StandardError => e

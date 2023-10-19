@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'net/http/persistent'
 require 'json'
 
 class OpencorporatesClient
-  API_VERSION = 'v0.4.6'.freeze
+  API_VERSION = 'v0.4.6'
 
   CACHE_EXPIRY_SECS = 31.days.to_i
 
@@ -15,7 +17,7 @@ class OpencorporatesClient
       open_timeout: timeout,
       read_timeout: timeout,
       enable_retries: false,
-      raise_timeouts: true,
+      raise_timeouts: true
     )
   end
 
@@ -23,7 +25,7 @@ class OpencorporatesClient
     @api_token = api_token
     @raise_timeouts = raise_timeouts
 
-    @connection = Faraday.new(url: "https://api.opencorporates.com") do |c|
+    @connection = Faraday.new(url: 'https://api.opencorporates.com') do |c|
       c.request :json
 
       c.response :follow_redirects
@@ -34,7 +36,8 @@ class OpencorporatesClient
                   interval: 2,
                   interval_randomness: 1,
                   backoff_factor: 5,
-                  exceptions: [Errno::ETIMEDOUT, Net::OpenTimeout, 'Timeout::Error', Faraday::RetriableResponse, Faraday::TimeoutError]
+                  exceptions: [Errno::ETIMEDOUT, Net::OpenTimeout, 'Timeout::Error', Faraday::RetriableResponse,
+                               Faraday::TimeoutError]
       end
 
       c.response :json,
@@ -70,9 +73,9 @@ class OpencorporatesClient
   def search_companies(jurisdiction_code, company_number)
     params = {
       q: company_number,
-      jurisdiction_code: jurisdiction_code,
+      jurisdiction_code:,
       fields: 'company_number',
-      order: 'score',
+      order: 'score'
     }
 
     response = get('/companies/search', params)
@@ -86,7 +89,7 @@ class OpencorporatesClient
     params = {
       q: name,
       fields: 'company_name',
-      order: 'score',
+      order: 'score'
     }
 
     response = get('/companies/search', params)
@@ -110,7 +113,7 @@ class OpencorporatesClient
     if response.success?
       response.body.fetch(:results)
     else
-      Rails.logger.info("Received #{response.status} from api.opencorporates.com when calling #{normalised_path} (#{params})")
+      Rails.logger.info("Received #{response.status} from api.opencorporates.com when calling #{normalised_path} (#{params})") # rubocop:disable Layout/LineLength
       nil
     end
   rescue Faraday::ConnectionFailed => e

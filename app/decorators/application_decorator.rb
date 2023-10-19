@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationDecorator < Draper::Decorator
   def self.transliterated_attrs(*attrs)
     Array(attrs).each do |attr|

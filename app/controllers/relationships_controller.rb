@@ -1,19 +1,24 @@
+# frozen_string_literal: true
+
 class RelationshipsController < ApplicationController
   ENTITY_SERVICE = Rails.application.config.entity_service
 
   def show
-    target_entity = ENTITY_SERVICE.find_by_entity_id(params[:entity_id])
-    source_entity = resolve_master_entity(ENTITY_SERVICE.find_by_entity_id(params[:id]))
+    target_entity = ENTITY_SERVICE.find_by_entity_id(params[:entity_id]) # rubocop:disable Rails/DynamicFindBy
+    source_entity = resolve_master_entity(ENTITY_SERVICE.find_by_entity_id(params[:id])) # rubocop:disable Rails/DynamicFindBy
 
     relationships = InferredRelationshipGraph2
-      .new(target_entity)
-      .relationships_to(source_entity)
+                    .new(target_entity)
+                    .relationships_to(source_entity)
 
     relationships = RelationshipsSorter.new(relationships)
-      .call
-      .uniq { |r| r.sourced_relationships.first.keys_for_uniq_grouping }
+                                       .call
+                                       .uniq { |r| r.sourced_relationships.first.keys_for_uniq_grouping }
 
-    raise Mongoid::Errors::DocumentNotFound.new(Relationship, [target_entity.id, source_entity.id]) if relationships.empty?
+    if relationships.empty?
+      raise Mongoid::Errors::DocumentNotFound.new(Relationship,
+                                                  [target_entity.id, source_entity.id])
+    end
 
     reference_number = 0
 

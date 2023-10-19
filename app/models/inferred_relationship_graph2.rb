@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InferredRelationshipGraph2
   def initialize(entity)
     @entity = entity
@@ -22,8 +24,8 @@ class InferredRelationshipGraph2
 
     select_relationships_recursive(
       entity: @entity,
-      inferred_relationships: inferred_relationships,
-      stop_condition: stop_condition,
+      inferred_relationships:,
+      stop_condition:
     )
 
     inferred_relationships
@@ -45,11 +47,9 @@ class InferredRelationshipGraph2
       inferred_relationship = InferredRelationship2.new(
         source: entity,
         target: @entity,
-        sourced_relationships: seen_relationships,
+        sourced_relationships: seen_relationships
       )
-      if seen_relationships.size == 1
-        inferred_relationship.interests = seen_relationships.first.interests
-      end
+      inferred_relationship.interests = seen_relationships.first.interests if seen_relationships.size == 1
       inferred_relationships << inferred_relationship
     end
 
@@ -58,10 +58,10 @@ class InferredRelationshipGraph2
     immediate_relationships.each do |relationship|
       select_relationships_recursive(
         entity: relationship.source,
-        inferred_relationships: inferred_relationships,
+        inferred_relationships:,
         seen_entities: [entity] + seen_entities,
         seen_relationships: [relationship] + seen_relationships,
-        stop_condition: stop_condition,
+        stop_condition:
       )
     end
   end

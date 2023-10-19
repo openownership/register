@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DecorateHelpers
   extend ActiveSupport::Concern
 
@@ -5,23 +7,23 @@ module DecorateHelpers
 
   def decorate(object)
     if object.is_a?(Enumerable)
-      object.map { |o| o.decorate(context: context) }
+      object.map { |o| o.decorate(context:) }
     else
-      object.decorate(context: context)
+      object.decorate(context:)
     end
   end
 
   def decorate_with(object, decorator_class)
     if object.is_a?(Enumerable)
-      decorator_class.decorate_collection(object, context: context)
+      decorator_class.decorate_collection(object, context:)
     else
-      decorator_class.new(object, context: context)
+      decorator_class.new(object, context:)
     end
   end
 
   private
 
   def context
-    { should_transliterate: should_transliterate }
+    { should_transliterate: }
   end
 end

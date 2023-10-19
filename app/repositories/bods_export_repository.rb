@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ostruct'
 
 class BodsExportRepository
@@ -20,18 +22,19 @@ class BodsExportRepository
   attr_reader :s3_adapter, :s3_bucket, :s3_prefix
 
   def list_all
-    s3_paths = s3_adapter.list_objects(s3_bucket: s3_bucket, s3_prefix: s3_prefix)
+    s3_paths = s3_adapter.list_objects(s3_bucket:, s3_prefix:)
 
     s3_paths.sort.reverse.map do |s3_path|
       matched = /ex(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})/.match s3_path
       next unless matched
+
       time = begin
-        Time.new(matched[:year], matched[:month], matched[:day])
+        Time.zone.local(matched[:year], matched[:month], matched[:day])
       rescue ArgumentError
         next
       end
 
-      OpenStruct.new(created_at: time, s3_path: s3_path)
+      OpenStruct.new(created_at: time, s3_path:) # rubocop:disable Style/OpenStructUse
     end.compact
   end
 end

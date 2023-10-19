@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ostruct'
 require 'register_sources_psc/repositories/company_record_repository'
 require 'register_sources_sk/repositories/record_repository'
@@ -19,6 +21,7 @@ class RawDataRecordRepository
     ]
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def all_for_entity(main_entity)
     return all_for_entity(main_entity.master_entity) if main_entity.master_entity
 
@@ -29,28 +32,29 @@ class RawDataRecordRepository
       main_entity.relationships_as_source,
       main_entity.relationships_as_target
     ].flatten.map(&:bods_statement).each do |bods_statement|
-      if bods_statement.respond_to?(:identifiers)
-        bods_identifiers += bods_statement.identifiers
-      end
+      bods_identifiers += bods_statement.identifiers if bods_statement.respond_to?(:identifiers)
 
-      if bods_statement.respond_to?(:source)
-        source = bods_statement.source
-        if source
-          s = source.url.to_s.split("https://api.company-information.service.gov.uk")
-          if s.length > 1
-            bods_identifiers += [RegisterSourcesBods::Identifier.new(
-              schemeName: 'GB Persons Of Significant Control Register',
-              id: s[1]
-            )]
-          end
-        end
-      end
+      next unless bods_statement.respond_to?(:source)
+
+      source = bods_statement.source
+      next unless source
+
+      s = source.url.to_s.split('https://api.company-information.service.gov.uk')
+      next unless s.length > 1
+
+      bods_identifiers += [RegisterSourcesBods::Identifier.new(
+        schemeName: 'GB Persons Of Significant Control Register',
+        id: s[1]
+      )]
     end
 
     return [] if bods_identifiers.empty?
 
-    get_by_bods_identifiers(bods_identifiers.uniq).sort_by { |raw_record| raw_record_date(main_entity, raw_record) }.reverse
+    get_by_bods_identifiers(bods_identifiers.uniq).sort_by do |raw_record|
+      raw_record_date(main_entity, raw_record)
+    end.reverse
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def newest_for_entity_date(entity)
     raw_record = all_for_entity(entity).first
@@ -81,15 +85,14 @@ class RawDataRecordRepository
   end
 
   def raw_record_date(entity, raw_record)
-    entity_date = (entity.bods_statement.source&.retrievedAt || entity.bods_statement.publicationDetails.publicationDate)&.to_date
+    entity_date = (entity.bods_statement.source&.retrievedAt ||
+                   entity.bods_statement.publicationDetails.publicationDate)&.to_date
 
     case raw_record
-    when RegisterSourcesDk::Deltagerperson
+    when RegisterSourcesDk::Deltagerperson, RegisterSourcesSk::Record
       entity_date
     when RegisterSourcesPsc::CompanyRecord
       raw_record.data.notified_on.to_date
-    when RegisterSourcesSk::Record
-      entity_date
     end
   end
 end
