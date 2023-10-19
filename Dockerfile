@@ -3,15 +3,12 @@
 #===============================================================================
 FROM docker.io/library/ruby@sha256:7681a3d37560dbe8ff7d0a38f3ce35971595426f0fe2f5709352d7f7a5679255 AS dev
 
-RUN tmp="$(mktemp -d)" && \
-    cd "$tmp" && \
-    # SYNC: package.json
-    curl -fsSL -o setup.x https://deb.nodesource.com/setup_16.x && \
-    echo 'de093cd0d0a2e5754b2e1a4ba06e6624437776b7ee5ede8036a48c6d319eb209  setup.x' | sha256sum -c && \
-    bash setup.x && \
-    rm -rf "$tmp"
-
-RUN apt-get update && \
+# SYNC: package.json
+RUN echo "deb [signed-by=/etc/apt/trusted.gpg.d/nodesource.asc] https://deb.nodesource.com/node_16.x nodistro main" > \
+        /etc/apt/sources.list.d/nodesource.list && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key > \
+        /etc/apt/trusted.gpg.d/nodesource.asc && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         nodejs \
         shellcheck \
