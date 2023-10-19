@@ -10,7 +10,7 @@ module ApplicationHelper
   end
 
   def render_haml(haml)
-    Haml::Engine.new(haml, escape_html: true).render(self)
+    Haml::Template.new { haml }.render(self).html_safe # rubocop:disable Rails/OutputSafety
   end
 
   def google_analytics
