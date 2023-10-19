@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def asset_present?(path)
     if Rails.configuration.assets.compile
@@ -8,7 +10,7 @@ module ApplicationHelper
   end
 
   def render_haml(haml)
-    Haml::Engine.new(haml, escape_html: true).render(self)
+    Haml::Template.new { haml }.render(self).html_safe # rubocop:disable Rails/OutputSafety
   end
 
   def google_analytics
@@ -16,7 +18,6 @@ module ApplicationHelper
 
     safe_join(
       [
-        # rubocop:disable Style/TrailingCommaInArguments
         raw( # rubocop:disable Rails/OutputSafety
           <<-GA
           <script async src="https://www.googletagmanager.com/gtag/js?id=#{Rails.application.config.ga_tracking_id}"></script>
@@ -28,9 +29,8 @@ module ApplicationHelper
             gtag('config', '#{Rails.application.config.ga_tracking_id}', { anonymize_ip: true, client_storage: 'none' });
           </script>
           GA
-        ),
-        # rubocop:enable Style/TrailingCommaInArguments
-      ],
+        )
+      ]
     )
   end
 
@@ -43,7 +43,7 @@ module ApplicationHelper
       :span,
       label,
       data: { 'tippy-content' => title, 'tippy-placement' => position },
-      class: "tooltip-helper",
+      class: 'tooltip-helper'
     )
   end
 
@@ -62,7 +62,7 @@ module ApplicationHelper
   PARTIAL_DATE_FORMATS = {
     1 => '%04d',
     2 => '%04d-%02d',
-    3 => '%04d-%02d-%02d',
+    3 => '%04d-%02d-%02d'
   }.freeze
 
   def partial_date_format(iso8601_date)
@@ -71,13 +71,13 @@ module ApplicationHelper
     PARTIAL_DATE_FORMATS[iso8601_date.atoms.size] % iso8601_date.atoms
   end
 
-  REPORT_INCORRECT_DATA_URL = 'https://share.hsforms.com/1it46pw4MTL2L2jaUiepirA3upv4'.freeze
+  REPORT_INCORRECT_DATA_URL = 'https://share.hsforms.com/1it46pw4MTL2L2jaUiepirA3upv4'
 
   def report_incorrect_data_url
     REPORT_INCORRECT_DATA_URL
   end
 
-  FEEDBACK_FORM_URL = 'https://share.hsforms.com/1t-W-_8y1REuXNcXWxwTiaQ3upv4'.freeze
+  FEEDBACK_FORM_URL = 'https://share.hsforms.com/1t-W-_8y1REuXNcXWxwTiaQ3upv4'
 
   def feedback_form_url
     FEEDBACK_FORM_URL

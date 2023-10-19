@@ -5,25 +5,25 @@
 
     .row
       .col-lg-12
-        %h1= t(".headline")
+        %h1= t('.headline')
         - if params[:q].blank?
-          %p.legal-entity-count= t(".legal-entity_count", count: number_to_human(@legal_entity_count, precision: 2).downcase)
+          %p.legal-entity-count= t('.legal-entity_count', count: number_to_human(@legal_entity_count, precision: 2).downcase)
       .col-lg-6.offset-lg-3
         .form-group
           = form_with url: search_path, method: 'get', class: 'search-form', local: true do |f|
-            = f.text_field :q, value: params[:q], class: 'form-control form-control-lg search-field', placeholder: t(".placeholder"), autofocus: true
-            = f.submit t(".search"), name: nil, class: 'search-button'
+            = f.text_field :q, value: params[:q], class: 'form-control form-control-lg search-field', placeholder: t('.placeholder'), autofocus: true
+            = f.submit t('.search'), name: nil, class: 'search-button'
 
     .row
       - if params[:q].blank?
         .col-lg-6.offset-lg-3
           .oo-intro
-            %p= t(".blurb_html", bo_link: link_to(t('.bo_link_text'), glossary_path), more_info_link: link_to(t('.more_info_link_text'), faq_path))
+            %p= t('.blurb_html', bo_link: link_to(t('.bo_link_text'), glossary_path), more_info_link: link_to(t('.more_info_link_text'), faq_path))
 
             %hr
 
             .data-sources-info
-              %p= t(".data_sources_preface", count: number_with_delimiter(@legal_entity_count))
+              %p= t('.data_sources_preface', count: number_with_delimiter(@legal_entity_count))
               %ul.list-unstyled
                 - if @data_sources['uk-psc-register'].present?
                   %li= link_to('UK PSC Register', data_source_path(@data_sources['uk-psc-register'].slug))
@@ -43,21 +43,21 @@
             %hr
 
             %p
-              = link_to "Download our data", download_path, class: 'btn btn-primary'
+              = link_to 'Download our data', download_path, class: 'btn btn-primary'
 
             %hr
 
       - elsif @response.empty?
         .col-lg-6.offset-lg-3
           .no-results
-            %p= t(".no_results")
+            %p= t('.no_results')
       - else
         .col-lg-7.offset-lg-1
           .frame
             .frame-wrap
               %p.search-results-header
                 - if @fallback
-                  %em= t(".fallback", query: params[:q])
+                  %em= t('.fallback', query: params[:q])
                   %br
                 = page_entries_info @response, entry_name: 'result'
               .options
@@ -65,7 +65,7 @@
               %ul.list-unstyled.list-entities
                 - @response.each do |record|
                   %li.item
-                    = render "shared/entity_title", entity: record, with_company: true
+                    = render 'shared/entity_title', entity: record, with_company: true
                     - if record.natural_person?
                       .result-controls
                         = render partial: 'shared/entity_controlled_companies', locals: { entity: record }

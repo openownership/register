@@ -10,10 +10,10 @@
             = entity.unknown_reason
         - if entity.natural_person?
           .type-icon.natural-person
-            = image_tag "icon-natural-person.svg"
+            = image_tag 'icon-natural-person.svg'
         - else
           .type-icon.legal-entity
-            = image_tag "icon-legal-entity.svg"
+            = image_tag 'icon-legal-entity.svg'
         %small
           = entity_attributes_snippet(entity)
           - entity.address.try do |address|

@@ -1,19 +1,22 @@
+# frozen_string_literal: true
+
 require 'register_sources_bods/enums/statement_types'
 
 class BodsStatementSorter
   # accepts array of statements
   # returns sorted by publication date, with any statements referred to by relationships
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def sort_statements(statements)
     statements = statements.sort_by { |statement| statement.publicationDetails&.publicationDate }
 
-    statements_by_id = statements.to_h { |statement| [statement.statementID, statement] }
+    statements.index_by(&:statementID)
 
     used_ids = Set.new
     new_statements = []
 
     while new_statements.length < statements.length
       current_new_statement_count = new_statements.length
-      
+
       statements.each do |statement|
         next if used_ids.include?(statement.statementID)
 
@@ -21,8 +24,9 @@ class BodsStatementSorter
 
         dependent_ids =
           case statement.statementType
-          when RegisterSourcesBods::StatementTypes['personStatement'], RegisterSourcesBods::StatementTypes['entityStatement']
-            []  
+          when RegisterSourcesBods::StatementTypes['personStatement'],
+              RegisterSourcesBods::StatementTypes['entityStatement']
+            []
           when RegisterSourcesBods::StatementTypes['ownershipOrControlStatement']
             [
               statement.subject&.describedByEntityStatement,
@@ -30,7 +34,7 @@ class BodsStatementSorter
               statement.interestedParty&.describedByPersonStatement
             ].compact
           end
-        
+
         all_dependent = (replaced_ids + dependent_ids).compact.uniq
 
         all_dependencies_satisfied = all_dependent.all? { |dependency_id| used_ids.include? dependency_id }
@@ -51,4 +55,5 @@ class BodsStatementSorter
 
     new_statements
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end

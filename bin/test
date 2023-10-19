@@ -1,11 +1,26 @@
-#!/bin/bash
-set -e -o pipefail
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-bin_folder=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-cd "$bin_folder/.."
+echo -e "\n=== ShellCheck"
+file --mime-type ./* bin/* | grep 'text/x-shellscript' | cut -d':' -f1 |
+    xargs -r shellcheck
 
-bundle exec rspec --color --require spec_helper --format documentation spec
-yarn test
-# bundle exec rubocop
-# bundle exec haml-lint .
+echo -e "\n=== RuboCop"
+rubocop
+
+echo -e "\n=== HAML-Lint"
+haml-lint
+
+echo -e "\n=== Yarn Lint"
 yarn lint
+
+echo -e "\n=== RSpec"
+rspec
+
+echo -e "\n=== Rails Test"
+rails test
+
+echo -e "\n=== Yarn Test"
+yarn test
+
+echo

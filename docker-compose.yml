@@ -19,10 +19,12 @@ services:
     volumes:
       - ${DC_WEB_LIB_REGISTER_COMMON:-.dockerempty}:/home/x/lib/register-common
       - ${DC_WEB_LIB_REGISTER_SOURCES_BODS:-.dockerempty}:/home/x/lib/register-sources-bods
+      - ${DC_WEB_LIB_REGISTER_SOURCES_DK:-.dockerempty}:/home/x/lib/register-sources-dk
       - ${DC_WEB_LIB_REGISTER_SOURCES_OC:-.dockerempty}:/home/x/lib/register-sources-oc
       - ${DC_WEB_LIB_REGISTER_SOURCES_PSC:-.dockerempty}:/home/x/lib/register-sources-psc
-      - ${DC_WEB_LIB_REGISTER_SOURCES_DK:-.dockerempty}:/home/x/lib/register-sources-dk
       - ${DC_WEB_LIB_REGISTER_SOURCES_SK:-.dockerempty}:/home/x/lib/register-sources-sk
+      - ./.haml-lint.yml:/home/x/r/.haml-lint.yml
+      - ./.rubocop.yml:/home/x/r/.rubocop.yml
       - ./app:/home/x/r/app
       - ./bin:/home/x/r/bin
       - ./config:/home/x/r/config

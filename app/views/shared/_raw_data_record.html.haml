@@ -5,6 +5,6 @@
   .col-lg-4
     .frame-light.meta
       .frame-wrap
-        %h6= t("raw_data_records.show.fields.etag")
+        %h6= t('raw_data_records.show.fields.etag')
         %p
           %code= raw_record.respond_to?(:etag) ? raw_record.etag : raw_record.data.etag

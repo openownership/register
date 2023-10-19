@@ -1,8 +1,8 @@
 !!!
 %html.no-js
   %head
-    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type" }/
-    %meta{ content: "width=device-width, initial-scale=1", name: "viewport" }/
+    %meta{ :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type' }/
+    %meta{ content: 'width=device-width, initial-scale=1', name: 'viewport' }/
     %title
       Open Ownership Register
       - yield(:title).presence.try do |title|
@@ -15,39 +15,39 @@
     = csrf_meta_tags
     = stylesheet_link_tag 'application', media: 'all'
     = javascript_pack_tag 'application'
-    %link{ href: "/apple-touch-icon.png", rel: "apple-touch-icon", sizes: "180x180" }/
-    %link{ href: "/favicon-32x32.png", rel: "icon", sizes: "32x32", type: "image/png" }/
-    %link{ href: "/favicon-16x16.png", rel: "icon", sizes: "16x16", type: "image/png" }/
-    %link{ href: "/site.webmanifest", rel: "manifest" }/
-    %link{ color: "#3b26d8", href: "/safari-pinned-tab.svg", rel: "mask-icon" }/
-    %meta{ content: "#12171d", name: "theme-color" }/
+    %link{ href: '/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180' }/
+    %link{ href: '/favicon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png' }/
+    %link{ href: '/favicon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png' }/
+    %link{ href: '/site.webmanifest', rel: 'manifest' }/
+    %link{ color: '#3b26d8', href: '/safari-pinned-tab.svg', rel: 'mask-icon' }/
+    %meta{ content: '#12171d', name: 'theme-color' }/
     = yield :head
   %body{ class: yield(:body_class) }
-    %header.site-header{ class: ("site-header-small" unless current_page?(root_path)) }
+    %header.site-header{ class: ('site-header-small' unless current_page?(root_path)) }
       .container-fluid
         .row
           .col-md-12
             %nav.navbar.navbar-dark
-              %button.navbar-toggler.hidden-lg-up{ :type => "button", "data-toggle" => "collapse", "data-target" => "#navbarResponsive", "aria-controls" => "navbarResponsive", "aria-expanded" => "false", "aria-label" => "Toggle navigation" }
+              %button.navbar-toggler.hidden-lg-up{ :type => 'button', 'data-toggle' => 'collapse', 'data-target' => '#navbar-responsive', 'aria-controls' => 'navbar-responsive', 'aria-expanded' => 'false', 'aria-label' => 'Toggle navigation' }
                 %span Menu
-              .collapse.navbar-toggleable-md#navbarResponsive
+              .collapse.navbar-toggleable-md#navbar-responsive
                 %ul.nav.navbar-nav
-                  %li.nav-item{ class: ("active" if current_page?(root_path)) }
-                    = link_to t(".nav.home"), root_path, class: "nav-link"
+                  %li.nav-item{ class: ('active' if current_page?(root_path)) }
+                    = link_to t('.nav.home'), root_path, class: 'nav-link'
                   %li.nav-item
-                    %a.nav-link.external{ href: "https://www.openownership.org/", target: "_blank" }
-                      = t(".nav.back_to_oo")
+                    %a.nav-link.external{ href: 'https://www.openownership.org/', target: '_blank' }
+                      = t('.nav.back_to_oo')
                   %li.nav-item
-                    %a.nav-link.external{ href: feedback_form_url, target: "_blank" }
-                      = t(".nav.feedback")
+                    %a.nav-link.external{ href: feedback_form_url, target: '_blank' }
+                      = t('.nav.feedback')
                   %span.float-lg-right.follow-nav
                     %li.nav-item.follow-label
-                      = t(".nav.follow")
+                      = t('.nav.follow')
                     %li.nav-item
-                      %a.nav-link{ href: "http://www.twitter.com/openownership" }
+                      %a.nav-link{ href: 'http://www.twitter.com/openownership' }
                         %i.fa.fa-twitter
                     %li.nav-item
-                      %a.nav-link{ href: "https://github.com/openownership/register" }
+                      %a.nav-link{ href: 'https://github.com/openownership/register' }
                         %i.fa.fa-github
             .brand-header
               = link_to root_path do
@@ -72,9 +72,9 @@
           .supporters
             .supporters-header
               %h5
-                = t(".footer.brought_by")
-            %a.Open_Ownership{ href: "https://www.openownership.org/" }
+                = t('.footer.brought_by')
+            %a.Open_Ownership{ href: 'https://www.openownership.org/' }
             .funders-header
               %h5
-                = t(".footer.funded_by")
-            %a.uk-aid-logo{ href: "https://www.gov.uk/government/organisations/foreign-commonwealth-development-office" }
+                = t('.footer.funded_by')
+            %a.uk-aid-logo{ href: 'https://www.gov.uk/government/organisations/foreign-commonwealth-development-office' }

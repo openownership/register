@@ -1,4 +1,4 @@
-- content_for(:title, t(".title"))
+- content_for(:title, t('.title'))
 - content_for :schema do
   = render partial: 'download_schema.json'
 
@@ -7,7 +7,7 @@
     .row
       .col-lg-8
         .page-header
-          %h1= t(".title")
+          %h1= t('.title')
 
     .row
       .col-lg-8
@@ -73,8 +73,8 @@
             readable with a variety of compression programs on Windows.
           %p
             <strong>Our regular data updates at least every month</strong>, and we will
-            make a new export after each update. This page will be updated as soon as 
-            that happens, but you can also rely on the "latest" link at the top of the 
+            make a new export after each update. This page will be updated as soon as
+            that happens, but you can also rely on the "latest" link at the top of the
             page to always point to the most recent data.
 
           %h2{ id: 'what-isnt-it' } What is this data not?
@@ -141,7 +141,7 @@
           %p
             The primary identifier in BODS is the <code>statementID</code>. This uniquely
             identifies a particular statement about a person, legal entity or
-            relationship between them. You may also want to link our data to other 
+            relationship between them. You may also want to link our data to other
             datasets that have company numbers or other identifiers in them.
           %p
             The <code>identifiers</code> field is the way you can do this.
@@ -166,14 +166,14 @@
             from the <a href="http://org-id.guide">org-id.guide</a>
             <code>scheme</code> given. For example, we'll give
             company numbers under the <code>GB-COH</code> scheme for
-            companies declaring their beneficial owners in the UK People with 
+            companies declaring their beneficial owners in the UK People with
             significant control (PSC) Register.
           %p
             If entities have identifiers from a register that we matched in
             org-id, you should be able to uniquely identify them and connect
             them to other data sources. For example, you can match companies to
-            a national register or match them to other datasets like those from the 
-            <a href="https://data.open-contracting.org/">Open Contracting Partnership</a> 
+            a national register or match them to other datasets like those from the
+            <a href="https://data.open-contracting.org/">Open Contracting Partnership</a>
             which use the <a href="https://standard.open-contracting.org/latest/en/guidance/map/beneficial_ownership/">
             same identifiers</a>.
           %p
@@ -200,7 +200,7 @@
             we'll give an identifier with just a <code>schemeName</code>.
             These names will always start with the ISO-3166-1 alpha2
             country code for the country the register is in, followed by the
-            original language name for the register. For example: <i>UK People with 
+            original language name for the register. For example: <i>UK People with
             significant control (PSC) Register</i>.
           %p
             The intention is that these identifiers can be used to

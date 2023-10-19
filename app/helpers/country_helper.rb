@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CountryHelper
   def country_flag(country)
     return unknown_country_flag unless country
@@ -10,10 +12,10 @@ module CountryHelper
   end
 
   def country_flag_path(country)
-    return path_to_image("flag-unknown.svg") unless country
+    return path_to_image('flag-unknown.svg') unless country
 
     basename = "#{country.alpha2.upcase}.svg"
-    return path_to_image("flag-unknown.svg") unless asset_present?(basename)
+    return path_to_image('flag-unknown.svg') unless asset_present?(basename)
 
     path_to_image(basename)
   end
@@ -22,9 +24,9 @@ module CountryHelper
 
   def unknown_country_flag
     glossary_tooltip(
-      image_tag("flag-unknown.svg", size: '32x16', alt: "unknown", class: 'flag'),
+      image_tag('flag-unknown.svg', size: '32x16', alt: 'unknown', class: 'flag'),
       :unknown_jurisdiction,
-      :top,
+      :top
     )
   end
 end

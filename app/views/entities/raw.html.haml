@@ -14,31 +14,31 @@
                     = country_flag(@sentity.country)
                     = nationality
                   .type-icon.natural-person
-                    = image_tag "icon-natural-person.svg"
-                    = t("entity_types.natural-person").capitalize
+                    = image_tag 'icon-natural-person.svg'
+                    = t('entity_types.natural-person').capitalize
               - else
                 - @sentity.country.try do |country|
                   .jurisdiction
                     = country_flag(country)
                     = entity_jurisdiction(@sentity)
                   .type-icon.legal-entity
-                    = image_tag "icon-legal-entity.svg"
-                    = glossary_tooltip(t("entity_types.legal-entity").capitalize, :'legal-entity', :right)
+                    = image_tag 'icon-legal-entity.svg'
+                    = glossary_tooltip(t('entity_types.legal-entity').capitalize, :'legal-entity', :right)
           .col-lg-4.header-sep
             .entity-header-meta.meta
               - if @sentity.natural_person?
                 - @sentity.country_of_residence.try do |country_of_residence|
-                  %h6= t("entities.show.fields.country_of_residence")
+                  %h6= t('entities.show.fields.country_of_residence')
                   %p= country_of_residence
                 - @sentity.date_of_birth.presence.try do |date_of_birth|
-                  %h6= t("entities.show.fields.date_of_birth")
+                  %h6= t('entities.show.fields.date_of_birth')
                   %p= date_of_birth
               - else
                 - @sentity.company_number.try do |company_number|
-                  %h6= t("entities.show.fields.company_number")
+                  %h6= t('entities.show.fields.company_number')
                   %p= company_number
                 - @oc_data[:company_type].try do |company_type|
-                  %h6= t("entities.show.fields.company_type")
+                  %h6= t('entities.show.fields.company_type')
                   %p= company_type
 
   .options-bar
@@ -49,7 +49,7 @@
             %h6 Options
             %ul.list-unstyled
               %li.option-report.last
-                = link_to t("shared.report_incorrect_data"), report_incorrect_data_url, target: '_blank', rel: 'noopener'
+                = link_to t('shared.report_incorrect_data'), report_incorrect_data_url, target: '_blank', rel: 'noopener'
 
 .content.entity-content
   .container-fluid
@@ -73,4 +73,4 @@
       .row
         .col-lg-12
           - @raw_data_records.each do |raw_record|
-            = render(partial: 'shared/raw_data_record', locals: { raw_record: raw_record })
+            = render(partial: 'shared/raw_data_record', locals: { raw_record: })

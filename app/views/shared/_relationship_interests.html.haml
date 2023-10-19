@@ -2,13 +2,13 @@
   %ul.list-unstyled{ id: ("cite-back-#{relationship[:reference_number]}" if relationship[:reference_number]) }
     - if relationship.is_indirect
       %li.indirect
-        = t(".indirect")
+        = t('.indirect')
     - if relationship.started_date
       %li.started_date
-        = t(".started", date: relationship.started_date)
+        = t('.started', date: relationship.started_date)
     - if relationship.interests.empty?
       %li.unknown
-        = glossary_tooltip(t(".unknown"), :undefined_interest, :right)
+        = glossary_tooltip(t('.unknown'), :undefined_interest, :right)
     - else
       - known_interests_for(relationship).each do |interest|
         - if interest.share
@@ -18,10 +18,10 @@
             %li= t("#{interest.type}-range", scope: :relationship_interests, share_min: number_with_precision(interest.share.minimum, strip_insignificant_zeros: true), share_max: number_with_precision(interest.share.maximum, strip_insignificant_zeros: true), default: interest.type)
       - if unknown_interests_for(relationship).any?
         %li.unknown
-          = glossary_tooltip(t(".unknown"), :undefined_interest, :right)
+          = glossary_tooltip(t('.unknown'), :undefined_interest, :right)
     - if relationship.ended_date
       %li.ended_date
-        = t(".ended", date: relationship.ended_date)
+        = t('.ended', date: relationship.ended_date)
     - if relationship[:reference_number]
       %sup.reference
         %a{ href: "#cite-#{relationship[:reference_number]}" }

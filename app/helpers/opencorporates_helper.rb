@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 module OpencorporatesHelper
   def previous_names(company_hash)
     company_hash[:previous_names].pluck(:company_name).join(', ')
   end
 
   def industry_codes(company_hash)
-    company_hash[:industry_codes].map { |hash| "#{hash[:industry_code][:code]} #{hash[:industry_code][:description]}" }.join(', ')
+    company_hash[:industry_codes].map do |hash|
+      "#{hash[:industry_code][:code]} #{hash[:industry_code][:description]}"
+    end.join(', ')
   end
 
   def officers(company_hash)

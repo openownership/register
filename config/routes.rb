@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   resources :entities, only: :show do
     member do
@@ -16,5 +18,5 @@ Rails.application.routes.draw do
   get 'download/latest' => 'pages#download_latest'
   get 'data-changelog' => 'pages#data_changelog'
   resources :data_sources, only: %i[index show]
-  root "pages#home"
+  root 'pages#home'
 end

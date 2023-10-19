@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'draper/query_methods/load_strategy'
 
 module Draper

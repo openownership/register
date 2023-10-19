@@ -5,10 +5,10 @@
     = entity.name
   - if entity.natural_person?
     %span.type-icon.natural-person
-      = image_tag "icon-natural-person.svg"
+      = image_tag 'icon-natural-person.svg'
   - else
     %span.type-icon.legal-entity
-      = image_tag "icon-legal-entity.svg"
+      = image_tag 'icon-legal-entity.svg'
 - if entity.respond_to?(:unknown_reason) && entity.unknown_reason
   %span.entity-unknown-reason
     = entity.unknown_reason

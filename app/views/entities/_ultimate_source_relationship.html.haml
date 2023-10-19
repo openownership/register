@@ -1,13 +1,14 @@
 - ended_date = relationship.ended_date
 
+-# haml-lint:disable InstanceVariables
 .item{ class: ('ended' if ended_date) }
   = render partial: 'shared/entity_title', locals: { entity: relationship.source }
 
   = link_to entity_relationship_path(relationship.target&.id, relationship.source&.id), class: 'relationship-link' do
     - if relationship.intermediate_entities.any?
       %span.via
-        = t(".controls_via")
-        - if !relationship.source.natural_person?
+        = t('.controls_via')
+        - unless relationship.source.natural_person?
           = relationship.source.name
           = country_flag(relationship.source.country)
           &rarr;
@@ -20,11 +21,11 @@
         = country_flag(@sentity.country)
         - if relationship.is_indirect
           .indirect
-            = t("shared.relationship_interests.also_indirect")
+            = t('shared.relationship_interests.also_indirect')
         - if ended_date
           .ended_date
-            = t("shared.relationship_interests.ended", date: ended_date)
+            = t('shared.relationship_interests.ended', date: ended_date)
     - else
-      = render partial: 'shared/relationship_interests', locals: { relationship: relationship }
+      = render partial: 'shared/relationship_interests', locals: { relationship: }
     %span.details
-      = t(".details")
+      = t('.details')

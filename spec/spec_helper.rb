@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'webmock/rspec'
 require 'factory_bot'
 
@@ -14,7 +16,7 @@ RSpec.configure do |config|
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.filter_run_when_matching :focus
-  config.example_status_persistence_file_path = "spec/examples.txt"
+  config.example_status_persistence_file_path = 'spec/examples.txt'
   config.disable_monkey_patching!
   config.default_formatter = 'doc' if config.files_to_run.one?
 
@@ -23,7 +25,7 @@ RSpec.configure do |config|
 
   WebMock.disable_net_connect!(
     allow_localhost: true,
-    allow: 'chromedriver.storage.googleapis.com',
+    allow: 'chromedriver.storage.googleapis.com'
   )
 
   config.before(:each, type: :system) do

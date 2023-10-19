@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 Rails.application.config.blocked_ips = ENV.fetch('BLOCKED_IPS', '').split(',').map(&:strip)
 Rails.application.config.blocked_uas = ENV.fetch('BLOCKED_USER_AGENTS', '').split(',').map(&:strip)
 Rails.application.config.unrestricted_ips = ENV.fetch('UNRESTRICTED_IPS', '').split(',').map(&:strip)
 Rails.application.config.enable_ratelimiting = (ENV.fetch('ENABLE_RATE_LIMITING', '') == 'true')
 
 if Rails.env.production?
-  X_FORWARDED_FOR_HEADER = 'HTTP_X_FORWARDED_FOR'.freeze
+  X_FORWARDED_FOR_HEADER = 'HTTP_X_FORWARDED_FOR'
 
   Rails.application.config.unrestricted_ips.each do |ip|
     Rack::Attack.safelist_ip ip
@@ -14,7 +16,7 @@ if Rails.env.production?
     Rack::Attack.blocklist_ip ip
   end
 
-  Rack::Attack.blocklist("blocked user agents") do |request|
+  Rack::Attack.blocklist('blocked user agents') do |request|
     ua = request.user_agent
     if ua.present?
       Rails.application.config.blocked_uas.any? do |blocked_ua|
