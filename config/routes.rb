@@ -6,12 +6,12 @@ Rails.application.routes.draw do
   resources :data_sources, only: %i[index show]
 
   resources :entities, only: :show do
-    resources :relationships, only: :show, path: ''
     member do
       get 'graph'
       get 'opencorporates-additional-info'
       get 'raw'
     end
+    resources :relationships, only: :show, path: ''
   end
 
   resource :search, only: :show
