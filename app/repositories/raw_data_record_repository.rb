@@ -35,14 +35,9 @@ class RawDataRecordRepository
     ]
   end
 
-<<<<<<< HEAD
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  def all_for_entity(main_entity)
-    return all_for_entity(main_entity.master_entity) if main_entity.master_entity
-=======
   def all_for_entity(main_entity, per_page: 10, page: 1)
     return all_for_entity(main_entity.master_entity, per_page:, page:) if main_entity.master_entity
->>>>>>> 5871251... Added pagination for raw records
 
     bods_identifiers = []
 
@@ -69,13 +64,9 @@ class RawDataRecordRepository
 
     return [] if bods_identifiers.empty?
 
-<<<<<<< HEAD
-    get_by_bods_identifiers(bods_identifiers.uniq).sort_by do |raw_record|
+    get_by_bods_identifiers(bods_identifiers.uniq, per_page:, page:).sort_by do |raw_record|
       raw_record_date(main_entity, raw_record)
     end.reverse
-=======
-    get_by_bods_identifiers(bods_identifiers.uniq, per_page:, page:)
->>>>>>> 5871251... Added pagination for raw records
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
