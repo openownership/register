@@ -1,8 +1,8 @@
 ---
 name: OpenOwnership Register
 slugs:
-- openownership-register
+  - openownership-register
 current_statistic_types: []
 types:
-- thirdParty
-- selfDeclaration
+  - thirdParty
+  - selfDeclaration

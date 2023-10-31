@@ -1,136 +1,136 @@
 en:
-  :true: 'Yes'
-  :false: 'No'
+  :true: "Yes"
+  :false: "No"
   entities:
     show:
-      controlled_entities_html: Companies controlled by %{entity}
+      controlled_entities_html: "Companies controlled by %{entity}"
       controlled_entities_none:
-        entityStatement_html: No companies are known to be controlled by %{entity}
-        personStatement_html: No companies are known to be beneficially owned by %{entity}
+        entityStatement_html: "No companies are known to be controlled by %{entity}"
+        personStatement_html: "No companies are known to be beneficially owned by %{entity}"
       controlling_entities:
         text_html: "%{beneficial_owners} of %{entity}"
-        beneficial_owners: Beneficial owners
+        beneficial_owners: "Beneficial owners"
       controlling_entities_none:
         text_html: "%{entity} has no %{beneficial_owners}"
-        beneficial_owners: beneficial owners
+        beneficial_owners: "beneficial owners"
       controlling_entities_unknown:
         text_html: "%{entity} has no known %{beneficial_owners}"
-        beneficial_owners: beneficial owners
+        beneficial_owners: "beneficial owners"
       data_from_opencorporates_html: "Data from %{opencorporates}"
-      no_further_information_known: No further information known about this %{type}
-      no_data_from_opencorporates: OpenCorporates data not available
-      loading_data_from_opencorporates: Loading data from OpenCorporates
-      opencorporates_api_timed_out: OpenCorporates took too long to respond. Reload the page to retry.
+      no_further_information_known: "No further information known about this %{type}"
+      no_data_from_opencorporates: "OpenCorporates data not available"
+      loading_data_from_opencorporates: "Loading data from OpenCorporates"
+      opencorporates_api_timed_out: "OpenCorporates took too long to respond. Reload the page to retry."
       more_on: "More on %{name}"
-      details: Details ›
+      details: "Details ›"
       fields:
-        nationality: Nationality
-        country_of_residence: Country of residence
-        address: Address
-        date_of_birth: Born
-        jurisdiction: Jurisdiction
-        company_number: Company number
-        lei: Legal Entity Identifier (LEI)
-        company_type: Type
-        incorporation_date: Incorporation date
-        dissolution_date: Dissolution date
-        current_status: Current status
-        previous_names: Previous names
-        industry_codes: Industry codes
-        officers: Officers
+        nationality: "Nationality"
+        country_of_residence: "Country of residence"
+        address: "Address"
+        date_of_birth: "Born"
+        jurisdiction: "Jurisdiction"
+        company_number: "Company number"
+        lei: "Legal Entity Identifier (LEI)"
+        company_type: "Type"
+        incorporation_date: "Incorporation date"
+        dissolution_date: "Dissolution date"
+        current_status: "Current status"
+        previous_names: "Previous names"
+        industry_codes: "Industry codes"
+        officers: "Officers"
       advertising_protection:
-        title: Advertising protection
-        text: License prohibits advertising
-        terms_of_use: 'terms of use'
+        title: "Advertising protection"
+        text: "License prohibits advertising"
+        terms_of_use: "terms of use"
       instances:
-        one: 1 Match
+        one: "1 Match"
         other: "%{count} Matches"
       grouping_note: "These owners have been grouped together because they have exactly the same name."
       grouping_note_html: "<span class='grouping-note-label'>Note:</span> These owners have been grouped together because they have exactly the same name. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
-      view_as_graph: View as graph
-      download_bods: Download BODS JSON
-      company_name_missing: ‹Company name missing›
-      person_name_missing: ‹Person name missing›
-      merged_people: Merged people
+      view_as_graph: "View as graph"
+      download_bods: "Download BODS JSON"
+      company_name_missing: "‹Company name missing›"
+      person_name_missing: "‹Person name missing›"
+      merged_people: "Merged people"
       merged_note_html:
         one: "<span class='grouping-note-label'>Note:</span> This person has been merged because they have exactly the same name, date of birth and address. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
         other: "<span class='grouping-note-label'>Note:</span> These people have been merged because they have exactly the same name, date of birth and address. <a href='%{report_incorrect_data_url}' target='_blank'>Don't think this is correct?</a>"
-      similar_people: People with similar names
-      provenance: 'Provenance'
+      similar_people: "People with similar names"
+      provenance: "Provenance"
     ultimate_source_relationship:
-      controls_via: Owned via
-      details: Details ›
+      controls_via: "Owned via"
+      details: "Details ›"
     provenance:
-      latest_data: 'Latest data: %{date}'
+      latest_data: "Latest data: %{date}"
       detail:
-        one: 'See the original source record'
-        other: 'See the original source records'
+        one: "See the original source record"
+        other: "See the original source records"
   data_sources:
     show:
-      data_availability_title: Data availability and license
-      links_title: Links
-      news_title: News
-      news_fallback_text: Tweets curated by Open Ownership
-      overview_title: Overview, definitions, thresholds
-      source_url_link: 'Original source data'
+      data_availability_title: "Data availability and license"
+      links_title: "Links"
+      news_title: "News"
+      news_fallback_text: "Tweets curated by Open Ownership"
+      overview_title: "Overview, definitions, thresholds"
+      source_url_link: "Original source data"
   helpers:
     entities:
       entity_attributes_snippet:
-        date_of_birth: (Born %{date_of_birth})
+        date_of_birth: "(Born %{date_of_birth})"
   layouts:
     application:
       footer:
         brought_by: "Brought to you by:"
         funded_by: "Funded by:"
-        privacy: Privacy
-        terms_and_conditions: Terms & Conditions
-        faq: FAQ
-        glossary: Glossary
-        download: Download data
-        data_sources: Data sources
+        privacy: "Privacy"
+        terms_and_conditions: "Terms & Conditions"
+        faq: "FAQ"
+        glossary: "Glossary"
+        download: "Download data"
+        data_sources: "Data sources"
       nav:
-        back_to_oo: Back to main site
-        follow: Follow our work on
-        home: Home
-        feedback: Feedback
+        back_to_oo: "Back to main site"
+        follow: "Follow our work on"
+        home: "Home"
+        feedback: "Feedback"
   pages:
     terms_and_conditions:
-      title: Terms & Conditions
+      title: "Terms & Conditions"
     privacy:
-      title: Privacy
+      title: "Privacy"
     faq:
-      title: FAQ
+      title: "FAQ"
     glossary:
-      title: Glossary
+      title: "Glossary"
     download:
-      title: Download our data
+      title: "Download our data"
     data_changelog:
-      title: Data changelog
+      title: "Data changelog"
     home:
-      title: Search over 28 million beneficial ownership records
+      title: "Search over 28 million beneficial ownership records"
   relationships:
     provenance:
-      unknown: Not yet uploaded
+      unknown: "Not yet uploaded"
       sample_date: "As of:"
       retrieved_at: "Retrieved:"
       imported_at: "Uploaded:"
     show:
       beneficial_ownership_chain:
-        one: Beneficial ownership chain
-        other: Beneficial ownership chains
-      provenance: Provenance
+        one: "Beneficial ownership chain"
+        other: "Beneficial ownership chains"
+      provenance: "Provenance"
       title_html: "%{source} to %{target}"
   searches:
     show:
-      blurb_html: The Open Ownership Register is a platform to collect and publish %{bo_link} to fight corruption and crime and improve business integrity.<br />%{more_info_link}
-      bo_link_text: beneficial ownership
-      more_info_link_text: More info
-      legal-entity_count: Currently showing %{count} companies
+      blurb_html: "The Open Ownership Register is a platform to collect and publish %{bo_link} to fight corruption and crime and improve business integrity.<br />%{more_info_link}"
+      bo_link_text: "beneficial ownership"
+      more_info_link_text: "More info"
+      legal-entity_count: "Currently showing %{count} companies"
       data_sources_preface: "Free and open information on %{count} companies, from:"
-      headline: Who controls, influences, or benefits from a company?
-      placeholder: Search company name, number or name of person
-      no_results: No results to show
-      search: Search
+      headline: "Who controls, influences, or benefits from a company?"
+      placeholder: "Search company name, number or name of person"
+      no_results: "No results to show"
+      search: "Search"
       fallback: "No results containing all your search terms were found. Matches on some of your search terms:"
       merged_people:
         one: "Includes details of 1 other merged record"
@@ -139,40 +139,37 @@ en:
     filter:
       filter_by: "Filter by %{key}"
       filtered_by: "Filtered by %{key}"
-      remove_filter: Remove filter
+      remove_filter: "Remove filter"
   shared:
     relationship_interests:
-      unknown: Interests unknown
-      started: Started on %{date}
-      ended: Ended on %{date}
-      indirect: Owned via one or more undisclosed legal entities
-      also_indirect: Also owned via one or more undisclosed legal entities
+      unknown: "Interests unknown"
+      started: "Started on %{date}"
+      ended: "Ended on %{date}"
+      indirect: "Owned via one or more undisclosed legal entities"
+      also_indirect: "Also owned via one or more undisclosed legal entities"
     search_bar:
-      new_search: Search company or name of person
-    report_incorrect_data: Report incorrect data
+      new_search: "Search company or name of person"
+    report_incorrect_data: "Report incorrect data"
     transliteration:
-      transliterate: Transliterate
+      transliterate: "Transliterate"
       dont_transliterate: "Don't transliterate"
-    javascript_required: (Javascript is required to view this content)
+    javascript_required: "(Javascript is required to view this content)"
     controlled_companies_html: "Controls: %{company_links}"
     no_controlled_companies: "Does not currently control any companies"
   entity_types:
-    default: entity
-    entityStatement: legal entity
-    personStatement: person
-    legal-entity: legal entity
-    natural-person: person
-
+    default: "entity"
+    entityStatement: "legal entity"
+    personStatement: "person"
+    legal-entity: "legal entity"
+    natural-person: "person"
   unknown_persons_entity:
     names:
-      unknown: Unknown person(s)
-      no_person: 'No person'
+      unknown: "Unknown person(s)"
+      no_person: "No person"
     reasons:
-      totally_unknown: 'We have no data to tell us who this person or people might be.'
-
+      totally_unknown: "We have no data to tell us who this person or people might be."
   circular_ownership_entity:
-    name: circular ownership
-
+    name: "circular ownership"
   # From https://github.com/companieshouse/api-enumerations/blob/develop/psc_descriptions.yml
   statement-descriptions:
     no-individual-or-entity-with-signficant-control: "The company knows or has reasonable cause to believe that there is no registrable person or registrable relevant legal entity in relation to the company"
@@ -193,7 +190,6 @@ en:
     disclosure-transparency-rules-chapter-five-applies: "The company has been or is exempt from keeping a PSC register, because it is a DTR issuer and the shares are admitted to trading on a regulated market."
     psc-exempt-as-trading-on-regulated-market: "The company has been or is exempt from keeping a PSC register, as it has voting shares admitted to trading on a regulated market other than the UK."
     psc-exempt-as-shares-admitted-on-market: "The company has been or is exempt from keeping a PSC register, as it has voting shares admitted to trading on a market listed in the Register of People with Significant Control Regulations 2016."
-
   relationship_interests:
     shareholding: "Ownership of shares"
     shareholding-exact: "Ownership of shares - %{share}%"
@@ -274,7 +270,6 @@ en:
     right-to-appoint-and-remove-members-as-trust-limited-liability-partnership: "Right to appoint and remove members as a trustee of a trust"
     right-to-appoint-and-remove-members-as-firm-limited-liability-partnership: "Right to appoint and remove members as a member of a firm"
     significant-influence-or-control: "Other significant influence or control"
-
   entity_graph:
     labels:
       max_levels_relationships_as_source:
@@ -289,21 +284,21 @@ en:
     relationship_page_link: "View page"
     entity_graph_link: "View graph"
     zoom: "Zoom in or out"
-    help: Click and drag anywhere to change the view. Click entities or relationships to see more detail.
+    help: "Click and drag anywhere to change the view. Click entities or relationships to see more detail."
   raw_data_provenances:
     show:
-      data_source: Data source
-      import_date: Import date
+      data_source: "Data source"
+      import_date: "Import date"
       fields:
-        created_at: Record imported at
-        entity_or_relationship: Record
+        created_at: "Record imported at"
+        entity_or_relationship: "Record"
   raw_data_records:
     show:
-      data_sources: Data source(s)
-      oldest: 'Oldest'
-      newest: 'Newest'
-      seen_in_most_recent_import: Seen in most recent import?
-      first_seen: First seen
-      last_seen: Last seen
+      data_sources: "Data source(s)"
+      oldest: "Oldest"
+      newest: "Newest"
+      seen_in_most_recent_import: "Seen in most recent import?"
+      first_seen: "First seen"
+      last_seen: "Last seen"
       fields:
-        etag: Etag
+        etag: "Etag"
