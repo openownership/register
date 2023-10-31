@@ -24,7 +24,7 @@ class TransliterationService
   rescue StandardError => e
     # We want to know about these errors, but we don't want them to crash a page
     # or an import.
-    Rollbar.error(e)
+    Rails.logger.error(e)
     value
   end
 

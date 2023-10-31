@@ -1,22 +1,26 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  root to: 'pages#home'
+
+  resources :data_sources, only: %i[index show]
+
   resources :entities, only: :show do
+    resources :relationships, only: :show, path: ''
     member do
       get 'graph'
-      get 'raw'
       get 'opencorporates-additional-info'
+      get 'raw'
     end
-    resources :relationships, only: :show, path: ''
   end
+
   resource :search, only: :show
-  get 'terms-and-conditions' => 'pages#terms_and_conditions'
-  get 'privacy' => 'pages#privacy'
-  get 'faq' => 'pages#faq'
-  get 'glossary' => 'pages#glossary'
-  get 'download' => 'pages#download'
-  get 'download/latest' => 'pages#download_latest'
-  get 'data-changelog' => 'pages#data_changelog'
-  resources :data_sources, only: %i[index show]
-  root 'pages#home'
+
+  get 'data-changelog',       to: 'pages#data_changelog'
+  get 'download',             to: 'pages#download'
+  get 'download/latest',      to: 'pages#download_latest'
+  get 'faq',                  to: 'pages#faq'
+  get 'glossary',             to: 'pages#glossary'
+  get 'privacy',              to: 'pages#privacy'
+  get 'terms-and-conditions', to: 'pages#terms_and_conditions'
 end

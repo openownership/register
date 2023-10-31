@@ -15,5 +15,4 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :test
   config.active_support.deprecation = :stderr
   config.i18n.raise_on_missing_translations = true
-  Rack::Attack.enabled = false
 end

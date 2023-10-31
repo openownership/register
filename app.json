@@ -50,12 +50,6 @@
     "RAILS_SERVE_STATIC_FILES": {
       "required": true
     },
-    "ROLLBAR_ACCESS_TOKEN": {
-      "required": true
-    },
-    "ROLLBAR_ENV": {
-      "required": true
-    },
     "SECRET_KEY_BASE": {
       "required": true
     }

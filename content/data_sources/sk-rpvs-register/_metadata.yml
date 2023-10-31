@@ -1,9 +1,9 @@
 ---
 name: Slovakia Public Sector Partners Register (Register partnerov verejného sektora)
 slugs:
-- sk-rpvs-register
+  - sk-rpvs-register
 document_id: Slovakia PSP Register
 current_statistic_types: []
 types:
-- officialRegister
+  - officialRegister
 timeline_url: https://twitter.com/sheislaurence/timelines/1108422389283635200?ref_src=twsrc%5Etfw

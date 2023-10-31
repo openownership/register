@@ -1,16 +1,16 @@
 ---
 name: UK People with significant control (PSC) Register
 slugs:
-- uk-psc-register
+  - uk-psc-register
 document_id: GB PSC Snapshot
 current_statistic_types:
-- total
-- register_total
-- psc_no_owner
-- psc_unknown_owner
-- psc_offshore_rle
-- psc_non_legit_rle
-- psc_secrecy_rle
-- dissolved
+  - total
+  - register_total
+  - psc_no_owner
+  - psc_unknown_owner
+  - psc_offshore_rle
+  - psc_non_legit_rle
+  - psc_secrecy_rle
+  - dissolved
 types:
-- officialRegister
+  - officialRegister
