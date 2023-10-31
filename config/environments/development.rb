@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.configure do
-  # Enable 10.0.2.2 for development to enable using NAT port forwarding through a VM
-  config.web_console.permissions = '10.0.2.2'
-
   config.cache_classes = false
   config.eager_load = false
   config.consider_all_requests_local = true
