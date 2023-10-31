@@ -37,10 +37,13 @@ gem 'xxhash',                           '~> 0.5'
 
 gem 'register_common',       git: 'https://github.com/openownership/register-common.git'
 gem 'register_sources_bods', git: 'https://github.com/openownership/register-sources-bods.git'
-gem 'register_sources_dk',   git: 'https://github.com/openownership/register-sources-dk.git', branch: '180-paginate-raw-records'
+gem 'register_sources_dk',   git: 'https://github.com/openownership/register-sources-dk.git',
+                             branch: '180-paginate-raw-records'
 gem 'register_sources_oc',   git: 'https://github.com/openownership/register-sources-oc.git'
-gem 'register_sources_psc',  git: 'https://github.com/openownership/register-sources-psc.git', branch: '180-paginate-raw-records'
-gem 'register_sources_sk',   git: 'https://github.com/openownership/register-sources-sk.git', branch: '180-paginate-raw-records'
+gem 'register_sources_psc',  git: 'https://github.com/openownership/register-sources-psc.git',
+                             branch: '180-paginate-raw-records'
+gem 'register_sources_sk',   git: 'https://github.com/openownership/register-sources-sk.git',
+                             branch: '180-paginate-raw-records'
 
 group :development, :test do
   gem 'byebug',                         '~> 11.1'

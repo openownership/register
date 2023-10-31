@@ -96,6 +96,7 @@ class RawDataRecordRepository
     repositories.map(&:client).first
   end
 
+  # rubocop:disable Metrics/PerceivedComplexity
   def get_by_bods_identifiers(identifiers, per_page:, page:)
     queries = repositories.map do |repository|
       repository.build_get_by_bods_identifiers(identifiers)
@@ -111,31 +112,40 @@ class RawDataRecordRepository
       from = nil
     end
 
-    res = process_results(
-      (!client || queries.empty?) ? {} : client.search(
-        index: '*',
-        body: {
-          query: {
-            bool: {
-              should: queries
-            }
-          },
-          from:,
-          size: per_page,
-        }.compact,
-      ),
-    )
+    results =
+      if !client || queries.empty?
+        {}
+      else
+        client.search(
+          index: '*',
+          body: {
+            query: {
+              bool: {
+                should: queries
+              }
+            },
+            from:,
+            size: per_page
+          }.compact
+        )
+      end
 
-    RegisterSourcesBods::Register::PaginatedArray.new(res.map(&:record), current_page: page, records_per_page: per_page, total_count: res.total_count)
+    res = process_results(results)
+
+    RegisterSourcesBods::Register::PaginatedArray.new(res.map(&:record), current_page: page,
+                                                                         records_per_page: per_page,
+                                                                         total_count: res.total_count)
   end
+  # rubocop:enable Metrics/PerceivedComplexity
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def process_results(results)
     hits = results.dig('hits', 'hits') || []
-    hits = hits.sort { |hit| hit['_score'] }.reverse
+    hits = hits.sort_by { |hit| hit['_score'] }.reverse
     total_count = results.dig('hits', 'total', 'value') || 0
 
     mapped = hits.map do |hit|
-      case hit["_index"]
+      case hit['_index']
       when psc_repository.send(:index)
         SearchResult.new(map_psc_es_record(hit['_source']), hit['_score'])
       when dk_repository.send(:index)
@@ -148,9 +158,10 @@ class RawDataRecordRepository
     SearchResults.new(
       mapped.sort_by(&:score).reverse,
       total_count:,
-      aggs: results['aggregations'],
+      aggs: results['aggregations']
     )
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def raw_record_date(entity, raw_record)
     entity_date = (entity.bods_statement.source&.retrievedAt ||
