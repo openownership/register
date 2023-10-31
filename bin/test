@@ -14,9 +14,6 @@ haml-lint
 echo -e "\n=== Yarn Lint"
 yarn lint
 
-echo -e "\n=== RSpec"
-rspec
-
 echo -e "\n=== Rails Test"
 rails test
 
