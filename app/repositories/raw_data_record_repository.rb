@@ -64,9 +64,7 @@ class RawDataRecordRepository
 
     return [] if bods_identifiers.empty?
 
-    get_by_bods_identifiers(bods_identifiers.uniq, per_page:, page:).sort_by do |raw_record|
-      raw_record_date(main_entity, raw_record)
-    end.reverse
+    get_by_bods_identifiers(bods_identifiers.uniq, per_page:, page:)
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
