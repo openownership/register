@@ -74,3 +74,4 @@
         .col-lg-12
           - @raw_data_records.each do |raw_record|
             = render(partial: 'shared/raw_data_record', locals: { raw_record: })
+          = paginate @raw_data_records
