@@ -1,1 +1,7 @@
-
+---
+name: Armenia Multi-Sector Register
+slugs:
+  - am-multisector-register
+document_id:
+types:
+  - officialRegister
