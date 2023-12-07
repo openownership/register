@@ -1,8 +1,0 @@
----
-name: Denmark Central Business Register (Centrale Virksomhedsregister [CVR])
-slugs:
-  - dk-cvr-register
-document_id: Denmark CVR
-current_statistic_types: []
-types:
-  - officialRegister

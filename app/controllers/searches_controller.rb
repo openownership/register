@@ -2,13 +2,12 @@
 
 class SearchesController < ApplicationController
   ENTITY_SERVICE = Rails.application.config.entity_service
-  DATA_SOURCE_REPOSITORY = Rails.application.config.data_source_repository
 
   def show
     Rails.application.config.entity_service
 
     @legal_entity_count = ENTITY_SERVICE.count_legal_entities
-    @data_sources = DATA_SOURCE_REPOSITORY.all.index_by(&:slug)
+    @data_sources = Rails.configuration.x.data_sources
 
     return if params[:q].blank?
 

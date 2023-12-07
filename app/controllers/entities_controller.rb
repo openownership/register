@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class EntitiesController < ApplicationController
-  DATA_SOURCE_REPOSITORY = Rails.application.config.data_source_repository
   RAW_DATA_RECORD_REPOSITORY = Rails.application.config.raw_data_record_repository
   ENTITY_SERVICE = Rails.application.config.entity_service
 
@@ -80,7 +79,10 @@ class EntitiesController < ApplicationController
       @similar_people = entity.natural_person? ? similar_people(entity) : nil
     end
 
-    @data_source_names = DATA_SOURCE_REPOSITORY.data_source_names_for_entity(entity)
+    @data_source_names = [
+      entity.relationships_as_source,
+      entity.relationships_as_target
+    ].flatten.compact.map(&:provenance).map(&:source_name).uniq.sort
 
     # Conversion
     @oc_data = get_opencorporates_company_hash(entity, sparse: true) || {}
@@ -133,7 +135,13 @@ class EntitiesController < ApplicationController
 
     @newest = RAW_DATA_RECORD_REPOSITORY.newest_for_entity_date(entity)
     @oldest = RAW_DATA_RECORD_REPOSITORY.oldest_for_entity_date(entity)
-    @data_sources = DATA_SOURCE_REPOSITORY.all_for_raw_records(@raw_data_records)
+
+    data_source_klasses = @raw_data_records.map do |raw_record|
+      raw_record.class.to_s
+    end.compact.uniq.sort
+    @data_sources = Rails.configuration.x.data_sources.filter do |_, data_source|
+      data_source_klasses.include?(data_source[:class])
+    end
   end
 
   def opencorporates_additional_info

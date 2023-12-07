@@ -66,13 +66,17 @@ en:
         one: "See the original source record"
         other: "See the original source records"
   data_sources:
+    index:
+      title: "Data Sources"
     show:
-      data_availability_title: "Data availability and license"
-      links_title: "Links"
-      news_title: "News"
-      news_fallback_text: "Tweets curated by Open Ownership"
-      overview_title: "Overview, definitions, thresholds"
-      source_url_link: "Original source data"
+      overview: "Overview, definitions, thresholds"
+      ownership: "Direct and indirect ownership"
+      ownership_direct: "Direct ownership"
+      ownership_indirect: "Indirect ownership"
+      exclusions: "Exclusions and exemptions"
+      availability: "Data availability and license"
+      links: "Links"
+      links_source: "Original source data"
   helpers:
     entities:
       entity_attributes_snippet:

@@ -3,10 +3,9 @@
     .row
       .col-lg-8
         .page-header
-          %h1
-            Data Sources
+          %h1= t('.title')
         .page-text
-          - @data_sources.each do |data_source|
-            %h2= data_source.name
-            = sanitize data_source.short_overview
-            = link_to 'Read more', "data_sources/#{data_source.slug}", class: 'btn btn-primary'
+          - @data_sources.each do |id, data_source|
+            %h2= sanitize data_source[:name]
+            = sanitize data_source[:overview].split(/\n{2,}/).first
+            = link_to 'Read more', "data_sources/#{id}", class: 'btn btn-primary'
