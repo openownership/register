@@ -61,7 +61,7 @@
         .col-lg-8
           .meta
             %h6= t('raw_data_records.show.data_sources')
-            %p= @data_sources.map(&:name).to_sentence
+            %p= @data_sources.map { |_, data_source| data_source[:name] }.to_sentence
         .col-lg-2
           .meta
             %h6= t('raw_data_records.show.oldest')

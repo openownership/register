@@ -1,29 +1,32 @@
-- content_for(:title, @data_source.name)
-
+- content_for(:title, @data_source[:name])
 .content.page-content
   .container-fluid
     .row
       .col-lg-8
         .page-header
-          %h1
-            = @data_source.name
+          %h1= @data_source[:name]
         .page-text
-          - if @overview_html.present?
+          - if @data_source[:overview].present?
             .data-source-content
-              %h2
-                = t('.overview_title')
-              = sanitize @overview_html
-          - if @data_availability_html.present?
+              %h2= t '.overview'
+              = sanitize @data_source[:overview]
+              - if @data_source[:ownership].present?
+                %h2= t '.ownership'
+                = sanitize @data_source[:ownership]
+              - else
+                %h2= t '.ownership_direct'
+                = sanitize @data_source[:ownership_direct]
+                %h2= t '.ownership_indirect'
+                = sanitize @data_source[:ownership_indirect]
+              %h2= t '.exclusions'
+              = sanitize @data_source[:exclusions]
+          - if @data_source[:availability].present?
             .data-source-content
-              %h2
-                = t('.data_availability_title')
-              = sanitize @data_availability_html
-
+              %h2= t '.availability'
+              = sanitize @data_source[:availability]
       .col-lg-4
-        - if @data_source.url.present?
+        - if @data_source[:url].present?
           .frame-light.meta
             .frame-wrap
-              %h6
-                = t('.links_title')
-              %p
-                = link_to(t('.source_url_link'), @data_source.url, class: 'external', target: '_blank', rel: 'noopener')
+              %h6= t '.links'
+              %p= link_to t('.links_source'), @data_source[:url], class: 'external', target: '_blank', rel: 'noopener'

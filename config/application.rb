@@ -42,5 +42,18 @@ module OpenOwnershipRegister
     config.action_mailer.asset_host = host_uri.to_s
 
     self.default_url_options = config.action_mailer.default_url_options
+
+    markdown     = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
+    markdown_sfx = '_md'
+
+    config.x.data_sources = config_for(:data_sources).transform_values do |v|
+      v.to_h do |k2, v2|
+        if k2.end_with?(markdown_sfx)
+          [k2.to_s.chomp(markdown_sfx).to_sym, markdown.render(v2)]
+        else
+          [k2, v2]
+        end
+      end
+    end
   end
 end
