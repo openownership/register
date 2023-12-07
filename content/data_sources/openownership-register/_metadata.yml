@@ -1,8 +1,0 @@
----
-name: OpenOwnership Register
-slugs:
-  - openownership-register
-current_statistic_types: []
-types:
-  - thirdParty
-  - selfDeclaration

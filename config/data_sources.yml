@@ -1,1 +1,200 @@
-shared: {}
+shared:
+  sk-rpvs-register:
+    name: Slovakia Public Sector Partners Register (Register partnerov verejného sektora)
+    class: RegisterSourcesSk::Record
+    url: https://rpvs.gov.sk/
+    overview_md: |
+      In 2017, the Act on the Register of Public Sector Partners (ARPSP) entered into
+      force in Slovakia. It covers entities benefiting from public funding or
+      conducting business with the state, so-called ‘Partners of Public Sector’. Data
+      is collected by the Ministry of Justice of the Slovak Republic in the ‘Register
+      partnerov verejného sektora’ (RPVS), which is free to use and public. This is
+      the data which is available on the OpenOwnership register.
+
+      Following an amendment of the Anti-money Laundering Act, and under the
+      amendments to the Commercial Register Act, all companies are now obliged to
+      register their beneficial owners to the Commercial Register by 31 December 2019.
+      Unlike the RPVS, the data will not be made public and access will be limited to
+      persons and authorities provided for by law.
+    ownership_md: |
+      Slovak companies and foreign companies operating in Slovakia have to report
+      beneficial owners (‘Konečného užívateľa výhod’) who directly and indirectly
+      control a company. Beneficial owners can be Slovak or foreign natural persons.
+      Declarations to the RPVS must be done via an ‘authorized person’, who must be
+      either an attorney, notary, bank, auditor or a tax advisor.
+
+      A beneficial owner is a natural person who:
+
+      - holds (directly or indirectly) at least 25% of the voting rights or a 25%
+        share in the registered capital of the legal entity
+      - has the right to appoint or recall a statutory/executive/supervisory body of
+        the legal entity or any of its members
+      - controls in practice a legal entity other than as described above
+      - has at least a 25% share of the benefits from the legal entity’s business
+        (dividends and similar payments)
+
+      If a beneficial owner’s interests are held indirectly through one or more legal
+      entities (whether Slovak or foreign), they have to be declared.
+
+      This is because legal entities, such as companies and trusts, can never be
+      beneficial owners, only natural persons can.
+
+      If there are no persons who meet the above criteria, members of senior
+      management of the company are considered to be beneficial owners.
+    exclusions_md: |
+      In the RPVS, information regarding beneficial owners of all entities conducting
+      business with the state have to be registered. There are no exemptions such as
+      foreign entities acting through branch offices, non-profits or contractual
+      partnerships. However since September 2019, any company owned directly or
+      indirectly by a listed company (on a regulated market or a market with similar
+      disclosure obligations in accordance with applicable EU regulation) only needs
+      to report the executive directors and board members of this parent company.
+
+      In the Commercial Register, listed companies are exempt altogether.
+
+      Registration in the RPVS removes the obligation to register in the Commercial
+      Register, however the opposite is not true.
+    availability_md: |
+      The RPVS data is publicly and freely available in two formats:
+
+      - [Searchable online](https://rpvs.gov.sk/rpvs) by company/person name, number
+      - [API access](https://rpvs.gov.sk/OpenData) with JSON output
+        ([schema overview here](https://rpvs.gov.sk/OpenData/$metadata))
+
+      The RPVS Register data is licensed by statute.
+
+      Beneficial ownership data in Slovakia's Commercial Register is not yet available for public
+      search.
+
+      Open Ownership [ingests, maps and transforms the RPVS data](https://bods-data.openownership.org/source/slovakia) in line with [version 0.2 of our Beneficial Ownership Data Standard](https://standard.openownership.org/en/0.2.0/) before making it available for anyone to reuse in a range of formats.
+
+      We also reconcile and enrich this using bulk data from OpenCorporates. These mappings are currently a work in progress and should be treated with caution. The dataset is published under the [Open Data Commons Attribution License](https://opendatacommons.org/licenses/by/1-0/).
+  uk-psc-register:
+    name: UK PSC Register
+    class: RegisterSourcesPsc::CompanyRecord
+    url: http://download.companieshouse.gov.uk/en_pscdata.html
+    overview_md: |
+      The United Kingdom’s beneficial ownership register was launched in April 2016 as
+      the People with significant control (PSC) Register.
+    ownership_direct_md: |
+      UK Companies have to report PSCs who directly control a company.
+
+      A PSC is an individual who meets at least one of the following conditions:
+
+      - Holds more than 25% of the company’s shares
+      - Holds more than 25% of the company’s voting rights
+      - Has the power to appoint or remove a majority of the company’s board
+      - Has the right to exercise or actually exercises significant influence or control
+        over the company
+      - Has the right to exercise or actually exercises significant influence or control
+        over a trust or a firm that is not a legal entity which itself satisfies any of
+        the first four conditions.
+    ownership_indirect_md: |
+      If a beneficial owner’s shares or rights in a company are all held indirectly
+      through one or more legal entities (whether UK or foreign), they generally do
+      not need to be recorded on the PSC register.
+
+      This is because the UK requires that companies only record on the Register the
+      first holding company nearest to them in the ownership chain. These holdings are
+      called Registrable RLEs, (Relevant Legal Entities). Other holdings further up
+      the chain do not need recording.
+
+      A holding company is an RLE:
+
+      - if it had been an individual, it would have satisfied one of the PSC
+        conditions, and
+      - is either: (i) a UK company subject to the PSC regime, or (ii)
+        a UK or non-UK company subject to ownership disclosure requirements through
+        being listed or traded on a UK or other EEA-regulated market or any of the US,
+        Japanese, Swiss or Israeli exchanges.
+
+      If the holding company doesn’t meet the RLE criteria, then the PSC doesn’t need
+      to be declared, unless the PSC holds a ‘majority stake’ in the reporting
+      company, i.e. a majority control of voting rights, of appointment/removal of
+      directors or general dominant influence.
+    exclusions_md: |
+      UK companies with voting shares admitted to trading on regulated markets in the
+      EEA or on certain specified exchanges in the US (including NYSE and NASDAQ),
+      Japan, Switzerland and Israel—do not have to keep a PSC register themselves and
+      so are excluded from the PSC regime. Their unlisted UK subsidiaries will still
+      have to maintain their own PSC registers.
+
+      Branches of non-UK companies are not subject to the requirements to hold a PSC
+      register (subsidiaries are).
+
+      More details from Companies House [here](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/753028/170623_NON-STAT_Guidance_for_PSCs_4MLD.pdf).
+    availability_md: |
+      The PSC register data is publicly and freely available from Companies House in three formats:
+
+      - Searchable in Companies House’s [main companies register](https://find-and-update.company-information.service.gov.uk/)
+        (searchable by names of individuals or companies)
+      - Downloadable via a [daily JSON snapshot](http://download.companieshouse.gov.uk/en_pscdata.html).
+      - Available via Application Programming Interface (API) through the [Companies House Public Data API](https://developer-specs.company-information.service.gov.uk/companies-house-public-data-api/reference/persons-with-significant-control) or [Streaming API](https://developer-specs.company-information.service.gov.uk/streaming-api/reference/persons-with-significant-control).
+
+      The PSC Register data is [licensed by statute](https://www.gov.uk/government/publications/companies-house-accreditation-to-information-fair-traders-scheme).
+
+      Open Ownership [ingests, maps and transforms this data](https://bods-data.openownership.org/source/UK_PSC/) in line with [version 0.2 of our Beneficial Ownership Data Standard](https://standard.openownership.org/en/0.2.0/) before making it available for anyone to reuse in a range of formats.
+
+      We also reconcile and enrich this using bulk data from OpenCorporates. These mappings are currently a work in progress and should be treated with caution. The dataset is published under the [Open Data Commons Attribution License](https://opendatacommons.org/licenses/by/1-0/).
+  dk-cvr-register:
+    name: Denmark Central Business Register (Centrale Virksomhedsregister [CVR])
+    class: RegisterSourcesDk::Deltagerperson
+    url: https://cvr.dk/
+    overview_md: |
+      The regulation on registration of beneficial owners in Denmark entered into
+      effect in May 2017. Data is collected by the Danish Business Authority in the
+      Danish Central Business Register (aka CVR —
+      [Det Centrale Virksomhedsregister](https://datacvr.virk.dk/artikel/system-til-system-adgang-til-cvr-data)).
+    ownership_direct_md: |
+      Danish companies have to report beneficial owners (‘reelle ejere’) who directly
+      control a company. Beneficial owners can be Danish or foreign natural persons.
+
+      The indication of a 25% threshold is not directly mentioned in the Danish
+      definition, but it is used to determine presumption of beneficial ownership. Lower
+      levels of ownership of interest in capital and voting rights could also indicate
+      beneficial ownership, when they point to the right to exercise or actually
+      exercises significant influence or control over the company. Other factors include
+      the right to appoint members of the board, holding shareholders’ agreements or
+      share pledge agreements, the right to approve payments of dividend or any
+      combination of the above.
+
+      As a result, all these interests should be declared.
+    ownership_indirect_md: |
+      If a beneficial owner’s interests are held indirectly through one or more legal
+      entities (whether DK or foreign), they have to be declared.
+
+      This is because legal entities, such as companies and foundations, can never be
+      beneficial owners. They are registered as ‘legal owners’ (or ‘legale ejere’), a
+      requirement that predates that of registering beneficial owners.
+
+      If there are no beneficial owners, or the beneficial owners cannot be defined, the
+      registered members of the company’s executive board must be registered as
+      beneficial owners in the CVR.
+    exclusions_md: |
+      The following entities are exempt from registering beneficial owners:
+
+      - Entities listed on a regulated market or a market with similar disclosure
+        obligations in accordance with applicable EU regulation
+      - Sole proprietorships and small personally owned businesses
+      - Publicly (state/government/regional) owned businesses
+      - Branches of non-Danish companies
+      - Certain associations not conducting business
+    availability_md: |
+      The CVR Register data is publicly and freely available in two formats:
+
+      - [Searchable online](https://datacvr.virk.dk/) by company name, number,
+        address, person name, etc
+      - [API access](https://datacvr.virk.dk/artikel/system-til-system-adgang-til-cvr-data)
+        via ElasticSearch
+
+      The Danish Business Authority withholds API data relating to ‘entities protected
+      against unsolicited advertising’. This data is only available to API users if
+      they formally commit to respect those same protections
+      ([Clause 7](https://datacvr.virk.dk/artikel/vilkaar-og-betingelser)).
+
+      The CVR Register data is
+      [licensed by statute](https://datafordeler.dk/vejledning/hent-data/).
+
+      Open Ownership [ingests, maps and transforms the CVR data](https://bods-data.openownership.org/source/denmark) in line with [version 0.2 of our Beneficial Ownership Data Standard](https://standard.openownership.org/en/0.2.0/) before making it available for anyone to reuse in a range of formats.
+
+      We also reconcile and enrich this using bulk data from OpenCorporates. These mappings are currently a work in progress and should be treated with caution. The dataset is published under the [Open Data Commons Attribution License](https://opendatacommons.org/licenses/by/1-0/).
