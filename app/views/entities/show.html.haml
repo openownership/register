@@ -121,6 +121,9 @@
           - @sentity.identifiers_lei.each do |identifier|
             %h6= t('.fields.lei')
             %p= link_to identifier.id, identifier.uri
+          - @sentity.alternate_names.each do |alternate_name|
+            %h6= t('.fields.alternate_name')
+            %p= alternate_name
 
       .col-lg-4
         .frame-light.meta
