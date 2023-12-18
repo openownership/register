@@ -6,22 +6,23 @@
         .page-header
           %h1= @data_source[:name]
         .page-text
-          - if @data_source[:overview].present?
-            .data-source-content
+          .data-source-content
+            - if @data_source[:overview].present?
               %h2= t '.overview'
               = sanitize @data_source[:overview]
-              - if @data_source[:ownership].present?
-                %h2= t '.ownership'
-                = sanitize @data_source[:ownership]
-              - else
-                %h2= t '.ownership_direct'
-                = sanitize @data_source[:ownership_direct]
-                %h2= t '.ownership_indirect'
-                = sanitize @data_source[:ownership_indirect]
+            - if @data_source[:ownership].present?
+              %h2= t '.ownership'
+              = sanitize @data_source[:ownership]
+            - if @data_source[:ownership_direct].present?
+              %h2= t '.ownership_direct'
+              = sanitize @data_source[:ownership_direct]
+            - if @data_source[:ownership_indirect].present?
+              %h2= t '.ownership_indirect'
+              = sanitize @data_source[:ownership_indirect]
+            - if @data_source[:exclusions].present?
               %h2= t '.exclusions'
               = sanitize @data_source[:exclusions]
-          - if @data_source[:availability].present?
-            .data-source-content
+            - if @data_source[:availability].present?
               %h2= t '.availability'
               = sanitize @data_source[:availability]
       .col-lg-4
