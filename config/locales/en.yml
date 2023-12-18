@@ -35,6 +35,8 @@ en:
         incorporation_date: "Incorporation date"
         dissolution_date: "Dissolution date"
         current_status: "Current status"
+        alternate_name: "Alternate name"
+        alternate_names: "Alternate names"
         previous_names: "Previous names"
         industry_codes: "Industry codes"
         officers: "Officers"

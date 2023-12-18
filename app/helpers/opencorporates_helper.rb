@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module OpencorporatesHelper
+  def alternate_names(company_hash)
+    company_hash[:alternative_names].pluck(:company_name).join(', ')
+  end
+
   def previous_names(company_hash)
     company_hash[:previous_names].pluck(:company_name).join(', ')
   end
