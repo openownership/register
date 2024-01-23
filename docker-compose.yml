@@ -1,38 +1,7 @@
-version: "3.8"
+networks:
+  elasticsearch: {}
+  web: {}
 services:
-  web:
-    build:
-      context: .
-      target: dev
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    env_file: .env
-    environment:
-      RAILS_DEVELOPMENT_HOSTS: $HOSTNAME
-    networks:
-      - web
-      - elasticsearch
-    ports:
-      - ${DC_WEB_PORT:-14972}:$PORT
-    restart: on-failure
-    volumes:
-      - ${DC_WEB_LIB_REGISTER_COMMON:-.dockerempty}:/home/x/lib/register-common
-      - ${DC_WEB_LIB_REGISTER_SOURCES_BODS:-.dockerempty}:/home/x/lib/register-sources-bods
-      - ${DC_WEB_LIB_REGISTER_SOURCES_DK:-.dockerempty}:/home/x/lib/register-sources-dk
-      - ${DC_WEB_LIB_REGISTER_SOURCES_OC:-.dockerempty}:/home/x/lib/register-sources-oc
-      - ${DC_WEB_LIB_REGISTER_SOURCES_PSC:-.dockerempty}:/home/x/lib/register-sources-psc
-      - ${DC_WEB_LIB_REGISTER_SOURCES_SK:-.dockerempty}:/home/x/lib/register-sources-sk
-      - ./.haml-lint.yml:/home/x/r/.haml-lint.yml
-      - ./.rubocop.yml:/home/x/r/.rubocop.yml
-      - ./app:/home/x/r/app
-      - ./bin:/home/x/r/bin
-      - ./config:/home/x/r/config
-      - ./Gemfile.lock:/home/x/r/Gemfile.lock
-      - ./Gemfile:/home/x/r/Gemfile
-      - ./package.json:/home/x/r/package.json
-      - ./spec:/home/x/r/spec
-      - ./yarn.lock:/home/x/r/yarn.lock
   elasticsearch:
     environment:
       ES_JAVA_OPTS: -Xms512m -Xmx512m
@@ -47,12 +16,9 @@ services:
         - curl
         - -fs
         - http://localhost:9200/_cluster/health
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.6
+    image: docker.io/library/elasticsearch:8.12.0
     networks:
       - elasticsearch
-    ports:
-      - ${DC_ELASTICSEARCH_PORT:-15489}:9200
-    restart: on-failure
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
   kibana:
@@ -65,14 +31,43 @@ services:
         - curl
         - -fs
         - http://localhost:5601/api/status
-    image: docker.elastic.co/kibana/kibana:7.17.6
+    image: docker.io/library/kibana:8.12.0
     networks:
       - elasticsearch
     ports:
       - ${DC_KIBANA_PORT:-16492}:5601
-    restart: on-failure
-networks:
-  elasticsearch: {}
-  web: {}
+  web:
+    build:
+      context: .
+      target: dev
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      RAILS_DEVELOPMENT_HOSTS: $HOSTNAME
+    networks:
+      - web
+      - elasticsearch
+    ports:
+      - ${DC_WEB_PORT:-14972}:3000
+    volumes:
+      - ${DC_WEB_LIB_REGISTER_COMMON:-.dockerempty}:/home/x/lib/register-common
+      - ${DC_WEB_LIB_REGISTER_SOURCES_BODS:-.dockerempty}:/home/x/lib/register-sources-bods
+      - ${DC_WEB_LIB_REGISTER_SOURCES_DK:-.dockerempty}:/home/x/lib/register-sources-dk
+      - ${DC_WEB_LIB_REGISTER_SOURCES_OC:-.dockerempty}:/home/x/lib/register-sources-oc
+      - ${DC_WEB_LIB_REGISTER_SOURCES_PSC:-.dockerempty}:/home/x/lib/register-sources-psc
+      - ${DC_WEB_LIB_REGISTER_SOURCES_SK:-.dockerempty}:/home/x/lib/register-sources-sk
+      - ./.haml-lint.yml:/home/x/r/.haml-lint.yml
+      - ./.rubocop.yml:/home/x/r/.rubocop.yml
+      - ./Gemfile.lock:/home/x/r/Gemfile.lock
+      - ./Gemfile:/home/x/r/Gemfile
+      - ./app:/home/x/r/app
+      - ./bin:/home/x/r/bin
+      - ./config:/home/x/r/config
+      - ./package.json:/home/x/r/package.json
+      - ./spec:/home/x/r/spec
+      - ./yarn.lock:/home/x/r/yarn.lock
+version: "3.8"
 volumes:
   elasticsearch: {}

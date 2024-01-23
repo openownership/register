@@ -2,24 +2,16 @@ version: 2.1
 jobs:
   build:
     machine:
-      image: ubuntu-2204:2023.07.2
+      image: ubuntu-2204:current
       docker_layer_caching: true
     steps:
-      - run:
-          name: Install Elasticsearch
-          command: |
-            wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
-            echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
-            sudo apt-get update
-            sudo apt-get install elasticsearch
-            sudo systemctl start elasticsearch
       - checkout
       - run:
-          name: Build dev
+          name: Build
           command: |
-            docker build --target dev -t dev .
+            cp .env.example .env
+            docker compose build
       - run:
           name: Test
           command: |
-            function run() { docker run --rm -t --network host --env-file .env.circleci dev "$@"; }
-            run bin/test
+            docker compose run web test

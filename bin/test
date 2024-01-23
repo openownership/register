@@ -8,7 +8,7 @@ file --mime-type ./* bin/* | grep 'text/x-shellscript' | cut -d':' -f1 |
 echo -e "\n=== RuboCop"
 rubocop
 
-echo -e "\n=== HAML-Lint"
+echo -e "\n=== HAML Lint"
 haml-lint
 
 echo -e "\n=== Yarn Lint"

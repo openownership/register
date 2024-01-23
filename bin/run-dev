@@ -3,6 +3,6 @@ set -Eeuo pipefail
 
 bin/configure-dev-lib
 
-echo -e "\n=== Boot"
+echo -e "\n=== Rails Boot\n"
 rm -f tmp/pids/server.pid
-exec rails server --binding 0.0.0.0 --port "$PORT"
+exec rails server --binding 0.0.0.0 --port 3000
