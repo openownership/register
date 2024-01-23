@@ -3,7 +3,8 @@
 # rubocop:disable Layout/ExtraSpacing
 
 source 'https://rubygems.org'
-ruby File.read('.ruby-version').strip
+
+ruby '3.1.2'
 
 gem 'addressable',                      '~> 2.8'
 gem 'aws-sdk-s3',                       '~> 1.114'
