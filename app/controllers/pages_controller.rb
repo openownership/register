@@ -20,7 +20,8 @@ class PagesController < ApplicationController
 
   def download_latest
     exports = BODS_EXPORT_REPOSITORY.completed_exports(limit: 1)
-    redirect_to "https://#{ENV.fetch('BODS_EXPORT_S3_BUCKET_NAME')}.s3-eu-west-1.amazonaws.com/#{ERB::Util.url_encode exports.first.s3_path}"
+    f = ERB::Util.url_encode exports.first.s3_path
+    redirect_to "https://#{ENV.fetch('BODS_EXPORT_S3_BUCKET_NAME')}.s3-eu-west-1.amazonaws.com/#{f}"
   end
 
   def data_changelog
