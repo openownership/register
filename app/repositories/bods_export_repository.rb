@@ -24,8 +24,10 @@ class BodsExportRepository
   def list_all
     s3_paths = s3_adapter.list_objects(s3_bucket:, s3_prefix:)
 
-    s3_paths.sort.reverse.map do |s3_path|
-      matched = /ex(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})/.match s3_path
+    s3_paths.map do |s3_path|
+      matched1 = /ex(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})/.match s3_path
+      matched2 = /all\.(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2}).*\.jsonl\.gz/.match s3_path
+      matched = matched1 || matched2
       next unless matched
 
       time = begin
@@ -35,6 +37,6 @@ class BodsExportRepository
       end
 
       OpenStruct.new(created_at: time, s3_path:) # rubocop:disable Style/OpenStructUse
-    end.compact
+    end.compact.sort_by(&:created_at).reverse
   end
 end
