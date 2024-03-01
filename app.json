@@ -17,9 +17,6 @@
     "BODS_INDEX": {
       "required": true
     },
-    "CACHE_OC_API": {
-      "required": true
-    },
     "ELASTICSEARCH_URL": {
       "required": true
     },
