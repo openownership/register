@@ -44,24 +44,6 @@ GIT
       xxhash
 
 GIT
-  remote: https://github.com/openownership/register-sources-oc.git
-  revision: 5122dae625b36ad1813f8db539dcd44bd4424c87
-  specs:
-    register_sources_oc (0.1.0)
-      activesupport (>= 6, < 8)
-      countries (>= 4, < 5)
-      dotenv
-      dry-struct (>= 1, < 2)
-      dry-types (>= 1, < 2)
-      elasticsearch (>= 7.10, < 8)
-      faraday (>= 1, < 2)
-      faraday_middleware (>= 1, < 2)
-      geokit (>= 1, < 2)
-      iso8601
-      net-http-persistent
-      rexml
-
-GIT
   remote: https://github.com/openownership/register-sources-psc.git
   revision: 9fc14f30aa16da9382626dcf75a1ca3ee72d7c41
   specs:
@@ -519,7 +501,6 @@ DEPENDENCIES
   register_common!
   register_sources_bods!
   register_sources_dk!
-  register_sources_oc!
   register_sources_psc!
   register_sources_sk!
   rexml (~> 3.2)
