@@ -1,55 +1,10 @@
 # frozen_string_literal: true
 
+require 'register_common/utils/paginated_array'
+
 class EntitiesController < ApplicationController
   RAW_DATA_RECORD_REPOSITORY = Rails.application.config.raw_data_record_repository
   ENTITY_SERVICE = Rails.application.config.entity_service
-
-  class PaginatedArray < Array
-    def initialize(source_array, current_page: 0, records_per_page: 10, limit_value: nil, total_count: nil)
-      @source_array = source_array
-
-      @current_page = current_page
-      @records_per_page = records_per_page
-      @limit_value = limit_value
-      @total_count = total_count || source_array.count
-
-      super(source_array)
-    end
-
-    attr_reader :current_page, :limit_value, :total_count
-
-    def limit(lim)
-      new_limit = [limit_value, lim].compact.min
-      PaginatedArray.new(source_array[0...new_limit], current_page:, records_per_page:,
-                                                      limit_value: new_limit, total_count:)
-    end
-
-    def page(page_num)
-      PaginatedArray.new(source_array[0...n], current_page: page_num, records_per_page:,
-                                              limit_value:, total_count:)
-    end
-
-    def per(max_per_page)
-      PaginatedArray.new(source_array[0...n], current_page:, records_per_page: max_per_page,
-                                              limit_value:, total_count:)
-    end
-
-    def total_pages
-      (total_count / records_per_page).ceil
-    end
-
-    def order_by(**_args)
-      self
-    end
-
-    def offset_value
-      current_page * records_per_page
-    end
-
-    private
-
-    attr_reader :records_per_page, :source_array
-  end
 
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def show
@@ -64,7 +19,7 @@ class EntitiesController < ApplicationController
 
     @merged_entities = entity.merged_entities # .page(params[:merged_page]).per(10)
 
-    @source_relationships = PaginatedArray.new(entity.relationships_as_source)
+    @source_relationships = RegisterCommon::Utils::PaginatedArray.new(entity.relationships_as_source)
     # .order_by(started_date: :desc)
     # .page(params[:source_page]).per(10)
 

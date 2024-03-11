@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'ostruct'
+require 'register_common/utils/paginated_array'
+require 'register_sources_bods/structs/identifier'
+require 'register_sources_dk/repositories/deltagerperson_repository'
 require 'register_sources_psc/repositories/company_record_repository'
 require 'register_sources_sk/repositories/record_repository'
-require 'register_sources_dk/repositories/deltagerperson_repository'
-require 'register_sources_bods/structs/identifier'
-require 'register_sources_bods/register/paginated_array'
 
 class RawDataRecordRepository
   DEFAULT_PER_PAGE = 20
@@ -130,9 +130,12 @@ class RawDataRecordRepository
 
     res = process_results(results)
 
-    RegisterSourcesBods::Register::PaginatedArray.new(res.map(&:record), current_page: page,
-                                                                         records_per_page: per_page,
-                                                                         total_count: res.total_count)
+    RegisterCommon::Utils::PaginatedArray.new(
+      res.map(&:record),
+      current_page: page,
+      records_per_page: per_page,
+      total_count: res.total_count
+    )
   end
   # rubocop:enable Metrics/PerceivedComplexity
 

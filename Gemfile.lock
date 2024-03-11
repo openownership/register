@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/openownership/register-common.git
-  revision: fc24c1ddac24515bb33429d7c8d7980d594891a0
+  revision: b4712df52586ae9fef244becba9a5cd7aeb51fed
   specs:
     register_common (0.1.0)
       activesupport (>= 6, < 8)
@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-bods.git
-  revision: 234dd779366634e52c038c5fa1416f5d60130891
+  revision: cf9a7380ed7047f8626deb914997cf24c8821b77
   specs:
     register_sources_bods (0.1.0)
       activesupport (>= 6, < 8)
@@ -32,7 +32,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-dk.git
-  revision: 5a838ae7ebde19d6b72a1d172cc33f7b2c849259
+  revision: 1cbf06d176f5788b5c3ada79ebd0f6c326b091e8
   specs:
     register_sources_dk (0.1.0)
       activesupport (>= 6, < 8)
@@ -44,26 +44,8 @@ GIT
       xxhash
 
 GIT
-  remote: https://github.com/openownership/register-sources-oc.git
-  revision: 5122dae625b36ad1813f8db539dcd44bd4424c87
-  specs:
-    register_sources_oc (0.1.0)
-      activesupport (>= 6, < 8)
-      countries (>= 4, < 5)
-      dotenv
-      dry-struct (>= 1, < 2)
-      dry-types (>= 1, < 2)
-      elasticsearch (>= 7.10, < 8)
-      faraday (>= 1, < 2)
-      faraday_middleware (>= 1, < 2)
-      geokit (>= 1, < 2)
-      iso8601
-      net-http-persistent
-      rexml
-
-GIT
   remote: https://github.com/openownership/register-sources-psc.git
-  revision: 9fc14f30aa16da9382626dcf75a1ca3ee72d7c41
+  revision: 95d3a1b9843ced47906f17fec1bf07d474702508
   specs:
     register_sources_psc (0.1.0)
       activesupport (>= 6, < 8)
@@ -76,7 +58,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-sk.git
-  revision: 217006ae66ca754d162ab24299f2ad61ea40d19b
+  revision: 705d98c6a872f4561a31ef4f876fa66c3887e39e
   specs:
     register_sources_sk (0.1.0)
       activesupport (>= 6, < 8)
@@ -519,7 +501,6 @@ DEPENDENCIES
   register_common!
   register_sources_bods!
   register_sources_dk!
-  register_sources_oc!
   register_sources_psc!
   register_sources_sk!
   rexml (~> 3.2)
