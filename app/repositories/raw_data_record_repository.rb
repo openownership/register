@@ -3,9 +3,9 @@
 require 'ostruct'
 require 'register_common/utils/paginated_array'
 require 'register_sources_bods/structs/identifier'
-require 'register_sources_dk/repositories/deltagerperson_repository'
-require 'register_sources_psc/repositories/company_record_repository'
-require 'register_sources_sk/repositories/record_repository'
+require 'register_sources_dk/repository'
+require 'register_sources_psc/repository'
+require 'register_sources_sk/repository'
 
 class RawDataRecordRepository
   DEFAULT_PER_PAGE = 20
@@ -24,9 +24,9 @@ class RawDataRecordRepository
   end
 
   def initialize
-    @psc_repository = RegisterSourcesPsc::Repositories::CompanyRecordRepository.new
-    @sk_repository = RegisterSourcesSk::Repositories::RecordRepository.new
-    @dk_repository = RegisterSourcesDk::Repositories::DeltagerpersonRepository.new
+    @psc_repository = RegisterSourcesPsc::Repository.new(index: RegisterSourcesPsc::Config::ELASTICSEARCH_INDEX_COMPANY)
+    @sk_repository = RegisterSourcesSk::Repository.new(index: RegisterSourcesSk::Config::ELASTICSEARCH_INDEX)
+    @dk_repository = RegisterSourcesDk::Repository.new(index: RegisterSourcesDk::Config::ELASTICSEARCH_INDEX)
 
     @repositories = [
       @psc_repository,
