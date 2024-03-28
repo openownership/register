@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 libs=(register-common register-sources-bods register-sources-oc register-sources-psc register-sources-sk register-sources-dk)
 
-echo -e "\n=== Configuring dev libs"
+echo -e "\n=== CONFIGURE DEV LIBS\n"
 
 bundle config disable_local_branch_check true
 
