@@ -1,23 +1,29 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-echo -e "\n=== ShellCheck"
+echo -e "\n=== LINT SHELL\n"
+
 file --mime-type ./* bin/* | grep 'text/x-shellscript' | cut -d':' -f1 |
     xargs -r shellcheck
 
-echo -e "\n=== RuboCop"
+echo -e "\n=== LINT RUBY\n"
+
 rubocop
 
-echo -e "\n=== HAML Lint"
+echo -e "\n=== LINT HAML\n"
+
 haml-lint
 
-echo -e "\n=== Yarn Lint"
+echo -e "\n=== LINT JAVASCRIPT\n"
+
 yarn lint
 
-echo -e "\n=== Rails Test"
+echo -e "\n=== TEST RUBY\n"
+
 rails test
 
-echo -e "\n=== Yarn Test"
+echo -e "\n=== TEST JAVASCRIPT\n"
+
 yarn test
 
 echo
