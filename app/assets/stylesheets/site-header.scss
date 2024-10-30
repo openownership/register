@@ -73,6 +73,20 @@
       }
     }
   }
+  .sunsetting-container {
+      margin-top: 1em;
+      .sunsetting-notice {
+          font-family: $sans;
+          color: white;
+          .sunsetting-link {
+              color: white;
+              font-weight: bold;
+              &:visited {
+                  color: white;
+              }
+          }
+      }
+  }
 }
 
 .navbar-dark .navbar-toggler {

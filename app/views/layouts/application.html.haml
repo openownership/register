@@ -49,6 +49,11 @@
                     %li.nav-item
                       %a.nav-link{ href: 'https://github.com/openownership/register' }
                         %i.fa.fa-github
+              .sunsetting-container
+                %span.sunsetting-notice
+                  = t('.nav.sunsetting_notice')
+                  %a.sunsetting-link.external{ href: 'https://www.openownership.org/en/news/evolving-from-the-open-ownership-register-to-increase-our-impact/', target: '_blank' }
+                    = t('.nav.sunsetting_link')
             .brand-header
               = link_to root_path do
                 = image_tag('OpenOwnership-Logo-Beta.svg', class: 'logo')

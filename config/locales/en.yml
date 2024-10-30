@@ -99,6 +99,8 @@ en:
         follow: "Follow our work on"
         home: "Home"
         feedback: "Feedback"
+        sunsetting_notice: "We are sunsetting the Open Ownership Register website from the end of November 2024."
+        sunsetting_link: "Find out why"
   pages:
     terms_and_conditions:
       title: "Terms & Conditions"
